@@ -1,0 +1,94 @@
+{
+    "general": {
+        "gps_enabled": true,
+        "gps_demo_mode": {
+            "enabled": false,
+            "longitude": 41.4969,
+            "latitude": -81.6694,
+            "speed": 10.0,
+            "altitude": 100.0,
+            "track": 180.0,
+            "satellites": 5
+        },
+        "record_telemetry": true,
+        "alert_range": {
+            "traffic_cameras": 1,
+            "alpr_cameras": 1 
+        },
+        "refresh_delay": 1.0,
+        "alert_databases": {
+            "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
+            "alpr_cameras": "./assets/databases/alpr.json"
+        },
+        "camera_alert_types": {
+            "speed": true,
+            "redlight": true,
+            "misc": true
+        },
+        "traffic_camera_loaded_radius": 500,
+        "traffic_camera_speed_check": true
+    },
+    "display": {
+        "displays": {
+            "time": true,
+            "date": true,
+            "speed": true,
+            "location": true,
+            "altitude": true,
+            "track": true,
+             "satellites": true
+        },
+        "large_critical_display": true,
+        "shape_alerts": true,
+        "ascii_art_header": true,
+        "custom_startup_message": "",
+        "speed_display_unit": "mph",
+        "big_speed_display": {
+            "enabled":  true,
+            "decimal_places": 2
+        },
+        "status_lighting": {
+            "enabled": false,
+            "base_url": "http://wled.local/win&A=255",
+            "status_lighting_values": {
+                "normal": "[U]&R=0&G=255&B=0",
+                "enforcementcamera": "[U]&R=0&G=0&B=255",
+                "alprcamera": "[U]&R=255&G=0&B=255"
+            }
+        } 
+    },
+    "audio": {
+        "sounds": {
+            "startup": {
+                "path": "./assets/sounds/startup.mp3",
+                "repeat": "0",
+                "delay": "1.5"
+            },
+            "camera1": {
+                "path": "./assets/sounds/camera1.mp3",
+                "repeat": "0",
+                "delay": "1.5"
+            },
+            "camera2": {
+                "path": "./assets/sounds/camera2.mp3",
+                "repeat": "0",
+                "delay": "1.5"
+            },
+            "camera3": {
+                "path": "./assets/sounds/camera3.mp3",
+                "repeat": "0",
+                "delay": "1.5"
+            },
+            "alpr": {
+                "path": "./assets/sounds/alpr.mp3",
+                "repeat": "0",
+                "delay": "0.3"
+             },
+            "alarm": {
+                "path": "./assets/sounds/alarm.mp3",
+                "repeat": "0",
+                "delay": "1"
+            }
+        } 
+    }
+}
