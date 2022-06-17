@@ -2,9 +2,9 @@
     "general": {
         "gps_enabled": true,
         "gps_demo_mode": {
-            "enabled": false,
-            "longitude": 41.4969,
-            "latitude": -81.6694,
+            "enabled": true,
+            "longitude": 41.0,
+            "latitude": -71.0,
             "speed": 10.0,
             "altitude": 100.0,
             "track": 180.0,
@@ -13,7 +13,7 @@
         "record_telemetry": true,
         "alert_range": {
             "traffic_cameras": 1,
-            "alpr_cameras": 1 
+            "alpr_cameras": 100
         },
         "refresh_delay": 1.0,
         "alert_databases": {
