@@ -58,6 +58,7 @@ nearby_traffic_cameras = utils.nearby_traffic_cameras # Load the function used t
 nearby_database_poi = utils.nearby_database_poi # Load the function used to check for general nearby points of interest.
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
 display_number = utils.display_number # Load the function used to display numbers as large ASCII font.
+get_cardinal_direction = utils.get_cardinal_direction # Load the function used to convert headings from degrees to cardinal directions.
 
 
 
@@ -226,8 +227,11 @@ while True: # Run forever in a loop until terminated.
     if (config["display"]["displays"]["altitude"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Altitude: " + str(current_location[3]) + " meters") # Print the current altitude to the console.
 
-    if (config["display"]["displays"]["track"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current track display is enabled in the configuration.
-        print("Track: " + str(current_location[4])) # Print the current track to the console.
+    if (config["display"]["displays"]["heading"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current heading display is enabled in the configuration.
+        if (config["display"]["heading_as_cardinal_direction"] == True): # Check to see if the configuration value to display the current heading in cardinal values is enabled.
+            print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(current_location[4]) + ")") # Print the current heading to the console in cardinal directions.
+        else: # The configuration value to display the current heading in cardinal directions is disabled, so display the current heading in degrees.
+            print("Heading: " + str(current_location[4])) # Print the current heading to the console in degrees.
 
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.

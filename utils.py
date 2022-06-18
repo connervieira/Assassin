@@ -283,7 +283,7 @@ def countdown(timer):
 def get_gps_location(demo=False): # Placeholder that should be updated at a later date.
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps_demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
-            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["track"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
+            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             try: # Don't terminate the entire script if the GPS location fails to be aquired.
                 gpsd.connect() # Connect to the GPS daemon.
@@ -405,3 +405,26 @@ def display_number(display_number="0"): # This function is used to display a num
 
     for line_index in display_lines: # Iterate through each line that needs to displayed.
         print(display_lines[line_index]) # Print each individual line.
+
+
+
+
+
+def get_cardinal_direction(heading=0):
+    direction = round(heading / 45)
+    if (direction == 0 or direction == 8):
+        return "N"
+    elif (direction == 1):
+        return "NE"
+    elif (direction == 2):
+        return "E"
+    elif (direction == 3):
+        return "SE"
+    elif (direction == 4):
+        return "S"
+    elif (direction == 5):
+        return "SW"
+    elif (direction == 6):
+        return "W"
+    elif (direction == 7):
+        return "NW"

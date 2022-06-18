@@ -7,7 +7,7 @@
             "latitude": -71.0,
             "speed": 10.0,
             "altitude": 100.0,
-            "track": 180.0,
+            "heading": 180.0,
             "satellites": 5
         },
         "record_telemetry": true,
@@ -35,11 +35,12 @@
             "speed": true,
             "location": true,
             "altitude": true,
-            "track": true,
+            "heading": true,
             "satellites": true
         },
         "large_critical_display": true,
         "shape_alerts": true,
+        "heading_as_cardinal_direction": true,
         "ascii_art_header": true,
         "custom_startup_message": "",
         "speed_display_unit": "mph",
