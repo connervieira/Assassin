@@ -367,7 +367,7 @@ def convert_speed(speed, unit="mph"): # This function is used to convert speeds 
         speed = speed * 2.236936
     elif (unit == "mps"): # Convert the speed to meters per second.
         speed = speed # The speed is already measured in meters per second, so there is no reason to convert it.
-    elif (unit == "knot"): # Convert the speed to meters per second.
+    elif (unit == "knot"): # Convert the speed to knots.
         speed = speed * 1.943844
     elif (unit == "fps"): # Convert the speed to feet per second.
         speed = speed * 3.28084

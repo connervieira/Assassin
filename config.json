@@ -13,7 +13,7 @@
         "record_telemetry": true,
         "alert_range": {
             "traffic_cameras": 1,
-            "alpr_cameras": 100
+            "alpr_cameras": 1
         },
         "refresh_delay": 1.0,
         "alert_databases": {
@@ -36,7 +36,7 @@
             "location": true,
             "altitude": true,
             "track": true,
-             "satellites": true
+            "satellites": true
         },
         "large_critical_display": true,
         "shape_alerts": true,
