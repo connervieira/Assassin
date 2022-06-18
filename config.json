@@ -35,7 +35,10 @@
             "speed": true,
             "location": true,
             "altitude": true,
-            "heading": true,
+            "heading": {
+                "degrees": true,
+                "direction": true 
+            },
             "satellites": true
         },
         "large_critical_display": true,

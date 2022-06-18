@@ -46,9 +46,6 @@ This section of configuration values effect Assassin's visual displays.
 - `shape_alerts`
     - This setting allows the user to turn on and off Assassin's "shape alerts", which are large ASCII shapes displayed when important events occur.
     - Shape alerts take up a lot of space on screen, but make it easy for the driver to understand a situation simply using their peripheral vision.
-- `heading_as_cardinal_direction`
-    - This setting determines if the current heading will be displayed as a cardinal direction, like "N", or "SE".
-    - When set to `false`, the heading will be show in degrees off north, like "158" or "22".
 - `ascii_art_header`
     - This configuration value determines whether or not Assassin will display a large title header upon start-up.
     - This this setting is set to `false`, Assassin will instead display a small, since line title.

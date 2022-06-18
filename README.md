@@ -30,9 +30,9 @@ Assassin is extremely lightweight, and is designed to work on a Raspberry Pi.
 
 Assassin is capable of operating entirely offline, meaning it can go anywhere your car does regardless of network connectivity.
 
-### Free
+### Repairable
 
-Assassin is completely free to use, and contains absolutely no ads or data mining of any kind.
+Assassin follows a philosophy of repairability by providing the user with everything they need to diagnose and resolve problems independently.
 
 ### Open Source
 
