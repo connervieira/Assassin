@@ -58,6 +58,8 @@ nearby_database_poi = utils.nearby_database_poi # Load the function used to chec
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
 display_number = utils.display_number # Load the function used to display numbers as large ASCII font.
 get_cardinal_direction = utils.get_cardinal_direction # Load the function used to convert headings from degrees to cardinal directions.
+update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
+play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 
 
 
@@ -65,6 +67,13 @@ get_cardinal_direction = utils.get_cardinal_direction # Load the function used t
 if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if traffic camera alerts are enabled.
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
+    else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
+        if (str(config["general"]["alert_databases"]["traffic_cameras"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
+            print(style.yellow + "Warning: Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified." + style.end)
+        elif (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == False): # The traffic camera alert database specified in the configuration does not exist.
+            print(style.yellow + "Warning: Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["alert_databases"]["traffic_cameras"]) + ") does not exist." + style.end)
+        else:
+            print(style.yellow + "Warning: An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue." + style.end)
 
 
 
@@ -73,6 +82,13 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to 
 if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see if ALPR camera alerts are enabled.
     if (str(config["general"]["alert_databases"]["alpr_cameras"]) != "" and os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"]))): # Check to see if the ALPR camera database exists.
         loaded_alpr_camera_database = json.load(open(str(config["general"]["alert_databases"]["alpr_cameras"]))) # Load the ALPR database.
+    else:
+        if (str(config["general"]["alert_databases"]["alpr_cameras"]) == ""): # The ALPR alert database specified in the configuration is blank.
+            print(style.yellow + "Warning: ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified." + style.end)
+        elif (os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"])) == False): # The ALPR alert database specified in the configuration does not exist.
+            print(style.yellow + "Warning: ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alert_databases"]["alpr_cameras"]) + ") does not exist." + style.end)
+        else:
+            print(style.yellow + "Warning: An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue." + style.end)
 
 
 
@@ -97,27 +113,31 @@ if (config["display"]["custom_startup_message"] != ""): # Only display the line 
     print(config["display"]["custom_startup_message"]) # Show the user's custom defined start-up message.
 
 
-
-if (int(config["audio"]["sounds"]["startup"]["repeat"]) > 0): # Check to see if the user has the start up audio alert enabled.
-    for i in range(0, int(config["audio"]["sounds"]["startup"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-        os.system("mpg321 " + config["audio"]["sounds"]["startup"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-        time.sleep(float(config["audio"]["sounds"]["startup"]["delay"])) # Wait before playing the sound again.
+time.sleep(2) # Wait to seconds to allow the start-up logo to remain on-screen for a moment.
 
 
 
 
 
-active_alarm = "none" # Set the active alert placeholder before starting the main loop.
+play_sound("startup")
 
+
+
+
+
+active_alarm = "none" # Set the active alert indicator variable to a placeholder before starting the main loop.
+current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
 
 while True: # Run forever in a loop until terminated.
 
-
-    # Process all information that needs to be handled at the beginning of each cycle.
+    # Process all information that needs to be handled at the beginning of each cycle to prevent delays in the middle of the displaying process.
 
     if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
+        last_location = current_location # Set the last location to the current location immediately before we update the current location for the next cycle.
         current_location = get_gps_location() # Get the current location.
+
+
 
     # Traffic camera alert processing
     if (config["general"]["gps_enabled"] == True and float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
@@ -140,8 +160,6 @@ while True: # Run forever in a loop until terminated.
                     nearest_misc_camera = camera # Make the current camera the new closest camera.
 
 
-
-
         if (nearest_speed_camera["dst"] < nearest_redlight_camera["dst"] and nearest_speed_camera["dst"] < nearest_misc_camera["dst"]): # Check to see if the nearest speed camera is closer than nearest of the other camera types
             nearest_enforcement_camera = nearest_speed_camera # Set the overall nearest camera to the nearest speed camera.
         elif (nearest_redlight_camera["dst"] < nearest_speed_camera["dst"] and nearest_redlight_camera["dst"] < nearest_misc_camera["dst"]): # Check to see if the nearest red-light camera is closer than nearest of the other camera types
@@ -153,6 +171,10 @@ while True: # Run forever in a loop until terminated.
             if (nearest_enforcement_camera["spd"] != None): # Check to see if the nearest speed camera has speed limit data associated with it.
                 if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then enable a heightend alert.
                     active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
+
+
+
+
 
     # ALPR camera alert processing
     if (os.path.exists(config["general"]["alert_databases"]["alpr_cameras"]) == True and config["general"]["alert_databases"]["alpr_cameras"] != "" and config["general"]["gps_enabled"] == True): # Check to see if a valid ALPR database has been configured.
@@ -168,14 +190,18 @@ while True: # Run forever in a loop until terminated.
 
 
 
+
+
     clear() # Clear the console output at the beginning of every cycle.
+
+
 
     if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
         update_status_lighting("normal") # Run the function to reset the status lighting to indicate normal operation.
 
 
 
-
+    # Display any critical alarm messages that the user should know about as soon as possible.
 
     if (active_alarm == "speedcameralimitexceeded"):
         if (config["display"]["large_critical_display"] == True):
@@ -197,13 +223,14 @@ while True: # Run forever in a loop until terminated.
 
 
 
-
     active_alarm = "none" # Reset the active alert to none at the beginning of each session.
 
 
 
 
 
+
+    # Show all configured basic information displays.
 
     if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the large speed display is enabled in the configuration.
         current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
@@ -236,6 +263,8 @@ while True: # Run forever in a loop until terminated.
 
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
+
+
 
 
 
@@ -272,26 +301,18 @@ while True: # Run forever in a loop until terminated.
             if (nearest_enforcement_camera["dst"] < (float(config["general"]["alert_range"]["traffic_cameras"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
                 if (nearest_enforcement_camera["spd"] != None and config["general"]["traffic_camera_speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
                     if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
-                        if (int(config["audio"]["sounds"]["alarm"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-                            for i in range(0, int(config["audio"]["sounds"]["alarm"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-                                os.system("mpg321 " + config["audio"]["sounds"]["alarm"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-                if (int(config["audio"]["sounds"]["camera3"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-                    for i in range(0, int(config["audio"]["sounds"]["camera3"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-                        os.system("mpg321 " + config["audio"]["sounds"]["camera3"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-                        time.sleep(float(config["audio"]["sounds"]["camera3"]["delay"])) # Wait before playing the sound again.
+                        play_sound("alarm")
+
+                play_sound("camera3")
             elif (nearest_enforcement_camera["dst"] < (float(config["general"]["alert_range"]["traffic_cameras"]) * 0.25)): # Check to see if the nearest camera is within 25% of the traffic camera alert radius.
-                if (int(config["audio"]["sounds"]["camera2"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-                    for i in range(0, int(config["audio"]["sounds"]["camera2"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-                        os.system("mpg321 " + config["audio"]["sounds"]["camera2"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-                        time.sleep(float(config["audio"]["sounds"]["camera2"]["delay"])) # Wait before playing the sound again.
+                play_sound("camera2")
             elif (nearest_enforcement_camera["dst"] < (float(config["general"]["alert_range"]["traffic_cameras"]))): # Check to see if the nearest camera is within the traffic camera alert radius.
-                if (int(config["audio"]["sounds"]["camera1"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-                    for i in range(0, int(config["audio"]["sounds"]["camera1"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-                        os.system("mpg321 " + config["audio"]["sounds"]["camera1"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-                        time.sleep(float(config["audio"]["sounds"]["camera1"]["delay"])) # Wait before playing the sound again.
+                play_sound("camera1")
 
 
-    # ALPR camera alert display
+
+
+    # Display ALPR camera alerts.
     if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
 
         if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
@@ -307,13 +328,13 @@ while True: # Run forever in a loop until terminated.
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output.
 
         if (int(config["audio"]["sounds"]["alpr"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-            for i in range(0, int(config["audio"]["sounds"]["alpr"]["repeat"])): # Repeat the sound several times, if the configuration says to.
-                os.system("mpg321 " + config["audio"]["sounds"]["alpr"]["path"] + " > /dev/null 2>&1 &") # Play the sound specified for this alert type in the configuration.
-                time.sleep(float(config["audio"]["sounds"]["alpr"]["delay"])) # Wait before playing the sound again.
+            play_sound("alpr")
 
 
 
-    # Telemetry recording
+
+
+    # Record telemetry data according to the configuration.
     if (config["general"]["record_telemetry"] == True): # Check to see if Assassin is configured to record telemetry data.
         if (config["general"]["gps_enabled"] == True): # Check to see if GPS features are enabled.
             export_data = str(round(time.time())) + "," + str(current_speed) + "," + str(current_location[0]) + "," + str(current_location[1]) + "," + str(current_location[3]) + "," + str(current_location[4]) + "," + str(current_location[5]) + "\n" # Add all necessary information to the export data.
@@ -321,6 +342,7 @@ while True: # Run forever in a loop until terminated.
             export_data = str(round(time.time())) + "," + str("0") + "," + str("0.000") + "," + str("0.000") + "," + str("0") + "," + str("0") + "," + str("0") + "\n" # Add all necessary information to the export data, using placeholders for information that depends on GPS.
 
         add_to_file(assassin_root_directory + "/information_recording.csv", export_data, True) # Add the export data to the end of the file and write it to disk.
+
 
 
 
