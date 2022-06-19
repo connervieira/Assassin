@@ -410,8 +410,8 @@ def display_number(display_number="0"): # This function is used to display a num
 
 
 
-def get_cardinal_direction(heading=0):
-    direction = round(heading / 45)
+def get_cardinal_direction(heading=0): # Define the function used to convert degrees into cardinal directions.
+    direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
     if (direction == 0 or direction == 8):
         return "N"
     elif (direction == 1):
@@ -428,3 +428,15 @@ def get_cardinal_direction(heading=0):
         return "W"
     elif (direction == 7):
         return "NW"
+    else: # This case should never occur, unless the degrees supplied to the function exceeded 360 or were below 0.
+        return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+
+
+
+
+def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
+    status_lighting_update_url = str(config["realtime"]["status_lighting_values"][url_id]).replace("[U]", str(config["realtime"]["status_lighting_base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+    if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
+        response = requests.get(status_lighting_update_url)
+    else:
+        print(style.yellow + "Warning: Unable to update status lighting. Invalid URL configured for " + url_id + style.end) # Display a warning that the URL was invalid, and no network request was sent.

@@ -10,7 +10,7 @@
             "heading": 180.0,
             "satellites": 5
         },
-        "record_telemetry": true,
+        "record_telemetry": false,
         "alert_range": {
             "traffic_cameras": 1,
             "alpr_cameras": 1
