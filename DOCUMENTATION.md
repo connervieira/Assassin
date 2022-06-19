@@ -17,11 +17,14 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Assassin requires MPG321 in order to play audio effects for alerts.
     - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
     - You can install MPG321 using the following command on a Debian based Linux machine: `sudo apt-get install mpg321`
-4. Optionally, install RaspAP
+4. Optionally, install AirCrackNG
+    - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
+    - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
+5. Optionally, install RaspAP
     - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) (or similar program) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
     - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
     - If you already have an access point installed in the same area as Assassin, you can simply connect Assassin to it, and use SSH on a separate device to access the instance remotely.
-5. Download Assassin
+6. Download Assassin
     - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory to prevent any conflicts.
 
 

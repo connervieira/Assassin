@@ -443,22 +443,29 @@ def update_status_lighting(url_id): # Define the function used to update status 
 
 
 
+
+
+
 def play_sound(sound_id):
     if (str(sound_id) in config["audio"]["sounds"]): # Check to see that a sound with the specified sound ID exists in the configuration.
-        if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
-            if (int(config["audio"]["sounds"][str(sound_id)]["repeat"]) > 0): # Check to see if this sound effect is enabled.
+        if (int(config["audio"]["sounds"][str(sound_id)]["repeat"]) > 0): # Check to see if this sound effect is enabled.
+            if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
                 for i in range(0, int(config["audio"]["sounds"][str(sound_id)]["repeat"])): # Repeat the sound several times, if the configuration says to do so.
                     os.system("mpg321 " + config["audio"]["sounds"][str(sound_id)]["path"] + " > /dev/null 2>&1 &") # Play the sound file associated with this sound ID in the configuration.
                     time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
-        elif (str(config["audio"]["sounds"][str(sound_id)]["path"]) == ""): # The file path associated with this sound ID is left blank, and therefore the sound can't be played.
-            print(style.yellow + "Warning: The sound file path associated with sound ID (" + str(sound_id) + ") is blank." + style.end)
-            input("Press enter to continue...")
-        elif (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == False): # The file path associated with this sound ID does not exist, and therefore the sound can't be played.
-            print(style.yellow + "Warning: The sound file path associated with sound ID (" + str(sound_id) + ") does not exist." + style.end)
-            input("Press enter to continue...")
+            elif (str(config["audio"]["sounds"][str(sound_id)]["path"]) == ""): # The file path associated with this sound ID is left blank, and therefore the sound can't be played.
+                print(style.yellow + "Warning: The sound file path associated with sound ID (" + str(sound_id) + ") is blank." + style.end)
+                input("Press enter to continue...")
+            elif (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == False): # The file path associated with this sound ID does not exist, and therefore the sound can't be played.
+                print(style.yellow + "Warning: The sound file path associated with sound ID (" + str(sound_id) + ") does not exist." + style.end)
+                input("Press enter to continue...")
     else: # No sound with this ID exists in the configuration database, and therefore the sound can't be played.
         print(style.yellow + "Warning: No sound with the ID (" + str(sound_id) + ") exists in the configuration." + style.end)
         input("Press enter to continue...")
+
+
+
+
 
 
 def display_notice(message, level=1):

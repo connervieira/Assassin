@@ -18,7 +18,8 @@
         "refresh_delay": 1.0,
         "alert_databases": {
             "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
-            "alpr_cameras": "./assets/databases/alpr.json"
+            "alpr_cameras": "./assets/databases/alpr.json",
+            "drones": "./assets/databases/drones.json"
         },
         "camera_alert_types": {
             "speed": true,
@@ -26,7 +27,13 @@
             "misc": true
         },
         "traffic_camera_loaded_radius": 500,
-        "traffic_camera_speed_check": true
+        "traffic_camera_speed_check": true,
+        "drone_alerts": {
+            "enabled": true,
+            "save_detected_hazards": true,
+            "monitoring_device": "wlp1s0b1",
+            "monitoring_mode": "manual"
+        }
     },
     "display": {
         "displays": {
@@ -104,6 +111,11 @@
              },
             "alarm": {
                 "path": "./assets/sounds/alarm.mp3",
+                "repeat": "0",
+                "delay": "1"
+            },
+            "drone": {
+                "path": "./assets/sounds/drone.mp3",
                 "repeat": "0",
                 "delay": "1"
             }

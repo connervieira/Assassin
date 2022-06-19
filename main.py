@@ -29,6 +29,7 @@ config = json.load(open(assassin_root_directory + "/config.json")) # Load the co
 
 import time # Required to add delays and handle dates/times
 import subprocess # Required for starting some shell commands
+import signal # Required to manage sub-proceses.
 import sys
 import urllib.request # Required to make network requests
 import re # Required to use Regex
@@ -95,6 +96,36 @@ if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see
 
 
 
+# Load drone alert information, if enabled.
+if (config["general"]["drone_alerts"]["enabled"] == True):
+    if (os.path.exists(config["general"]["alert_databases"]["drones"]) == True and config["general"]["alert_databases"]["drones"] != ""):
+        drone_threat_database = json.load(open(config["general"]["alert_databases"]["drones"]))
+    elif (config["general"]["alert_databases"]["drones"] == ""):
+        display_notice("Drone alerts are enabled in the configuration, but the drone alert database path is blank.", 2)
+    elif (os.path.exists(config["general"]["alert_databases"]["drones"]) == False):
+        display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["alert_databases"]["drones"]) + ") doesn't exist.", 2)
+
+
+    if (config["general"]["drone_alerts"]["save_detected_hazards"] == True): # Check to see if drone hazard recording is enabled.
+        if (os.path.exists(assassin_root_directory + "/drone_threat_history.json")):
+            drone_threat_history_file = open(assassin_root_directory + "/drone_threat_history.json") # Open the drone threat history file.
+            drone_threat_history = json.load(drone_threat_history_file) # Load the drone threat history from the file.
+        else:
+            drone_threat_history = [] # Set the drone threat history to a blank placeholder list.
+
+    os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
+
+    airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
+    if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
+        proc = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
+        time.sleep(1) # Wait for 1 second to give airodump time to start.
+    elif (config["general"]["drone_alerts"]["monitoring_mode"] == "manual"):
+        print("Please manually execute the following command in the Assassin root directory:")
+        print(style.italic + airodump_command + style.end)
+        input("Press enter to continue once the command is running.")
+
+
+
 
 
 
@@ -116,7 +147,7 @@ if (config["display"]["custom_startup_message"] != ""): # Only display the line 
     print(config["display"]["custom_startup_message"]) # Show the user's custom defined start-up message.
 
 
-time.sleep(2) # Wait to seconds to allow the start-up logo to remain on-screen for a moment.
+time.sleep(2) # Wait two seconds to allow the start-up logo to remain on-screen for a moment.
 
 
 
@@ -187,6 +218,47 @@ while True: # Run forever in a loop until terminated.
         for entry in nearby_alpr_cameras: # Iterate through all nearby ALPR cameras.
             if (entry["distance"] < nearest_alpr_camera["distance"]): # Check to see if the distance to this camera is lower than the current closest camera.
                 nearest_alpr_camera = entry # Make the current camera the new closest camera.
+
+
+
+
+    # Drone alert processing
+    if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
+        grab_output_command = "cat " + assassin_root_directory + "/airodump_data-01.csv" # Set up the command to grab the contents of airodump's CSV output file.
+        command_output = str(os.popen(grab_output_command).read()) # Execute the output file grab command.
+
+        line_split_output = command_output.split("\n") # Split the raw command output into a list, line by line.
+        detected_devices = [] # Create a placeholder list for all of the detected devices and their data.
+        for device in line_split_output: # Iterate through each detected device, and separate it's information into a sub-list.
+            detected_devices.append(device.split(",")) # Add the information from each detected device to the access point list.
+
+        # Remove invalid entries from the listed of detected devices.
+        for device in detected_devices: # Iterate through each entry in the list of devices.
+            if (len(device) <= 3): # Check to see if this entry is shorter than expected.
+                detected_devices.remove(device) # Remove this entry from the list.
+
+        for device in detected_devices: # Iterate through each entry in the list of devices.
+            if (device[0] == "BSSID"): # Check to see if this entry is of the first header of the airodump output.
+                detected_devices.remove(device) # Remove this entry from the list.
+            elif (device[0] == "Station MAC"): # Check to see if this entry is of the second header of the airodump output.
+                detected_devices.remove(device) # Remove this entry from the list.
+
+        for device in detected_devices: # Iterate through each entry in the list of devices.
+            if (len(device) <= 3): # Check to see if this entry is shorter than expected.
+                detected_devices.remove(device) # Remove this entry from the list.
+
+        for device_key, device in enumerate(detected_devices): # Iterate through each entry in the list of devices.
+            for entry_key, entry in enumerate(device): # Iterate through each data entry for this device.
+                detected_devices[device_key][entry_key] = entry.strip() # Remove leading whitespace before any data in this entry.
+
+        detected_drone_hazards = [] # This is a placeholder list of detected hazards that will be append to in the next step.
+        for company in drone_threat_database: # Iterate through each manufacturer in the threat database.
+            for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
+                for device in detected_devices: # Iterate through each access point detected in the previous step.
+                    if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this AP matches the MAC address of this company.
+                        device.append(company) # Add this device's associated company to this device's data.
+                        device.append(round(time.time())) # Add the current time to this device's data.
+                        detected_drone_hazards.append(device) # Add the current device to the list of hazards detected.
 
 
 
@@ -271,7 +343,7 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Traffic enforcement camera alert display
+    # Display traffic camera alerts.
     if (config["general"]["gps_enabled"] == True and float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
         # Display the nearest traffic camera, if applicable.
         if (nearest_enforcement_camera["dst"] < float(config["general"]["alert_range"]["traffic_cameras"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.
@@ -298,7 +370,7 @@ while True: # Run forever in a loop until terminated.
 
 
             if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
-                display_shape("circle") # Display an ASCII cross in the output.
+                display_shape("circle") # Display an ASCII circle in the console output.
 
             # Play audio alerts, as necessary.
             if (nearest_enforcement_camera["dst"] < (float(config["general"]["alert_range"]["traffic_cameras"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
@@ -330,9 +402,48 @@ while True: # Run forever in a loop until terminated.
         if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output.
 
-        if (int(config["audio"]["sounds"]["alpr"]["repeat"]) > 0): # Check to see if the user has audio alerts enabled.
-            play_sound("alpr")
+        play_sound("alpr")
 
+
+
+
+    # Display drone alerts.
+    if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
+        if (len(detected_drone_hazards) > 0): # Check to see if any hazards were detected this cycle.
+            print(style.cyan + "Detected drone hazards:")
+            for hazard in detected_drone_hazards: # Iterate through each detected hazard.
+                if (len(hazard) == 17): # This hazards is an access point.
+                    print("    " + hazard[0] + "") # Show this hazard's MAC address.
+                    print("        Type: Access Point") # Show this hazard's type.
+                    print("        Name: " + hazard[13]) # Show this hazard's name.
+                    print("        Last Seen: " + str(hazard[2])) # Show the timestamp that this hazard was last seen.
+                    print("        First Seen: " + str(hazard[1])) # Show the timestamp that this hazard was first seen.
+                    print("        Channel: " + hazard[3]) # Show this hazard's wireless channel.
+                    print("        Strength: " + str(100 + (int(hazard[8]))) + "%") # Show this hazards relative signal strength.
+                    print("        Company: " + hazard[15]) # Show company or brand that this hazard is associated with.
+                elif (len(hazard) == 9): # This hazard is a device. TODO
+                    print("    " + hazard[0] + "") # Show this hazard's MAC address.
+                    print("        Type: Device") # Show this hazard's type.
+                    print("        Name: " + hazard[7]) # Show this hazard's name.
+                    print("        Last Seen: " + str(hazard[2])) # Show the timestamp that this hazard was last seen.
+                    print("        First Seen: " + str(hazard[1])) # Show the timestamp that this hazard was first seen.
+                    print("        Channel: " + str(hazard[4])) # Show this hazard's wireless channel.
+                    print("        Strength: " + str(100 + (int(hazard[3]))) + "%") # Show this hazards relative signal strength.
+                    print("        Company: " + str(hazard[7])) # Show company or brand that this hazard is associated with.
+                else:
+                    print("    " + hazard[0] + "") # Show this hazard's MAC address.
+
+                drone_threat_history.append(hazard) # Add this threat to the treat history.
+
+            print(style.end) # End the font styling from the drone threat display.
+
+            with open(assassin_root_directory + "/drone_threat_history.json", 'w') as drone_hazard_history_file: # Open the drone threat history file for editing.
+                drone_hazard_history_file.write(str(json.dumps(drone_threat_history, indent = 4))) # Write the current drone threat history to the file.
+
+            if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
+                display_shape("cross") # Display an ASCII cross in the console output to represent a drone.
+
+            play_sound("drone") # Play the sound effect associated with a potential drone threat being detected.
 
 
 
