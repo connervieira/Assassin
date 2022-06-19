@@ -12,7 +12,7 @@
         },
         "record_telemetry": false,
         "alert_range": {
-            "traffic_cameras": 1,
+            "traffic_cameras": 0,
             "alpr_cameras": 1
         },
         "refresh_delay": 1.0,
@@ -32,7 +32,8 @@
             "enabled": true,
             "save_detected_hazards": true,
             "monitoring_device": "wlp1s0b1",
-            "monitoring_mode": "manual"
+            "monitoring_mode": "manual",
+            "hazard_latch_time": 10
         }
     },
     "display": {
@@ -41,7 +42,7 @@
             "date": true,
             "speed": {
                 "small_display": true,
-                "large_display": true,
+                "large_display": false,
                 "decimal_places": 2,
                 "unit": "mph"
             },

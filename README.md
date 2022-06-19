@@ -42,13 +42,17 @@ These are some of the key features of Assassin.
 
 Assassin is capable of logging various pieces of information to a local file, including speed, location, altitude, heading, and more. This file is completely private, but can be used by the owner of the system to look back at historical data at a later time.
 
-### Traffic Enforcement Camera Alerts
+### Traffic Enforcement Camera Defense
 
 Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras.
 
-### Automated License Plate Recognition Camera Alerts
+### ALPR Defense
 
 Assassin can use a bundled database to detect nearby ALPR cameras, and alert the user before crossing the threshold.
+
+### Drone Detection
+
+Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz antennas in order to detect, record, and alert to nearby consumer and commercial drones.
 
 ### Status Lighting
 

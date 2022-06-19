@@ -261,6 +261,11 @@ while True: # Run forever in a loop until terminated.
                         detected_drone_hazards.append(device) # Add the current device to the list of hazards detected.
 
 
+        for hazard in detected_drone_hazards: # Iterate through each detected hazard.
+            if (time.time() - time.mktime(datetime.datetime.strptime(hazard[2], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, remove it from the detected drone hazards database.
+                detected_drone_hazards.remove(hazard) # Remove the hazard from the active detected hazards database.
+
+
 
 
 
@@ -421,7 +426,7 @@ while True: # Run forever in a loop until terminated.
                     print("        Channel: " + hazard[3]) # Show this hazard's wireless channel.
                     print("        Strength: " + str(100 + (int(hazard[8]))) + "%") # Show this hazards relative signal strength.
                     print("        Company: " + hazard[15]) # Show company or brand that this hazard is associated with.
-                elif (len(hazard) == 9): # This hazard is a device. TODO
+                elif (len(hazard) == 9): # This hazard is a device.
                     print("    " + hazard[0] + "") # Show this hazard's MAC address.
                     print("        Type: Device") # Show this hazard's type.
                     print("        Name: " + hazard[7]) # Show this hazard's name.
@@ -432,6 +437,7 @@ while True: # Run forever in a loop until terminated.
                     print("        Company: " + str(hazard[7])) # Show company or brand that this hazard is associated with.
                 else:
                     print("    " + hazard[0] + "") # Show this hazard's MAC address.
+                    print("        Type: Unknown") # Show this hazard's type.
 
                 drone_threat_history.append(hazard) # Add this threat to the treat history.
 
