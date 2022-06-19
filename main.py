@@ -60,6 +60,9 @@ display_number = utils.display_number # Load the function used to display number
 get_cardinal_direction = utils.get_cardinal_direction # Load the function used to convert headings from degrees to cardinal directions.
 update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
+display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
+
+
 
 
 
@@ -69,11 +72,11 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to 
         loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
     else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
         if (str(config["general"]["alert_databases"]["traffic_cameras"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
-            print(style.yellow + "Warning: Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified." + style.end)
+            display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 2)
         elif (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == False): # The traffic camera alert database specified in the configuration does not exist.
-            print(style.yellow + "Warning: Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["alert_databases"]["traffic_cameras"]) + ") does not exist." + style.end)
+            display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["alert_databases"]["traffic_cameras"]) + ") does not exist.", 2)
         else:
-            print(style.yellow + "Warning: An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue." + style.end)
+            display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
 
 
 
@@ -84,11 +87,11 @@ if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see
         loaded_alpr_camera_database = json.load(open(str(config["general"]["alert_databases"]["alpr_cameras"]))) # Load the ALPR database.
     else:
         if (str(config["general"]["alert_databases"]["alpr_cameras"]) == ""): # The ALPR alert database specified in the configuration is blank.
-            print(style.yellow + "Warning: ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified." + style.end)
+            display_notice("ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified.", 2)
         elif (os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"])) == False): # The ALPR alert database specified in the configuration does not exist.
-            print(style.yellow + "Warning: ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alert_databases"]["alpr_cameras"]) + ") does not exist." + style.end)
+            display_notice("ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alert_databases"]["alpr_cameras"]) + ") does not exist.", 2)
         else:
-            print(style.yellow + "Warning: An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue." + style.end)
+            display_notice("An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
 
 
 

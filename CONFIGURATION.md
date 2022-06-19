@@ -75,6 +75,11 @@ This section of configuration values effect Assassin's visual displays.
     - The `base_url` configuration value determines the base level URL that network requests will be made to in order to update the status lighting.
     - The `status_lighting_values` determine the exact URL that will be called for each condition.
         - The string `[U]` is replaced with the base URL defined earlier.
+- `notices`
+    - This configuration value contains all of the different levels of notices Assassin can show the user when issues are encountered. Level 1 indicates basic notices, level 2 indicates warnings, and level 3 indicates errors.
+    - Each notice level has the following configuration values:
+        - `wait_for_input` indicates whether Assassin should pause, and prompt the user to press enter to continue. This can be useful to allow the user to read the message at their own pace before continuing, but it can lead to situations where the user doesn't notice the message while driving, and Assassin remains paused.
+        - `delay` indicates how long, in seconds, Assassin should allow the message to be read before continuing. This delay is only used when `wait_for_input` is disabled.
 
 
 ## Audio Configuration

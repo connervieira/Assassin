@@ -59,7 +59,21 @@
                 "enforcementcamera": "[U]&R=0&G=0&B=255",
                 "alprcamera": "[U]&R=255&G=0&B=255"
             }
-        } 
+        },
+        "notices": {
+            "1": {
+                "wait_for_input": false,
+                "delay": 3.0
+            },
+            "2": {
+                "wait_for_input": true,
+                "delay": 5.0
+            },
+            "3": {
+                "wait_for_input": true,
+                "delay": 10.0
+            }
+        }
     },
     "audio": {
         "sounds": {

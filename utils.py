@@ -459,3 +459,28 @@ def play_sound(sound_id):
     else: # No sound with this ID exists in the configuration database, and therefore the sound can't be played.
         print(style.yellow + "Warning: No sound with the ID (" + str(sound_id) + ") exists in the configuration." + style.end)
         input("Press enter to continue...")
+
+
+def display_notice(message, level=1):
+    level = int(level) # Convert the message level to an integer.
+
+    if (level == 1): # The level is set to 1, indicating a standard notice.
+        print(str(message))
+        if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+            input("Press enter to continue...") # Wait for the user to press enter before continuning.
+        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+            time.sleep(float(config["display"]["notices"]["1"]["delay"])) # Wait for the delay specified in the configuration.
+
+    elif (level == 2): # The level is set to 2, indicating a warning.
+        print(style.yellow + "Warning: " + str(message) + style.end)
+        if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+            input("Press enter to continue...") # Wait for the user to press enter before continuning.
+        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+            time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
+
+    elif (level == 3): # The level is set to 3, indicating an error.
+        print(style.red + "Error: " + str(message) + style.end)
+        if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+            input("Press enter to continue...") # Wait for the user to press enter before continuning.
+        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+            time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
