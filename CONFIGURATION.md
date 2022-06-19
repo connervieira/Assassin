@@ -40,6 +40,24 @@ This section of configuration values effect Assassin's visual displays.
 - `displays`
     - This configuration value allows the user to turn on and off each information display individually.
     - This allows the user to control what information they can see while driving.
+    - `time` can be toggled on and off.
+    - `date` can be toggled on and off.
+    - `speed` has several configuration values.
+        - `small_display` toggles the small, single line speed text display on and off.
+        - `large_display` toggles the large, ASCII font speed display on and off
+        - `decimal_places` determines how many decimal places will be displayed in both speed display types.
+        - `unit` determines the unit of speed that Assassin will use.
+            - "kph" for kilometers-per-hour
+            - "mph" for miles-per-hour
+            - "mps" for meters-per-second
+            - "knot" for knots
+            - "fps" for feet-per-second
+    - `location` can be toggled on and off.
+    - `altitude` can be toggled on and off.
+    - `heading` has several configuration values.
+        - `degrees` determines whether or not the current heading will be displayed in degrees off north. When both `degrees` and `direction` are enabled, the degrees will be displayed in parenthesis after the cardinal direction.
+        - `direction` determines whether or not the current heading will be displayed as a cardinal direction, such as 'N', 'SW', or 'E'.
+    - `satellites` can be toggled on and off.
 - `large_critical_display`
     - This setting allows the user to determine whether or not they want critical messages to be shown in large ASCII font.
     - This can be useful to allow the user to quickly see critically important information at a glance, such as an imminent threat that requires immediate action.
@@ -51,17 +69,6 @@ This section of configuration values effect Assassin's visual displays.
     - This this setting is set to `false`, Assassin will instead display a small, since line title.
 - `custom_startup_message`
     - This setting defines a string that will be displayed the Assassin title upon start-up.
-- `speed_display_unit`
-    - This configuration value determines the unit that speeds will be displayed in.
-    - The following speed units are supported:
-        - "kph" for kilometers-per-hour
-        - "mph" for miles-per-hour
-        - "mps" for meters-per-second
-        - "knot" for knots
-        - "fps" for feet-per-second
-- `big_speed_display`
-    - This configuration value is used to determine whether or not Assassin will display the current speed in a large ASCII font at the top of the main display.
-    - The `decimal_places` sub-value determines how many decimal places Assassin will show in the large speed display, if enabled.
 - `status_lighting`
     - The status lighting configuration values allow Assassin to interact with a "WLED" RGB LED controller.
     - The `enabled` configuration value determines whether or not status lighting is enabled or disabled.
@@ -78,6 +85,8 @@ This section of configuration values effect Assassin's audio functionality.
     This configuration value determines all of the sounds that Assassin is capable of using.
     - Each sound has a `path`, `repeat`, and `delay` defined.
         - The `path` defines the file path of the sound file.
+            - This file path can be relative to the Assassin directory, or an absolute path.
         - The `repeat` setting defines how many times the sound file is played each time the sound is triggered.
+            - When `repeat` is set to zero for a particular sound, that sould will be disabled.
         - The `delay` setting defines how long code execution will be paused to allow the sound effect time to play.
             - It's important to note that this delay does not include the time spent playing the audio file. Therefore, a 0.5 second audio file with a 1 second delay will only leave 0.5 seconds of delay after the sound has finished playing.

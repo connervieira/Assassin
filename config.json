@@ -32,7 +32,12 @@
         "displays": {
             "time": true,
             "date": true,
-            "speed": true,
+            "speed": {
+                "small_display": true,
+                "large_display": true,
+                "decimal_places": 2,
+                "unit": "mph"
+            },
             "location": true,
             "altitude": true,
             "heading": {
@@ -46,11 +51,6 @@
         "heading_as_cardinal_direction": true,
         "ascii_art_header": true,
         "custom_startup_message": "",
-        "speed_display_unit": "mph",
-        "big_speed_display": {
-            "enabled":  true,
-            "decimal_places": 2
-        },
         "status_lighting": {
             "enabled": false,
             "base_url": "http://wled.local/win&A=255",

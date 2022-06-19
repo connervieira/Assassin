@@ -206,9 +206,9 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    if (config["display"]["displays"]["speed"] == True and config["general"]["gps_enabled"] == True and config["display"]["big_speed_display"]["enabled"] == True): # Check to see the speed display is enabled in the configuration.
-        current_speed = convert_speed(float(current_location[2]), config["display"]["speed_display_unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
-        current_speed = round(current_speed * 10**int(config["display"]["big_speed_display"]["decimal_places"]))/10**int(config["display"]["big_speed_display"]["decimal_places"]) # Round off the current speed to a certain number of decimal places as specific in the configuration.
+    if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the large speed display is enabled in the configuration.
+        current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
+        current_speed = round(current_speed * 10**int(config["display"]["displays"]["speed"]["decimal_places"]))/10**int(config["display"]["displays"]["speed"]["decimal_places"]) # Round off the current speed to a certain number of decimal places as specific in the configuration.
         display_number(current_speed) # Display the current speed in a large ASCII font.
 
     if (config["display"]["displays"]["time"] == True): # Check to see the time display is enabled in the configuration.
@@ -217,9 +217,9 @@ while True: # Run forever in a loop until terminated.
     if (config["display"]["displays"]["date"]  == True): # Check to see the date display is enabled in the configuration.
         print("Date: " + str(time.strftime('%A, %B %d, %Y'))) # Print the current date to the console.
 
-    if (config["display"]["displays"]["speed"] == True and config["general"]["gps_enabled"] == True and config["display"]["big_speed_display"]["enabled"] == False): # Check to see the speed display is enabled in the configuration.
-        current_speed = round(convert_speed(float(current_location[2]), config["display"]["speed_display_unit"])*100)/100 # Convert the speed data from the GPS into the units specified by the configuration.
-        print("Speed: " + str(current_speed) + " " + str(config["display"]["speed_display_unit"])) # Print the current speed to the console.
+    if (config["display"]["displays"]["speed"]["small_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the small speed display is enabled in the configuration.
+        current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
+        print("Speed: " + str(current_speed) + " " + str(config["display"]["displays"]["speed"]["unit"])) # Print the current speed to the console.
 
     if (config["display"]["displays"]["location"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current location display is enabled in the configuration.
         print("Position: " + str(current_location[0]) + " " + str(current_location[1])) # Print the current location as coordinates to the console.

@@ -20,11 +20,52 @@ While Assassin is designed to be as safe as possible, it's always the driver's r
 Assassin is a system designed to be your driving copilot by detecting and mitigating potential hazards like speed cameras, potholes, and more. During normal driving, Assassin works in the background as a dashboard, displaying basic, customizable information on screen. However, when a potential hazard or threat is encountered, Assassin alerts the driver, and suggests a solution to mitigate the problem.
 
 
-## General Features
+## Features
+
+These are some of the key features of Assassin.
+
+### Information Displays
+
+- Speed display
+    - Assassin can show the current speed with both a small, single-line text output, and/or a large ASCII font that's extremely easy to read at a glance.
+    - Speeds can be displayed in miles per hour, kilometers per hour, meters per second, feet per second, or knots.
+- Location display
+    - The current GPS location can be displayed as coordinates on-screen, allowing the driver to quickly determine their exact location.
+- Heading display
+    - The current direction of travel can be displayed as both a number in degrees, and/or as a cardinal direction.
+- Altitude display
+    - The current altitude in meters can be displayed based on data derived from the GPS.
+- Satellite display
+    - For diagnostic purposes, Assasin can display the number of satellites that the GPS is currently connected to.
+
+### Telemetry Logging
+
+Assassin is capable of logging various pieces of information to a local file, including speed, location, altitude, heading, and more. This file is completely private, but can be used by the owner of the system to look back at historical data at a later time.
+
+### Traffic Enforcement Camera Alerts
+
+Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras.
+
+### Automated License Plate Recognition Camera Alerts
+
+Assassin can use a bundled database to detect nearby ALPR cameras, and alert the user before crossing the threshold.
+
+### Status Lighting
+
+Assassin can interface with WLED status lighting systems to provide immersive, attention grabbing alerts while driving.
+
+### Audio Alerts
+
+Assassin comes bundled with various audio alert terms that are seamless and pleasant while still being distinctive and recognizable.
+
+
+## Philosophy
+
+These are some of the attributes that Assassin is designed around.
 
 ### Lightweight
 
-Assassin is extremely lightweight, and is designed to work on a Raspberry Pi.
+Assassin is extremely lightweight and power efficient, and is designed to work on a Raspberry Pi or similar low-powered device.
 
 ### Offline
 
