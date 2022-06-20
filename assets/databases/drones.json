@@ -3,7 +3,8 @@
         "MAC": [
             "60601f",
             "34d262"
-        ]
+        ],
+        "type": "drone"
     },
     "Parrot": {
         "MAC": [
@@ -12,6 +13,19 @@
             "9003b7",
             "a0143d",
             "00267e"
-        ]
+        ],
+        "type": "drone"
+    },
+    "Gatso": {
+        "MAC": [
+            "001829"
+        ],
+        "type": "camera"
+    },
+    "Redflex": {
+        "MAC": [
+            "00307e"
+        ],
+        "type": "camera"
     }
 }
