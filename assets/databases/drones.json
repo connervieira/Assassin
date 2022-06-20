@@ -4,7 +4,7 @@
             "60601f",
             "34d262"
         ],
-        "type": "drone"
+        "type": "aircraft"
     },
     "Parrot": {
         "MAC": [
@@ -14,7 +14,7 @@
             "a0143d",
             "00267e"
         ],
-        "type": "drone"
+        "type": "aircraft"
     },
     "Gatso": {
         "MAC": [
@@ -25,6 +25,19 @@
     "Redflex": {
         "MAC": [
             "00307e"
+        ],
+        "type": "camera"
+    },
+    "Mesta Fusion": {
+        "MAC": [
+            "0024ae"
+        ],
+        "type": "camera"
+    },
+    "TraffiStar": {
+        "MAC": [
+            "48e3c3",
+            "00044c"
         ],
         "type": "camera"
     }

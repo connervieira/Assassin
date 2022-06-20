@@ -33,7 +33,12 @@
             "save_detected_hazards": true,
             "monitoring_device": "wlp1s0b1",
             "monitoring_mode": "manual",
-            "hazard_latch_time": 10
+            "hazard_latch_time": 10,
+            "alert_types": [
+                "aircraft",
+                "camera",
+                "network"
+            ]
         }
     },
     "display": {

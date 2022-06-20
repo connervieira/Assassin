@@ -256,9 +256,11 @@ while True: # Run forever in a loop until terminated.
             for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
                 for device in detected_devices: # Iterate through each access point detected in the previous step.
                     if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this AP matches the MAC address of this company.
-                        device.append(company) # Add this device's associated company to this device's data.
-                        device.append(round(time.time())) # Add the current time to this device's data.
-                        detected_drone_hazards.append(device) # Add the current device to the list of hazards detected.
+                        if (drone_threat_database[company]["type"] in config["general"]["drone_alerts"]["alert_types"]): # Check to see if the company associated with the device matches one of the device types in the list of device types Assassin is configured to alert to.
+                            device.append(company) # Add this device's associated company to this device's data.
+                            device.append(round(time.time())) # Add the current time to this device's data.
+                            device.append(drone_threat_database[company]["type"]) # Add this device's type from the database to it's data.
+                            detected_drone_hazards.append(device) # Add the current device to the list of hazards detected.
 
 
         for hazard in detected_drone_hazards: # Iterate through each detected hazard.
@@ -415,29 +417,31 @@ while True: # Run forever in a loop until terminated.
     # Display drone alerts.
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
         if (len(detected_drone_hazards) > 0): # Check to see if any hazards were detected this cycle.
-            print(style.cyan + "Detected drone hazards:")
+            print(style.cyan + "Detected autonomous hazards:")
             for hazard in detected_drone_hazards: # Iterate through each detected hazard.
-                if (len(hazard) == 17): # This hazards is an access point.
+                if (len(hazard) == 18): # This hazards is an access point.
                     print("    " + hazard[0] + "") # Show this hazard's MAC address.
-                    print("        Type: Access Point") # Show this hazard's type.
+                    print("        Threat Type: " + hazard[17]) # Show what kind of threat this device is.
+                    print("        Company: " + hazard[15]) # Show company or brand that this hazard is associated with.
                     print("        Name: " + hazard[13]) # Show this hazard's name.
                     print("        Last Seen: " + str(hazard[2])) # Show the timestamp that this hazard was last seen.
                     print("        First Seen: " + str(hazard[1])) # Show the timestamp that this hazard was first seen.
                     print("        Channel: " + hazard[3]) # Show this hazard's wireless channel.
                     print("        Strength: " + str(100 + (int(hazard[8]))) + "%") # Show this hazards relative signal strength.
-                    print("        Company: " + hazard[15]) # Show company or brand that this hazard is associated with.
-                elif (len(hazard) == 9): # This hazard is a device.
+                    print("        Wireless Type: Access Point") # Show this hazard's type.
+                elif (len(hazard) == 10): # This hazard is a device.
                     print("    " + hazard[0] + "") # Show this hazard's MAC address.
-                    print("        Type: Device") # Show this hazard's type.
+                    print("        Threat Type: " + hazard[9]) # Show what kind of threat this device is.
+                    print("        Company: " + str(hazard[7])) # Show company or brand that this hazard is associated with.
                     print("        Name: " + hazard[7]) # Show this hazard's name.
                     print("        Last Seen: " + str(hazard[2])) # Show the timestamp that this hazard was last seen.
                     print("        First Seen: " + str(hazard[1])) # Show the timestamp that this hazard was first seen.
                     print("        Channel: " + str(hazard[4])) # Show this hazard's wireless channel.
                     print("        Strength: " + str(100 + (int(hazard[3]))) + "%") # Show this hazards relative signal strength.
-                    print("        Company: " + str(hazard[7])) # Show company or brand that this hazard is associated with.
+                    print("        Wireless Type: Device") # Show this hazard's type.
                 else:
                     print("    " + hazard[0] + "") # Show this hazard's MAC address.
-                    print("        Type: Unknown") # Show this hazard's type.
+                    print("        Wireless Type: Unknown") # Show this hazard's type.
 
                 drone_threat_history.append(hazard) # Add this threat to the treat history.
 
