@@ -37,8 +37,7 @@
             "hazard_latch_time": 10,
             "alert_types": [
                 "aircraft",
-                "camera",
-                "network"
+                "camera"
             ]
         },
         "relay_alerts": {
@@ -57,8 +56,13 @@
         "bluetooth_monitoring": {
             "enabled": true,
             "scan_time": 1,
-            "minimum_following_distance": 0,
+            "minimum_following_distance": 1,
             "whitelist": {
+                "enabled": true,
+                "devices": {
+                }
+            },
+            "blacklist": {
                 "enabled": true,
                 "devices": {
                 }

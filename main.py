@@ -355,7 +355,8 @@ while True: # Run forever in a loop until terminated.
                     "lastseenlocation": current_location, # This is the most recent GPS location that this device was detected at. This will be updated upon subsequent detections.
                     "firstseentime": round(time.time()), # This is the first time that this device was detected at. This will not be updated upon subsequent detections.
                     "lastseentime": round(time.time()), # This is the most recent time that this device was detected at. This will be updated upon subsequent detections.
-                    "whitelist": address in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"] # Check to see if this device address is in the whitelist specified in the configuration.
+                    "whitelist": address in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"], # Check to see if this device address is in the whitelist specified in the configuration.
+                    "blacklist": address in config["general"]["bluetooth_monitoring"]["blacklist"]["devices"] # Check to see if this device address is in the blacklist specified in the configuration.
                 }
 
 
@@ -445,7 +446,7 @@ while True: # Run forever in a loop until terminated.
         for address in detected_bluetooth_devices:
             device = detected_bluetooth_devices[address] # Grab the data for the device of this iteration cycle.
             distance_followed = get_distance(device["firstseenlocation"][0], device["firstseenlocation"][1], device["lastseenlocation"][0], device["lastseenlocation"][1]) # Calculate the distance that this device has been following Assassin by determining the distance between the first detected location and the last detected location.
-            if (distance_followed >= float(config["general"]["bluetooth_monitoring"]["minimum_following_distance"]) and address not in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"]): # Check to see if the distance this device has followed Assassin is greater than or equal to the threshold set in the configuration for alerting. Also check to make sure this device is not in the whitelist.
+            if ((distance_followed >= float(config["general"]["bluetooth_monitoring"]["minimum_following_distance"]) and address not in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"]) or address in config["general"]["bluetooth_monitoring"]["blacklist"]["devices"]): # Check to see if the distance this device has followed Assassin is greater than or equal to the threshold set in the configuration for alerting. Also check to make sure this device is not in the whitelist. If this device is in the blacklist, the alert regardless of other conditions.
                 print(style.pink + address + " (" + device["name"] + ") has been following for " + str(distance_followed) + " miles over the past " + str(int(device["lastseentime"]) - int(device["firstseentime"])) + " seconds." + style.end) # Print a notice containing the device that is following, as well has how far and how long the device has been detected.
             
 

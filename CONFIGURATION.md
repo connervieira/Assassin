@@ -62,6 +62,9 @@ This section of configuration values will effect Assassin's general operation.
     - `whitelist` allows the user to whitelist devices that are supposed to be following, like their car's stereo or their cell phone.
         - The `enabled` value enables or disables the whitelist.
         - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
+    - `blacklist` allows the user to specify devices that Assassin should immediately alert to, regardless of whether they've been following.
+        - The `enabled` value enables or disables the blacklist.
+        - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
 
 
 ## Display Configuration
