@@ -49,7 +49,7 @@
                     "gpio_pin": 22,
                     "alert_on_closed": true,
                     "minimum_activiation_speed": "0",
-                    "maximum_activiation_speed": "0"
+                    "maximum_activiation_speed": "0.5"
                 }
             }
         },

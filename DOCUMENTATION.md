@@ -24,11 +24,14 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
     - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
         - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
-5. Optionally, install RaspAP
+6. Optionally, install Dump1090
+    - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
+    - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
+7. Optionally, install RaspAP
     - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) (or similar program) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
     - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
     - If you already have an access point installed in the same area as Assassin, you can simply connect Assassin to it, and use SSH on a separate device to access the instance remotely.
-6. Download Assassin
+8. Download Assassin
     - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory to prevent any conflicts.
 
 

@@ -323,15 +323,14 @@ while True: # Run forever in a loop until terminated.
 
     # Run relay-based alert processing.
     if (config["general"]["relay_alerts"]["enabled"] == True): # Only check for relay-based alerts if relay alerts are enabled in the configuration.
+        active_relay_alerts = [] # Set the active relay alerts to a blank placeholder so all of the active alerts this cycle can be added to it in the next step.
         for alert in config["general"]["relay_alerts"]["alerts"]:
             if (GPIO.input(config["general"]["relay_alerts"]["alerts"][alert]["gpio_pin"]) == config["general"]["relay_alerts"]["alerts"][alert]["alert_on_closed"]):
                 if (config["general"]["gps_enabled"] == True):
                     if (float(current_speed) >= config["general"]["relay_alerts"]["alerts"][alert]["minimum_speed"] and float(current_speed) <= config["general"]["relay_alerts"]["alerts"][alert]["maximum_speed"]): # Check to see if the current speed falls within the range specified for this alert.
-                        print(style.green + config["general"]["relay_alerts"]["alerts"][alert]["title"]) # TODO Move alerts displaying to the display section.
-                        print(config["general"]["relay_alerts"]["alerts"][alert]["message"] + style.end)
+                        active_relay_alerts.append(config["general"]["relay_alerts"]["alerts"][alert]) # Add this alert to the list of active alerts for this cycle.
                 else: # GPS features are disabled, so show the alert regardless of the current speed.
-                    print(style.green + config["general"]["relay_alerts"]["alerts"][alert]["title"]) # TODO Move alerts displaying to the display section.
-                    print(config["general"]["relay_alerts"]["alerts"][alert]["message"] + style.end)
+                    active_relay_alerts.append(config["general"]["relay_alerts"]["alerts"][alert]) # Add this alert to the list of active alerts for this cycle.
 
 
 
@@ -437,6 +436,14 @@ while True: # Run forever in a loop until terminated.
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
 
+
+
+
+    # Display relay-based alerts.
+    if (config["general"]["relay_alerts"]["enabled"] == True): # Only display relay-based alerts if relay alerts are enabled in the configuration.
+        for alert in active_relay_alerts: # Iterate through each active alert, and print it to the screen.
+            print(style.green + alert["title"])
+            print("    " + alert["message"] + style.end)
 
 
 
