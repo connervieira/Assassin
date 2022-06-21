@@ -54,6 +54,10 @@ Assassin can use a bundled database to detect nearby ALPR cameras, and alert the
 
 Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz antennas in order to detect, record, and alert to nearby consumer and commercial drones. While not it's primary purpose, this feature is also capable of detecting speed cameras from several common manufacturers.
 
+### Bluetooth Monitoring
+
+Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, and can display an alert when a particular Bluetooth device has been following for a suspiciously long time. This can help provide early warning of people tailing you as you drive, as well as concealed tracking devices hidden in your car.
+
 ### Status Lighting
 
 Assassin can interface with WLED status lighting systems to provide immersive, attention grabbing alerts while driving.

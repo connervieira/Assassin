@@ -4,3 +4,4 @@ This is a informal to-do list for Assassin. Keep in mind that this is not a comp
 
 - [X] Add configuration options for how warning messages are displayed.
 - [X] Add support for detecting motion using a motion detector relay.
+- [ ] Add a Bluetooth blacklist, for which Assassin will instantly alert instead of waiting for devices to follow.
