@@ -7,6 +7,9 @@ This document describes the configuration values found `config.json`.
 
 This section of configuration values will effect Assassin's general operation.
 
+- `active_config_refresh`
+    - This setting determines whether or not Assassin will refresh the configuration file every cycle.
+    - Activating this setting can easily cause fatal errors, so it should only be used for testing.
 - `gps_enabled`
     - This setting is used to globally enable and disable GPS functionality throughout Assassin.
 - `gps_demo_mode`
@@ -31,6 +34,34 @@ This section of configuration values will effect Assassin's general operation.
 - `traffic_camera_speed_check`
     - This configuration value determines whether or not Assassin will attempt to check the current speed against nearby speed enforcement cameras to inform the driver when they are at risk of getting a ticket.
     - Note that traffic enforcement camera speed checks are not always possible, since not all cameras in the database have speed limit information embedded.
+- `drone_alerts`
+    - Drone alerts are Assassin's system for detector drone aircraft, speed cameras, and other autonomous wireless threats.
+    - This setting has the following sub-values for configuration:
+        - `enabled` toggles the entire drone detection system on and off.
+        - `save_detect_hazards` determines whether or not Assassin will save the drone hazards it detects to a local file for later analysis.
+        - `monitoring_device` determines the wireless device that Assassin will attempt to use to run wireless network analysis.
+        - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it. Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
+            - This setting can only be set to "manual" or "automatic"
+        - `hazard_latch_time` is how long (in seconds) Assassin will latch onto alerts after they are no longer detected before dismissing them.
+        - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to. This is useful if you only want to alert to certain types of autonomous threats.
+- `relay_alerts`
+    - Relay alerts allow the user to connect custom relays via GPIO pins, and have Assassin alert to events from them.
+    - The `enabled` configuration value enables and disables the entire relay alert system.
+    - Each relay alert is defined under the `alerts` configuration value, and has the following information associated with it:
+        - `title` is simply the title of the relay alert.
+        - `message` is the message shown when the relay alert is activated.
+        - `gpio_pin` is the GPIO pin ID that this relay is connected to.
+        - `alert_on_closed` determines whether or not this alert should trigger when the relay closes or opens.
+        - `minimum_activation_speed` defines the minimum GPS speed that this alert will activate at. This is useful if your connected device requires the vehicle to be moving.
+        - `maximum_activation_speed` defines the maximum GPS speed that this alert will activate at. This is useful if your connected device requires the vehicle to be below a certain speed.
+- `bluetooth_monitoring`
+    - Bluetooth monitoring allows Assassin to detect nearby Bluetooth devices, and monitor when a particular device has been following for a suspiciously long distance.
+    - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
+    - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
+    - `minimum_followin_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
+    - `whitelist` allows the user to whitelist devices that are supposed to be following, like their car's stereo or their cell phone.
+        - The `enabled` value enables or disables the whitelist.
+        - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
 
 
 ## Display Configuration

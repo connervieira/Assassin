@@ -1,5 +1,6 @@
 {
     "general": {
+        "active_config_refresh": true,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
@@ -15,7 +16,7 @@
             "traffic_cameras": 0,
             "alpr_cameras": 1
         },
-        "refresh_delay": 1.0,
+        "refresh_delay": 0,
         "alert_databases": {
             "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
             "alpr_cameras": "./assets/databases/alpr.json",
@@ -29,7 +30,7 @@
         "traffic_camera_loaded_radius": 500,
         "traffic_camera_speed_check": true,
         "drone_alerts": {
-            "enabled": true,
+            "enabled": false,
             "save_detected_hazards": true,
             "monitoring_device": "wlp1s0b1",
             "monitoring_mode": "manual",
@@ -39,6 +40,29 @@
                 "camera",
                 "network"
             ]
+        },
+        "relay_alerts": {
+            "enabled": false,
+            "alerts": {
+                "perimeter_monitoring": {
+                    "title": "Perimeter Monitoring",
+                    "message": "Vehicle perimeter has been breached",
+                    "gpio_pin": 22,
+                    "alert_on_closed": true,
+                    "minimum_activiation_speed": "0",
+                    "maximum_activiation_speed": "0"
+                }
+            }
+        },
+        "bluetooth_monitoring": {
+            "enabled": true,
+            "scan_time": 1,
+            "minimum_following_distance": 0,
+            "whitelist": {
+                "enabled": true,
+                "devices": {
+                }
+            }
         }
     },
     "display": {
@@ -70,7 +94,8 @@
             "status_lighting_values": {
                 "normal": "[U]&R=0&G=255&B=0",
                 "enforcementcamera": "[U]&R=0&G=0&B=255",
-                "alprcamera": "[U]&R=255&G=0&B=255"
+                "alprcamera": "[U]&R=255&G=0&B=255",
+                "autonomousthreat": "[U]&R=255&G=0&B=0"
             }
         },
         "notices": {

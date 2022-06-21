@@ -248,13 +248,17 @@ def display_shape(shape):
 # Define some styling information
 class style:
     # Define colors
-    purple = '\033[95m'
-    cyan = '\033[96m'
-    blue = '\033[94m'
-    green = '\033[92m'
-    yellow = '\033[93m'
-    gray = '\033[1;37m'
     red = '\033[91m'
+    yellow = '\033[93m'
+    green = '\033[92m'
+    blue = '\033[94m'
+    cyan = '\033[96m'
+    pink = '\033[95m'
+    purple = '\033[1;35m'
+    gray = '\033[1;37m'
+    brown = '\033[0;33m'
+    black = '\033[0;30m'
+
 
     # Define text decoration
     bold = '\033[1m'
@@ -297,7 +301,7 @@ def get_gps_location(demo=False): # Placeholder that should be updated at a late
 
 
 
-# Define a simple function to calculate the approximate distance between two points.
+# Define a simple function to calculate the approximate distance between two points in miles.
 def get_distance(lat1, lon1, lat2, lon2):
     return great_circle((lat1, lon1), (lat2, lon2)).miles
 

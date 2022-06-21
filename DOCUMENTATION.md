@@ -20,6 +20,10 @@ This is the installation process for Assassin and all of it's dependencies. This
 4. Optionally, install AirCrackNG
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
+5. Optionally, install Bluez Tools
+    - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
+    - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
+        - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
 5. Optionally, install RaspAP
     - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) (or similar program) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
     - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
