@@ -65,6 +65,14 @@ This section of configuration values will effect Assassin's general operation.
     - `blacklist` allows the user to specify devices that Assassin should immediately alert to, regardless of whether they've been following.
         - The `enabled` value enables or disables the blacklist.
         - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
+- `adsb_alerts`
+    - ADS-B alerts allow Assassin to monitor and analyze aircraft in surrounding areas as a way to detect potential threats.
+    - The `enabled` value enables and disables the entire ADS-B system.
+    - The `minimum_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while the car is on residential roads.
+    - The `distance_threshold` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
+    - The `base_altitude_threshold` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
+        - Below the base altitude threshold, the distance threshold will be proportionally decreased, and above the base altitude threshold, the distance threshold will be proportionally increased.
+        - The `base_altitude_threshold` should roughly be the altitude that you expect hazardous planes to be at. Any planes above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower planes pose less of a threat, so the alert distance decreases.
 
 
 ## Display Configuration

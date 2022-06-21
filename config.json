@@ -67,6 +67,12 @@
                 "devices": {
                 }
             }
+        },
+        "adsb_alerts": {
+            "enabled": false,
+            "minimum_speed": 50,
+            "distance_threshold": 3,
+            "base_altitude_threshold": 10000
         }
     },
     "display": {
