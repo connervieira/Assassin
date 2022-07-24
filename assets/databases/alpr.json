@@ -783,6 +783,50 @@
             "direction": 270,
             "owner": "",
             "type": "standalone"
+        },
+        {
+            "latitude": 41.53926,
+            "longitude": -81.45295,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "Alpha Drive",
+            "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
+            "direction": 340,
+            "owner": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.53927,
+            "longitude": -81.45295,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "Alpha Drive",
+            "description": "A white, hardwired unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
+            "direction": 340,
+            "owner": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.538991,
+            "longitude": -81.453685,
+            "brand": "",
+            "name": "Falcon",
+            "road": "Wilson Mills Road",
+            "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling west on Wilson Mills Road",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar"
+        },
+        {
+            "latitude": 41.538921,
+            "longitude": -81.453687,
+            "brand": "",
+            "name": "Falcon",
+            "road": "Wilson Mills Road",
+            "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling east on Wilson Mills Road",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar"
         }
     ]
 }
