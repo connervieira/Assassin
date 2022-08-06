@@ -2,7 +2,7 @@
 
 **Copyright 2022 V0LT - Conner Vieira**
 
-The ultimate secret weapon for driving the technological world.
+The ultimate digital weapon for driving the technological world.
 
 
 ## Disclaimer
@@ -12,7 +12,7 @@ While Assassin is designed to be as safe as possible, it's always the driver's r
 
 ## Description
 
-Assassin is a system designed to be your driving copilot by detecting and mitigating potential hazards like speed cameras, potholes, and more. During normal driving, Assassin works in the background as a dashboard, displaying basic, customizable information on screen. However, when a potential hazard or threat is encountered, Assassin alerts the driver, and suggests a solution to mitigate the problem.
+Assassin is a system designed to be your driving copilot by detecting and mitigating potential hazards like speed cameras, potholes, and more. During normal driving, Assassin works in the background as a dashboard, displaying basic, customizable information on screen. However, when a potential hazard or threat is encountered, Assassin alerts the driver, and often suggests a solution to mitigate the problem.
 
 
 ## Features
@@ -80,7 +80,7 @@ Assassin follows a philosophy of repairability by providing the user with everyt
 
 ### Open Source
 
-Assasin is free and open source from top to bottom, and is 'free software', meaning you can make changes and distribute them to others freely.
+Assassin is free and open source from top to bottom, and is 'free software', meaning you can make changes and distribute them to others freely.
 
 ### Generic
 
@@ -88,7 +88,7 @@ By design, Assassin doesn't require specialized hardware to run. Regardless of w
 
 ### Easy
 
-While being technically mindedly will certainly help, Assassin doesn't require professional installation or setup to function. As long as you're reasonably experienced with the Linux command line and automotive electronics, installing assassin should only take a few hours at most.
+While being technically minded will certainly help, Assassin doesn't require professional installation or setup to function. As long as you're reasonably experienced with the Linux command line and automotive electronics, installing assassin should only take a few hours at most.
 
 ### Private
 
