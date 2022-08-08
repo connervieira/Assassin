@@ -512,7 +512,7 @@ while True: # Run forever in a loop until terminated.
         print(style.purple + style.bold)
         print("Nearest " + loaded_alpr_camera_database["name"] + ":")
         print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles")
-        rint("    Street: " + str(nearest_alpr_camera["road"]))
+        print("    Street: " + str(nearest_alpr_camera["road"]))
         print(style.end + style.end)
 
         if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
