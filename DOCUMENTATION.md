@@ -17,10 +17,10 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Assassin requires MPG321 in order to play audio effects for alerts.
     - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
     - You can install MPG321 using the following command on a Debian based Linux machine: `sudo apt-get install mpg321`
-4. Optionally, install AirCrackNG (Reccommended)
+4. Optionally, install AirCrackNG (Recommended)
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
-5. Optionally, install Bluez Tools (Reccomended)
+5. Optionally, install Bluez Tools (Recomended)
     - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
     - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
         - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
