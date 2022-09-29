@@ -10,7 +10,7 @@
         "road": "str",
         "description": "str",
         "direction": "int",
-        "owner": "str",
+        "operator": "str",
         "type": "str"
     },
     "entries": [
@@ -22,7 +22,7 @@
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the west side of the road, reading the license plates on the back of vehicles traveling south on County Line Road just after passing Fairmount Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -33,7 +33,7 @@
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the east side of the road, reading the license plates on the back of vehicles traveling north on County Line Road just after passing Fairmount Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -44,7 +44,7 @@
             "road": "Fairmount Boulevard",
             "description": "A black, solar powered unit placed on a pole on the south side of the road, reading the license plates on the back of vehicles traveling west on Fairmount Boulevard just after passing County Line Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -55,7 +55,7 @@
             "road": "Chagrin River Road",
             "description": "A black, solar powered unit placed on a black pole on the side of the road, scanning the license plates on the backs of cars headed south, entering Hunting Valley.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -66,7 +66,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed east on Mayfield Road, just after passing SOM Center Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -77,7 +77,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed west on Mayfield Road, just after passing SOM Center Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -88,7 +88,7 @@
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of vehicles just as they hit the start of a bridge.",
             "direction": 75,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -99,7 +99,7 @@
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the right side of the road, facing the backs of cars on I-90 East.",
             "direction": 45,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -110,7 +110,7 @@
             "road": "I-90 West",
             "description": "Located on a tall silver pole on the right side of the road, facing the backs of cars on I-90 West.",
             "direction": 225,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -121,7 +121,7 @@
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of cars on I-90 East, just as they begin to cross a bridge.",
             "direction": 70,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -132,7 +132,7 @@
             "road": "I-90 West",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of cars on I-90 West, just after they finish crossing a bridge.",
             "direction": 250,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -143,7 +143,7 @@
             "road": "Center Street",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Center Street, just after passing Mentor Avenue.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -154,7 +154,7 @@
             "road": "Center Street",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Center Street, just after passing Mentor Avenue.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -165,7 +165,7 @@
             "road": "Turney Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed south-east on Turney Road, just after passing Granger Road.",
             "direction": 150,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -176,7 +176,7 @@
             "road": "Turney Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed north-west on Turney Road, just after passing Granger Road.",
             "direction": 330,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -187,7 +187,7 @@
             "road": "Chargrin Boulevard",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling west on Chargrin Boulevard as they pass Brainard Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -198,7 +198,7 @@
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Chagrin Boulevard as they pass Brainard Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -209,7 +209,7 @@
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Ridge Road as they cross Pearl Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -220,7 +220,7 @@
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Ridge Road as they cross Pearl Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -231,7 +231,7 @@
             "road": "Pearl Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars headed north-east on Pearl road, just after they pass York Road and Stumph Road.",
             "direction": 30,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -242,7 +242,7 @@
             "road": "Stumph Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north-west on Stump Road, just after crossing Pearl Road.",
             "direction": 325,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -253,7 +253,7 @@
             "road": "Pearl Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed south-west on Pearl Road, just after passing Stumph Road and York Road.",
             "direction": 230,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -264,7 +264,7 @@
             "road": "York Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south-east on York Road, just after passing Pearl Road.",
             "direction": 130,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -275,7 +275,7 @@
             "road": "County Line Road",
             "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling south on Country Line Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -286,7 +286,7 @@
             "road": "Cedar Road",
             "description": "Mounted on a tall black pole on the east side of the of a fork in Cedar Road, facing the backs of cars traveling west from Chagrin River Road to Cedar Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -297,7 +297,7 @@
             "road": "SOM Center Road",
             "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling north on the round-about between Gates Mills Boulevard and SOM Center Road.",
             "direction": 30,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -308,7 +308,7 @@
             "road": "SOM Center Road",
             "description": "Mounted on a tall black pole on the east side of the road, facing the backs of cars traveling north on SOM Center Road just after passing Fairmount Boulevard.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -319,7 +319,7 @@
             "road": "Fairmount Boulevard",
             "description": "Mounted on a tall black pole on the south side of the road, facing the backs of cars traveling east on Fairmount Boulevard just after passing SOM Center Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -330,7 +330,7 @@
             "road": "SOM Center Road",
             "description": "A solar powered unit placed on a tall black pole on the east side of the road, reading the license plates on the backs of cars traveling north on SOM Center Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -341,7 +341,7 @@
             "road": "West Hill Drive",
             "description": "On the south side of the road, facing the backs of cars traveling east on West Hill Drive.",
             "direction": 40,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -352,7 +352,7 @@
             "road": "Mayfield Road",
             "description": "3 small black camera units mounted on a traffic signal cross bar, each facing the back of cars traveling west on the 3 lanes of Mayfield Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -363,7 +363,7 @@
             "road": "Old Mill Road",
             "description": "A black solar powered unit mounted on a pole on the south side of the road, facing the backs of cars traveling east on Old Mill Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -374,7 +374,7 @@
             "road": "Cedar Road",
             "description": "A black, solar powered unit placed on a pole on the north side of the road, facing front of vehicles traveling west on Cedar Road just before reaching SOM Center Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -385,7 +385,7 @@
             "road": "SOM Center Road",
             "description": "A discrete black unit placed on a standalone pole on the west side of the road, facing the backs of cars traveling south on SOM Center Road, just after passing Cedar Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -396,7 +396,7 @@
             "road": "SOM Center Road",
             "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the front of cars traveling north on SOM Center Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -407,7 +407,7 @@
             "road": "SOM Center Road",
             "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the backs of cars traveling north on SOM Center Road.",
             "direction": 20,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -418,7 +418,7 @@
             "road": "Old Kinsman Road",
             "description": "A black solar powered camera on a standalone pole located on the sound side of the road, facing the backs of cars traveling east on Old Kinsman Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -429,7 +429,7 @@
             "road": "Chagrin River Road",
             "description": "Located on the west side of the road, facing the front of cars traveling south on Chagrin River Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -440,7 +440,7 @@
             "road": "Chagrin Boulevard",
             "description": "A compact silver camera mounted on a traffic light cross bar facing the backs of cars traveling west on Chagrin Boulevard as they pass Brainard Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -451,7 +451,7 @@
             "road": "Chagrin Boulevard",
             "description": "A compact silver camera mounted on a traffic light cross bar facing the backs of cars traveling east on Chagrin Boulevard as they pass Brainard Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -462,7 +462,7 @@
             "road": "Liberty Tunnel",
             "description": "A thin white camera mounted on the support post of a street lamp on the west side of the road, facing the backs of cars traveling south entering the Liberty Tunnel.",
             "direction": 200,
-            "owner": "",
+            "operator": "",
             "type": "streetlamp_supportpost"
         },
         {
@@ -473,7 +473,7 @@
             "road": "Liberty Tunnel",
             "description": "A thin white camera mounted on the support post of a street lamp on the east side of the road, facing the backs of cars traveling north existing the Liberty Tunnel.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "streetlamp_supportpost"
         },
         {
@@ -484,7 +484,7 @@
             "road": "Liberty Tunnel",
             "description": "A small white camera mounted on a traffic light cross bar at the corner of the intersection, facing the backs of cars traveling south exiting the Liberty Tunnel.",
             "direction": 230,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -495,7 +495,7 @@
             "road": "Cochran Road",
             "description": "A small white camera facing the backs of cars traveling north on Cochran Road.",
             "direction": 330,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -506,7 +506,7 @@
             "road": "Washington Road",
             "description": "A small white camera facing the backs of cars traveling south on Washington Road just after passing Cochran Road.",
             "direction": 200,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -517,7 +517,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling west on Mayfield Road just after passing Lander Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -528,7 +528,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling east on Mayfield Road just after passing Lander Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -539,7 +539,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling west on Mayfield Road just after passing Richmond Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -550,7 +550,7 @@
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling north on Richmond Road just after passing Mayfield Road.",
             "direction": 10,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -561,7 +561,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Mayfield Road, just after passing South Belvoir Boulevard.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -572,7 +572,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling west on Mayfield Road just after passing South Belvoir Boulevard.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -583,7 +583,7 @@
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Richmond Road just after passing Cedar Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -594,7 +594,7 @@
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Richmond Road just after passing Cedar Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -605,7 +605,7 @@
             "road": "Cedar Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling west on Cedar Road just after passing Richmond Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -616,7 +616,7 @@
             "road": "Cedar Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Cedar Road just after passing Richmond Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -627,7 +627,7 @@
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bars, facing the backs of cars traveling south west on Euclid Avenue just after passing Ford Drive.",
             "direction": 220,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -638,7 +638,7 @@
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north east on Euclid Avenue just after passing Mayfield Road.",
             "direction": 50,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -649,7 +649,7 @@
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Ridge Road just before passing Pearl Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -660,7 +660,7 @@
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Ridge Road, just before passing Pearl Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -671,7 +671,7 @@
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north on Ridge Road, as they cross Snow Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -682,7 +682,7 @@
             "road": "Ridge road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south on Ridge Road as they cross Snow Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -693,7 +693,7 @@
             "road": "Snow Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling west on Snow Road as they pass Ridge Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -704,7 +704,7 @@
             "road": "Snow Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling east on Snow Road as they pass Ridge Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -715,7 +715,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the front of cars traveling west on Mayfield Road as they pass Warrensville Center Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficsignal_crossbar_monitor"
         },
         {
@@ -726,7 +726,7 @@
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling east on Mayfield Road as they pass Warrensville Center Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -737,7 +737,7 @@
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north on Warrensville Center Road as they pass Mayfield Road.",
             "direction": 180,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -748,7 +748,7 @@
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south on Warrensville Center Road as they pass Mayfield Road.",
             "direction": 0,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
         {
@@ -759,7 +759,7 @@
             "road": "Gates Mills Boulevard",
             "description": "Mounted on the north west side of the road, facing the backs of cars traveling north east on Gates Mills Boulevard.",
             "direction": 50,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -770,7 +770,7 @@
             "road": "Wilson Mills Road",
             "description": "A small black solar powered unit mounted on a utility pole facing the backs of cars traveling east on Wilson Mills Road.",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "utilitypole"
         },
         {
@@ -781,7 +781,7 @@
             "road": "Wilson Mills Road",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling west on Wilson Mills Road.",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -792,7 +792,7 @@
             "road": "Alpha Drive",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
             "direction": 340,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -803,7 +803,7 @@
             "road": "Alpha Drive",
             "description": "A white, hardwired unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
             "direction": 340,
-            "owner": "",
+            "operator": "",
             "type": "standalone"
         },
         {
@@ -814,7 +814,7 @@
             "road": "Wilson Mills Road",
             "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling west on Wilson Mills Road",
             "direction": 270,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         },
         {
@@ -825,7 +825,7 @@
             "road": "Wilson Mills Road",
             "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling east on Wilson Mills Road",
             "direction": 90,
-            "owner": "",
+            "operator": "",
             "type": "trafficlight_crossbar"
         }
     ]

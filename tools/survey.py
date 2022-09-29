@@ -14,10 +14,10 @@
 import os
 import json
 
-assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory, containing all the program's support files.. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
+assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory, containing all the program's support files. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
 
-config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+config = json.load(open(assassin_root_directory + "/../config.json")) # Load the configuration database from config.json
 
 
 import time # Required to add delays and handle dates/times
@@ -59,9 +59,7 @@ root = input("Project root directory path: ") # Prompt the user to enter a path 
 
 # Run some validation to make sure the information just entered by the user is correct.
 if (os.path.exists(root) == False): # Check to see if the root directory entered by the user exists.
-    print(style.yellow + "Warning: The root project directory entered doesn't seem to exist. The database editor will almost certainly fail." + style.end)
-    input("Press enter to continue...")
-
+    display_notice("The root project directory entered doesn't seem to exist. The database editor will almost certainly fail.", 2)
 
 
 while True:
