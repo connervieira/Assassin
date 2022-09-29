@@ -65,6 +65,7 @@ nearby_database_poi = utils.nearby_database_poi # Load the function used to chec
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
 display_number = utils.display_number # Load the function used to display numbers as large ASCII font.
 get_cardinal_direction = utils.get_cardinal_direction # Load the function used to convert headings from degrees to cardinal directions.
+get_arrow_direction = utils.get_arrow_direction # Load the function used to convert headings from degrees to arrow directions.
 update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
@@ -511,8 +512,10 @@ while True: # Run forever in a loop until terminated.
 
         print(style.purple + style.bold)
         print("Nearest " + loaded_alpr_camera_database["name"] + ":")
-        print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles")
-        print("    Street: " + str(nearest_alpr_camera["road"]))
+        print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
+        print("    Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
+        print("    Direction: " + str(get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4])) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°") # Display the direct to this POI relative to the current direction of movement.
+        print("    Bearing: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
         print(style.end + style.end)
 
         if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.

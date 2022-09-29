@@ -42,6 +42,10 @@ import fnmatch # Required to use wildcards to check strings
 import lzma # Required to load ExCam database
 import math # Required to run more complex math calculations
 from geopy.distance import great_circle # Required to calculate distance between locations.
+
+import pyproj # Required to calculate bearing between locations.
+geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic
+
 from gps import * # Required to access GPS information.
 import gpsd
 
@@ -352,6 +356,10 @@ def nearby_database_poi(current_lat, current_lon, database_information, radius=1
     for entry in database_information["entries"]: # Iterate through each entry in the loaded database information.
         current_distance = get_distance(current_lat, current_lon, entry['latitude'], entry['longitude']) # Get the current distance to the POI in question.
         entry["distance"] = current_distance # Append the current POI's distance to it's database information.
+        entry["bearing"] = geodesic.inv(current_lon, current_lat, entry["longitude"], entry["latitude"])[0] # Calculate the bearing to the POI.
+        if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
+            entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
+
         if (current_distance < float(radius)): # Check to see if the current POI is within range of the user.
             nearby_database_information.append(entry) # Add this entry to the list of POIs within range.
     return nearby_database_information # Return the new database with the newly added distance information.
@@ -415,6 +423,9 @@ def display_number(display_number="0"): # This function is used to display a num
 
 
 def get_cardinal_direction(heading=0): # Define the function used to convert degrees into cardinal directions.
+    if (heading < 0): # Check to see if the heading is a negative number.
+         heading = 360 + heading # Convert the heading to a positive number. 
+
     direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
     if (direction == 0 or direction == 8):
         return "N"
@@ -432,6 +443,31 @@ def get_cardinal_direction(heading=0): # Define the function used to convert deg
         return "W"
     elif (direction == 7):
         return "NW"
+    else: # This case should never occur, unless the degrees supplied to the function exceeded 360 or were below 0.
+        return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+
+
+def get_arrow_direction(heading=0): # Define the function used to convert degrees into an arrow pointing in a particular direction.
+    if (heading < 0): # Check to see if the heading is a negative number.
+         heading = 360 + heading # Convert the heading to a positive number. 
+
+    direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
+    if (direction == 0 or direction == 8):
+        return "↑"
+    elif (direction == 1):
+        return "⬈"
+    elif (direction == 2):
+        return "→"
+    elif (direction == 3):
+        return "⬊"
+    elif (direction == 4):
+        return "↓"
+    elif (direction == 5):
+        return "⬋"
+    elif (direction == 6):
+        return "←"
+    elif (direction == 7):
+        return "⬉"
     else: # This case should never occur, unless the degrees supplied to the function exceeded 360 or were below 0.
         return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
 

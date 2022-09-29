@@ -4,17 +4,17 @@
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41.4741,
-            "latitude": -81.4439,
-            "speed": 36.4,
+            "longitude": 41,
+            "latitude": -80,
+            "speed": 0,
             "altitude": 132.0,
-            "heading": 87.2,
+            "heading": 270,
             "satellites": 6
         },
         "record_telemetry": false,
         "alert_range": {
-            "traffic_cameras": 5,
-            "alpr_cameras": 5
+            "traffic_cameras": 0,
+            "alpr_cameras": 1
         },
         "refresh_delay": 0,
         "alert_databases": {
@@ -27,7 +27,7 @@
             "redlight": true,
             "misc": true
         },
-        "traffic_camera_loaded_radius": 500,
+        "traffic_camera_loaded_radius": 100,
         "traffic_camera_speed_check": true,
         "drone_alerts": {
             "enabled": false,
@@ -94,8 +94,7 @@
             "satellites": true
         },
         "large_critical_display": true,
-        "shape_alerts": true,
-        "heading_as_cardinal_direction": true,
+        "shape_alerts": false,
         "ascii_art_header": true,
         "custom_startup_message": "",
         "status_lighting": {

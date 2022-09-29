@@ -8,7 +8,7 @@ This document contains the information you need to know to set up and use Assass
 This is the installation process for Assassin and all of it's dependencies. This process is written assuming you're running a Debian based distribution of GNU/Linux, but it's theoretically possible to get Assassin to function on MacOS as well.
 
 1. Install the required Python packages. (Required)
-    - `pip3 install validators gps geopy gpsd-py3 gpsd requests`
+    - `pip3 install validators gps geopy gpsd-py3 gpsd requests pyproj`
 2. Install GPSD (Highly Recommended)
     - GPSD is required for Assassin to communicate with GPS devices.
     - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
