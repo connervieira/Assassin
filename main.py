@@ -138,6 +138,17 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
 
 
 
+# Load the Bluetooth device log file, if applicable.
+if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
+    if (os.path.exists(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])):
+        bluetooth_device_log_file.write = open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"]) # Open the Bluetooth device log file.
+        detected_bluetooth_devices = json.load(bluetooth_device_log_file) # Load the data from the Bluetooth device log file.
+    else:
+        detected_bluetooth_devices = {} # Set the Bluetooth device log to a blank placeholder list.
+
+
+
+
 
 
 # Display the start-up intro header.
@@ -172,7 +183,6 @@ play_sound("startup")
 
 active_alarm = "none" # Set the active alert indicator variable to a placeholder before starting the main loop.
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
-detected_bluetooth_devices = {} # Set the detected BBluetooth devices dictionary to an empty placeholder. This variable will only be used if Bluetooth monitoring is enabled.
 
 
 while True: # Run forever in a loop until terminated.
@@ -341,8 +351,8 @@ while True: # Run forever in a loop until terminated.
         try:
             nearby_bluetooth_devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
         except:
-            display_notice("Couldn't detect nearby Bluetooth devices.", 2)
-            nearby_bluetooth_devices = {} 
+            display_notice("Couldn't detect nearby Bluetooth devices.", 2) # Display a warning that Bluetooth devices could not be detected.
+            nearby_bluetooth_devices = {}  # Set the nearby Bluetooth device list to an empty placeholder, since Bluetooth devices could not be detected.
 
         for address, name in nearby_bluetooth_devices:
             if (address in detected_bluetooth_devices): # This device has been seen before, so update it's existing dictionary entry.
@@ -358,6 +368,10 @@ while True: # Run forever in a loop until terminated.
                     "whitelist": address in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"], # Check to see if this device address is in the whitelist specified in the configuration.
                     "blacklist": address in config["general"]["bluetooth_monitoring"]["blacklist"]["devices"] # Check to see if this device address is in the blacklist specified in the configuration.
                 }
+
+            if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
+                with open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], 'w') as bluetooth_device_log_file: # Open the Bluetooth device log file for editing.
+                    bluetooth_device_log_file.write(str(json.dumps(detected_bluetooth_devices, indent = 4))) # Write the current Bluetooth device log to the file.
 
 
 

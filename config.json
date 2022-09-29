@@ -30,7 +30,7 @@
         "traffic_camera_loaded_radius": 100,
         "traffic_camera_speed_check": true,
         "drone_alerts": {
-            "enabled": true,
+            "enabled": false,
             "save_detected_hazards": false,
             "monitoring_device": "wlp1s0b1",
             "monitoring_mode": "manual",
@@ -57,6 +57,10 @@
             "enabled": false,
             "scan_time": 1,
             "minimum_following_distance": 1,
+            "log_devices": {
+                "enabled": true,
+                "filename": "bluetooth_devices.json"
+            },
             "whitelist": {
                 "enabled": true,
                 "devices": {
