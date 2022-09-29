@@ -424,8 +424,7 @@ while True: # Run forever in a loop until terminated.
                 }
 
             if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
-                with open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], 'w') as bluetooth_device_log_file: # Open the Bluetooth device log file for editing.
-                    bluetooth_device_log_file.write(str(json.dumps(detected_bluetooth_devices, indent = 4))) # Write the current Bluetooth device log to the file.
+                save_to_file(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], json.dumps(detected_bluetooth_devices), True) # Save the Bluetooth device history to disk.
 
 
 
@@ -620,8 +619,7 @@ while True: # Run forever in a loop until terminated.
 
             print(style.end) # End the font styling from the drone threat display.
 
-            with open(assassin_root_directory + "/drone_threat_history.json", 'w') as drone_hazard_history_file: # Open the drone threat history file for editing.
-                drone_hazard_history_file.write(str(json.dumps(drone_threat_history, indent = 4))) # Write the current drone threat history to the file.
+            save_to_file(assassin_root_directory + "/drone_threat_history.json", str(json.dumps(drone_threat_history, indent = 4)), True) # Save the current drone threat history to disk.
 
             if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
                 display_shape("cross") # Display an ASCII cross in the console output to represent a drone.
