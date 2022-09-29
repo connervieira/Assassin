@@ -40,11 +40,5 @@
             "00044c"
         ],
         "type": "camera"
-    },
-    "Netgear": {
-        "MAC": [
-            "2c3033"
-        ],
-        "type": "camera"
     }
 }
