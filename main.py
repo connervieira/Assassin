@@ -193,9 +193,11 @@ current_location = [] # Set the current location variable to a placeholder befor
 
 
 while True: # Run forever in a loop until terminated.
-
     if (config["general"]["active_config_refresh"] == True): # Check to see if the configuration indicates to actively refresh the configuration during runtime.
         config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+
+
+    time.sleep(config["general"]["refresh_delay"]) # Wait for a certain amount of time, as specified in the configuration.
 
 
 
@@ -321,10 +323,11 @@ while True: # Run forever in a loop until terminated.
                         if (current_timestamp not in radio_device_history): # Check to see if the current timestamp already exists in the radio device history.
                             radio_device_history[current_timestamp] = [] # If this timestamp doesn't exist in the database, then create it with a blank placeholder dictionary.
 
-                        radio_device_history[str(round(time.time()))].append(device_information) # Add the current device to the list of detected radio devices.
+                        radio_device_history[current_timestamp].append(device_information) # Add the current device to the list of detected radio devices.
+    
 
-            with open(assassin_root_directory + "/" + "/radio_device_history.json", 'w') as radio_device_log_file: # Open the radio device history log file for editing. TODO - Change to writing utility function.
-                radio_device_log_file.write(str(json.dumps(radio_device_history, indent = 4))) # Write the current radio device history log to the file.
+            save_to_file(assassin_root_directory + "/" + "/radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
+
 
 
 

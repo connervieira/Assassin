@@ -1,6 +1,7 @@
 {
     "general": {
         "active_config_refresh": true,
+        "refresh_delay": 1,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,

@@ -10,6 +10,8 @@ This section of configuration values will effect Assassin's general operation.
 - `active_config_refresh`
     - This setting determines whether or not Assassin will refresh the configuration file every cycle.
     - Activating this setting can easily cause fatal errors, so it should only be used for testing.
+- `refresh_delay`
+    - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
 - `gps_enabled`
     - This setting is used to globally enable and disable GPS functionality throughout Assassin.
 - `gps_demo_mode`
