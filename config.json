@@ -54,7 +54,7 @@
             }
         },
         "bluetooth_monitoring": {
-            "enabled": false,
+            "enabled": true,
             "scan_time": 1,
             "minimum_following_distance": 1,
             "log_devices": {
@@ -117,8 +117,8 @@
                 "delay": 3.0
             },
             "2": {
-                "wait_for_input": true,
-                "delay": 5.0
+                "wait_for_input": false,
+                "delay": 2.0
             },
             "3": {
                 "wait_for_input": true,
