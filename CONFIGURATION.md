@@ -40,7 +40,8 @@ This section of configuration values will effect Assassin's general operation.
     - Drone alerts are Assassin's system for detector drone aircraft, speed cameras, and other autonomous wireless threats.
     - This setting has the following sub-values for configuration:
         - `enabled` toggles the entire drone detection system on and off.
-        - `save_detect_hazards` determines whether or not Assassin will save the drone hazards it detects to a local file for later analysis.
+        - `save_detected_hazards` determines whether or not Assassin will save the drone hazards it detects to a local file for later analysis.
+        - `save_detected_devices` determines whether or not Assassin will save the all radio devices it detects to a local file for later analysis.
         - `monitoring_device` determines the wireless device that Assassin will attempt to use to run wireless network analysis.
         - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it. Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
             - This setting can only be set to "manual" or "automatic"
@@ -61,6 +62,9 @@ This section of configuration values will effect Assassin's general operation.
     - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
     - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
     - `minimum_followin_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
+    - `log_devices` determines whether Assassin will log all of the Bluetooth devices it detects, and has the following sub-values:
+        - `enabled` determines whether device logging is active.
+        - `filename` determines the name of the file that Assassin will write logged devices to.
     - `whitelist` allows the user to whitelist devices that are supposed to be following, like their car's stereo or their cell phone.
         - The `enabled` value enables or disables the whitelist.
         - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
