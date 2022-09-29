@@ -4,17 +4,17 @@
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41.0,
-            "latitude": -71.0,
-            "speed": 22.352,
-            "altitude": 100.0,
-            "heading": 180.0,
-            "satellites": 5
+            "longitude": 41.4741,
+            "latitude": -81.4439,
+            "speed": 36.4,
+            "altitude": 132.0,
+            "heading": 87.2,
+            "satellites": 6
         },
         "record_telemetry": false,
         "alert_range": {
-            "traffic_cameras": 0,
-            "alpr_cameras": 1
+            "traffic_cameras": 5,
+            "alpr_cameras": 5
         },
         "refresh_delay": 0,
         "alert_databases": {
@@ -54,7 +54,7 @@
             }
         },
         "bluetooth_monitoring": {
-            "enabled": true,
+            "enabled": false,
             "scan_time": 1,
             "minimum_following_distance": 1,
             "whitelist": {
