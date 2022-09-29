@@ -295,20 +295,16 @@ while True: # Run forever in a loop until terminated.
 
                 device_information = [] # Create a blank placeholder that will be used to store this device's information.
 
-                if (len(device) == 18): # This hazard is an access point.
+                if (len(device) == 15): # This hazard is an access point.
                     device_information.append(device[0]) # Add the device's MAC address to the device information.
-                    device_information.append(device[17]) # Add the device's threat type to the device information.
-                    device_information.append(device[15]) # Add the device's associated company to the device information.
                     device_information.append(device[13]) # Add the device's name to the device information.
                     device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
                     device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
                     device_information.append(device[3]) # Add the device's channel to the device information.
                     device_information.append(str(100 + (int(device[8])))) # Convert the relative strength to a percentage, then save it to the device information.
                     device_information.append("Access Point") # Add the device's device type to the device information.
-                elif (len(device) == 10): # This hazard is a device.
+                elif (len(device) == 7): # This hazard is a device.
                     device_information.append(device[0]) # Add the device's MAC address to the device information.
-                    device_information.append(device[9]) # Add the device's threat type to the device information.
-                    device_information.append(device[7]) # Add the device's associated company to the device information.
                     device_information.append("Unknown") # Add the device's name to the device information.
                     device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
                     device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
@@ -320,14 +316,15 @@ while True: # Run forever in a loop until terminated.
 
 
                 if (device_information != []): # Check to see if the device_information has been populated by data.
-                    if (time.time() - time.mktime(datetime.datetime.strptime(device_information[4], "%Y-%m-%d %H:%M:%S").timetuple()) < float(3)): # Check to see if this threat was seen within the last 3 seconds. If not, ignore it and don't log it.
-                        if (str(round(time.time())) not in radio_device_history): # Check to see if the current timestamp already exists in the radio device history.
-                            radio_device_history[str(round(time.time()))] = [] # If this timestamp doesn't exist in the database, then create it with a blank placeholder dictionary.
+                    current_timestamp = str(round(time.time())) # Get the current timestamp. This value is saved to variable because it's theoretically possible for the time to change between the time the database entry is changed and the time information is added to it.
+                    if (time.time() - time.mktime(datetime.datetime.strptime(device_information[2], "%Y-%m-%d %H:%M:%S").timetuple()) < float(3)): # Check to see if this threat was seen within the last 3 seconds. If not, ignore it and don't log it.
+                        if (current_timestamp not in radio_device_history): # Check to see if the current timestamp already exists in the radio device history.
+                            radio_device_history[current_timestamp] = [] # If this timestamp doesn't exist in the database, then create it with a blank placeholder dictionary.
 
-                    radio_device_history[str(round(time.time()))].append(device_information) # Add the current device to the list of detected radio devices.
+                        radio_device_history[str(round(time.time()))].append(device_information) # Add the current device to the list of detected radio devices.
 
-                with open(assassin_root_directory + "/" + "/radio_device_history.json", 'w') as radio_device_log_file: # Open the radio device history log file for editing. TODO - Change to writing utility function.
-                    radio_device_log_file.write(str(json.dumps(radio_device_history, indent = 4))) # Write the current radio device history log to the file.
+            with open(assassin_root_directory + "/" + "/radio_device_history.json", 'w') as radio_device_log_file: # Open the radio device history log file for editing. TODO - Change to writing utility function.
+                radio_device_log_file.write(str(json.dumps(radio_device_history, indent = 4))) # Write the current radio device history log to the file.
 
 
 
