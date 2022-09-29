@@ -31,8 +31,8 @@
         "traffic_camera_speed_check": true,
         "drone_alerts": {
             "enabled": false,
-            "save_detected_hazards": false,
-            "monitoring_device": "wlp1s0b1",
+            "save_detected_hazards": true,
+            "monitoring_device": "wlp40s0",
             "monitoring_mode": "manual",
             "hazard_latch_time": 10,
             "alert_types": [

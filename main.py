@@ -139,7 +139,7 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
 
 
 # Load the Bluetooth device log file, if applicable.
-if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
+if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
     if (os.path.exists(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])):
         bluetooth_device_log_file.write = open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"]) # Open the Bluetooth device log file.
         detected_bluetooth_devices = json.load(bluetooth_device_log_file) # Load the data from the Bluetooth device log file.
