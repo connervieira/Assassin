@@ -35,7 +35,7 @@ These are some of the key features of Assassin.
 
 ### Telemetry Logging
 
-Assassin is capable of logging various pieces of information to a local file, including speed, location, altitude, heading, and more. This file is completely private, but can be used by the owner of the system to look back at historical data at a later time.
+Assassin is capable of logging various pieces of information to a local file, including speed, location, altitude, heading, and more. This file is completely private, but can be used by the owner of the system to look back at historical data at a later time. This feature is completely optional.
 
 ### Traffic Enforcement Camera Defense
 
@@ -43,7 +43,7 @@ Assassin can process and alert to nearby speed enforcement and red light cameras
 
 ### ALPR Defense
 
-Assassin comes bundled database to detect nearby ALPR cameras, and alert the user before crossing the threshold.
+Assassin comes bundled database to detect nearby ALPR cameras, and alert the user before crossing the threshold. Assassin will determine the distance and direction to nearby ALPR cameras in real-time.
 
 ### Autonomous Threat Defense
 
