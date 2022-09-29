@@ -122,6 +122,14 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
         else:
             drone_threat_history = [] # Set the drone threat history to a blank placeholder list.
 
+    # Load the detected devices history file, if applicable.
+    if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
+        if (os.path.exists(assassin_root_directory + "/radio_device_history.json")):
+            radio_device_history_file = open(assassin_root_directory + "/radio_device_history.json") # Open the device history file.
+            radio_device_history = json.load(radio_device_history_file) # Load the detected device history from the file.
+        else:
+            radio_device_history = {} # Set the drone threat history to a blank placeholder list.
+
 
     # Run Airodump based on the Assassin configuration.
     os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
@@ -278,11 +286,58 @@ while True: # Run forever in a loop until terminated.
             for entry_key, entry in enumerate(device): # Iterate through each data entry for this device.
                 detected_devices[device_key][entry_key] = entry.strip() # Remove leading whitespace before any data in this entry.
 
+
+
+
+
+        if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
+            for device in detected_devices: # Iterate through each device detected in the previous step.
+
+                device_information = [] # Create a blank placeholder that will be used to store this device's information.
+
+                if (len(device) == 18): # This hazard is an access point.
+                    device_information.append(device[0]) # Add the device's MAC address to the device information.
+                    device_information.append(device[17]) # Add the device's threat type to the device information.
+                    device_information.append(device[15]) # Add the device's associated company to the device information.
+                    device_information.append(device[13]) # Add the device's name to the device information.
+                    device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
+                    device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
+                    device_information.append(device[3]) # Add the device's channel to the device information.
+                    device_information.append(str(100 + (int(device[8])))) # Convert the relative strength to a percentage, then save it to the device information.
+                    device_information.append("Access Point") # Add the device's device type to the device information.
+                elif (len(device) == 10): # This hazard is a device.
+                    device_information.append(device[0]) # Add the device's MAC address to the device information.
+                    device_information.append(device[9]) # Add the device's threat type to the device information.
+                    device_information.append(device[7]) # Add the device's associated company to the device information.
+                    device_information.append("Unknown") # Add the device's name to the device information.
+                    device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
+                    device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
+                    device_information.append(device[4]) # Add the device's channel to the device information.
+                    device_information.append(str(100 + (int(device[3])))) # Convert the relative strength to a percentage, then save it to the device information.
+                    device_information.append("Device") # Add the device's device type to the device information.
+                else: # This hazard doesn't match the expected formatting rules.
+                    pass
+
+
+                if (device_information != []): # Check to see if the device_information has been populated by data.
+                    if (time.time() - time.mktime(datetime.datetime.strptime(device_information[4], "%Y-%m-%d %H:%M:%S").timetuple()) < float(3)): # Check to see if this threat was seen within the last 3 seconds. If not, ignore it and don't log it.
+                        if (str(round(time.time())) not in radio_device_history): # Check to see if the current timestamp already exists in the radio device history.
+                            radio_device_history[str(round(time.time()))] = [] # If this timestamp doesn't exist in the database, then create it with a blank placeholder dictionary.
+
+                    radio_device_history[str(round(time.time()))].append(device_information) # Add the current device to the list of detected radio devices.
+
+                with open(assassin_root_directory + "/" + "/radio_device_history.json", 'w') as radio_device_log_file: # Open the radio device history log file for editing. TODO - Change to writing utility function.
+                    radio_device_log_file.write(str(json.dumps(radio_device_history, indent = 4))) # Write the current radio device history log to the file.
+
+
+
+
+
         detected_drone_hazards = [] # This is a placeholder list of detected hazards that will be append to in the next step.
-        for company in drone_threat_database: # Iterate through each manufacturer in the threat database.
-            for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
-                for device in detected_devices: # Iterate through each access point detected in the previous step.
-                    if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this AP matches the MAC address of this company.
+        for device in detected_devices: # Iterate through each device detected in an ealier step.
+            for company in drone_threat_database: # Iterate through each manufacturer in the threat database.
+                for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
+                    if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this device matches the MAC address of this company.
                         if (drone_threat_database[company]["type"] in config["general"]["drone_alerts"]["alert_types"]): # Check to see if the company associated with the device matches one of the device types in the list of device types Assassin is configured to alert to.
                             device.append(company) # Add this device's associated company to this device's data.
                             device.append(round(time.time())) # Add the current time to this device's data.

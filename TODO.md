@@ -9,6 +9,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - [X] Add configuration options for how warning messages are displayed.
 - [X] Add support for detecting motion using a motion detector relay.
 - [X] Add a Bluetooth blacklist, for which Assassin will instantly alert instead of waiting for devices to follow.
+- [ ] Fix drone hazard logging.
 - [ ] Add wireless access point logging.
 - [ ] Add ADS-B monitoring to detect planes.
 

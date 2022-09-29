@@ -30,8 +30,9 @@
         "traffic_camera_loaded_radius": 100,
         "traffic_camera_speed_check": true,
         "drone_alerts": {
-            "enabled": false,
+            "enabled": true,
             "save_detected_hazards": true,
+            "save_detected_devices": true,
             "monitoring_device": "wlp40s0",
             "monitoring_mode": "manual",
             "hazard_latch_time": 10,
@@ -54,7 +55,7 @@
             }
         },
         "bluetooth_monitoring": {
-            "enabled": true,
+            "enabled": false,
             "scan_time": 1,
             "minimum_following_distance": 1,
             "log_devices": {
