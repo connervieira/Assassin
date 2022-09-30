@@ -34,7 +34,7 @@
             "enabled": true,
             "save_detected_hazards": true,
             "save_detected_devices": false,
-            "monitoring_device": "wlp40s0",
+            "monitoring_device": "wlp1s0b1",
             "monitoring_mode": "manual",
             "hazard_latch_time": 10,
             "alert_types": [
