@@ -134,4 +134,4 @@ Assasin's extreme customizability can be a bit overwhelming to new users. For th
 
 ## Installing
 
-Due to it's customizable nature, Assassin has extensive configuration and setup options. To learn more about how to install, configure, and use Assassin, see <DOCUMENTATION.md>
+Due to it's customizable nature, Assassin has extensive configuration and setup options. To learn more about how to install, configure, and use Assassin, see [DOCUMENTATION.md](DOCUMENTATION.md)
