@@ -66,18 +66,34 @@ After installing Assassin, you should do some quick configuration in order to ge
 
 Many of Assassin's features are dependent on external hardware. This section provides basic information on feature-specific hardware.
 
+- Processor
+    - Assassin is specific designed to be extremely lightweight, so it should run smoothly on devices like the Raspberry Pi.
+        - The Raspberry Pi 4 runs Assassin extremely well, and seems to handle any realistic usage case well.
+        - The Raspberry Pi 3 runs Assassin reliably. It may suffer from longer startup times, but otherwise works well.
+        - The Raspberry Pi 2 runs Assassin acceptably, but smoothly. For the best experience, consider a faster processing device.
+    - Since Assassin is capable of interfacing with several external devices and sensors, a processing device with solid I/O is recommended.
 - Location Services
     - Many of Assassin's core features are dependent on GPS data. As such, it is highly recommend that you install a GPS unit to make the most of Assassin.
-    - Assassin uses GPSD as a location backend, which means practically any USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
+    - Assassin uses GPSD as a location backend, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
 - Bluetooth Monitoring
     - To enable Bluetooth related features, Assassin simply connects to any typical Bluetooth adapter. Many devices have these adapters built in.
-    - If you're device has integrated Bluetooth, Assassin whould have no problem interfacing it. However, external Bluetooth adapters can increase range.
+    - If you're device has integrated Bluetooth, Assassin whould have no problem interfacing it. However, external Bluetooth adapters can increase range especially if they are placed outside the body of the vehicle.
 - Radio Monitoring
     - Assassin's radio monitoring features allow it to detect WiFi devices, consumer/commercial drones, and other wireless threats.
     - Assassin uses Airodump to detect wireless devices. Airodump is capable of using most consumer network adapters.
         - Practically all consumer devices operate on either 2.4GHz or 5.0GHz
         - Certain drones operate on 5.8GHz
     - If your device has a built in wireless adapter, it's highly likely that Assassin can use it. However, external wireless receivers can increase range, especially if they're placed outside the body of the vehicle.
+- Plane Detection
+    - Assassin makes use of ADS-B technology in order to detect planes and collect information from them.
+    - In order to enable plane detection functionality, you'll need to connect Assassin to an ADS-B receiver.
+    - To build a basic ADS-B system, you'll need a USB 1090MHz tuner, a 1090MHz antenna, and software to interpret data from the tuner.
+        - Nearly all tuners will work with Assassin. Any standardized tuner that works with dump1090 should work fine.
+            - Generally speaking, less expensive tuners will work just fine for Assassin's purposes. More expensive tuners allow for increased detection range, but even low-end tuners can easily detect planes from 50+ miles away, far beyond the point of visibility.
+        - Any 1090MHz antenna that connects appropriately to your tuner should work just fine with Assassin.
+            - It's highly recommended that you get an externally mounted antenna. Antennas located within the body of the car will have dramatically reduced range.
+        - Assassin uses the dump1090-mutability software for it's backend.
+            - Verify that dump1090 can successfully connect to and interpret data from the tuner.
 
 
 ## Usage
