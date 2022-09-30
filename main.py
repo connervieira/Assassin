@@ -114,6 +114,10 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
         display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["alert_databases"]["drones"]) + ") doesn't exist.", 2)
 
 
+
+    detected_drone_hazards = [] # Set the active drone hazards list to a blank placeholder.
+
+
     # Load the drone threat history file, if applicable.
     if (config["general"]["drone_alerts"]["save_detected_hazards"] == True): # Check to see if drone hazard recording is enabled.
         if (os.path.exists(assassin_root_directory + "/drone_threat_history.json")):
@@ -289,99 +293,83 @@ while True: # Run forever in a loop until terminated.
                 detected_devices[device_key][entry_key] = entry.strip() # Remove leading whitespace before any data in this entry.
 
 
+        active_radio_devices = {} # Set a placeholder dictionary to store the active radio devices. Information stored in this dictionary is voltile and are not saved to disk.
+
+        for device in detected_devices: # Iterate through each device detected in the previous step.
+
+            device_information = {} # Create a blank placeholder that will be used to store this device's information.
+
+            if (len(device) == 15): # This hazard is an access point.
+                device_information["mac"] = device[0] # Add the device's MAC address to the device information.
+                device_information["name"] = device[13] # Add the device's name to the device information.
+                device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
+                device_information["firstseen"] = device[1] # Add the device's first-seen timestamp to the device information.
+                device_information["channel"] = device[3] # Add the device's channel to the device information.
+                device_information["strength"] = str(100 + (int(device[8]))) # Convert the relative strength to a percentage, then save it to the device information.
+                device_information["type"] = "Access Point" # Add the device's device type to the device information.
+                device_information["threat"] = False # Add the device's threat status to the device information.
+                device_information["company"] = "" # Add a placeholder for this device's associated company. This will be updated if the device is found to be a threat.
+                device_information["threattype"] = "" # Add a placeholder for this device's threat type. This will be updated if the device is found to be a threat.
+            elif (len(device) == 7): # This hazard is a device.
+                device_information["mac"] = device[0] # Add the device's MAC address to the device information.
+                device_information["name"] = "Unknown" # Add the device's name to the device information.
+                device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
+                device_information["firstseen"] = device[1] # Add the device's first-seen timestamp to the device information.
+                device_information["channel"] = device[4] # Add the device's channel to the device information.
+                device_information["strength"] = str(100 + (int(device[3]))) # Convert the relative strength to a percentage, then save it to the device information.
+                device_information["type"] = "Device" # Add the device's device type to the device information.
+                device_information["threat"] = False # Add the device's threat status to the device information.
+                device_information["company"] = "" # Add a placeholder for this device's associated company. This will be updated if the device is found to be a threat.
+                device_information["threattype"] = "" # Add a placeholder for this device's threat type. This will be updated if the device is found to be a threat.
+            else: # This hazard doesn't match the expected formatting rules.
+                pass
 
 
+            if (device_information != []): # Check to see if the device_information has been populated by data.
 
-        if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
-            for device in detected_devices: # Iterate through each device detected in the previous step.
-
-                device_information = [] # Create a blank placeholder that will be used to store this device's information.
-
-                if (len(device) == 15): # This hazard is an access point.
-                    device_information.append(device[0]) # Add the device's MAC address to the device information.
-                    device_information.append(device[13]) # Add the device's name to the device information.
-                    device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
-                    device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
-                    device_information.append(device[3]) # Add the device's channel to the device information.
-                    device_information.append(str(100 + (int(device[8])))) # Convert the relative strength to a percentage, then save it to the device information.
-                    device_information.append("Access Point") # Add the device's device type to the device information.
-                elif (len(device) == 7): # This hazard is a device.
-                    device_information.append(device[0]) # Add the device's MAC address to the device information.
-                    device_information.append("Unknown") # Add the device's name to the device information.
-                    device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
-                    device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
-                    device_information.append(device[4]) # Add the device's channel to the device information.
-                    device_information.append(str(100 + (int(device[3])))) # Convert the relative strength to a percentage, then save it to the device information.
-                    device_information.append("Device") # Add the device's device type to the device information.
-                else: # This hazard doesn't match the expected formatting rules.
-                    pass
-
-
-                if (device_information != []): # Check to see if the device_information has been populated by data.
+                # Handle historical device recording.
+                if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
                     current_timestamp = str(round(time.time())) # Get the current timestamp. This value is saved to variable because it's theoretically possible for the time to change between the time the database entry is changed and the time information is added to it.
-                    if (time.time() - time.mktime(datetime.datetime.strptime(device_information[2], "%Y-%m-%d %H:%M:%S").timetuple()) < float(3)): # Check to see if this threat was seen within the last 3 seconds. If not, ignore it and don't log it.
+                    if (time.time() - time.mktime(datetime.datetime.strptime(device_information["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) < float(3)): # Check to see if this threat was seen within the last 3 seconds. If not, ignore it and don't log it.
+
                         if (current_timestamp not in radio_device_history): # Check to see if the current timestamp already exists in the radio device history.
                             radio_device_history[current_timestamp] = [] # If this timestamp doesn't exist in the database, then create it with a blank placeholder dictionary.
 
                         radio_device_history[current_timestamp].append(device_information) # Add the current device to the list of detected radio devices.
-    
 
+                # Handle active device recording.
+                active_radio_devices[device_information["mac"]] = device_information # Add this device to the device information
+
+
+
+
+        if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
             save_to_file(assassin_root_directory + "/" + "/radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
 
 
-
-
-
-
-        detected_drone_hazards = [] # This is a placeholder list of detected hazards that will be append to in the next step.
-        for device in detected_devices: # Iterate through each device detected in an ealier step.
-            for company in drone_threat_database: # Iterate through each manufacturer in the threat database.
-                for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
+        for company in drone_threat_database: # Iterate through each manufacturer in the threat database. TODO - Verify functionality
+            for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
+                for device_information in active_radio_devices: # Iterate through each active radio device.
                     if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this device matches the MAC address of this company.
                         if (drone_threat_database[company]["type"] in config["general"]["drone_alerts"]["alert_types"]): # Check to see if the company associated with the device matches one of the device types in the list of device types Assassin is configured to alert to.
-                            device.append(company) # Add this device's associated company to this device's data.
-                            device.append(round(time.time())) # Add the current time to this device's data.
-                            device.append(drone_threat_database[company]["type"]) # Add this device's type from the database to it's data.
-
-                            device_information = [] # Create a blank placeholder that will be used to store this device's information.
-                            if (len(device) == 18): # This hazard is an access point.
-                                device_information.append(device[0]) # Add the device's MAC address to the device information.
-                                device_information.append(device[17]) # Add the device's threat type to the device information.
-                                device_information.append(device[15]) # Add the device's associated company to the device information.
-                                device_information.append(device[13]) # Add the device's name to the device information.
-                                device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
-                                device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
-                                device_information.append(device[3]) # Add the device's channel to the device information.
-                                device_information.append(str(100 + (int(device[8])))) # Convert the relative strength to a percentage, then save it to the device information.
-                                device_information.append("Access Point") # Add the device's device type to the device information.
-                            elif (len(device) == 10): # This hazard is a device.
-                                device_information.append(device[0]) # Add the device's MAC address to the device information.
-                                device_information.append(device[9]) # Add the device's threat type to the device information.
-                                device_information.append(device[7]) # Add the device's associated company to the device information.
-                                device_information.append("Unknown") # Add the device's name to the device information.
-                                device_information.append(device[2]) # Add the device's last-seen timestamp to the device information.
-                                device_information.append(device[1]) # Add the device's first-seen timestamp to the device information.
-                                device_information.append(device[4]) # Add the device's channel to the device information.
-                                device_information.append(str(100 + (int(device[3])))) # Convert the relative strength to a percentage, then save it to the device information.
-                                device_information.append("Device") # Add the device's device type to the device information.
-                            else: # This hazard doesn't match the expected formatting rules.
-                                device_information.append(device[0]) # Add the device's MAC address to the device information.
-                                device_information.append(drone_threat_database[company]["type"]) # Add the device's threat type to the device information.
-                                device_information.append(company) # Add the device's associated company to the device information.
-                                device_information.append("Unknown") # Add the device's name to the device information.
-                                device_information.append("Unknown") # Add the device's last-seen timestamp to the device information.
-                                device_information.append("Unknown") # Add the device's first-seen timestamp to the device information.
-                                device_information.append("Unknown") # Add the device's channel to the device information.
-                                device_information.append("Unknown") # Convert the relative strength to a percentage, then save it to the device information.
-                                device_information.append("Unknown") # Add the device's device type to the device information.
+                            device_information["threat"] = True # Change this device's threat status to positive.
+                            device_information["company"] = company # Add this device's associated company to this device's data.
+                            device_information["threattype"] = drone_threat_database[company]["type"] # Add this device's type from the database to it's data.
 
 
-                            detected_drone_hazards.append(device_information) # Add the current device to the list of actively hazards detected.
+
+        # Check to see which threats are still within the latch time, then add them to the active hazards list. TODO - Verify functionality
+        for device in active_radio_devices: # Iterate through each active radio device.
+            if (active_radio_devices[device]["threat"] == True):
+                if (time.time() - time.mktime(datetime.datetime.strptime(active_radio_devices[device]["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
+                    detected_drone_hazards.append(active_radio_devices["device"]) # Add the current device to the list of active hazards detected.
 
 
-        for hazard in detected_drone_hazards: # Iterate through each detected hazard.
-            if (time.time() - time.mktime(datetime.datetime.strptime(hazard[4], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, remove it from the detected drone hazards database.
+        # Iterate through all active hazards, and remove any that have expired. TODO - Verify functionality
+        for device_information in detected_drone_hazards: # Iterate through each active hazard.
+            if (time.time() - time.mktime(datetime.datetime.strptime(device_information["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
                 detected_drone_hazards.remove(hazard) # Remove the hazard from the active detected hazards database.
+
 
 
 

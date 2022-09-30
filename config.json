@@ -33,7 +33,7 @@
         "drone_alerts": {
             "enabled": true,
             "save_detected_hazards": true,
-            "save_detected_devices": true,
+            "save_detected_devices": false,
             "monitoring_device": "wlp40s0",
             "monitoring_mode": "manual",
             "hazard_latch_time": 10,
