@@ -201,8 +201,6 @@ while True: # Run forever in a loop until terminated.
         config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
 
 
-    time.sleep(config["general"]["refresh_delay"]) # Wait for a certain amount of time, as specified in the configuration.
-
 
 
     # Process all information that needs to be handled at the beginning of each cycle to prevent delays in the middle of the displaying process.
@@ -305,6 +303,7 @@ while True: # Run forever in a loop until terminated.
                 device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
                 device_information["firstseen"] = device[1] # Add the device's first-seen timestamp to the device information.
                 device_information["channel"] = device[3] # Add the device's channel to the device information.
+                device_information["packets"] = device[9] # Add the device's packet count to the device information.
                 device_information["strength"] = str(100 + (int(device[8]))) # Convert the relative strength to a percentage, then save it to the device information.
                 device_information["type"] = "Access Point" # Add the device's device type to the device information.
                 device_information["threat"] = False # Add the device's threat status to the device information.
@@ -312,10 +311,11 @@ while True: # Run forever in a loop until terminated.
                 device_information["threattype"] = "" # Add a placeholder for this device's threat type. This will be updated if the device is found to be a threat.
             elif (len(device) == 7): # This hazard is a device.
                 device_information["mac"] = device[0] # Add the device's MAC address to the device information.
-                device_information["name"] = "Unknown" # Add the device's name to the device information.
+                device_information["name"] = device[6] # Add the device's name to the device information.
                 device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
                 device_information["firstseen"] = device[1] # Add the device's first-seen timestamp to the device information.
-                device_information["channel"] = device[4] # Add the device's channel to the device information.
+                device_information["channel"] = "Unknown" # Add the device's channel to the device information.
+                device_information["packets"] = device[4] # Add the device's packet count to the device information.
                 device_information["strength"] = str(100 + (int(device[3]))) # Convert the relative strength to a percentage, then save it to the device information.
                 device_information["type"] = "Device" # Add the device's device type to the device information.
                 device_information["threat"] = False # Add the device's threat status to the device information.
@@ -325,7 +325,7 @@ while True: # Run forever in a loop until terminated.
                 pass
 
 
-            if (device_information != []): # Check to see if the device_information has been populated by data.
+            if (device_information != {}): # Check to see if the device_information has been populated by data.
 
                 # Handle historical device recording.
                 if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
@@ -347,10 +347,11 @@ while True: # Run forever in a loop until terminated.
             save_to_file(assassin_root_directory + "/" + "/radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
 
 
-        for company in drone_threat_database: # Iterate through each manufacturer in the threat database. TODO - Verify functionality
+        for company in drone_threat_database: # Iterate through each manufacturer in the threat database.
             for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
-                for device_information in active_radio_devices: # Iterate through each active radio device.
-                    if (''.join(c for c in device[0] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this device matches the MAC address of this company.
+                for device in active_radio_devices: # Iterate through each active radio device.
+                    device_information = active_radio_devices[device] # Get the information for the current device in the iteration.
+                    if (''.join(c for c in device_information["mac"] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this device matches the MAC address of this company.
                         if (drone_threat_database[company]["type"] in config["general"]["drone_alerts"]["alert_types"]): # Check to see if the company associated with the device matches one of the device types in the list of device types Assassin is configured to alert to.
                             device_information["threat"] = True # Change this device's threat status to positive.
                             device_information["company"] = company # Add this device's associated company to this device's data.
@@ -358,16 +359,21 @@ while True: # Run forever in a loop until terminated.
 
 
 
-        # Check to see which threats are still within the latch time, then add them to the active hazards list. TODO - Verify functionality
+        # Check to see which threats are still within the latch time, then add them to the active hazards list.
         for device in active_radio_devices: # Iterate through each active radio device.
             if (active_radio_devices[device]["threat"] == True):
-                if (time.time() - time.mktime(datetime.datetime.strptime(active_radio_devices[device]["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
-                    detected_drone_hazards.append(active_radio_devices["device"]) # Add the current device to the list of active hazards detected.
+                if (time.time() - time.mktime(datetime.datetime.strptime(active_radio_devices[device]["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) < float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
+
+                    # Check to see if this hazard already exists in the active drone hazards list.
+                    for hazard in detected_drone_hazards: # Iterate through all active hazards.
+                        if hazard["mac"] == active_radio_devices[device]["mac"]: # Check to see if the hazard already exists in the list of active hazards.
+                            detected_drone_hazards.remove(hazard) # Remove the older hazard information.
+                    detected_drone_hazards.append(active_radio_devices[device]) # Add the current device to the list of active hazards detected.
 
 
-        # Iterate through all active hazards, and remove any that have expired. TODO - Verify functionality
-        for device_information in detected_drone_hazards: # Iterate through each active hazard.
-            if (time.time() - time.mktime(datetime.datetime.strptime(device_information["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
+        # Iterate through all active hazards, and remove any that have expired.
+        for hazard in detected_drone_hazards: # Iterate through each active hazard.
+            if (time.time() - time.mktime(datetime.datetime.strptime(hazard["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
                 detected_drone_hazards.remove(hazard) # Remove the hazard from the active detected hazards database.
 
 
@@ -589,21 +595,18 @@ while True: # Run forever in a loop until terminated.
 
             print(style.cyan + "Detected autonomous hazards:")
             for hazard in detected_drone_hazards: # Iterate through each detected hazard.
-                if (len(hazard) == 9) :
-                    print("    " + hazard[0] + "") # Show this hazard's MAC address.
-                    print("        Threat Type: " + hazard[1]) # Show what kind of threat this device is.
-                    print("        Company: " + hazard[2]) # Show company or brand that this hazard is associated with.
-                    print("        Name: " + hazard[3]) # Show this hazard's name.
-                    print("        Last Seen: " + str(hazard[4])) # Show the timestamp that this hazard was last seen.
-                    print("        First Seen: " + str(hazard[5])) # Show the timestamp that this hazard was first seen.
-                    print("        Channel: " + hazard[6]) # Show this hazard's wireless channel.
-                    print("        Strength: " + str(hazard[7]) + "%") # Show this hazards relative signal strength.
-                    print("        Wireless Type: " + hazard[8]) # Show this hazard's type.
-                else:
-                    print("    " + hazard[0] + "") # Show this hazard's MAC address.
-                    print("        Wireless Type: Unknown") # Show this hazard's type.
+                print("    " + hazard["mac"] + "") # Show this hazard's MAC address.
+                print("        Threat Type: " + hazard["threattype"]) # Show what kind of threat this device is.
+                print("        Company: " + hazard["company"]) # Show company or brand that this hazard is associated with.
+                print("        Name: " + hazard["name"]) # Show this hazard's name.
+                print("        Last Seen: " + str(hazard["lastseen"])) # Show the timestamp that this hazard was last seen.
+                print("        First Seen: " + str(hazard["firstseen"])) # Show the timestamp that this hazard was first seen.
+                print("        Channel: " + hazard["channel"]) # Show this hazard's wireless channel.
+                print("        Channel: " + hazard["packets"]) # Show this hazard's packet count.
+                print("        Strength: " + str(hazard["strength"]) + "%") # Show this hazards relative signal strength.
+                print("        Wireless Type: " + hazard["type"]) # Show this hazard's type.
 
-                drone_threat_history.append(hazard) # Add this threat to the treat history.
+                drone_threat_history.append(hazard) # Add this threat to the threat history.
 
             print(style.end) # End the font styling from the drone threat display.
 
