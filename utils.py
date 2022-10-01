@@ -47,7 +47,8 @@ import pyproj # Required to calculate bearing between locations.
 geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic
 
 from gps import * # Required to access GPS information.
-import gpsd
+import gpsd # Required to access GPS information.
+import csv # Required to process CSV information.
 
 
 
@@ -531,3 +532,37 @@ def display_notice(message, level=1):
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
         else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
             time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
+
+
+
+def fetch_aircraft_data(file):
+    with open(file, 'r') as read_file:
+        raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
+
+
+    aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
+
+    for entry in raw_output: # Iterate through each entry in the CSV list data.
+        if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
+            individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
+        else:
+            individual_data = {"latitude":"", "longitude":"", "altitude":"", "speed":"", "heading":"", "climb":""} # Set the data for this aircraft to a fresh placeholder.
+
+
+        if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
+            individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
+        if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
+            individual_data["longitude"] = entry[15] # Get the aircraft's longitude.
+        if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
+            individual_data["altitude"] = entry[11] # Get the aircraft's altitude.
+        if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
+            individual_data["speed"] = entry[12] # Get the aircraft's ground speed.
+        if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
+            individual_data["heading"] = entry[13] # Get the aircraft's compass heading.
+        if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
+            individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
+
+        aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
+        
+
+    return aircraft_data # Return the processed aircraft data.

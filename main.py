@@ -69,8 +69,7 @@ get_arrow_direction = utils.get_arrow_direction # Load the function used to conv
 update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
-
-
+fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
 
 
 

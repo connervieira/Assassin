@@ -31,7 +31,7 @@
         "traffic_camera_loaded_radius": 100,
         "traffic_camera_speed_check": true,
         "drone_alerts": {
-            "enabled": true,
+            "enabled": false,
             "save_detected_hazards": true,
             "save_detected_devices": false,
             "monitoring_device": "wlp1s0b1",
