@@ -40,5 +40,11 @@
             "00044c"
         ],
         "type": "camera"
+    },
+    "Stalker":
+        "MAC": [
+            "1c:82:59"
+        ],
+        "type": "camera"
     }
 }
