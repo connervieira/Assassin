@@ -41,6 +41,9 @@ import math # Required to run more complex math functions.
 from geopy.distance import great_circle # Required to calculate distance between locations.
 import random # Required to generate random numbers.
 
+import pyproj # Required to calculate bearing between locations.
+geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic.
+
 if (config["general"]["relay_alerts"]["enabled"] == True): # Only import the GPIO library if relay alerts are enabled.
     import RPi.GPIO as GPIO
 
@@ -70,6 +73,10 @@ update_status_lighting = utils.update_status_lighting # Load the function used t
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
+
+
+
+
 
 
 
@@ -426,6 +433,41 @@ while True: # Run forever in a loop until terminated.
 
 
 
+    # Run aircraft ADS-B alert processing.
+    if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        aircraft_data = fetch_aircraft_data("/home/pi/Downloads/ADSB-Data.csv") # Fetch the most recent aircraft data. TODO - Replace with live data stream.
+        aircraft_threats = [] # Set the list of active aircraft threats to an empty placeholder database.
+
+        for key in aircraft_data.keys(): # Iterate through all detected aircraft
+            aircraft_location = [aircraft_data[key]["latitude"], aircraft_data[key]["longitude"], aircraft_data[key]["altitude"]] # Grab the location information for the aircraft.
+
+            if (aircraft_location[0] != "" and aircraft_location[1] != ""): # Check to make sure this aircraft has location information. Otherwise, skip it.
+                # Calculate the distance to the aircraft.
+                aircraft_distance = get_distance(current_location[0], current_location[1], aircraft_location[0], aircraft_location[1]) # Calculate the distance to the aircraft.
+                aircraft_data[key]["distance"] = aircraft_distance # Add the distance to the aircraft to its data.
+
+                # Calculate the heading of the aircraft relative to the current direction of motion.
+                relative_heading = int(aircraft_data[key]["heading"]) - current_location[4] # Calculate the heading direction of this aircraft relative to the current direction of movement
+                if (relative_heading < 0): # Check to see if the relative heading is a negative number.
+                    relative_heading = 360 + relative_heading # Convert the relative heading to a positive number.
+                aircraft_data[key]["relativeheading"] = relative_heading # Add the relative heading of the aircraft to its data.
+
+                # Calculate the direction to the aircraft relative to the current position.
+                relative_direction = geodesic.inv(current_location[1], current_location[0], aircraft_data[key]["longitude"], aircraft_data[key]["latitude"])[0]
+                if (relative_direction < 0): # Check to see if the direction to the aircraft is negative.
+                    relative_direction = 360 + relative_direction
+                aircraft_data[key]["direction"] = relative_direction # Add the direction to the aircraft to its data.
+
+                precise_alert_threshold = (int(aircraft_location[2]) / config["general"]["adsb_alerts"]["base_altitude_threshold"]) * config["general"]["adsb_alerts"]["distance_threshold"] # Calculate the precise alerting distance based on the aircraft altitude, base altitude threshold, and alert distance configured by the user. Higher altitude will cause planes to alert from farther away.
+
+                if (aircraft_distance < precise_alert_threshold):
+                    aircraft_threats.append(aircraft_data[key]) # Add this aircraft to the list of active threats.
+
+
+
+
+
+
 
     clear() # Clear the console output at the beginning of every cycle.
 
@@ -489,11 +531,11 @@ while True: # Run forever in a loop until terminated.
 
     if ((config["display"]["displays"]["heading"]["degrees"] == True or config["display"]["displays"]["heading"]["direction"] == True) and config["general"]["gps_enabled"] == True): # Check to see if the current heading display is enabled in the configuration.
         if (config["display"]["displays"]["heading"]["direction"] == True and config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees are both enabled.
-            print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(current_location[4]) + ")") # Print the current heading to the console in cardinal directions.
-        elif (config["display"]["displays"]["heading"]["direction"] == True): # Check to see if the configuration value to display the current heading in cardinal directions is enabled.
+            print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(current_location[4]) + "°)") # Print the current heading to the console in cardinal directions.
+        elif (config["display"]["displays"]["heading"]["direction"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees is enabled.
             print("Heading: " + str(get_cardinal_direction(current_location[4]))) # Print the current heading to the console in cardinal directions.
         elif (config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in degrees is enabled.
-            print("Heading: " + str(current_location[4])) # Print the current heading to the console in degrees.
+            print("Heading: " + str(current_location[4]) + "°") # Print the current heading to the console in degrees.
 
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
@@ -512,11 +554,19 @@ while True: # Run forever in a loop until terminated.
 
     # Display Bluetooth monitoring alerts.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if bluetooth alerts and GPS features are enabled in the configuration.
+        active_bluetooth_alert = False # Reset the alert status to false. This will be changed to true if an active alert is found.
         for address in detected_bluetooth_devices:
             device = detected_bluetooth_devices[address] # Grab the data for the device of this iteration cycle.
             distance_followed = get_distance(device["firstseenlocation"][0], device["firstseenlocation"][1], device["lastseenlocation"][0], device["lastseenlocation"][1]) # Calculate the distance that this device has been following Assassin by determining the distance between the first detected location and the last detected location.
             if ((distance_followed >= float(config["general"]["bluetooth_monitoring"]["minimum_following_distance"]) and address not in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"]) or address in config["general"]["bluetooth_monitoring"]["blacklist"]["devices"]): # Check to see if the distance this device has followed Assassin is greater than or equal to the threshold set in the configuration for alerting. Also check to make sure this device is not in the whitelist. If this device is in the blacklist, the alert regardless of other conditions.
+                active_bluetooth_alert = True # Change the current alert status to 'active'.
                 print(style.pink + address + " (" + device["name"] + ") has been following for " + str(distance_followed) + " miles over the past " + str(int(device["lastseentime"]) - int(device["firstseentime"])) + " seconds." + style.end) # Print a notice containing the device that is following, as well has how far and how long the device has been detected.
+
+        if (active_bluetooth_alert == True): # If an active alert was determined this round, then run relevant alerts.
+            if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
+                display_shape("square") # Display an ASCII square in the console output to represent a device.
+
+            play_sound("bluetooth") # Play the alert sound associated with Bluetooth alerts, if one is configured to run.
             
 
 
@@ -616,6 +666,34 @@ while True: # Run forever in a loop until terminated.
                 display_shape("cross") # Display an ASCII cross in the console output to represent a drone.
 
             play_sound("drone") # Play the sound effect associated with a potential drone threat being detected.
+
+
+
+    # Display ADS-B aircraft alerts
+    if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        if (len(aircraft_threats) > 0): # Check to see if any threats were detected this cycle.
+            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+                update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
+
+            print(style.yellow + "Detected aircraft ADS-B threats:")
+            for threat in aircraft_threats: # Iterate through each detected hazard.
+                print("    " + threat["id"] + ":") # Show this hazard's MAC address.
+                print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + ")") # Show the coordinates of this aircraft.
+                print("        Distance: " + str(round(threat["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
+                print("        Speed: " + str(threat["speed"]) + " knots") # Show the speed of this aircraft.
+                print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
+                print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]) + " (" + str(threat["relativeheading"]) + "°)") # Show the direction of this aircraft relative to the current direction of movement.
+
+            print(style.end) # End the font styling from the aircraft ADS-B threat display.
+
+            if (config["display"]["shape_alerts"] == True): # Check to see if the user has enabled shape notifications.
+                display_shape("triangle") # Display an ASCII triangle in the console output to represent a plane.
+
+            play_sound("adsb") # Play the sound effect associated with a potential ADS-B aircraft threat being detected.
+
+
+
+
 
 
 

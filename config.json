@@ -5,11 +5,11 @@
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41,
-            "latitude": -80,
+            "longitude": 41.0,
+            "latitude": -81.0,
             "speed": 0,
             "altitude": 132.0,
-            "heading": 270,
+            "heading": 310,
             "satellites": 6
         },
         "record_telemetry": false,
@@ -75,10 +75,11 @@
             }
         },
         "adsb_alerts": {
-            "enabled": false,
+            "enabled": true,
             "minimum_speed": 50,
             "distance_threshold": 3,
-            "base_altitude_threshold": 10000
+            "base_altitude_threshold": 20000,
+            "message_time_to_live": 60
         }
     },
     "display": {
@@ -110,7 +111,8 @@
                 "normal": "[U]&R=0&G=255&B=0",
                 "enforcementcamera": "[U]&R=0&G=0&B=255",
                 "alprcamera": "[U]&R=255&G=0&B=255",
-                "autonomousthreat": "[U]&R=255&G=0&B=0"
+                "autonomousthreat": "[U]&R=255&G=0&B=0",
+                "adsbthreat": "[U]&R=255&G=128&B=0"
             }
         },
         "notices": {
@@ -162,6 +164,16 @@
             },
             "drone": {
                 "path": "./assets/sounds/drone.mp3",
+                "repeat": "0",
+                "delay": "1"
+            },
+            "adsb": {
+                "path": "./assets/sounds/adsb.mp3",
+                "repeat": "0",
+                "delay": "1"
+            },
+            "bluetooth": {
+                "path": "./assets/sounds/bluetooth.mp3",
                 "repeat": "0",
                 "delay": "1"
             }

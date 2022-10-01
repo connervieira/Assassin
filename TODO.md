@@ -12,6 +12,13 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - [X] Add wireless access point logging.
 - [X] Fix drone hazard logging.
 - [ ] Add ADS-B monitoring to detect planes.
+    - [X] Complete ADS-B data processing.
+    - [X] Complete alert processing.
+    - [ ] Complete ADS-B data streaming.
+    - [ ] Refine alerting sensitivity.
+- [ ] Finish alert sounds.
+    - [ ] Add Bluetooth alert sound.
+    - [ ] Add ADS-B alert sound.
 
 ### Hypothetical
 

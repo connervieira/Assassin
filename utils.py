@@ -44,7 +44,7 @@ import math # Required to run more complex math calculations
 from geopy.distance import great_circle # Required to calculate distance between locations.
 
 import pyproj # Required to calculate bearing between locations.
-geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic
+geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic.
 
 from gps import * # Required to access GPS information.
 import gpsd # Required to access GPS information.
@@ -424,6 +424,7 @@ def display_number(display_number="0"): # This function is used to display a num
 
 
 def get_cardinal_direction(heading=0): # Define the function used to convert degrees into cardinal directions.
+    heading = int(heading) # Convert the heading to an integer.
     if (heading < 0): # Check to see if the heading is a negative number.
          heading = 360 + heading # Convert the heading to a positive number. 
 
@@ -449,6 +450,7 @@ def get_cardinal_direction(heading=0): # Define the function used to convert deg
 
 
 def get_arrow_direction(heading=0): # Define the function used to convert degrees into an arrow pointing in a particular direction.
+    heading = int(heading) # Convert the heading to an integer.
     if (heading < 0): # Check to see if the heading is a negative number.
          heading = 360 + heading # Convert the heading to a positive number. 
 
@@ -539,6 +541,8 @@ def fetch_aircraft_data(file):
     with open(file, 'r') as read_file:
         raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
 
+    # TODO - Add message TTL
+
 
     aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
 
@@ -546,9 +550,10 @@ def fetch_aircraft_data(file):
         if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
             individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
         else:
-            individual_data = {"latitude":"", "longitude":"", "altitude":"", "speed":"", "heading":"", "climb":""} # Set the data for this aircraft to a fresh placeholder.
+            individual_data = {"latitude":"", "longitude":"", "altitude":"", "speed":"", "heading":"", "climb":"", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
 
-
+        if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
+            individual_data["id"] = entry[4] # Get the aircraft's identification.
         if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
             individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
         if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
@@ -561,6 +566,12 @@ def fetch_aircraft_data(file):
             individual_data["heading"] = entry[13] # Get the aircraft's compass heading.
         if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
             individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
+        if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
+            individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
+        if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
+            individual_data["time"] = str(round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple()))) # Convert the human readable timestamp into a Unix timestamp.
+        else:
+            display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
 
         aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
         
