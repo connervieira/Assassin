@@ -2,8 +2,8 @@
     "general": {
         "active_config_refresh": true,
         "refresh_delay": 1.0,
-        "debuging_output": false,
-        "disable_console_clearing": false,
+        "debuging_output": true,
+        "disable_console_clearing": true,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,

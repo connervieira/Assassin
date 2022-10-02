@@ -66,10 +66,6 @@ debug_message("Importing `subprocess` library")
 import subprocess # Required for starting some shell commands
 debug_message("Importing `sys` library")
 import sys
-debug_message("Importing `requests` library")
-import requests # Required to make network requests
-debug_message("Importing `validators` library")
-import validators # Required to validate URLs
 debug_message("Importing `datetime` library")
 import datetime # Required for converting between timestamps and human readable date/time information
 debug_message("Importing `minidom` library")
@@ -87,8 +83,11 @@ from geopy.distance import great_circle # Required to calculate distance between
 debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
-
-
+if (config["display"]["status_lighting"]["enabled"] == True): # Only import the libraries required by the status lighting system if the status lighting is enabled. These two libraries have loading times much higher than other libraries, so this step can improve loading times.
+    debug_message("Importing `requests` library")
+    import requests # Required to make network requests
+    debug_message("Importing `validators` library")
+    import validators # Required to validate URLs
 
 
 gps_enabled = config["general"]["gps_enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
@@ -588,18 +587,19 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
 
 debug_message("Creating `update_status_lighting` function")
 def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
-    debug_message("Updating status lighting")
-    status_lighting_update_url = str(config["display"]["status_lighting"]["status_lighting_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
-    if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
-        debug_message("Sending status lighting network request")
-        try:
-            response = requests.get(status_lighting_update_url)
-            debug_message("Updated status lighting")
-        except:
-            debug_message("Failed to update status lighting")
-            display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
-    else:
-        display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+    if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+        debug_message("Updating status lighting")
+        status_lighting_update_url = str(config["display"]["status_lighting"]["status_lighting_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+        if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
+            debug_message("Sending status lighting network request")
+            try:
+                response = requests.get(status_lighting_update_url)
+                debug_message("Updated status lighting")
+            except:
+                debug_message("Failed to update status lighting")
+                display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
+        else:
+            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
 
 
 
