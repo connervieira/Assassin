@@ -93,7 +93,7 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and config["g
         time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
 
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
-        loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
+        loaded_traffic_camera_database = load_traffic_cameras(current_location[0], current_location[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
     else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
         if (str(config["general"]["alert_databases"]["traffic_cameras"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
             display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 2)
@@ -235,11 +235,11 @@ while True: # Run forever in a loop until terminated.
     # Process all information that needs to be handled at the beginning of each cycle to prevent delays in the middle of the displaying process.
 
     if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
-        debug_message("Grabbing GPS information")
         last_location = current_location # Set the last location to the current location immediately before we update the current location for the next cycle.
+        last_location_time = current_location_time # Record when the last location was received.
         current_location = get_gps_location() # Get the current location.
+        current_location_time = time.time() # Record when this location was received.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
-        debug_message("Grabbed GPS information")
 
 
 
