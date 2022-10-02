@@ -16,6 +16,12 @@
 print("Loading Assassin...")
 
 
+import utils # Import the utils.py scripts.
+debug_message = utils.debug_message # Load the function to print debugging information when the configuration says to do so.
+
+debug_message("Starting loading")
+
+
 import os # Required to interact with certain operating system functions
 import json # Required to process JSON data
 
@@ -24,6 +30,7 @@ assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # Thi
 
 
 config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+debug_message("Loaded configuration")
 
 
 
@@ -31,24 +38,22 @@ import time # Required to add delays and handle dates/times
 import subprocess # Required for starting some shell commands
 import signal # Required to manage sub-proceses.
 import sys
-import urllib.request # Required to make network requests
 import re # Required to use Regex
-import validators # Required to validate URLs
 import datetime # Required for converting between timestamps and human readable date/time information
 import fnmatch # Required to use wildcards to check strings
 import math # Required to run more complex math functions.
-from geopy.distance import great_circle # Required to calculate distance between locations.
 import random # Required to generate random numbers.
 
 if (config["general"]["relay_alerts"]["enabled"] == True): # Only import the GPIO library if relay alerts are enabled.
+    debug_message("Importing `GPIO` library")
     import RPi.GPIO as GPIO
 
 if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only import the Bluetooth library if Bluetooth monitoring is enabled.
+    debug_message("Importing `bluetooth` library")
     import bluetooth
 
 
-
-import utils # Import the utils.py scripts.
+# Load the rest of the utility functions from utils.py
 style = utils.style # Load the style from the utils script.
 clear = utils.clear # Load the screen clearing function from the utils script.
 process_gpx = utils.process_gpx # Load the GPX processing function from the utils script.
@@ -70,7 +75,7 @@ update_status_lighting = utils.update_status_lighting # Load the function used t
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
-
+debug_message("Imported `utils.py`")
 
 
 
@@ -80,6 +85,7 @@ fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetc
 
 # Load the traffic enforcement camera, if enabled.
 if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if traffic camera alerts are enabled.
+    debug_message("Loading traffic enforcement camera database")
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
     else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
@@ -89,12 +95,14 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to 
             display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["alert_databases"]["traffic_cameras"]) + ") does not exist.", 2)
         else:
             display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
+    debug_message("Loaded traffic enforcement camera database")
 
 
 
 
 # Load the ALPR camera database, if enabled.
 if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see if ALPR camera alerts are enabled.
+    debug_message("Loading ALPR camera database")
     if (str(config["general"]["alert_databases"]["alpr_cameras"]) != "" and os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"]))): # Check to see if the ALPR camera database exists.
         loaded_alpr_camera_database = json.load(open(str(config["general"]["alert_databases"]["alpr_cameras"]))) # Load the ALPR database.
     else:
@@ -104,11 +112,13 @@ if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see
             display_notice("ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alert_databases"]["alpr_cameras"]) + ") does not exist.", 2)
         else:
             display_notice("An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
+    debug_message("Loaded ALPR camera database")
 
 
 
 # Load drone alert information, if enabled.
 if (config["general"]["drone_alerts"]["enabled"] == True):
+    debug_message("Loading drone detection system")
     # Load the drone database.
     if (os.path.exists(config["general"]["alert_databases"]["drones"]) == True and config["general"]["alert_databases"]["drones"] != ""):
         drone_threat_database = json.load(open(config["general"]["alert_databases"]["drones"]))
@@ -140,10 +150,10 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
 
 
     # Run Airodump based on the Assassin configuration.
-    os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
 
     airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
     if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
+        os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
         proc = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
         time.sleep(1) # Wait for 1 second to give airodump time to start.
     elif (config["general"]["drone_alerts"]["monitoring_mode"] == "manual"):
@@ -152,14 +162,21 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
         input("Press enter to continue once the command is running.")
 
 
+    debug_message("Loaded drone detection system")
+
+
+
 
 
 # Load the Bluetooth device log file, if applicable.
 if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
+    debug_message("Loading Bluetooth log file")
     if (os.path.exists(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])):
         detected_bluetooth_devices = json.load(open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])) # Load the data from the Bluetooth device log file.
     else:
         detected_bluetooth_devices = {} # Set the Bluetooth device log to a blank placeholder list.
+
+    debug_message("Loaded Bluetooth log file")
 
 
 
@@ -168,6 +185,7 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["gen
 
 # Display the start-up intro header.
 clear() # Clear the screen.
+debug_message("Completed loading")
 if (config["display"]["ascii_art_header"] == True): # Check to see whether the user has configured there to be a large ASCII art header, or a standard text header.
     print(style.red + style.bold)
     print("    _   ___ ___   _   ___ ___ ___ _  _ ")
@@ -184,7 +202,7 @@ if (config["display"]["custom_startup_message"] != ""): # Only display the line 
     print(config["display"]["custom_startup_message"]) # Show the user's custom defined start-up message.
 
 
-time.sleep(2) # Wait two seconds to allow the start-up logo to remain on-screen for a moment.
+time.sleep(1) # Wait two seconds to allow the start-up logo to remain on-screen for a moment.
 
 
 
@@ -200,9 +218,13 @@ active_alarm = "none" # Set the active alert indicator variable to a placeholder
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
 
+debug_message("Starting main loop")
+
 while True: # Run forever in a loop until terminated.
+    debug_message("Cycle started")
     if (config["general"]["active_config_refresh"] == True): # Check to see if the configuration indicates to actively refresh the configuration during runtime.
         config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+        debug_message("Reloaded configuration")
 
 
 
@@ -210,14 +232,17 @@ while True: # Run forever in a loop until terminated.
     # Process all information that needs to be handled at the beginning of each cycle to prevent delays in the middle of the displaying process.
 
     if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
+        debug_message("Grabbing GPS information")
         last_location = current_location # Set the last location to the current location immediately before we update the current location for the next cycle.
         current_location = get_gps_location() # Get the current location.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
+        debug_message("Grabbed GPS information")
 
 
 
     # Run traffic enforcement camera alert processing
     if (config["general"]["gps_enabled"] == True and float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
+        debug_message("Processing traffic enforcement camera alerts")
         # Create placeholders for each camera type so we can add the closet camera for each category in the next step .
         nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearest_traffic_camera = {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}
 
@@ -249,12 +274,15 @@ while True: # Run forever in a loop until terminated.
                 if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then enable a heightend alert.
                     active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
 
+        debug_message("Processed traffic enforcement camera alerts")
+
 
 
 
 
     # Run ALPR camera alert processing
     if (os.path.exists(config["general"]["alert_databases"]["alpr_cameras"]) == True and config["general"]["alert_databases"]["alpr_cameras"] != "" and config["general"]["gps_enabled"] == True): # Check to see if a valid ALPR database has been configured.
+        debug_message("Processing ALPR camera alerts")
         nearby_alpr_cameras = nearby_database_poi(current_location[0], current_location[1], loaded_alpr_camera_database, float(config["general"]["alert_range"]["alpr_cameras"])) # Get nearby entries from this POI database.
         nearest_alpr_camera = {"distance": 1000000000.0}
 
@@ -262,11 +290,15 @@ while True: # Run forever in a loop until terminated.
             if (entry["distance"] < nearest_alpr_camera["distance"]): # Check to see if the distance to this camera is lower than the current closest camera.
                 nearest_alpr_camera = entry # Make the current camera the new closest camera.
 
+        debug_message("Processed ALPR camera alerts")
+
 
 
 
     # Run drone alert processing
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
+        debug_message("Processing drone alerts")
+
         grab_output_command = "cat " + assassin_root_directory + "/airodump_data-01.csv" # Set up the command to grab the contents of airodump's CSV output file.
         command_output = str(os.popen(grab_output_command).read()) # Execute the output file grab command.
 
@@ -381,11 +413,15 @@ while True: # Run forever in a loop until terminated.
                 detected_drone_hazards.remove(hazard) # Remove the hazard from the active detected hazards database.
 
 
+        debug_message("Processed drone alerts")
+
+
 
 
 
     # Run relay-based alert processing.
     if (config["general"]["relay_alerts"]["enabled"] == True): # Only check for relay-based alerts if relay alerts are enabled in the configuration.
+        debug_message("Processing relay alerts")
         active_relay_alerts = [] # Set the active relay alerts to a blank placeholder so all of the active alerts this cycle can be added to it in the next step.
         for alert in config["general"]["relay_alerts"]["alerts"]:
             if (GPIO.input(config["general"]["relay_alerts"]["alerts"][alert]["gpio_pin"]) == config["general"]["relay_alerts"]["alerts"][alert]["alert_on_closed"]):
@@ -395,11 +431,14 @@ while True: # Run forever in a loop until terminated.
                 else: # GPS features are disabled, so show the alert regardless of the current speed.
                     active_relay_alerts.append(config["general"]["relay_alerts"]["alerts"][alert]) # Add this alert to the list of active alerts for this cycle.
 
+        debug_message("Processed relay alerts")
+
 
 
 
     # Run Bluetooth alert processing.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if bluetooth alerts and GPS features are enabled in the configuration.
+        debug_message("Processing Bluetooth alerts")
         try:
             nearby_bluetooth_devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
         except:
@@ -424,6 +463,8 @@ while True: # Run forever in a loop until terminated.
             if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
                 save_to_file(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], json.dumps(detected_bluetooth_devices), True) # Save the Bluetooth device history to disk.
 
+        debug_message("Processed Bluetooth alerts")
+
 
 
 
@@ -432,6 +473,7 @@ while True: # Run forever in a loop until terminated.
 
     # Run aircraft ADS-B alert processing.
     if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        debug_message("Processing ADS-B alerts")
         aircraft_data = fetch_aircraft_data("/home/pi/Downloads/ADSB-Data.csv") # Fetch the most recent aircraft data. TODO - Replace with live data stream.
         aircraft_threats = [] # Set the list of active aircraft threats to an empty placeholder database.
 
@@ -460,13 +502,8 @@ while True: # Run forever in a loop until terminated.
                 if (aircraft_distance < precise_alert_threshold):
                     aircraft_threats.append(aircraft_data[key]) # Add this aircraft to the list of active threats.
 
+        debug_message("Processed ADS-B alerts")
 
-
-
-
-
-
-    clear() # Clear the console output at the beginning of every cycle.
 
 
 
@@ -475,8 +512,20 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Display any critical alarm messages that the user should know about as soon as possible.
 
+
+
+
+
+    debug_message("Alert processing completed")
+    clear() # Clear the console output at the beginning of every cycle.
+
+
+
+
+
+
+    # Display any critical alarm messages that the user should know about as soon as possible.
     if (active_alarm == "speedcameralimitexceeded"):
         if (config["display"]["large_critical_display"] == True):
             print(style.red + style.bold)
@@ -505,6 +554,8 @@ while True: # Run forever in a loop until terminated.
 
 
     # Show all configured basic information displays.
+
+    debug_message("Displaying basic dashboard")
 
     if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the large speed display is enabled in the configuration.
         current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
@@ -542,6 +593,7 @@ while True: # Run forever in a loop until terminated.
 
     # Display relay-based alerts.
     if (config["general"]["relay_alerts"]["enabled"] == True): # Only display relay-based alerts if relay alerts are enabled in the configuration.
+        debug_message("Displaying relay alerts")
         for alert in active_relay_alerts: # Iterate through each active alert, and print it to the screen.
             print(style.green + alert["title"])
             print("    " + alert["message"] + style.end)
@@ -551,6 +603,7 @@ while True: # Run forever in a loop until terminated.
 
     # Display Bluetooth monitoring alerts.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if bluetooth alerts and GPS features are enabled in the configuration.
+        debug_message("Displaying Bluetooth alerts")
         active_bluetooth_alert = False # Reset the alert status to false. This will be changed to true if an active alert is found.
         for address in detected_bluetooth_devices:
             device = detected_bluetooth_devices[address] # Grab the data for the device of this iteration cycle.
@@ -570,6 +623,7 @@ while True: # Run forever in a loop until terminated.
 
     # Display traffic camera alerts.
     if (config["general"]["gps_enabled"] == True and float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
+        debug_message("Displaying traffic enforcement camera alerts")
         # Display the nearest traffic camera, if applicable.
         if (nearest_enforcement_camera["dst"] < float(config["general"]["alert_range"]["traffic_cameras"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
@@ -614,6 +668,7 @@ while True: # Run forever in a loop until terminated.
 
     # Display ALPR camera alerts.
     if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
+        debug_message("Displaying ALPR camera alerts")
 
         if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
             update_status_lighting("alprcamera") # Run the function to update the status lighting.
@@ -636,6 +691,7 @@ while True: # Run forever in a loop until terminated.
 
     # Display drone alerts.
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
+        debug_message("Displaying drone alerts")
         if (len(detected_drone_hazards) > 0): # Check to see if any hazards were detected this cycle.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("autonomousthreat") # Update the status lighting to indicate that at least one autonomous threat was detected.
@@ -666,8 +722,10 @@ while True: # Run forever in a loop until terminated.
 
 
 
+
     # Display ADS-B aircraft alerts
     if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        debug_message("Displaying ADS-B alerts")
         if (len(aircraft_threats) > 0): # Check to see if any threats were detected this cycle.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
@@ -697,12 +755,14 @@ while True: # Run forever in a loop until terminated.
 
     # Record telemetry data according to the configuration.
     if (config["general"]["record_telemetry"] == True): # Check to see if Assassin is configured to record telemetry data.
+        debug_message("Recording telemetry data")
         if (config["general"]["gps_enabled"] == True): # Check to see if GPS features are enabled.
             export_data = str(round(time.time())) + "," + str(current_speed) + "," + str(current_location[0]) + "," + str(current_location[1]) + "," + str(current_location[3]) + "," + str(current_location[4]) + "," + str(current_location[5]) + "\n" # Add all necessary information to the export data.
         else:
             export_data = str(round(time.time())) + "," + str("0") + "," + str("0.000") + "," + str("0.000") + "," + str("0") + "," + str("0") + "," + str("0") + "\n" # Add all necessary information to the export data, using placeholders for information that depends on GPS.
 
         add_to_file(assassin_root_directory + "/information_recording.csv", export_data, True) # Add the export data to the end of the file and write it to disk.
+        debug_message("Telemetry recorded")
 
 
 

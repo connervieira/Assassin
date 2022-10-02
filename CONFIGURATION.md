@@ -12,6 +12,11 @@ This section of configuration values will effect Assassin's general operation.
     - Activating this setting can easily cause fatal errors, so it should only be used for testing.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
+- `debugging_output`
+    - This determines whether Assassin will operate in a verbose mode, where it prints out frequent status messages. This is useful for debugging.
+- `disable_console_clearing`
+    - This setting can be used to prevent Assassin from clearing the screen.
+    - Under normal circumstances, this should not be used because it will make Assassin's output extremely chaotic and unpredictable. However, there may be some situations in which it may be useful to disable output clearing.
 - `gps_enabled`
     - This setting is used to globally enable and disable GPS functionality throughout Assassin.
 - `gps_demo_mode`
