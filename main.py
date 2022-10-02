@@ -36,7 +36,6 @@ import re # Required to use Regex
 import validators # Required to validate URLs
 import datetime # Required for converting between timestamps and human readable date/time information
 import fnmatch # Required to use wildcards to check strings
-import lzma # Required to open and manipulate ExCam database.
 import math # Required to run more complex math functions.
 from geopy.distance import great_circle # Required to calculate distance between locations.
 import random # Required to generate random numbers.

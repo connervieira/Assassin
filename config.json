@@ -1,7 +1,7 @@
 {
     "general": {
         "active_config_refresh": true,
-        "refresh_delay": 1,
+        "refresh_delay": 1.0,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
@@ -17,7 +17,6 @@
             "traffic_cameras": 0,
             "alpr_cameras": 1
         },
-        "refresh_delay": 0,
         "alert_databases": {
             "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
             "alpr_cameras": "./assets/databases/alpr.json",
@@ -75,7 +74,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "minimum_speed": 50,
             "distance_threshold": 3,
             "base_altitude_threshold": 20000,

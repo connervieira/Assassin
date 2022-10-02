@@ -16,6 +16,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Complete alert processing.
     - [ ] Complete ADS-B data streaming.
     - [ ] Refine alerting sensitivity.
+        - [ ] Add max height threshold
+        - [ ] Finish minimum speed threshold
 - [ ] Finish alert sounds.
     - [ ] Add Bluetooth alert sound.
     - [ ] Add ADS-B alert sound.
