@@ -417,7 +417,7 @@ def load_traffic_cameras(current_lat, current_lon, database_file, radius):
                     if (get_distance(current_lat, current_lon, camera['lat'], camera['lon']) < float(radius)): # Check to see if this camera is inside the initial loading radius.
                         loaded_database_information.append(camera)
     else:
-        loaded_database_information = {} # Return a blank database if the file specified doesn't exist.
+        loaded_database_information = [] # Return a blank database if the file specified doesn't exist.
 
     return loaded_database_information # Return the newly edited database information.
 

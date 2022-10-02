@@ -95,12 +95,13 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and config["g
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(current_location[0], current_location[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
     else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
+        loaded_traffic_camera_database = [] # Load a blank list of traffic cameras.
         if (str(config["general"]["alert_databases"]["traffic_cameras"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
             display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 2)
         elif (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == False): # The traffic camera alert database specified in the configuration does not exist.
             display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["alert_databases"]["traffic_cameras"]) + ") does not exist.", 2)
         else:
-            display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
+            display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
     debug_message("Loaded traffic enforcement camera database")
 
 
@@ -112,6 +113,7 @@ if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0): # Check to see
     if (str(config["general"]["alert_databases"]["alpr_cameras"]) != "" and os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"]))): # Check to see if the ALPR camera database exists.
         loaded_alpr_camera_database = json.load(open(str(config["general"]["alert_databases"]["alpr_cameras"]))) # Load the ALPR database.
     else:
+        loaded_alpr_camera_database = {} # Load a blank database of ALPR cameras, since the actual database couldn't be loaded.
         if (str(config["general"]["alert_databases"]["alpr_cameras"]) == ""): # The ALPR alert database specified in the configuration is blank.
             display_notice("ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified.", 2)
         elif (os.path.exists(str(config["general"]["alert_databases"]["alpr_cameras"])) == False): # The ALPR alert database specified in the configuration does not exist.
@@ -129,8 +131,10 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
     if (os.path.exists(config["general"]["alert_databases"]["drones"]) == True and config["general"]["alert_databases"]["drones"] != ""):
         drone_threat_database = json.load(open(config["general"]["alert_databases"]["drones"]))
     elif (config["general"]["alert_databases"]["drones"] == ""):
+        drone_threat_database = {} # Load a blank placeholder database since the actual database couldn't be loaded.
         display_notice("Drone alerts are enabled in the configuration, but the drone alert database path is blank.", 2)
     elif (os.path.exists(config["general"]["alert_databases"]["drones"]) == False):
+        drone_threat_database = {} # Load a blank placeholder database since the actual database couldn't be loaded.
         display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["alert_databases"]["drones"]) + ") doesn't exist.", 2)
 
 
