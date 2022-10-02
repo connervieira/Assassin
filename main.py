@@ -41,9 +41,6 @@ import math # Required to run more complex math functions.
 from geopy.distance import great_circle # Required to calculate distance between locations.
 import random # Required to generate random numbers.
 
-import pyproj # Required to calculate bearing between locations.
-geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic.
-
 if (config["general"]["relay_alerts"]["enabled"] == True): # Only import the GPIO library if relay alerts are enabled.
     import RPi.GPIO as GPIO
 
@@ -453,7 +450,7 @@ while True: # Run forever in a loop until terminated.
                 aircraft_data[key]["relativeheading"] = relative_heading # Add the relative heading of the aircraft to its data.
 
                 # Calculate the direction to the aircraft relative to the current position.
-                relative_direction = geodesic.inv(current_location[1], current_location[0], aircraft_data[key]["longitude"], aircraft_data[key]["latitude"])[0]
+                relative_direction = calculate_bearing(current_location[0], current_location[1], aircraft_data[key]["latitude"], aircraft_data[key]["longitude"])
                 if (relative_direction < 0): # Check to see if the direction to the aircraft is negative.
                     relative_direction = 360 + relative_direction
                 aircraft_data[key]["direction"] = relative_direction # Add the direction to the aircraft to its data.

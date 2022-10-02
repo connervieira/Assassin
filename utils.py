@@ -41,10 +41,8 @@ from xml.dom import minidom # Required for processing GPX data
 import fnmatch # Required to use wildcards to check strings
 import lzma # Required to load ExCam database
 import math # Required to run more complex math calculations
+import numpy # Required to run more complex math calculations
 from geopy.distance import great_circle # Required to calculate distance between locations.
-
-import pyproj # Required to calculate bearing between locations.
-geodesic = pyproj.Geod(ellps='WGS84') # Setup the PyProj geodesic.
 
 from gps import * # Required to access GPS information.
 import gpsd # Required to access GPS information.
@@ -352,12 +350,31 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
 
 
 
+def calculate_bearing (lat1, lon1, lat2, lon2):
+    lat1 = float(lat1)
+    lat2 = float(lat2)
+    lon1 = float(lon1)
+    lon2 = float(lon2)
+
+    # Calculate the bearing.
+    longitude_difference = (lon2 - lon1)
+    x = math.cos(math.radians(lat2)) * math.sin(math.radians(longitude_difference))
+    y = math.cos(math.radians(lat1)) * math.sin(math.radians(lat2)) - math.sin(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.cos(math.radians(longitude_difference))
+    bearing = numpy.arctan2(x,y)
+    bearing = numpy.degrees(bearing)
+
+    # Return the bearing.
+    return bearing
+
+
+
+
 def nearby_database_poi(current_lat, current_lon, database_information, radius=1.0): # This function is used to get a list of all points of interest from a particular database within a certain range of a given location.
     nearby_database_information = [] # Create a placeholder list to add the nearby POIs to in the next steps.
     for entry in database_information["entries"]: # Iterate through each entry in the loaded database information.
         current_distance = get_distance(current_lat, current_lon, entry['latitude'], entry['longitude']) # Get the current distance to the POI in question.
         entry["distance"] = current_distance # Append the current POI's distance to it's database information.
-        entry["bearing"] = geodesic.inv(current_lon, current_lat, entry["longitude"], entry["latitude"])[0] # Calculate the bearing to the POI.
+        entry["bearing"] = calculate_bearing(current_lat, current_lon, entry["latitude"], entry["longitude"]) # Calculate the bearing to the POI.
         if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
             entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
 
@@ -534,6 +551,9 @@ def display_notice(message, level=1):
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
         else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
             time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
+
+
+
 
 
 
