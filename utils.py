@@ -660,6 +660,12 @@ def fetch_aircraft_data(file):
         raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
 
     # TODO - Add message TTL
+    for message in reversed(raw_output): # Iterate through each message (line) in the file.
+        message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
+        message_age = time.time() - message_timestamp # Calculate the age of this message.
+        if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
+            raw_output.remove(message) # Remove this message from the raw data.
+
 
 
     aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
