@@ -61,6 +61,7 @@ get_gps_location = utils.get_gps_location # Load the function to get the current
 get_distance = utils.get_distance # Load the function to get the distance between to global positions.
 load_traffic_cameras = utils.load_traffic_cameras # Load the function used to load the database of speed and red-light cameras.
 nearby_traffic_cameras = utils.nearby_traffic_cameras # Load the function used to check for nearby traffic cameras.
+bearing = utils.bearing # Load the function used to calculate the bearing between two coordinate pairs.
 nearby_database_poi = utils.nearby_database_poi # Load the function used to check for general nearby points of interest.
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
 display_number = utils.display_number # Load the function used to display numbers as large ASCII font.
