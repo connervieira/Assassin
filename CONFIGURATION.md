@@ -13,7 +13,8 @@ This section of configuration values will effect Assassin's general operation.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
 - `debugging_output`
-    - This determines whether Assassin will operate in a verbose mode, where it prints out frequent status messages. This is useful for debugging.
+    - This determines whether Assassin will operate in a verbose mode, where it prints out frequent status messages with timestamps. This is useful for debugging and for finding sources of delay.
+    - If you enable this, considering enabling the `disable_console_clearing` to prevent debugging messages from being cleared.
 - `disable_console_clearing`
     - This setting can be used to prevent Assassin from clearing the screen.
     - Under normal circumstances, this should not be used because it will make Assassin's output extremely chaotic and unpredictable. However, there may be some situations in which it may be useful to disable output clearing.

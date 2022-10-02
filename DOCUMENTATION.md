@@ -12,13 +12,15 @@ Due to it's inherently customizable and open-ended philosophy, there isn't a sin
 
 This is the installation process for Assassin and all of it's dependencies. This process is written assuming you're running a Debian based distribution of GNU/Linux, but it's theoretically possible to get Assassin to function smoothly on any Linux distribution.
 
-1. Install the required Python packages. (Required)
-    - `pip3 install validators gps gpsd-py3 gpsd requests`
-2. Install GPSD (Highly Recommended)
+1. Install GPSD (Highly Recommended)
     - GPSD is required for Assassin to communicate with GPS devices.
     - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
+    - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
     - It may also be necessary to start GPSD. You can test to see if GPSD is working properly using the `cgps` command.
     - Without GPSD, Assassin would theoretically function, but in a severely limited capacity. Many of the core functions of Assasin would fail to operate.
+2. Install networking packages (Recommended)
+    - `pip3 install validators requests`
+    - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
 3. Optionally, install MPG321 (Recommended)
     - Assassin requires MPG321 in order to play audio effects for alerts.
     - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
