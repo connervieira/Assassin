@@ -83,6 +83,7 @@ debug_message("Imported `utils.py`")
 
 
 
+
 # Load the traffic enforcement camera, if enabled.
 if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if traffic camera alerts are enabled.
     debug_message("Loading traffic enforcement camera database")

@@ -78,8 +78,6 @@ debug_message("Importing `math` library")
 import math # Required to run more complex math calculations
 debug_message("Importing `numpy` library")
 import numpy # Required to run more complex math calculations
-debug_message("Importing `geopy.distance` library")
-from geopy.distance import great_circle # Required to calculate distance between locations.
 debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
@@ -379,7 +377,23 @@ def get_gps_location(demo=False): # Placeholder that should be updated at a late
 # Define a simple function to calculate the approximate distance between two points in miles.
 debug_message("Creating `get_distance` function")
 def get_distance(lat1, lon1, lat2, lon2):
-    return great_circle((lat1, lon1), (lat2, lon2)).miles
+
+    # Convert the coordinates into radians.
+    lat1 = math.radians(float(lat1))
+    lon1 = math.radians(float(lon1))
+    lat2 = math.radians(float(lat2))
+    lon2 = math.radians(float(lon2))
+
+    # Calculate the distance.
+    distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
+
+    # Convert the distance from kilometers to miles.
+    distance = distance * 0.6213712
+
+    # Return the calculated distance.
+    return distance
+
+
 
 
 
@@ -421,6 +435,8 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
                 nearby_misc_cameras.append(camera) # Add this camera to the "nearby general traffic camera" list.
 
     return nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras # Return the list of nearby cameras for all types.
+
+
 
 
 
