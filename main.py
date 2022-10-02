@@ -85,8 +85,12 @@ debug_message("Imported `utils.py`")
 
 
 # Load the traffic enforcement camera, if enabled.
-if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0): # Check to see if traffic camera alerts are enabled.
+if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and config["general"]["gps_enabled"]): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
     debug_message("Loading traffic enforcement camera database")
+    current_location = [0, 0] # Set the "current location" to a placeholder.
+    while (current_location[0] == 0 and current_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
+        current_location = get_gps_location() # Attempt to get the current GPS location.
+
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
     else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
@@ -129,9 +133,7 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
         display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["alert_databases"]["drones"]) + ") doesn't exist.", 2)
 
 
-
     detected_drone_hazards = [] # Set the active drone hazards list to a blank placeholder.
-
 
     # Load the drone threat history file, if applicable.
     if (config["general"]["drone_alerts"]["save_detected_hazards"] == True): # Check to see if drone hazard recording is enabled.
@@ -151,7 +153,6 @@ if (config["general"]["drone_alerts"]["enabled"] == True):
 
 
     # Run Airodump based on the Assassin configuration.
-
     airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
     if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
         os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
