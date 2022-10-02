@@ -90,6 +90,7 @@ if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and config["g
     current_location = [0, 0] # Set the "current location" to a placeholder.
     while (current_location[0] == 0 and current_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
         current_location = get_gps_location() # Attempt to get the current GPS location.
+        time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
 
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(get_gps_location()[0], get_gps_location()[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.
