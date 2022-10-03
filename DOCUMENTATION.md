@@ -17,7 +17,7 @@ This is the installation process for Assassin and all of it's dependencies. This
     - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
     - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
     - It may also be necessary to start GPSD. You can test to see if GPSD is working properly using the `cgps` command.
-    - Without GPSD, Assassin would theoretically function, but in a severely limited capacity. Many of the core functions of Assasin would fail to operate.
+    - Without GPSD, Assassin would theoretically function, but in a severely limited capacity. Many of the core functions of Assassin would fail to operate.
 2. Install networking packages (Recommended)
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
@@ -30,7 +30,7 @@ This is the installation process for Assassin and all of it's dependencies. This
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
     - If you don't plan on using Assassin's radio threat detection features, this step is optional.
-5. Optionally, install Bluez Tools (Recomended)
+5. Optionally, install Bluez Tools (Recommended)
     - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
     - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
         - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
@@ -76,10 +76,10 @@ Many of Assassin's features are dependent on external hardware. This section pro
     - Since Assassin is capable of interfacing with several external devices and sensors, a processing device with solid I/O is recommended.
 - Location Services
     - Many of Assassin's core features are dependent on GPS data. As such, it is highly recommend that you install a GPS unit to make the most of Assassin.
-    - Assassin uses GPSD as a location backend, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
+    - Assassin uses GPSD as a location back-end, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
 - Bluetooth Monitoring
     - To enable Bluetooth related features, Assassin simply connects to any typical Bluetooth adapter. Many devices have these adapters built in.
-    - If you're device has integrated Bluetooth, Assassin whould have no problem interfacing it. However, external Bluetooth adapters can increase range especially if they are placed outside the body of the vehicle.
+    - If your device has integrated Bluetooth, Assassin should have no problem interfacing it. However, external Bluetooth adapters can increase range especially if they are placed outside the body of the vehicle.
 - Radio Monitoring
     - Assassin's radio monitoring features allow it to detect WiFi devices, consumer/commercial drones, and other wireless threats.
     - Assassin uses Airodump to detect wireless devices. Airodump is capable of using most consumer network adapters.
@@ -125,7 +125,7 @@ After you get Assassin up and running, you may want to use some of the integrate
 2. Start Assassin
     - Start Assassin as normal.
 3. Observe debugging messages
-    - When the debugging configuration values are enabled, Assassin should print out frequent gray-ed out messages explaining what processes are currently running.
+    - When the debugging configuration values are enabled, Assassin should print out frequent grayed out messages explaining what processes are currently running.
     - These messages follow this format:
         - `[current time] ([time since last message) - [message]`
         - Example: `1664770806.6115972996 (0.0029230118) - Importing 'math' library`
@@ -141,5 +141,5 @@ After you get Assassin up and running, you may want to use some of the integrate
 1664771348.414 (3.5831029) - Loading traffic enforcement cameras from database
 1664771349.143 (0.7282614) - Loaded traffic enforcement camera database
 ```
-    - Once you've located sources of delay, consider disabling functions you don't need. Assassin is designed to avoid unneccessary processing, and will skip processes that aren't required to complete the functions enabled in the configuration.
+    - Once you've located sources of delay, consider disabling functions you don't need. Assassin is designed to avoid unnecessary processing, and will skip processes that aren't required to complete the functions enabled in the configuration.
         - For example, if you don't see yourself using traffic enforcement camera alerts, setting the `alert_range` configuration value for `traffic_cameras` to `0` will cause Assassin to skip loading the traffic camera database entirely to save processing time.

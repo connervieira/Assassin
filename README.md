@@ -44,7 +44,7 @@ Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, 
 
 ### ADS-B Aircraft Detection\*
 
-Assassin can interface with ADS-B receivers in order to indepedently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services.
+Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services.
 
 
 ### Custom Relay Alerts
@@ -68,7 +68,7 @@ These are some of the key features of Assassin.
 - Altitude display
     - The current altitude in meters can be displayed based on data derived from the GPS.
 - Satellite display
-    - For diagnostic purposes, Assasin can display the number of satellites that the GPS is currently connected to.
+    - For diagnostic purposes, Assassin can display the number of satellites that the GPS is currently connected to.
 
 ### Status Lighting
 
@@ -125,7 +125,7 @@ Assassin is designed to be safe, regardless of the installation context. It's ea
 
 ### Documented
 
-Assasin's extreme customizability can be a bit overwhelming to new users. For this reason, the entire platform is extensively documented, and comes bundled with step-by-step guides on how to download it, install it, configure it, and run it.
+Assassin's extreme customizability can be a bit overwhelming to new users. For this reason, the entire platform is extensively documented, and comes bundled with step-by-step guides on how to download it, install it, configure it, and run it.
 
 
 ## Installing
