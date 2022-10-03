@@ -726,16 +726,21 @@ def fetch_aircraft_data(file):
         with open(file, 'r') as read_file: # Open the ADS-B message file.
             raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
 
-        save_to_file(file, "") # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
+        save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
 
 
         # Iterate through all received messages, and delete any that have exceeded the time-to-live threshold set in the configuration.
         debug_message("Removing expired messages")
-        for message in reversed(raw_output): # Iterate through each message (line) in the file.
+        messages_pruned_count = 0 # This is a placeholder variable that will be incremented by 1 for each message removed. This is used for debugging purposes.
+        for message in reversed(raw_output): # Iterate through each message (line) in the file, in reverse order to prevent list entries from being shuffled around during the pruning process.
             message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
             message_age = time.time() - message_timestamp # Calculate the age of this message.
             if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
                 raw_output.remove(message) # Remove this message from the raw data.
+                messages_pruned_count = messages_pruned_count + 1 # Increment the pruned message counter by 1.
+
+        if (messages_pruned_count > 0): # Check to see if any messages were pruned.
+            debug_message("Pruned " + str(messages_pruned_count) + " messages")
 
         debug_message("Generating pruned CSV data")
         new_raw_csv_string = "" # This is a placeholder string that will be appended to in the next steps.
@@ -746,7 +751,7 @@ def fetch_aircraft_data(file):
             new_raw_csv_string = new_raw_csv_string + "\n" # Add a line break at the end of the last line.
 
         debug_message("Saving pruned CSV data")
-        add_to_file(file, new_raw_csv_string) # Save the pruned CSV data back to the original file. The `add_to_file` function is used so that messages received during the data handling process are not overwritten and lost.
+        add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file. The `add_to_file` function is used so that messages received during the data handling process are not overwritten and lost.
 
 
 
@@ -771,8 +776,8 @@ def fetch_aircraft_data(file):
             if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
                 try:
                     individual_data["heading"] = int(entry[13]) # Get the aircraft's compass heading.
-                else:
-                    individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading..
+                except:
+                    individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading.
             if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
                 individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
             if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
