@@ -58,7 +58,7 @@ After installing Assassin, you should do some quick configuration in order to ge
     - Make changes to any of the configuration values to better fit your usage context.
     - This step is very open-ended. Depending on your situation, you may leave the configuration almost untouched, while other situations might involve intensive changes.
 3. Depending on the platform, Assassin might not be able to locate the `config.json` file. If you encounter issues during the steps described in the "Usage" section, you may need to manually set Assassin's directory. Under normal circumstances, this shouldn't be necessary.
-    - At the top of the `main.py` and `utils.py` scripts, you should see a variable titled `assassin_root_directory`. By default, a Python function is used to find the current directory of the script.
+    - At the top of the `main.py`, `utils.py`, and other scripts, you should see a variable titled `assassin_root_directory`. By default, a Python function is used to find the current directory of the script.
     - If you receive errors related to missing configuration files when trying to run Assassin, try setting this variable to a static file path.
     - Example:
         - `assassin_root_directory = "/home/user/Assassin/"`
@@ -72,7 +72,7 @@ Many of Assassin's features are dependent on external hardware. This section pro
     - Assassin is specific designed to be extremely lightweight, so it should run smoothly on devices like the Raspberry Pi.
         - The Raspberry Pi 4 runs Assassin extremely well, and seems to handle any realistic usage case well.
         - The Raspberry Pi 3 runs Assassin reliably. It may suffer from longer startup times, but otherwise works well.
-        - The Raspberry Pi 2 runs Assassin acceptably, but smoothly. For the best experience, consider a faster processing device.
+        - The Raspberry Pi 2 runs Assassin acceptably, but not smoothly. For the best experience, consider a faster processing device.
     - Since Assassin is capable of interfacing with several external devices and sensors, a processing device with solid I/O is recommended.
 - Location Services
     - Many of Assassin's core features are dependent on GPS data. As such, it is highly recommend that you install a GPS unit to make the most of Assassin.
@@ -135,11 +135,9 @@ After you get Assassin up and running, you may want to use some of the integrate
     - Once you've located the process that triggered the error, you can focus your search for solutions on that particular process.
 5. Locate sources of delay
     - The 'time since last message' field can be used to quickly determine how long the previous processing message took to complete. This is useful for locating sources of delay.
-    - In the following example, the process of opening the traffic camera database was a source of significant delay, as indicated by the (3.5831029) in the second line. This tells that the process of opening the traffic camera data in the previous line took 3.58 seconds.
-```
-1664771344.831 (0.0000543) - Opening traffic enforcement camera database
-1664771348.414 (3.5831029) - Loading traffic enforcement cameras from database
-1664771349.143 (0.7282614) - Loaded traffic enforcement camera database
-```
     - Once you've located sources of delay, consider disabling functions you don't need. Assassin is designed to avoid unnecessary processing, and will skip processes that aren't required to complete the functions enabled in the configuration.
         - For example, if you don't see yourself using traffic enforcement camera alerts, setting the `alert_range` configuration value for `traffic_cameras` to `0` will cause Assassin to skip loading the traffic camera database entirely to save processing time.
+    - In the following example, the process of opening the traffic camera database was a source of significant delay, as indicated by the (3.5831029) in the second line. This tells that the process of opening the traffic camera data in the previous line took 3.58 seconds.
+        - `1664771344.831 (0.0000543) - Opening traffic enforcement camera database`
+        - `1664771348.414 (3.5831029) - Loading traffic enforcement cameras from database`
+        - `1664771349.143 (0.7282614) - Loaded traffic enforcement camera database`
