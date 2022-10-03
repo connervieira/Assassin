@@ -42,10 +42,16 @@ class style:
     end = '\033[0m'
 
 
+import time # Required to add delays and handle dates/times
+
 # Define the function to print debugging information when the configuration specifies to do so.
+debugging_time_record = time.time()
 def debug_message(message):
     if (config["general"]["debuging_output"] == True): # Only print the message if the debugging output configuration value is set to true.
-        print(style.italic + style.faint + str(time.time()) + " - " + message + style.end) # Print the message.
+        global debugging_time_record
+        time_since_last_message = (time.time()-debugging_time_record) # Calculate the time since the last debug message.
+        print(f"{style.italic}{style.faint}{time.time():.10f} ({time_since_last_message:.10f}) - {message}{style.end}") # Print the message.
+        debugging_time_record = time.time() # Record the current timestamp.
 
 
 
@@ -66,7 +72,6 @@ else: # The configuration file couldn't be located. Assassin can't continue to l
 
 
 
-import time # Required to add delays and handle dates/times
 
 debug_message("Loading utils.py libraries")
 

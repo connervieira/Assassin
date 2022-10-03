@@ -2,7 +2,7 @@
     "general": {
         "active_config_refresh": true,
         "refresh_delay": 1.0,
-        "debuging_output": true,
+        "debuging_output": false,
         "disable_console_clearing": false,
         "gps_enabled": true,
         "gps_demo_mode": {
@@ -76,7 +76,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_file": "/home/pi/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
