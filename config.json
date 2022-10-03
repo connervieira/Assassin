@@ -7,11 +7,11 @@
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41.0,
+            "longitude": 41.2,
             "latitude": -81.0,
             "speed": 0,
             "altitude": 132.0,
-            "heading": 310,
+            "heading": 270,
             "satellites": 6
         },
         "record_telemetry": false,
@@ -57,7 +57,7 @@
             }
         },
         "bluetooth_monitoring": {
-            "enabled": false,
+            "enabled": true,
             "scan_time": 1,
             "minimum_following_distance": 1,
             "log_devices": {
@@ -72,12 +72,13 @@
             "blacklist": {
                 "enabled": true,
                 "devices": {
+                    "98:09:CF:5C:BE:1C": "ConnersOnePlus7Pro"
                 }
             }
         },
         "adsb_alerts": {
-            "enabled": false,
-            "adsb_message_file": "/home/pi/Downloads/ADSB-Data.csv",
+            "enabled": true,
+            "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 175,
@@ -85,7 +86,7 @@
             "distance_threshold": 4,
             "base_altitude_threshold": 10000,
             "message_time_to_live": 60,
-            "threat_threshold": 2
+            "threat_threshold": 1
         }
     },
     "display": {

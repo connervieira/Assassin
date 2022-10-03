@@ -61,14 +61,22 @@ import json # Required to process JSON data
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
-# Locate and load the configuration file.
-if (os.path.exists(str(assassin_root_directory + "/config.json")) == True): # Check to see if the configuration file exists in the default location.
-    config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
-elif (os.path.exists(str(assassin_root_directory + "/../config.json")) == True): # Check to see if the configuration file exists in the parent directory. This may occur if this script is being used in a subfolder of Assassin.
-    config = json.load(open(assassin_root_directory + "/../config.json")) # Load the configuration database from the parent directory.
-else: # The configuration file couldn't be located. Assassin can't continue to load.
-    print("Configuration couldn't be located.")
-    exit() # Terminate the program.
+
+def load_config():
+    # Locate and load the configuration file.
+    if (os.path.exists(str(assassin_root_directory + "/config.json")) == True): # Check to see if the configuration file exists in the default location.
+        config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+    elif (os.path.exists(str(assassin_root_directory + "/../config.json")) == True): # Check to see if the configuration file exists in the parent directory. This may occur if this script is being used in a subfolder of Assassin.
+        config = json.load(open(assassin_root_directory + "/../config.json")) # Load the configuration database from the parent directory.
+    else: # The configuration file couldn't be located. Assassin can't continue to load.
+        config = {} # Set the configuration to a blank placeholder dictionary.
+        print("Configuration couldn't be located.")
+        exit()
+
+    return config # Return the loaded configuration information.
+
+
+config = load_config() # Execute the configuration loading.
 
 
 
@@ -249,110 +257,111 @@ def add_to_file(file_name, contents, silence=False):
 # This is a simple function used to display large ASCII shapes.
 debug_message("Creating `display_shape` function")
 def display_shape(shape):
-    if (shape == "square"):
-        print(style.bold)
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print(style.end)
+    if (config["display"]["shape_alerts"] == True) # Check to see if shape alerts are enabled in the configuration.
+        if (shape == "square"):
+            print(style.bold)
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print(style.end)
 
-    elif (shape == "circle"):
-        print(style.bold)
-        print("        ######")
-        print("     ############")
-        print("   ################")
-        print("  ##################")
-        print(" ####################")
-        print("######################")
-        print("######################")
-        print("######################")
-        print(" ####################")
-        print("  ##################")
-        print("   ################")
-        print("     ############")
-        print("        ######")
-        print(style.end)
+        elif (shape == "circle"):
+            print(style.bold)
+            print("        ######")
+            print("     ############")
+            print("   ################")
+            print("  ##################")
+            print(" ####################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print(" ####################")
+            print("  ##################")
+            print("   ################")
+            print("     ############")
+            print("        ######")
+            print(style.end)
 
-    elif (shape == "triangle"):
-        print(style.bold)
-        print("           #")
-        print("          ###")
-        print("         #####")
-        print("        #######")
-        print("       #########")
-        print("      ###########")
-        print("     #############")
-        print("    ###############")
-        print("   #################")
-        print("  ###################")
-        print(" #####################")
-        print("#######################")
-        print(style.end)
+        elif (shape == "triangle"):
+            print(style.bold)
+            print("           #")
+            print("          ###")
+            print("         #####")
+            print("        #######")
+            print("       #########")
+            print("      ###########")
+            print("     #############")
+            print("    ###############")
+            print("   #################")
+            print("  ###################")
+            print(" #####################")
+            print("#######################")
+            print(style.end)
 
-    elif (shape == "diamond"):
-        print(style.bold)
-        print("           #")
-        print("          ###")
-        print("         #####")
-        print("        #######")
-        print("       #########")
-        print("      ###########")
-        print("     #############")
-        print("      ###########")
-        print("       #########")
-        print("        #######")
-        print("         #####")
-        print("          ###")
-        print("           #")
-        print(style.end)
+        elif (shape == "diamond"):
+            print(style.bold)
+            print("           #")
+            print("          ###")
+            print("         #####")
+            print("        #######")
+            print("       #########")
+            print("      ###########")
+            print("     #############")
+            print("      ###########")
+            print("       #########")
+            print("        #######")
+            print("         #####")
+            print("          ###")
+            print("           #")
+            print(style.end)
 
-    elif (shape == "cross"):
-        print(style.bold)
-        print("########              ########")
-        print("  ########          ########")
-        print("    ########      ########")
-        print("      ########  ########")
-        print("        ##############")
-        print("          ##########")
-        print("        ##############")
-        print("      ########  ########")
-        print("    ########      ########")
-        print("  ########          ########")
-        print("########              ########")
-        print(style.end)
+        elif (shape == "cross"):
+            print(style.bold)
+            print("########              ########")
+            print("  ########          ########")
+            print("    ########      ########")
+            print("      ########  ########")
+            print("        ##############")
+            print("          ##########")
+            print("        ##############")
+            print("      ########  ########")
+            print("    ########      ########")
+            print("  ########          ########")
+            print("########              ########")
+            print(style.end)
 
-    elif (shape == "horizontal"):
-        print(style.bold)
-        print("############################")
-        print("############################")
-        print("############################")
-        print("############################")
-        print(style.end)
+        elif (shape == "horizontal"):
+            print(style.bold)
+            print("############################")
+            print("############################")
+            print("############################")
+            print("############################")
+            print(style.end)
 
-    elif (shape == "vertical"):
-        print(style.bold)
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print("           ######")
-        print(style.end)
+        elif (shape == "vertical"):
+            print(style.bold)
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print(style.end)
 
 
 
@@ -410,7 +419,7 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
     # Convert the coordinates received.
     lat1 = float(lat1)
     lon1 = float(lon1)
-    lat2 = float(lat1)
+    lat2 = float(lat2)
     lon2 = float(lon2)
 
     # Verify the coordinates received, if efficient mode is disabled.
@@ -428,17 +437,21 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
             display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
             lon2 = 0 # Default to a safe value.
 
-    # Convert the coordinates into radians.
-    lat1 = math.radians(lat1)
-    lon1 = math.radians(lon1)
-    lat2 = math.radians(lat2)
-    lon2 = math.radians(lon2)
+    if (lon1 == lon2 and lat1 == lat2): # Check to see if the coordinates are the same.
+        distance = 0 # The points are the same, so they are 0 miles apart.
 
-    # Calculate the distance.
-    distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
+    else: # The points are different, so calculate the distance between them
+        # Convert the coordinates into radians.
+        lat1 = math.radians(lat1)
+        lon1 = math.radians(lon1)
+        lat2 = math.radians(lat2)
+        lon2 = math.radians(lon2)
 
-    # Convert the distance from kilometers to miles.
-    distance = distance * 0.6213712
+        # Calculate the distance.
+        distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
+
+        # Convert the distance from kilometers to miles.
+        distance = distance * 0.6213712
 
     # Return the calculated distance.
     return distance
@@ -477,7 +490,10 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
     nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras = [], [], [] # Create empty placeholder lists for each camera type.
 
     if (len(database_information) > 0): # Check to see if the supplied database information has data in it.
+        camera_id = 0 # This will be incremented up by 1 for each camera iterated through in the database.
         for camera in database_information: # Iterate through each camera in the loaded database.
+            camera_id = camera_id + 1
+            camera["id"] = camera_id
             current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
             if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
                 camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
@@ -537,7 +553,10 @@ def calculate_bearing (lat1, lon1, lat2, lon2):
 
 
 debug_message("Creating `nearby_database_poi` function")
-def nearby_database_poi(current_lat, current_lon, database_information, radius=1.0): # This function is used to get a list of all points of interest from a particular database within a certain range of a given location.
+def nearby_database_poi(current_location, database_information, radius=1.0): # This function is used to get a list of all points of interest from a particular database within a certain range of a given location.
+    current_lat = current_location[0]
+    current_lon = current_location[1]
+    current_heading = current_location[2]
     nearby_database_information = [] # Create a placeholder list to add the nearby POIs to in the next steps.
     for entry in database_information["entries"]: # Iterate through each entry in the loaded database information.
         current_distance = get_distance(current_lat, current_lon, entry['latitude'], entry['longitude']) # Get the current distance to the POI in question.
@@ -546,8 +565,14 @@ def nearby_database_poi(current_lat, current_lon, database_information, radius=1
         if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
             entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
 
+        if (entry["direction"] != ""): # Check to see if this POI has direction information.
+            entry["relativefacing"] = entry["direction"] - current_location[4] # Calculate the direction of this POI relative to the current direction of motion.
+            if (entry["relativefacing"] < 0): # If the relative facing direction of the POI is negative, then convert it to a positive direction.
+                entry["relativefacing"] = 360 + entry["relativefacing"] # Convert the relative facing direction to a positive value.
+
         if (current_distance < float(radius)): # Check to see if the current POI is within range of the user.
             nearby_database_information.append(entry) # Add this entry to the list of POIs within range.
+
     return nearby_database_information # Return the new database with the newly added distance information.
 
 
@@ -723,7 +748,7 @@ def play_sound(sound_id):
 
 
 
-
+# Define the function used to fetch aircraft data from the Dump1090 ADS-B message output. This function is also responsible for managing the raw message data itself.
 debug_message("Creating `fetch_aircraft_data` function")
 def fetch_aircraft_data(file):
     debug_message("Fetching aircraft data")

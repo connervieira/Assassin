@@ -29,7 +29,7 @@ Assassin comes bundled database to detect nearby ALPR cameras, and alert the use
 
 ### Autonomous Threat Defense
 
-Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detect, record, and alert to nearby consumer and commercial drones. This feature makes use of an open, customizable database of wireless threats in order to quickly and effectively detect and alert to nearby autonomous hazards. While not it's primary purpose, this feature is also capable of detecting various other radio-based devices, including remote-operated speed cameras from several common manufacturers.
+Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detect, record, and alert to nearby consumer and commercial drones. This feature makes use of an open, customizable database of wireless threats in order to quickly and effectively detect and alert to nearby autonomous hazards. While not it's primary purpose, this feature is also theoretically capable of detecting various other radio-based devices, including remote-operated speed cameras from several common manufacturers.
 
 
 ### Traffic Enforcement Camera Defense

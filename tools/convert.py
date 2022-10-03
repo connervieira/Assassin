@@ -1,6 +1,7 @@
 # Assassin - Database Convert
 
-# This tool converts OpenStreetMap data from the Overpass API to databases that can are compatible with Assassin. The converted databases might not be as detailed as databases specifically designed for Assassin, but they should still function correctly.
+# This tool converts OpenStreetMap data from the Overpass API to databases that are compatible with Assassin. The converted databases might not be as detailed as databases specifically designed for Assassin, but they should still function correctly.
+# This specific tool is designed to convert camera databases to Assassin compatible database.
 # To use this tool, simply run it from the command line using `python3 convert.py`. You will then be prompted to enter the file path to a JSON file containing information from the Overpass API. Then you'll be prompted to enter an output file path for the finished database after conversion. You'll then be prompted to enter a name and description for the new Assassin database. If these are left blank, defaults will be used.
 
 
