@@ -19,6 +19,7 @@ print("Loading Assassin...")
 import utils # Import the utils.py scripts.
 debug_message = utils.debug_message # Load the function to print debugging information when the configuration says to do so.
 
+
 debug_message("Starting loading")
 
 
@@ -30,7 +31,6 @@ assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # Thi
 
 
 config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
-debug_message("Loaded configuration")
 
 
 
@@ -495,7 +495,10 @@ while True: # Run forever in a loop until terminated.
                 aircraft_data[key]["distance"] = aircraft_distance # Add the distance to the aircraft to its data.
 
                 # Calculate the heading of the aircraft relative to the current direction of motion.
-                relative_heading = int(aircraft_data[key]["heading"]) - current_location[4] # Calculate the heading direction of this aircraft relative to the current direction of movement
+                try: # Try calculating the relative heading using relevant information.
+                    relative_heading = int(aircraft_data[key]["heading"]) - int(current_location[4]) # Calculate the heading direction of this aircraft relative to the current direction of movement
+                except: # If the relative heading fails to be calculated, then use a placeholder.
+                    relative_heading = 0
                 if (relative_heading < 0): # Check to see if the relative heading is a negative number.
                     relative_heading = 360 + relative_heading # Convert the relative heading to a positive number.
                 aircraft_data[key]["relativeheading"] = relative_heading # Add the relative heading of the aircraft to its data.

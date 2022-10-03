@@ -3,7 +3,7 @@
         "active_config_refresh": true,
         "refresh_delay": 1.0,
         "debuging_output": true,
-        "disable_console_clearing": true,
+        "disable_console_clearing": false,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
@@ -84,8 +84,8 @@
             "maximum_aircraft_altitude": 20000,
             "distance_threshold": 4,
             "base_altitude_threshold": 10000,
-            "message_time_to_live": 100000,
-            "threat_threshold": 3
+            "message_time_to_live": 60,
+            "threat_threshold": 2
         }
     },
     "display": {
