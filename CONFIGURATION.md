@@ -80,12 +80,21 @@ This section of configuration values will effect Assassin's general operation.
 - `adsb_alerts`
     - ADS-B alerts allow Assassin to monitor and analyze aircraft in surrounding areas as a way to detect potential threats.
     - The `enabled` value enables and disables the entire ADS-B system.
-    - The `minimum_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while the car is on residential roads.
+    - The `adsb_message_file` is the filepath to the CSV ADS-B data that Assassin will use. This file can be data streamed live from Drump1090 on port 30003.
+    - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while the car is on residential roads.
+    - The `minimum_aircraft_speed` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while an aircraft isn't at cruising speed.
+    - The `maximum_aircraft_speed` setting defines the maximum aircraft speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding for aircraft that move faster than a certain model of aircraft.
+    - The `maximum_aircraft_altitude` setting defines the maximum aircraft altitude that ADS-B alerts will be triggered at.
     - The `distance_threshold` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
     - The `base_altitude_threshold` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
         - Below the base altitude threshold, the distance threshold will be proportionally decreased, and above the base altitude threshold, the distance threshold will be proportionally increased.
         - The `base_altitude_threshold` should roughly be the altitude that you expect hazardous planes to be at. Any planes above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower planes pose less of a threat, so the alert distance decreases.
-        - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
+    - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
+    - The `threat_threshold` determines how likely a plane is to be a threat before Assassin displays it as an alert. A plane has to match all of the criteria in its threshold level, and all levels below it.
+        - A threat threshold of `0` includes all aircraft detected.
+        - A threat threshold of `1` includes all aircraft within the alert radius.
+        - A threshold of `2` includes aircraft within the alert altitude range.
+        - A threshold of `3` includes aircraft within the alert speed range.
 
 
 ## Display Configuration
@@ -112,7 +121,8 @@ This section of configuration values effect Assassin's visual displays.
     - `heading` has several configuration values.
         - `degrees` determines whether or not the current heading will be displayed in degrees off north. When both `degrees` and `direction` are enabled, the degrees will be displayed in parenthesis after the cardinal direction.
         - `direction` determines whether or not the current heading will be displayed as a cardinal direction, such as 'N', 'SW', or 'E'.
-    - `satellites` can be toggled on and off.
+    - `satellites` can be toggled on and off, and shows how many GPS satellites are connected.
+    - `planes` can be toggled on and off, and shows many many aircraft are being detected. This is dependent on the ADS-B alerts system and requires `adsb_alerts` to be enabled.
 - `large_critical_display`
     - This setting allows the user to determine whether or not they want critical messages to be shown in large ASCII font.
     - This can be useful to allow the user to quickly see critically important information at a glance, such as an imminent threat that requires immediate action.

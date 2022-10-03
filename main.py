@@ -240,7 +240,8 @@ while True: # Run forever in a loop until terminated.
 
     if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
         last_location = current_location # Set the last location to the current location immediately before we update the current location for the next cycle.
-        last_location_time = current_location_time # Record when the last location was received.
+        if ("current_location_time" in locals()  == True): # Check to see if the current location time variable exists. This variable will not exist on the first cycle.
+            last_location_time = current_location_time # Record when the last location was received before recording the next location.
         current_location = get_gps_location() # Get the current location.
         current_location_time = time.time() # Record when this location was received.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
@@ -478,12 +479,14 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Run aircraft ADS-B alert processing.
+    # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Processing ADS-B alerts")
-        aircraft_data = fetch_aircraft_data("/home/pi/Downloads/ADSB-Data.csv") # Fetch the most recent aircraft data. TODO - Replace with live data stream.
+        aircraft_data = fetch_aircraft_data(config["general"]["adsb_alerts"]["adsb_message_file"]) # Fetch the most recent aircraft data.
+
         aircraft_threats = [] # Set the list of active aircraft threats to an empty placeholder database.
 
+        debug_message("Determining ADS-B threats")
         for key in aircraft_data.keys(): # Iterate through all detected aircraft
             aircraft_location = [aircraft_data[key]["latitude"], aircraft_data[key]["longitude"], aircraft_data[key]["altitude"]] # Grab the location information for the aircraft.
 
@@ -506,8 +509,36 @@ while True: # Run forever in a loop until terminated.
 
                 precise_alert_threshold = (int(aircraft_location[2]) / config["general"]["adsb_alerts"]["base_altitude_threshold"]) * config["general"]["adsb_alerts"]["distance_threshold"] # Calculate the precise alerting distance based on the aircraft altitude, base altitude threshold, and alert distance configured by the user. Higher altitude will cause planes to alert from farther away.
 
-                if (aircraft_distance < precise_alert_threshold):
+
+                aircraft_data[key]["threatlevel"] = 0
+                if (aircraft_distance < precise_alert_threshold): # Check to see if the aircraft is within the alert distance range.
+                    aircraft_data[key]["threatlevel"] = 1
+                    if (int(aircraft_data[key]["altitude"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_altitude"])): # Check to see if the aircraft is at the altitude range specified in the configuration.
+                        aircraft_data[key]["threatlevel"] = 2
+                        if (int(aircraft_data[key]["speed"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_speed"]) and int(aircraft_data[key]["speed"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_speed"])): # Check to see if the aircraft is within the alert speed range specified in the configuration.
+                            aircraft_data[key]["threatlevel"] = 3
+
+                if (aircraft_data[key]["threatlevel"] >= config["general"]["adsb_alerts"]["threat_threshold"]): # Check to see if this aircraft's threat level exceeds the threshold set in the configuration.
                     aircraft_threats.append(aircraft_data[key]) # Add this aircraft to the list of active threats.
+
+
+
+
+        # Sort the ADS-B aircraft alert database.
+        if (len(aircraft_threats) > 1): # Only sort the aircraft threats list if there is more than 1 entry in it.
+            debug_message("Sorting ADS-B threats")
+            sorted_aircraft_threats = [] # Set the sorted aircraft threats to a blank placeholder so each entry can be added one by one in the next steps.
+            for i in range(1, len(aircraft_threats)): # Run once for every entry in the aircraft threat list.
+                current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance.
+                for element in aircraft_threats:
+                    if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
+                        current_closest = element # Set this aircraft to the current closest known aircraft.
+
+                sorted_aircraft_threats.append(current_closest) # Add the closest aircraft from this cycle to the list.
+                aircraft_threats.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+
+            aircraft_threats = sorted_aircraft_threats # After the sorting has been finished, set the original aircraft threats list to the sorted version of it's original contents.
+            
 
         debug_message("Processed ADS-B alerts")
 
@@ -592,8 +623,10 @@ while True: # Run forever in a loop until terminated.
         elif (config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in degrees is enabled.
             print("Heading: " + str(current_location[4]) + "°") # Print the current heading to the console in degrees.
 
-    if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
+    if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the satellite display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
+    if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
+        print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
 
 
 
@@ -733,18 +766,23 @@ while True: # Run forever in a loop until terminated.
     # Display ADS-B aircraft alerts
     if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Displaying ADS-B alerts")
-        if (len(aircraft_threats) > 0): # Check to see if any threats were detected this cycle.
+        if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is travelling above the minimum alert speed.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 
             print(style.yellow + "Detected aircraft ADS-B threats:")
             for threat in aircraft_threats: # Iterate through each detected hazard.
                 print("    " + threat["id"] + ":") # Show this hazard's MAC address.
-                print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + ")") # Show the coordinates of this aircraft.
+                print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + "°)") # Show the coordinates of this aircraft.
                 print("        Distance: " + str(round(threat["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
+                print("        Threat Level: " + str(threat["threatlevel"])) # Show the distance to this aircraft.
                 print("        Speed: " + str(threat["speed"]) + " knots") # Show the speed of this aircraft.
+                print("        Altitude: " + str(threat["altitude"]) + " feet") # Show the altitude of this aircraft.
                 print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
                 print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]) + " (" + str(threat["relativeheading"]) + "°)") # Show the direction of this aircraft relative to the current direction of movement.
+                print("        Time: " + str(round((time.time() - float(threat["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
+                print("        Callsign: " + str(threat["callsign"])) # Show the callsign of this aircraft.
+                print("        Climb: " + str(threat["climb"]) + " feet per minute") # Show the vertical climb rate of this aircraft.
 
             print(style.end) # End the font styling from the aircraft ADS-B threat display.
 
@@ -774,4 +812,5 @@ while True: # Run forever in a loop until terminated.
 
 
 
+    debug_message("Executing refresh delay")
     time.sleep(float(config["general"]["refresh_delay"])) # Wait for a certain amount of time, as specified in the configuration.

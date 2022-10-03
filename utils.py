@@ -656,48 +656,57 @@ def play_sound(sound_id):
 
 debug_message("Creating `fetch_aircraft_data` function")
 def fetch_aircraft_data(file):
-    with open(file, 'r') as read_file:
-        raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
+    debug_message("Fetching aircraft data")
 
-    # TODO - Add message TTL
-    for message in reversed(raw_output): # Iterate through each message (line) in the file.
-        message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
-        message_age = time.time() - message_timestamp # Calculate the age of this message.
-        if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
-            raw_output.remove(message) # Remove this message from the raw data.
+    if (os.path.exists(str(file)) == True): # Check to see if the filepath supplied exists before attempting to load it.
+        debug_message("Reading raw ADS-B messages")
+        with open(file, 'r') as read_file:
+            raw_output = list(csv.reader(read_file)) # Dump the contents of the CSV file as a nested Python list.
 
 
+        # Iterate through all received messages, and delete any that have exceeded the time-to-live threshold set in the configuration.
+        debug_message("Removing expired messages")
+        for message in reversed(raw_output): # Iterate through each message (line) in the file.
+            message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
+            message_age = time.time() - message_timestamp # Calculate the age of this message.
+            if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
+                raw_output.remove(message) # Remove this message from the raw data.
 
-    aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
 
-    for entry in raw_output: # Iterate through each entry in the CSV list data.
-        if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
-            individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
-        else:
-            individual_data = {"latitude":"", "longitude":"", "altitude":"", "speed":"", "heading":"", "climb":"", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
 
-        if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
-            individual_data["id"] = entry[4] # Get the aircraft's identification.
-        if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
-            individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
-        if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
-            individual_data["longitude"] = entry[15] # Get the aircraft's longitude.
-        if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
-            individual_data["altitude"] = entry[11] # Get the aircraft's altitude.
-        if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
-            individual_data["speed"] = entry[12] # Get the aircraft's ground speed.
-        if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
-            individual_data["heading"] = entry[13] # Get the aircraft's compass heading.
-        if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
-            individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
-        if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
-            individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
-        if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
-            individual_data["time"] = str(round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple()))) # Convert the human readable timestamp into a Unix timestamp.
-        else:
-            display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
+        debug_message("Collecting aircraft data")
+        aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
+        for entry in raw_output: # Iterate through each entry in the CSV list data.
+            if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
+                individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
+            else:
+                individual_data = {"latitude":"", "longitude":"", "altitude":"", "speed":"", "heading":"", "climb":"", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
 
-        aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
-        
+            if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
+                individual_data["id"] = entry[4] # Get the aircraft's identification.
+            if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
+                individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
+            if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
+                individual_data["longitude"] = entry[15] # Get the aircraft's longitude.
+            if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
+                individual_data["altitude"] = entry[11] # Get the aircraft's altitude.
+            if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
+                individual_data["speed"] = entry[12] # Get the aircraft's ground speed.
+            if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
+                individual_data["heading"] = entry[13] # Get the aircraft's compass heading.
+            if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
+                individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
+            if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
+                individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
+            if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
+                individual_data["time"] = str(round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple()))) # Convert the human readable timestamp into a Unix timestamp.
+            else:
+                display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
 
-    return aircraft_data # Return the processed aircraft data.
+            aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
+            
+        return aircraft_data # Return the processed aircraft data.
+
+    else: # The file supplied to load ADS-B messages from does not exist.
+        display_notice("The ADS-B message file specified in the configuration does not exist. ADS-B messages can't be loaded.", 2)
+        return {} # Return blank aircraft data.

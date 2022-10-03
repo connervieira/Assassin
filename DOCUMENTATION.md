@@ -96,6 +96,10 @@ Many of Assassin's features are dependent on external hardware. This section pro
             - It's highly recommended that you get an externally mounted antenna. Antennas located within the body of the car will have dramatically reduced range.
         - Assassin uses the dump1090-mutability software for it's backend.
             - Verify that dump1090 can successfully connect to and interpret data from the tuner.
+    - To stream data from Dump1090, you can download information live from Dump1090 on port 30003 to a CSV file using `wget`.
+        - This file will be updated with live incoming ADS-B messages until the `wget` command is terminated.
+        - Enter the full filepath to this CSV file in Assassin's configuration as the `adsb_message_file` in the `adsb_alerts` section.
+            - Note that Assassin may overwrite and manipulate this file as part of its data handling process. If you want to keep a copy of all ADS-B messages received, you should stream data to a second, separate file as well, independently of Assassin.
 
 
 ## Usage

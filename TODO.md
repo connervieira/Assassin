@@ -14,10 +14,12 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - [ ] Add ADS-B monitoring to detect planes.
     - [X] Complete ADS-B data processing.
     - [X] Complete alert processing.
-    - [ ] Complete ADS-B data streaming.
+    - [X] Add message time-to-live support.
+    - [X] Complete ADS-B data streaming.
     - [ ] Refine alerting sensitivity.
-        - [ ] Add max height threshold
-        - [ ] Finish minimum speed threshold
+        - [X] Add max aircraft height threshold.
+        - [X] Add minimum vehicle speed threshold.
+        - [ ] Add minimum aircraft speed threshold.
 - [ ] Finish alert sounds.
     - [ ] Add Bluetooth alert sound.
     - [ ] Add ADS-B alert sound.
