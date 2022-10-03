@@ -47,7 +47,7 @@ import time # Required to add delays and handle dates/times
 # Define the function to print debugging information when the configuration specifies to do so.
 debugging_time_record = time.time()
 def debug_message(message):
-    if (config["general"]["debuging_output"] == True): # Only print the message if the debugging output configuration value is set to true.
+    if (config["general"]["debugging_output"] == True): # Only print the message if the debugging output configuration value is set to true.
         global debugging_time_record
         time_since_last_message = (time.time()-debugging_time_record) # Calculate the time since the last debug message.
         print(f"{style.italic}{style.faint}{time.time():.10f} ({time_since_last_message:.10f}) - {message}{style.end}") # Print the message.
@@ -383,7 +383,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
     debug_message("Getting GPS location")
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps_demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
-            debug_message("Returning demo information")
+            debug_message("Returning demo GPS information")
             return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -405,7 +405,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
 
 # Define a simple function to calculate the approximate distance between two points in miles.
 debug_message("Creating `get_distance` function")
-def get_distance(lat1, lon1, lat2, lon2):
+def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
 
     # Convert the coordinates received.
     lat1 = float(lat1)
@@ -413,19 +413,20 @@ def get_distance(lat1, lon1, lat2, lon2):
     lat2 = float(lat1)
     lon2 = float(lon2)
 
-    # Verify the coordinates received.
-    if (lat1 > 180 or lat1 < -180):
-        display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
-        lat1 = 0 # Default to a safe value.
-    if (lon1 > 90 or lon1 < -90):
-        display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
-        lon1 = 0 # Default to a safe value.
-    if (lat2 > 180 or lat2 < -180):
-        display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
-        lat2 = 0 # Default to a safe value.
-    if (lon2 > 90 or lon2 < -90):
-        display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
-        lon2 = 0 # Default to a safe value.
+    # Verify the coordinates received, if efficient mode is disabled.
+    if (efficient_mode == False):
+        if (lat1 > 180 or lat1 < -180):
+            display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
+            lat1 = 0 # Default to a safe value.
+        if (lon1 > 90 or lon1 < -90):
+            display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
+            lon1 = 0 # Default to a safe value.
+        if (lat2 > 180 or lat2 < -180):
+            display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
+            lat2 = 0 # Default to a safe value.
+        if (lon2 > 90 or lon2 < -90):
+            display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
+            lon2 = 0 # Default to a safe value.
 
     # Convert the coordinates into radians.
     lat1 = math.radians(lat1)
@@ -452,10 +453,12 @@ def get_distance(lat1, lon1, lat2, lon2):
 debug_message("Creating `load_traffic_cameras` function")
 def load_traffic_cameras(current_lat, current_lon, database_file, radius):
     if (os.path.exists(database_file) == True): # Check to make sure the database specified in the configuration actually exists.
+        debug_message("Opening traffic enforcement camera database")
         with lzma.open(database_file, "rt", encoding="utf-8") as f: # Open the database file.
             database_lines = list(map(json.loads, f)) # Load the camera database
             loaded_database_information = [] # Load an empty placeholder database so we can write data to it later.
             
+            debug_message("Loading traffic enforcement cameras from database")
             for camera in database_lines: # Iterate through each camera in the database.
                 if ("lat" in camera and "lon" in camera): # Only check this camera if it has a latitude and longitude defined in the database.
                     if (get_distance(current_lat, current_lon, camera['lat'], camera['lon']) < float(radius)): # Check to see if this camera is inside the initial loading radius.

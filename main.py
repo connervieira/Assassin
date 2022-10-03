@@ -87,9 +87,13 @@ debug_message("Imported `utils.py`")
 if (float(config["general"]["alert_range"]["traffic_cameras"]) > 0 and config["general"]["gps_enabled"]): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
     debug_message("Loading traffic enforcement camera database")
     current_location = [0, 0] # Set the "current location" to a placeholder.
+    previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
     while (current_location[0] == 0 and current_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
+        if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
+            time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
+
+        previous_gps_attempt = True
         current_location = get_gps_location() # Attempt to get the current GPS location.
-        time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
 
     if (os.path.exists(str(config["general"]["alert_databases"]["traffic_cameras"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
         loaded_traffic_camera_database = load_traffic_cameras(current_location[0], current_location[1], config["general"]["alert_databases"]["traffic_cameras"], float(config["general"]["traffic_camera_loaded_radius"])) # Load all traffic cameras within the configured loading radius.

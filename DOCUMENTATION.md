@@ -114,3 +114,32 @@ After configuring Assassin, you can try it out for the first time!
     - Assassin runs on a cycle, where new information will be received, processed, and displayed at regular intervals. At this point, no user intervention is required.
 3. Quit Assassin
     - When you finish using Assassin, simply press Ctrl + C to terminate the program.
+
+
+## Debugging
+
+After you get Assassin up and running, you may want to use some of the integrated debugging tools to find and fix issues, and improve the efficiency of your installation.
+
+1. Enable debugging
+    - Assassin's debugging mode can be used by enabling the `debugging_output` and `disable_console_clearing` configuration values.
+2. Start Assassin
+    - Start Assassin as normal.
+3. Observe debugging messages
+    - When the debugging configuration values are enabled, Assassin should print out frequent gray-ed out messages explaining what processes are currently running.
+    - These messages follow this format:
+        - `[current time] ([time since last message) - [message]`
+        - Example: `1664770806.6115972996 (0.0029230118) - Importing 'math' library`
+4. Locate sources of errors
+    - If you happen to encounter errors, the debugging messages can be a valuable tool in the process of finding the source.
+    - Look at the last few messages before the error occurs. This can show what process was being completed when the error occurred.
+    - Once you've located the process that triggered the error, you can focus your search for solutions on that particular process.
+5. Locate sources of delay
+    - The 'time since last message' field can be used to quickly determine how long the previous processing message took to complete. This is useful for locating sources of delay.
+    - In the following example, the process of opening the traffic camera database was a source of significant delay, as indicated by the (3.5831029) in the second line. This tells that the process of opening the traffic camera data in the previous line took 3.58 seconds.
+```
+1664771344.831 (0.0000543) - Opening traffic enforcement camera database
+1664771348.414 (3.5831029) - Loading traffic enforcement cameras from database
+1664771349.143 (0.7282614) - Loaded traffic enforcement camera database
+```
+    - Once you've located sources of delay, consider disabling functions you don't need. Assassin is designed to avoid unneccessary processing, and will skip processes that aren't required to complete the functions enabled in the configuration.
+        - For example, if you don't see yourself using traffic enforcement camera alerts, setting the `alert_range` configuration value for `traffic_cameras` to `0` will cause Assassin to skip loading the traffic camera database entirely to save processing time.
