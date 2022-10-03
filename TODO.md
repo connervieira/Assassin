@@ -11,15 +11,16 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - [X] Add a Bluetooth blacklist, for which Assassin will instantly alert instead of waiting for devices to follow.
 - [X] Add wireless access point logging.
 - [X] Fix drone hazard logging.
-- [ ] Add ADS-B monitoring to detect planes.
+- [X] Add ADS-B monitoring to detect planes.
     - [X] Complete ADS-B data processing.
     - [X] Complete alert processing.
     - [X] Add message time-to-live support.
     - [X] Complete ADS-B data streaming.
-    - [ ] Refine alerting sensitivity.
+    - [X] Refine alerting sensitivity.
         - [X] Add max aircraft height threshold.
         - [X] Add minimum vehicle speed threshold.
-        - [ ] Add minimum aircraft speed threshold.
+        - [X] Add minimum aircraft speed threshold.
+        - [X] Add threat confidence level.
 - [ ] Finish alert sounds.
     - [ ] Add Bluetooth alert sound.
     - [ ] Add ADS-B alert sound.

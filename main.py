@@ -40,7 +40,6 @@ import signal # Required to manage sub-proceses.
 import sys
 import re # Required to use Regex
 import datetime # Required for converting between timestamps and human readable date/time information
-import fnmatch # Required to use wildcards to check strings
 import math # Required to run more complex math functions.
 import random # Required to generate random numbers.
 

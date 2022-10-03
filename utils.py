@@ -70,8 +70,6 @@ debug_message("Importing `datetime` library")
 import datetime # Required for converting between timestamps and human readable date/time information
 debug_message("Importing `minidom` library")
 from xml.dom import minidom # Required for processing GPX data
-debug_message("Importing `fnmatch` library")
-import fnmatch # Required to use wildcards to check strings
 debug_message("Importing `lzma` library")
 import lzma # Required to load ExCam database
 debug_message("Importing `math` library")
