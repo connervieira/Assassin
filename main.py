@@ -193,7 +193,7 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["gen
 
 
 
-# Display the start-up intro header.
+# Display the startup intro header.
 clear() # Clear the screen.
 debug_message("Completed loading")
 if (config["display"]["ascii_art_header"] == True): # Check to see whether the user has configured there to be a large ASCII art header, or a standard text header.
@@ -264,7 +264,7 @@ while True: # Run forever in a loop until terminated.
                 if (camera["dst"] < nearest_speed_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
                     nearest_speed_camera = camera # Make the current camera the new closest camera.
         if (config["general"]["camera_alert_types"]["redlight"] == True): # Only process alerts for red light cameras if enabled in the configuration.
-            for camera in nearby_redlight_cameras: # Iterate through all nearby redlight cameras.
+            for camera in nearby_redlight_cameras: # Iterate through all nearby red-light cameras.
                 if (camera["dst"] < nearest_redlight_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
                     nearest_redlight_camera = camera # Make the current camera the new closest camera.
         if (config["general"]["camera_alert_types"]["misc"] == True): # Only process alerts for general traffic cameras if enabled in the configuration.
@@ -282,7 +282,7 @@ while True: # Run forever in a loop until terminated.
 
         if (config["general"]["traffic_camera_speed_check"] == True and "nearest_enforcement_camera" in locals()): # Check to see if the traffic camera speed check setting is enabled in the configuration, and that a speed camera is actually within the alert radius at all.
             if (nearest_enforcement_camera["spd"] != None): # Check to see if the nearest speed camera has speed limit data associated with it.
-                if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then enable a heightend alert.
+                if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then enable a heightened alert.
                     active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
 
         debug_message("Processed traffic enforcement camera alerts")
@@ -338,7 +338,7 @@ while True: # Run forever in a loop until terminated.
                 detected_devices[device_key][entry_key] = entry.strip() # Remove leading whitespace before any data in this entry.
 
 
-        active_radio_devices = {} # Set a placeholder dictionary to store the active radio devices. Information stored in this dictionary is voltile and are not saved to disk.
+        active_radio_devices = {} # Set a placeholder dictionary to store the active radio devices. Information stored in this dictionary is volatile and are not saved to disk.
 
         for device in detected_devices: # Iterate through each device detected in the previous step.
 
@@ -448,7 +448,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Run Bluetooth alert processing.
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if bluetooth alerts and GPS features are enabled in the configuration.
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
         debug_message("Processing Bluetooth alerts")
         try:
             nearby_bluetooth_devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
@@ -648,7 +648,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display Bluetooth monitoring alerts.
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if bluetooth alerts and GPS features are enabled in the configuration.
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
         debug_message("Displaying Bluetooth alerts")
         active_bluetooth_alert = False # Reset the alert status to false. This will be changed to true if an active alert is found.
         for address in detected_bluetooth_devices:
