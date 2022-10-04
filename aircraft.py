@@ -57,7 +57,7 @@ def adsb_alert_processing(current_location):
                 aircraft_data[key]["threatlevel"] = 0
                 if (aircraft_distance < precise_alert_threshold): # Check to see if the aircraft is within the alert distance range.
                     aircraft_data[key]["threatlevel"] = 1
-                    if (int(aircraft_data[key]["altitude"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_altitude"]) and int(aircraft_data[key]["altitude"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_altitude"]): # Check to see if the aircraft is at the altitude range specified in the configuration.
+                    if (int(aircraft_data[key]["altitude"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_altitude"]) and int(aircraft_data[key]["altitude"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_altitude"])): # Check to see if the aircraft is at the altitude range specified in the configuration.
                         aircraft_data[key]["threatlevel"] = 2
                         if (int(aircraft_data[key]["speed"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_speed"]) and int(aircraft_data[key]["speed"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_speed"])): # Check to see if the aircraft is within the alert speed range specified in the configuration.
                             aircraft_data[key]["threatlevel"] = 3

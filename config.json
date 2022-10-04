@@ -57,7 +57,7 @@
             }
         },
         "bluetooth_monitoring": {
-            "enabled": true,
+            "enabled": false,
             "scan_time": 1,
             "minimum_following_distance": 1,
             "log_devices": {

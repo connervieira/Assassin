@@ -339,7 +339,7 @@ while True: # Run forever in a loop until terminated.
                 update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
 
 
-            print(style.blue + style.bold)
+            print(style.blue)
             print("Nearest Enforcement Camera:")
             if (nearest_enforcement_camera == nearest_speed_camera): # Check to see if the overall nearest camera is the nearest speed camera.
                 print("    Type: Speed Camera")
@@ -383,7 +383,7 @@ while True: # Run forever in a loop until terminated.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("alprcamera") # Run the function to update the status lighting.
 
-            print(style.purple + style.bold)
+            print(style.purple)
             print("Nearest " + loaded_alpr_camera_database["name"] + ":")
             print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
             print("    Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
