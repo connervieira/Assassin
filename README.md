@@ -42,7 +42,7 @@ Assassin can process and alert to nearby speed enforcement and red light cameras
 Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, and can display an alert when a particular Bluetooth device has been following for a suspiciously long time. This can help provide early warning of people tailing you as you drive, as well as aiding in the location of concealed tracking devices hidden in your car. This feature can also be configured to ignore certain devices (like your phone or car stereo) or instantly alert to specific devices that could be an imminent threat (like the phone of a previous security concern).
 
 
-### ADS-B Aircraft Detection\*
+### ADS-B Aircraft Detection
 
 Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services.
 
