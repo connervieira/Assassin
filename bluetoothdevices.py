@@ -37,7 +37,9 @@ def load_bluetooth_log_file():
 
 
 def bluetooth_alert_processing(current_location, detected_bluetooth_devices):
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
+    if (config["general"]["gps_enabled"] == False): # Check to see if GPS functionality is enabled. If this is the case, Assassin won't be able to detect when Bluetooth devices are following, but blacklist alerts will still work.
+        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location information to a dummy placeholder.
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts are enabled in the configuration.
         debug_message("Processing Bluetooth alerts")
         try:
             nearby_bluetooth_devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.

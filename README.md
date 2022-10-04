@@ -105,7 +105,7 @@ By design, Assassin doesn't require specialized hardware to run. Regardless of w
 
 ### Easy
 
-While being technically minded will certainly help, Assassin doesn't require professional installation or setup to function. As long as you're reasonably experienced with the Linux command line and automotive electronics, installing assassin should only take a few hours at most.
+While being technically minded will certainly help, Assassin doesn't require professional installation or setup to function. As long as you're reasonably experienced with the Linux command line and automotive electronics, installing a complete Assassin system should only take a few hours at most.
 
 ### Private
 
@@ -126,6 +126,10 @@ Assassin is designed to be safe, regardless of the installation context. It's ea
 ### Documented
 
 Assassin's extreme customizability can be a bit overwhelming to new users. For this reason, the entire platform is extensively documented, and comes bundled with step-by-step guides on how to download it, install it, configure it, and run it.
+
+### Modular
+
+Assassin is designed to be as modular as possible. This makes it customizable, fault tolerant, and easy to modify.
 
 
 ## Installing

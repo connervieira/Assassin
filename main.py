@@ -74,46 +74,52 @@ debug_message("Imported `utils.py`")
 # Load functionality plugins
 
 # Load the traffic camera alert system
-import trafficcameras
-load_traffic_camera_database = trafficcameras.load_traffic_camera_database
-traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
+if (config["general"]["alert_range"]["traffic_cameras"] > 0 and config["general"]["gps_enabled"] == True): # Only load traffic enforcement camera information if traffic camera alerts are enabled.
+    import trafficcameras
+    load_traffic_camera_database = trafficcameras.load_traffic_camera_database
+    traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
 
-loaded_traffic_camera_database = load_traffic_camera_database()
+    loaded_traffic_camera_database = load_traffic_camera_database()
 
 
 # Load the ADS-B aircraft alert system.
-import aircraft
-adsb_alert_processing = aircraft.adsb_alert_processing
+if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
+    import aircraft
+    adsb_alert_processing = aircraft.adsb_alert_processing
 
 
 # Load the drone/autonomous threat alert system.
-import drones
-drone_alert_processing = drones.drone_alert_processing
-load_drone_alerts = drones.load_drone_alerts
+if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone processing if drone alerts are enabled.
+    import drones
+    drone_alert_processing = drones.drone_alert_processing
+    load_drone_alerts = drones.load_drone_alerts
 
-drone_threat_history, radio_device_history, drone_threat_database = load_drone_alerts()
-detected_drone_hazards = []
+    drone_threat_history, radio_device_history, drone_threat_database = load_drone_alerts()
+    detected_drone_hazards = []
 
 
 # Load the relay alert system.
-import relay
-relay_alert_processing = relay.relay_alert_processing
+if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only load relay alerts if relay alerts are enabled.
+    import relay
+    relay_alert_processing = relay.relay_alert_processing
 
 
 # Load the ALPR camera alert system.
-import alprcameras
-load_alpr_camera_database = alprcameras.load_alpr_camera_database
-alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
+if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
+    import alprcameras
+    load_alpr_camera_database = alprcameras.load_alpr_camera_database
+    alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
 
-loaded_alpr_camera_database = load_alpr_camera_database()
+    loaded_alpr_camera_database = load_alpr_camera_database()
 
 
 # Load the Bluetooth device alert system. 
-import bluetoothdevices
-load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
-bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
+if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load Bluetooth monitoring system if Bluetooth monitoring is enabled.
+    import bluetoothdevices
+    load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
+    bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
 
-detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
+    detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
 
 
 
@@ -178,31 +184,41 @@ while True: # Run forever in a loop until terminated.
         current_location = get_gps_location() # Get the current location.
         current_location_time = time.time() # Record when this location was received.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
+    else: # GPS functionality is disabled.
+        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location to a placeholder. This should be unnecessary, but this will prevent fatal errors if the current location is unexpectedly called despite GPS functionality being disabled.
 
 
 
     # Run traffic enforcement camera alert processing
-    nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
+    if (config["general"]["alert_range"]["traffic_cameras"] > 0 and config["general"]["gps_enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
+        nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
 
 
     # Run ALPR camera alert processing
-    nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
+    if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
+        nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
 
 
     # Run drone alert processing
-    detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards) # Verify functionality.
+    if (config["general"]["drone_alerts"]["enabled"] == True): # Only run drone processing if drone alerts are enabled.
+        detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards)
 
 
     # Run relay-based alert processing.
-    active_relay_alerts = relay_alert_processing()
+    if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run relay alert processing if relay alerts are enabled.
+        active_relay_alerts = relay_alert_processing()
 
 
     # Run Bluetooth alert processing.
-    detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
+        detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
+    elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
+        detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing([0.0000, 0.0000, 0.0, 0.0, 0.0, 0], detected_bluetooth_devices) # Run the Bluetooth alert processing function with dummy GPS data.
 
 
     # Process ADS-B alerts.
-    aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
+        aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
 
 
     debug_message("Alert processing completed")
@@ -281,14 +297,14 @@ while True: # Run forever in a loop until terminated.
 
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the satellite display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
-    if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
+    if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
 
 
 
 
     # Display relay-based alerts.
-    if (config["general"]["relay_alerts"]["enabled"] == True): # Only display relay-based alerts if relay alerts are enabled in the configuration.
+    if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only display relay-based alerts if relay alerts are enabled in the configuration.
         debug_message("Displaying relay alerts")
         for alert in active_relay_alerts: # Iterate through each active alert, and print it to the screen.
             print(style.green + alert["title"])
@@ -298,7 +314,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display Bluetooth monitoring alerts.
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
         debug_message("Displaying Bluetooth alerts")
 
         if (len(bluetooth_threats) > 0):
@@ -360,27 +376,28 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display ALPR camera alerts.
-    if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
-        debug_message("Displaying ALPR camera alerts")
+    if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only display nearby ALPR camera alerts if they are enabled.
+        if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
+            debug_message("Displaying ALPR camera alerts")
 
-        if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-            update_status_lighting("alprcamera") # Run the function to update the status lighting.
+            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+                update_status_lighting("alprcamera") # Run the function to update the status lighting.
 
-        print(style.purple + style.bold)
-        print("Nearest " + loaded_alpr_camera_database["name"] + ":")
-        print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
-        print("    Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
-        print("    Direction To: " + str(get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4])) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°") # Display the direction towards this POI relative to the current direction of movement.
-        print("    Bearing To: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
-        if (nearest_alpr_camera["direction"] != ""): # Check to see if this POI has direction information.
-            print("    Absolute Facing: " + str(nearest_alpr_camera["direction"]) + "°" + get_cardinal_direction(nearest_alpr_camera["direction"])) # Display the direction this camera is facing.
-        if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
-            print("    Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
-        print(style.end + style.end)
+            print(style.purple + style.bold)
+            print("Nearest " + loaded_alpr_camera_database["name"] + ":")
+            print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
+            print("    Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
+            print("    Direction To: " + str(get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4])) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°") # Display the direction towards this POI relative to the current direction of movement.
+            print("    Bearing To: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
+            if (nearest_alpr_camera["direction"] != ""): # Check to see if this POI has direction information.
+                print("    Absolute Facing: " + str(nearest_alpr_camera["direction"]) + "°" + get_cardinal_direction(nearest_alpr_camera["direction"])) # Display the direction this camera is facing.
+            if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
+                print("    Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
+            print(style.end + style.end)
 
-        display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.
+            display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.
 
-        play_sound("alpr")
+            play_sound("alpr")
 
 
 
@@ -419,7 +436,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display ADS-B aircraft alerts
-    if (config["general"]["adsb_alerts"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Displaying ADS-B alerts")
         if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is travelling above the minimum alert speed.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.

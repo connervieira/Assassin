@@ -257,7 +257,7 @@ def add_to_file(file_name, contents, silence=False):
 # This is a simple function used to display large ASCII shapes.
 debug_message("Creating `display_shape` function")
 def display_shape(shape):
-    if (config["display"]["shape_alerts"] == True) # Check to see if shape alerts are enabled in the configuration.
+    if (config["display"]["shape_alerts"] == True): # Check to see if shape alerts are enabled in the configuration.
         if (shape == "square"):
             print(style.bold)
             print("######################")
@@ -403,10 +403,10 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                 debug_message("Received GPS information")
                 return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats # Return GPS information.
             except: # If the current location can't be established, then return placeholder location data.
-                return 0.0000, -0.0000, 0.0, 0.0, 0.0, 0 # Return a default placeholder location.
+                return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
                 debug_message("GPS fetch failed")
     else: # If GPS is disabled, then this function should never be called, but return a placeholder position regardless.
-        return 0.0000, 0.0000, 0.0, 0.0, 0.0, 0 # Return a default placeholder location.
+        return [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
         debug_message("GPS is disabled")
 
 

@@ -72,16 +72,16 @@
             "blacklist": {
                 "enabled": true,
                 "devices": {
-                    "98:09:CF:5C:BE:1C": "ConnersOnePlus7Pro"
                 }
             }
         },
         "adsb_alerts": {
             "enabled": true,
-            "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
+            "adsb_message_file": "/home/pi/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 175,
+            "minimum_aircraft_altitude": 0,
             "maximum_aircraft_altitude": 20000,
             "distance_threshold": 4,
             "base_altitude_threshold": 10000,

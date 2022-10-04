@@ -21,11 +21,10 @@ Tasks in this section are actively planned, and are likely to be completed some 
             - [X] Add minimum vehicle speed threshold.
             - [X] Add minimum aircraft speed threshold.
             - [X] Add threat confidence level.
-    - [ ] Improve efficiency by removing unnecessary plugin loading.
-    - [ ] Revise Bluetooth alerts.
+    - [X] Improve efficiency by removing unnecessary plugin loading.
+    - [X] Revise Bluetooth alerts.
         - [X] Add a Bluetooth blacklist, for which Assassin will instantly alert instead of waiting for devices to follow.
-        - [ ] Remove Bluetooth alert GPS dependency.
-        - [ ] Verify Bluetooth hazard logging function.
+        - [X] Remove Bluetooth alert GPS dependency.
     - [ ] Finish alert sounds.
         - [ ] Add Bluetooth alert sound.
         - [ ] Add ADS-B alert sound.
