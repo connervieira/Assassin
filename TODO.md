@@ -25,9 +25,11 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Revise Bluetooth alerts.
         - [X] Add a Bluetooth blacklist, for which Assassin will instantly alert instead of waiting for devices to follow.
         - [X] Remove Bluetooth alert GPS dependency.
-    - [ ] Finish alert sounds.
-        - [ ] Add Bluetooth alert sound.
-        - [ ] Add ADS-B alert sound.
+    - [X] Finish alert sounds.
+        - [X] Add Bluetooth alert sound.
+        - [X] Add ADS-B alert sound.
+        - [X] Normalize all sounds.
+
 
 ### Hypothetical
 
