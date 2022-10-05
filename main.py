@@ -102,6 +102,9 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
 if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only load relay alerts if relay alerts are enabled.
     import relay
     relay_alert_processing = relay.relay_alert_processing
+    load_relay_alerts = relay.load_relay_alerts
+
+    load_relay_alerts()
 
 
 # Load the ALPR camera alert system.

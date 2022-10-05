@@ -17,7 +17,13 @@ config = load_config()
 
 if (config["general"]["relay_alerts"]["enabled"] == True): # Only import the GPIO library if relay alerts are enabled.
     debug_message("Importing `GPIO` library")
-    import RPi.GPIO as GPIO
+    import RPi.GPIO as GPIO # Import the GPIO library.
+
+
+def load_relay_alerts():
+    GPIO.setmode(GPIO.BCM) # Set the GPIO library to use BCM numbers.
+    for alert in config["general"]["relay_alerts"]["alerts"]: # Iterate through all configured relay alerts.
+        GPIO.setup(config["general"]["relay_alerts"]["alerts"][alert]["gpio_pin"], GPIO.IN) # Set each pin in the relay alert list to input mode.
 
 
 
