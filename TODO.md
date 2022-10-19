@@ -29,6 +29,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add Bluetooth alert sound.
         - [X] Add ADS-B alert sound.
         - [X] Normalize all sounds.
+    - [ ] Fix GPIO relay alert detection.
 
 
 ### Hypothetical
