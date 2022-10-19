@@ -46,5 +46,11 @@
             "1c:82:59"
         ],
         "type": "camera"
+    },
+    "Poliscan": {
+        "MAC": [
+            "98:6D:35"
+        ],
+        "type": "camera"
     }
 }
