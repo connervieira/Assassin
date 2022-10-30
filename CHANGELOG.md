@@ -2,11 +2,11 @@
 
 This document contains a list of all the changes for each version of Assassin.
 
-## Version 1.0
+## Version 0.9
 
-### Initial Release
+### Initial release
 
-*To be determined*
+October 30th, 2022
 
 - Core functionality
     - Information dashboard
@@ -15,4 +15,11 @@ This document contains a list of all the changes for each version of Assassin.
     - Drone/autonomous threat detection
     - Bluetooth threat detection
     - ADS-B aircraft detection
-    - GPIO relay alerting
+
+## Version 1.0
+
+### First stable release
+
+*To be determined*
+
+- Finished GPIO relay alerting.

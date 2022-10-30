@@ -6,7 +6,7 @@
         "disable_console_clearing": false,
         "gps_enabled": true,
         "gps_demo_mode": {
-            "enabled": true,
+            "enabled": false,
             "longitude": 41.2,
             "latitude": -81.0,
             "speed": 0,
@@ -76,8 +76,8 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
-            "adsb_message_file": "/home/pi/Downloads/ADSB-Data.csv",
+            "enabled": false,
+            "adsb_message_file": "/home/pi/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 175,
