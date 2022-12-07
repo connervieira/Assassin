@@ -24,7 +24,7 @@ Assassin is capable of logging information from various sources to a local file,
 
 ### ALPR Defense
 
-Assassin comes bundled database to detect nearby ALPR cameras, and alert the user before crossing the threshold. Assassin will determine the distance and direction to nearby ALPR cameras in real-time, and assign them a threat severity level. Assassin also comes bundled with tools to convert information from existing sources, like OpenStreetMap to further extend coverage.
+Assassin comes bundled with a database to detect nearby ALPR cameras, and alert the user before crossing the reading threshold. Assassin will determine the distance and direction to nearby ALPR cameras in real-time, and assign them a threat severity level. Assassin also comes bundled with tools to convert information from existing sources, like OpenStreetMap to further extend coverage.
 
 
 ### Autonomous Threat Defense
@@ -44,7 +44,7 @@ Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, 
 
 ### ADS-B Aircraft Detection
 
-Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services.
+Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services, and is entirely self contained.
 
 
 ### Custom Relay Alerts
