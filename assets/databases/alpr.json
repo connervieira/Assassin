@@ -730,9 +730,9 @@
             "type": "trafficlight_crossbar_monitor"
         },
         {
-            "latitude": 1.0,
-            "longitude": 41.52082,
-            "brand": "-81.53647",
+            "latitude": 41.52082,
+            "longitude": -81.53647,
+            "brand": "",
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north on Warrensville Center Road as they pass Mayfield Road.",
@@ -873,7 +873,7 @@
             "type": "standalone"
         },
         {
-            "latitude": 41.515005, ,
+            "latitude": 41.515005,
             "longitude": -81.438655,
             "brand": "",
             "name": "",
