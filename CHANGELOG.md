@@ -22,4 +22,5 @@ October 30th, 2022
 
 *To be determined*
 
-- Finished GPIO relay alerting.
+- Added database preview tool
+- [ ] Finished GPIO relay alerting.

@@ -882,6 +882,17 @@
             "direction": 180,
             "owner": "",
             "type": "trafficlight_crossbar"
+        },
+        {
+            "latitude": 41.180504,
+            "longitude": -80.311491,
+            "brand": "",
+            "name": "",
+            "road": "I-80 East",
+            "description": "A two-camera unit mounted on a stand-alone weather station on the right side of the road, facing the backs of cars passing by.",
+            "direction": 30,
+            "owner": "",
+            "type": "standalone"
         }
     ]
 }
