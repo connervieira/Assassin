@@ -1,10 +1,33 @@
-import matplotlib.pyplot as plt
-import os
-import json
-import lzma # Required to load ExCam database
-import math
+# Assassin - Database Preview
+
+# This tool allows you to preview a point-of-interest database by plotting it's points on a graph. To use it, run it using Python3, then enter the following information as prompted.
+
+# Type - This is the type of database. The traffic enforcement camera database uses the 'excam' format. The ALPR database, and other custom databases use the 'json' format.
+# Database - This is an absolute file path to the database you want to preview.
+# Radius - If you're previewing an ExCam database, you'll be prompted to enter the radius you want to preview.
+# Longitude - If you're previewing an ExCam database, you'll be prompted to enter the longitude of the center point of the graph.
+# Latitude - If you're previewing an ExCam database, you'll be prompted to enter the latitude of the center point of the graph.
 
 
+
+
+# Copyright (C) 2022 V0LT - Conner Vieira 
+
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by# the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License along with this program (LICENSE.md)
+# If not, see https://www.gnu.org/licenses/ to read the license agreement.
+
+
+
+
+import matplotlib.pyplot as plt # Required to create graphs.
+import os # Required to handle files.
+import json # Required to load custom databases.
+import lzma # Required to load ExCam database.
+import math # Required complete more complex calculations.
 
 
 def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
@@ -81,7 +104,7 @@ def load_traffic_cameras(current_lat, current_lon, database_file, radius):
     return loaded_database_information # Return the newly edited database information.
 
 
-database_type = input("Type: ")
+database_type = input("Type (excam, json): ")
 database_to_load = input("Database: ")
 
 x = []
@@ -93,7 +116,7 @@ if (database_type == "json"):
     for entry in loaded_database["entries"]:
         x.append(entry["longitude"])
         y.append(entry["latitude"])
-else:
+elif (database_type == "excam"):
     load_radius = input("Radius: ")
     current_longitude = input("Longitude: ")
     current_latitude = input("Latitude: ")
@@ -102,6 +125,8 @@ else:
     for camera in loaded_traffic_camera_database:
         y.append(camera["lat"])
         x.append(camera["lon"])
+else:
+    print ("Unknown database type")
 
 
 plt.scatter(x, y, label = "Title", color = "green", marker = "X", s = 30)

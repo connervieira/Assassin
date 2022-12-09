@@ -22,5 +22,8 @@ October 30th, 2022
 
 *To be determined*
 
-- Added database preview tool
+- Added several tools.
+    - Added database preview tool.
+    - Added database verify tool.
+- Added several new ALPR cameras to the database.
 - [ ] Finished GPIO relay alerting.

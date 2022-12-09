@@ -1,6 +1,6 @@
 {
     "name": "ALPR",
-    "description": "This database contains the locations of various fixed automated license plate recognition cameras, specifically in north-east Ohio. This database is far from comprehensive, and is a work in progress.",
+    "description": "This database contains the locations of various fixed automated license plate recognition cameras, primarily in easter Ohio. This database is far from comprehensive, and is a work in progress.",
     "author": "V0LT",
     "created": "1648767201",
     "modified": "1649551228",
@@ -136,28 +136,6 @@
             "type": "standalone"
         },
         {
-            "latitude": 41.66674,
-            "longitude": -81.33987,
-            "brand": "",
-            "name": "",
-            "road": "Center Street",
-            "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Center Street, just after passing Mentor Avenue.",
-            "direction": 0,
-            "operator": "",
-            "type": "trafficlight_crossbar"
-        },
-        {
-            "latitude": 41.66621,
-            "longitude": -81.34004,
-            "brand": "",
-            "name": "",
-            "road": "Center Street",
-            "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Center Street, just after passing Mentor Avenue.",
-            "direction": 180,
-            "operator": "",
-            "type": "trafficlight_crossbar"
-        },
-        {
             "latitude": 41.41699,
             "longitude": -81.6061,
             "brand": "",
@@ -198,28 +176,6 @@
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Chagrin Boulevard as they pass Brainard Road.",
             "direction": 90,
-            "operator": "",
-            "type": "trafficlight_crossbar"
-        },
-        {
-            "latitude": 41.41299,
-            "longitude": -81.7344,
-            "brand": "",
-            "name": "",
-            "road": "Ridge Road",
-            "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Ridge Road as they cross Pearl Road.",
-            "direction": 0,
-            "operator": "",
-            "type": "trafficlight_crossbar"
-        },
-        {
-            "latitude": 41.41331,
-            "longitude": -81.73454,
-            "brand": "",
-            "name": "",
-            "road": "Ridge Road",
-            "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Ridge Road as they cross Pearl Road.",
-            "direction": 180,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -723,7 +679,7 @@
             "longitude": -81.73459,
             "brand": "",
             "name": "",
-            "road": "Ridge road",
+            "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south on Ridge Road as they cross Snow Road.",
             "direction": 0,
             "operator": "",
@@ -1400,7 +1356,7 @@
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
-        {	
+        {
             "latitude": 41.583870,
             "longitude": -81.348943,
             "brand": "",
@@ -1408,6 +1364,215 @@
             "road": "Chardon Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Chardon Road, as they pass Chillicothe Road.",
             "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.528225,
+            "longitude": -81.638593,
+            "brand": "",
+            "name": "",
+            "road": "Saint Clair Avenue",
+            "description": "Mounted on a street lamp crossbar above a traffic light, facing the front of cars headed north-east on Saint Clair Avenue, as they pass East 72nd Street.",
+            "direction": 260,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.528051,
+            "longitude": -81.638902,
+            "brand": "",
+            "name": "",
+            "road": "East 72nd Street",
+            "description": "Mounted on a street lamp crossbar above a traffic light, facing the front of cars headed north-east on East 72nd Street, as they enter Saint Clair Avenue.",
+            "direction": 5,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.624867,
+            "longitude": -81.439756,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the back of cars headed north-east on Euclid Avenue, just after passing SOM Center Road.",
+            "direction": 70,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.624891,
+            "longitude": -81.439764,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-east on Euclid Avenue, as they pass SOM Center Road.",
+            "direction": 250,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.624890,
+            "longitude": -81.440226,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-west on Euclid Avenue, as they pass SOM Center Road.",
+            "direction": 70,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.625149,
+            "longitude": -81.439921,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.624648,
+            "longitude": -81.440066,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Euclid Avenue.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.468264,
+            "longitude": -82.178257,
+            "brand": "",
+            "name": "",
+            "road": "Broadway",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-east on Broadway, as they pass Erie Avenue.",
+            "direction": 320,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.468445,
+            "longitude": -82.178399,
+            "brand": "",
+            "name": "",
+            "road": "Broadway",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-west on Broadway, as they pass Erie Avenue.",
+            "direction": 130,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.468209,
+            "longitude": -82.178250,
+            "brand": "",
+            "name": "",
+            "road": "Erie Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-east on Erie Avenue, as they pass Broadway.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.468251,
+            "longitude": -82.178379,
+            "brand": "",
+            "name": "",
+            "road": "Erie Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-west on Erie Avenue, as they pass Broadway.",
+            "direction": 50,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.384908,
+            "longitude": -81.437732,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Aurora Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.385226,
+            "longitude": -81.437721,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Aurora Road.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.385014,
+            "longitude": -81.437499,
+            "brand": "",
+            "name": "",
+            "road": "Aurora Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Aurora Road, as they pass SOM Center Road.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.385058,
+            "longitude": -81.437963,
+            "brand": "",
+            "name": "",
+            "road": "Aurora Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Aurora Road, as they pass SOM Center Road.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.356341,
+            "longitude": -81.438904,
+            "brand": "",
+            "name": "",
+            "road": "Pettibone Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Pettibone Road, as they pass SOM Center Road.",
+            "direction": 80,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.356349,
+            "longitude": -81.438695,
+            "brand": "",
+            "name": "",
+            "road": "Pettibone Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Pettibone Road, as they pass SOM Center Road.",
+            "direction": 255,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.356121,
+            "longitude": -81.438867,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Pettibone Road.",
+            "direction": 10,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.356491,
+            "longitude": -81.438731,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Pettibone Road.",
+            "direction": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         }
