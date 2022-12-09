@@ -108,7 +108,7 @@ if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["
 
 
 # Load the ALPR camera alert system.
-if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
+if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
     import alprcameras
     load_alpr_camera_database = alprcameras.load_alpr_camera_database
     alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
@@ -198,7 +198,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Run ALPR camera alert processing
-    if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
+    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
         nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
 
 
@@ -379,7 +379,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display ALPR camera alerts.
-    if (float(config["general"]["alert_range"]["alpr_cameras"]) > 0 and config["general"]["gps_enabled"] == True): # Only display nearby ALPR camera alerts if they are enabled.
+    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only display nearby ALPR camera alerts if they are enabled.
         if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
             debug_message("Displaying ALPR camera alerts")
 
@@ -387,15 +387,16 @@ while True: # Run forever in a loop until terminated.
                 update_status_lighting("alprcamera") # Run the function to update the status lighting.
 
             print(style.purple)
-            print("Nearest " + loaded_alpr_camera_database["name"] + ":")
-            print("    Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
-            print("    Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
-            print("    Direction To: " + str(get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4])) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°") # Display the direction towards this POI relative to the current direction of movement.
-            print("    Bearing To: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
+            print("Active " + loaded_alpr_camera_database["name"] + " Alerts: " + str(len(nearby_alpr_cameras))) # Display the number of active ALPR alerts.
+            print("    Nearest:")
+            print("        Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
+            print("        Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
+            print("        Direction To: " + str(get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4])) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°") # Display the direction towards this POI relative to the current direction of movement.
+            print("        Bearing To: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
             if (nearest_alpr_camera["direction"] != ""): # Check to see if this POI has direction information.
-                print("    Absolute Facing: " + str(nearest_alpr_camera["direction"]) + "°" + get_cardinal_direction(nearest_alpr_camera["direction"])) # Display the direction this camera is facing.
+                print("        Absolute Facing: " + str(nearest_alpr_camera["direction"]) + "°" + get_cardinal_direction(nearest_alpr_camera["direction"])) # Display the direction this camera is facing.
             if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
-                print("    Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
+                print("        Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
             print(style.end + style.end)
 
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.

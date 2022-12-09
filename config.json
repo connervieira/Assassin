@@ -6,22 +6,20 @@
         "disable_console_clearing": false,
         "gps_enabled": true,
         "gps_demo_mode": {
-            "enabled": false,
-            "longitude": 41.2,
-            "latitude": -81.0,
+            "enabled": true,
+            "longitude": 41.50443,
+            "latitude": -81.38493,
             "speed": 0,
             "altitude": 132.0,
-            "heading": 270,
+            "heading": 170,
             "satellites": 6
         },
         "record_telemetry": false,
         "alert_range": {
-            "traffic_cameras": 0,
-            "alpr_cameras": 1
+            "traffic_cameras": 0
         },
         "alert_databases": {
             "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
-            "alpr_cameras": "./assets/databases/alpr.json",
             "drones": "./assets/databases/drones.json"
         },
         "camera_alert_types": {
@@ -42,6 +40,12 @@
                 "aircraft",
                 "camera"
             ]
+        },
+        "alpr_alerts": {
+            "alert_range": 0.5,
+            "database": "./assets/databases/alpr.json",
+            "angle_threshold": 30,
+            "direction_threshold": 30 
         },
         "relay_alerts": {
             "enabled": false,

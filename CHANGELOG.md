@@ -26,4 +26,13 @@ October 30th, 2022
     - Added database preview tool.
     - Added database verify tool.
 - Added several new ALPR cameras to the database.
+- Adjusted the configuration layout.
+    - ALPR alerts now have their own section.
+- Updated ALPR alerting.
+    - ALPR alerts will now show the number of ALPR cameras within range, in addition to the nearest alert.
+    - Added ALPR alert filtering.
+        - Alerts can be filtered by direction.
+            - This prevents cameras that are behind or to the side from triggering alerts.
+        - Alerts can be filtered by angle.
+            - This prevents from ALPR cameras from triggering alerts when they are at an angle that can't read the license plate of the car.
 - [ ] Finished GPIO relay alerting.

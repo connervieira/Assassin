@@ -552,6 +552,38 @@ def calculate_bearing (lat1, lon1, lat2, lon2):
 
 
 
+
+# Define the function that gets the difference between two bearings.
+debug_message("Creating `bearing_difference` function")
+def bearing_difference(bearing1, bearing2):
+    # Convert the bearings received.
+    bearing1 = float(bearing1)
+    bearing2 = float(bearing2)
+
+    # Make sure both of the bearings are positive.
+    while bearing1 < 0:
+        bearing1 = bearing1 + 360
+    while bearing2 < 0:
+        bearing2 = bearing2 + 360
+
+    # Make sure both of the bearings are less than 360 degrees.
+    while bearing1 > 0:
+        bearing1 = bearing1 - 360
+    while bearing2 > 0:
+        bearing2 = bearing2 - 360
+
+
+    method1 = abs(bearing1 - bearing2)
+    method2 = abs(method1 - 360)
+
+    if (method1 < method2):
+        return method1
+    elif (method2 <= method1):
+        return method2
+
+
+
+
 debug_message("Creating `nearby_database_poi` function")
 def nearby_database_poi(current_location, database_information, radius=1.0): # This function is used to get a list of all points of interest from a particular database within a certain range of a given location.
     current_lat = current_location[0]

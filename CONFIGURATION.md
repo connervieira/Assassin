@@ -55,6 +55,15 @@ This section of configuration values will effect Assassin's general operation.
             - This setting can only be set to "manual" or "automatic"
         - `hazard_latch_time` is how long (in seconds) Assassin will latch onto alerts after they are no longer detected before dismissing them.
         - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to. This is useful if you only want to alert to certain types of autonomous threats.
+- `alpr_alerts`
+    - ALPR alerts are triggered by proximity to automated license plate reader cameras.
+    - This setting has the following sub-values for configuration:
+        - `alert_range` is the alert distance in miles.
+        - `database` is the file-path to ALPR database.
+        - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
+            - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
+        - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
+            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that on adjacent roads.
 - `relay_alerts`
     - Relay alerts allow the user to connect custom relays via GPIO pins, and have Assassin alert to events from them.
     - The `enabled` configuration value enables and disables the entire relay alert system.
