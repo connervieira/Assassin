@@ -631,6 +631,17 @@
             "type": "trafficlight_crossbar"
         },
         {
+            "latitude": 41.50878,
+            "longitude": -81.60562,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light cross bars, facing the front of cars traveling south west on Euclid Avenue as they pass Ford Drive.",
+            "direction": 50,
+            "operator": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
             "latitude": 41.50896,
             "longitude": -81.60518,
             "brand": "",
@@ -640,6 +651,39 @@
             "direction": 50,
             "operator": "",
             "type": "trafficlight_crossbar"
+        },
+        {
+            "latitude": 41.50896,
+            "longitude": -81.60518,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north east on Euclid Avenue as they pass Mayfield Road.",
+            "direction": 230,
+            "operator": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.508985,
+            "longitude": -81.605498,
+            "brand": "",
+            "name": "",
+            "road": "Mayfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north west on Mayfield Road as they pass Euclid Avenue.",
+            "direction": 130,
+            "operator": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.508735,
+            "longitude": -81.605269,
+            "brand": "",
+            "name": "",
+            "road": "Ford Drive",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south east on Ford Drive as they pass Euclid Avenue.",
+            "direction": 310,
+            "operator": "",
+            "type": "trafficlight_crossbar_monitor"
         },
         {
             "latitude": 41.41331,
@@ -716,7 +760,7 @@
             "description": "Mounted on a traffic light cross bar facing the front of cars traveling west on Mayfield Road as they pass Warrensville Center Road.",
             "direction": 90,
             "operator": "",
-            "type": "trafficsignal_crossbar_monitor"
+            "type": "trafficlight_crossbar_monitor"
         },
         {
             "latitude": 41.52067,
@@ -893,6 +937,479 @@
             "direction": 30,
             "owner": "",
             "type": "standalone"
+        },
+        {
+            "latitude": 41.335712,
+            "longitude": -81.531206,
+            "brand": "",
+            "name": "",
+            "road": "Northfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Northfield Road, as they pass Ledge Road and Eaton Ridge Road.",
+            "direction": 20,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.336085,
+            "longitude": -81.530963,
+            "brand": "",
+            "name": "",
+            "road": "Northfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Northfield Road, as they pass Ledge Road and Eaton Ridge Road.",
+            "direction": 200,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.335961,
+            "longitude": -81.531239,
+            "brand": "",
+            "name": "",
+            "road": "Ledge Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Ledge Road, as they pass Northfield Road.",
+            "direction": 110,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.335860,
+            "longitude": -81.530905,
+            "brand": "",
+            "name": "",
+            "road": "Eaton Ridge Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Eaton Ridge Road, as they pass Northfield Road.",
+            "direction": 290,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.313800,
+            "longitude": -81.514804,
+            "brand": "",
+            "name": "",
+            "road": "Summer Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Summer Road, as they enter Aurora Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.314096,
+            "longitude": -81.511218,
+            "brand": "",
+            "name": "",
+            "road": "Bedford Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Bedford Road, as they pass Aurora Road.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.313712,
+            "longitude": -81.511305,
+            "brand": "",
+            "name": "",
+            "road": "Freeway Drive",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Freeway Drive, as they pass Aurora Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.313927,
+            "longitude": -81.511480,
+            "brand": "",
+            "name": "",
+            "road": "Aurora Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Aurora Road, as they pass Bedford Road and Freeway Drive.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.313822,
+            "longitude": -81.511058,
+            "brand": "",
+            "name": "",
+            "road": "Aurora Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Aurora Road, as they pass Bedford Road and Freeway Drive.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.409714,
+            "longitude": -81.537095,
+            "brand": "",
+            "name": "",
+            "road": "Center Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Center Road, as they pass Rockside Road.",
+            "direction": 200,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.409449,
+            "longitude": -81.537018,
+            "brand": "",
+            "name": "",
+            "road": "Rockside Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Rockside Road, as they pass Center Road.",
+            "direction": 290,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.408404,
+            "longitude": -81.527444,
+            "brand": "",
+            "name": "",
+            "road": "Northfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Northfield Road, as they pass Rockside Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.408818,
+            "longitude": -81.527223,
+            "brand": "",
+            "name": "",
+            "road": "Northfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Northfield Road, as they pass Rockside Road.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.408697,
+            "longitude": -81.527578,
+            "brand": "",
+            "name": "",
+            "road": "Rockside Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Rockside Road, as they pass Northfield Road.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.408496,
+            "longitude": -81.527061,
+            "brand": "",
+            "name": "",
+            "road": "Rockside Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Rockside Road, as they pass Northfield Road.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.464501,
+            "longitude": -81.498143,
+            "brand": "",
+            "name": "",
+            "road": "Chagrin Boulevard",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Chagrin Boulevard, as they pass Richmond Road.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.464411,
+            "longitude": -81.497584,
+            "brand": "",
+            "name": "",
+            "road": "Chagrin Boulevard",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Chagrin Boulevard, as they pass Richmond Road.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.464290,
+            "longitude": -81.497935,
+            "brand": "",
+            "name": "",
+            "road": "Richmond Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Richmond Road, as they pass Chagrin Boulevard.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.464614,
+            "longitude": -81.497814,
+            "brand": "",
+            "name": "",
+            "road": "Richmond Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Richmond Road, as they pass Chagrin Boulevard.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.636945,
+            "longitude": -81.370587,
+            "brand": "",
+            "name": "",
+            "road": "Kirtland Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north-west on Kirtland Road, as they pass Clocktower Drive.",
+            "direction": 140,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.636681,
+            "longitude": -81.370453,
+            "brand": "",
+            "name": "",
+            "road": "Kirtland Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south-east on Kirtland Road, as they pass Clocktower Drive.",
+            "direction": 325,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.636715,
+            "longitude": -81.370658,
+            "brand": "",
+            "name": "",
+            "road": "Clocktower Drive",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south-west on Clocktower Drive, as they pass Kirtland Road.",
+            "direction": 55,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.636853,
+            "longitude": -81.370325,
+            "brand": "",
+            "name": "",
+            "road": "Clocktower Drive",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north-east on Clocktower Drive, as they pass Kirtland Road.",
+            "direction": 230,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.520412,
+            "longitude": -81.556027,
+            "brand": "",
+            "name": "",
+            "road": "Mayfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Mayfield Road, as they pass Taylor Road.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.520359,
+            "longitude": -81.555509,
+            "brand": "",
+            "name": "",
+            "road": "Mayfield Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Mayfield Road, as they pass Taylor Road.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.520551,
+            "longitude": -81.555776,
+            "brand": "",
+            "name": "",
+            "road": "Taylor Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Taylor Road, as they pass Mayfield Road.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.520207,
+            "longitude": -81.555869,
+            "brand": "",
+            "name": "",
+            "road": "Taylor Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Taylor Road, as they pass Mayfield Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503489,
+            "longitude": -81.615341,
+            "brand": "",
+            "name": "",
+            "road": "East 105th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 105th Street, as they pass Euclid Avenue.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503855,
+            "longitude": -81.615225,
+            "brand": "",
+            "name": "",
+            "road": "East 105th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 105th Street, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503752,
+            "longitude": -81.615531,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Euclid Avenue, as they pass East 105th Street.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503606,
+            "longitude": -81.615014,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Euclid Avenue, as they pass East 105th Street.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503473,
+            "longitude": -81.618390,
+            "brand": "",
+            "name": "",
+            "road": "East 100th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 100th Street, as they pass Euclid Avenue.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503779,
+            "longitude": -81.618331,
+            "brand": "",
+            "name": "",
+            "road": "East 100th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 100th Street, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503538,
+            "longitude": -81.624515,
+            "brand": "",
+            "name": "",
+            "road": "East 89th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 89th Street, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503247,
+            "longitude": -81.624602,
+            "brand": "",
+            "name": "",
+            "road": "East 89th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 89th Street, as they pass Euclid Avenue.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503406,
+            "longitude": -81.621567,
+            "brand": "",
+            "name": "",
+            "road": "East 93rd Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 93rd Street, as they pass Euclid Avenue.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503671,
+            "longitude": -81.620962,
+            "brand": "",
+            "name": "",
+            "road": "East 93rd Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 93rd Street, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503677,
+            "longitude": -81.627655,
+            "brand": "",
+            "name": "",
+            "road": "East 85th Street",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 85th Street, as they pass Euclid Avenue.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.503477,
+            "longitude": -81.627506,
+            "brand": "",
+            "name": "",
+            "road": "Euclid Avenue",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Euclid Avenue, as they pass East 85th Street.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.583759,
+            "longitude": -81.349156,
+            "brand": "",
+            "name": "",
+            "road": "Chillicothe Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Chillicothe Road, as they pass Chardon Road.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.584007,
+            "longitude": -81.349108,
+            "brand": "",
+            "name": "",
+            "road": "Chillicothe Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Chillicothe Road, as they pass Chardon Road.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.583914,
+            "longitude": -81.349308,
+            "brand": "",
+            "name": "",
+            "road": "Chardon Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Chardon Road, as they pass Chillicothe Road.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {	
+            "latitude": 41.583870,
+            "longitude": -81.348943,
+            "brand": "",
+            "name": "",
+            "road": "Chardon Road",
+            "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Chardon Road, as they pass Chillicothe Road.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
         }
     ]
 }
