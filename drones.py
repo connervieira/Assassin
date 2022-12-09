@@ -22,14 +22,14 @@ def load_drone_alerts():
     if (config["general"]["drone_alerts"]["enabled"] == True):
         debug_message("Loading drone detection system")
         # Load the drone database.
-        if (os.path.exists(config["general"]["alert_databases"]["drones"]) == True and config["general"]["alert_databases"]["drones"] != ""):
-            drone_threat_database = json.load(open(config["general"]["alert_databases"]["drones"]))
-        elif (config["general"]["alert_databases"]["drones"] == ""):
+        if (os.path.exists(config["general"]["drone_alerts"]["database"]) == True and config["general"]["drone_alerts"]["database"] != ""):
+            drone_threat_database = json.load(open(config["general"]["drone_alerts"]["database"]))
+        elif (config["general"]["drone_alerts"]["database"] == ""):
             drone_threat_database = {} # Load a blank placeholder database since the actual database couldn't be loaded.
             display_notice("Drone alerts are enabled in the configuration, but the drone alert database path is blank.", 2)
-        elif (os.path.exists(config["general"]["alert_databases"]["drones"]) == False):
+        elif (os.path.exists(config["general"]["drone_alerts"]["database"]) == False):
             drone_threat_database = {} # Load a blank placeholder database since the actual database couldn't be loaded.
-            display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["alert_databases"]["drones"]) + ") doesn't exist.", 2)
+            display_notice("Drone alerts are enabled in the configuration, but the specified drone alert database (" + str(config["general"]["drone_alerts"]["datbase"]) + ") doesn't exist.", 2)
 
 
         # Load the drone threat history file, if applicable.
@@ -190,6 +190,22 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
             if (time.time() - time.mktime(datetime.datetime.strptime(hazard["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) > float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
                 detected_drone_hazards.remove(hazard) # Remove the hazard from the active detected hazards database.
 
+
+
+        # Sort the drone alert list.
+        if (len(detected_drone_hazards) > 1): # Only sort the drone threats list if there is more than 1 entry in it.
+            debug_message("Sorting drone threats")
+            sorted_detected_drone_hazards = [] # Set the sorted drone threats to a blank placeholder so each entry can be added one by one in the next steps.
+            for i in range(1, len(detected_drone_hazards)): # Run once for every entry in the drone threat list.
+                current_closest = {"strength": 0} # Set the current strongest known drone to placeholder data with a strength of 0.
+                for element in detected_drone_hazards:
+                    if (float(element["strength"]) > float(current_closest["strength"])): # Check to see if this signal is stronger than the current strongest known threat.
+                        current_closest = element # Set this drone to the current strongest known drone.
+
+                sorted_detected_drone_hazards.append(current_closest) # Add the strongest drone signal from this cycle to the list.
+                detected_drone_hazards.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+
+            detected_drone_hazards = sorted_detected_drone_hazards # After the sorting has been finished, set the original drone threats list to the sorted version of it's original contents.
 
         return detected_drone_hazards
         debug_message("Processed drone alerts")

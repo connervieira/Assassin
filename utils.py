@@ -27,8 +27,8 @@ class style:
     blue = '\033[94m'
     cyan = '\033[96m'
     pink = '\033[95m'
-    purple = '\033[1;35m'
-    gray = '\033[1;37m'
+    purple = '\033[35m'
+    gray = '\033[37m'
     brown = '\033[0;33m'
     black = '\033[0;30m'
 
@@ -497,6 +497,7 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
             current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
             if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
                 camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
+                camera["bearing"] = calculate_bearing(camera["lat"], camera["lon"], current_lat, current_lon)
                 if (camera["flg"] == 0 or camera["flg"] == 2 or camera["flg"] == 3): # Check to see if this particular camera is speed related.
                     nearby_speed_cameras.append(camera) # Add this camera to the "nearby speed camera" list.
                 elif (camera["flg"] == 1): # Check to see if this particular camera is red-light related.

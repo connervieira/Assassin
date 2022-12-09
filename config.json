@@ -1,51 +1,76 @@
 {
     "general": {
-        "active_config_refresh": true,
+        "active_config_refresh": false,
         "refresh_delay": 1.0,
         "debugging_output": false,
         "disable_console_clearing": false,
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41.50443,
-            "latitude": -81.38493,
-            "speed": 0,
+            "longitude": 41.5,
+            "latitude": -81.6,
+            "speed": 30,
             "altitude": 132.0,
-            "heading": 170,
+            "heading": 45,
             "satellites": 6
         },
         "record_telemetry": false,
-        "alert_range": {
-            "traffic_cameras": 0
+        "traffic_camera_alerts": {
+            "loaded_radius": 200,
+            "database": "./assets/databases/enforcement_cameras.excam",
+            "alert_range": 1,
+            "speed_check": false,
+            "enabled_types": {
+                "speed": true,
+                "redlight": true,
+                "misc": true
+            },
+            "information_displayed": {
+                "type": true,
+                "location": true,
+                "distance": true,
+                "street": true,
+                "speed": true,
+                "bearing": false
+            }
         },
-        "alert_databases": {
-            "traffic_cameras": "./assets/databases/enforcement_cameras.excam",
-            "drones": "./assets/databases/drones.json"
-        },
-        "camera_alert_types": {
-            "speed": true,
-            "redlight": true,
-            "misc": true
-        },
-        "traffic_camera_loaded_radius": 100,
-        "traffic_camera_speed_check": true,
         "drone_alerts": {
-            "enabled": false,
+            "enabled": true,
+            "database": "./assets/databases/drones.json",
             "save_detected_hazards": true,
             "save_detected_devices": false,
             "monitoring_device": "wlp1s0b1",
             "monitoring_mode": "manual",
-            "hazard_latch_time": 10,
+            "hazard_latch_time": 20,
+            "information_displayed": {
+                "threat_type": true,
+                "company": true,
+                "name": true,
+                "last_seen": true,
+                "first_seen": true,
+                "channel": false,
+                "packets": false,
+                "strength": true,
+                "wireless_type": false
+            },
             "alert_types": [
                 "aircraft",
                 "camera"
             ]
         },
         "alpr_alerts": {
-            "alert_range": 0.5,
+            "alert_range": 5,
             "database": "./assets/databases/alpr.json",
-            "angle_threshold": 30,
-            "direction_threshold": 30 
+            "angle_threshold": 60,
+            "direction_threshold": 60,
+            "information_displayed": {
+                "location": true,
+                "distance": true,
+                "street": true,
+                "bearing": false,
+                "absolute_facing": false,
+                "relative_facing": true
+            }
         },
         "relay_alerts": {
             "enabled": false,
@@ -65,7 +90,7 @@
             "scan_time": 1,
             "minimum_following_distance": 1,
             "log_devices": {
-                "enabled": true,
+                "enabled": false,
                 "filename": "bluetooth_devices.json"
             },
             "whitelist": {
@@ -77,20 +102,37 @@
                 "enabled": true,
                 "devices": {
                 }
+            },
+            "information_displayed": {
+                "name": true,
+                "distance": true,
+                "time": true
             }
         },
         "adsb_alerts": {
-            "enabled": false,
-            "adsb_message_file": "/home/pi/ADSB-Data.csv",
+            "enabled": true,
+            "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 175,
             "minimum_aircraft_altitude": 0,
-            "maximum_aircraft_altitude": 20000,
-            "distance_threshold": 4,
-            "base_altitude_threshold": 10000,
+            "maximum_aircraft_altitude": 8000,
+            "distance_threshold": 3,
+            "base_altitude_threshold": 3000,
             "message_time_to_live": 60,
-            "threat_threshold": 1
+            "threat_threshold": 1,
+            "information_displayed": {
+                "location": true,
+                "distance": true,
+                "threat_level": true,
+                "speed": true,
+                "altitude": true,
+                "absolute_heading": false,
+                "relative_heading": true,
+                "time": true,
+                "callsign": true,
+                "climb": false
+            }
         }
     },
     "display": {

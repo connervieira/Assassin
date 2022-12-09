@@ -49,6 +49,8 @@ Assassin can interface with ADS-B receivers in order to independently detect nea
 
 ### Custom Relay Alerts
 
+This feature is a work in progress, and isn't currently operational.
+
 When installed on appropriate hardware, Assassin can monitor GPIO to detect when a relay opens or closes, then display alerts in response. This allows Assassin to natively interface with motion detectors, proximity detection systems, contact switches, and other custom hardware.
 
 

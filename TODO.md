@@ -29,6 +29,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add Bluetooth alert sound.
         - [X] Add ADS-B alert sound.
         - [X] Normalize all sounds.
+- Version 2.0
     - [ ] Fix GPIO relay alert detection.
 
 
@@ -39,5 +40,5 @@ Tasks in this section are purely hypothetical, and may not ever be finished.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.
 - [ ] Add more extensive vehicle integration using OBD-II.
-- [ ] Add integration for radar detectors through audio recognition.
+- [ ] Add integration for radar detectors.
 - [ ] Add optical motion detection using a webcam.

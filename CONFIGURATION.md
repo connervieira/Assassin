@@ -19,30 +19,33 @@ This section of configuration values will effect Assassin's general operation.
     - Under normal circumstances, this should not be used because it will make Assassin's output extremely chaotic and unpredictable. However, there may be some situations in which it may be useful to disable output clearing.
 - `gps_enabled`
     - This setting is used to globally enable and disable GPS functionality throughout Assassin.
-    - Many of Assassin's functions are dependent on GPS information, and will cease to work when this is set to `false`.
+    - It should be noted that the vast majority of Assassin's functionality depends on GPS. With it disabled, many important features will not function.
 - `gps_demo_mode`
     - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
     - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
 - `record_telemetry`
     - This setting determines whether Assassin will record telemetry data about it's location, speed, direction, and operating state to a CSV file.
     - To be clear, this information is never sent to an external service or logged for sake of analytics. All information collected remains local on the device.
-- `alert_range`
-    - This setting determines the alert range, in miles, of each point-of-interest database type.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
     - It's important to note that this setting doesn't guarantee Assassin will refresh exactly at the interval specified. This delay is added in addition to the natural delay created by processing alerts and handling data.
-- `alert_databases`
-    - This configuration value defines the file path to each of the different alert databases.
-- `camera_alert_types`
-    - This configuration value allows the user to set which types of enforcement cameras Assassin will alert to individually.
-- `traffic_camera_loaded_radius`
-    - This configuration value determines the radius around the current location that Assassin will load traffic enforcement cameras from.
-    - The higher this value is, the longer Assassin will take the process traffic camera alerts each cycle.
-    - The lower this value is, the smaller the loaded radius around the initial starting position will be.
-        - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
-- `traffic_camera_speed_check`
-    - This configuration value determines whether or not Assassin will attempt to check the current speed against nearby speed enforcement cameras to inform the driver when they are at risk of getting a ticket.
-    - Note that traffic enforcement camera speed checks are not always possible, since not all cameras in the database have speed limit information embedded. In this case, Assassin will ignore speed limits and alert normally.
+- `traffic_camera_alerts`
+    - Traffic camera alerts are triggered by proximity to enforcement cameras, like speed cameras, red light cameras, and lane monitoring cameras.
+    - This setting has the following sub-values for configuration:
+        - `loaded_radius` determines the radius around the current location that Assassin will load traffic enforcement cameras from on start-up.
+            - The higher this value is, the longer Assassin will take the process traffic camera alerts each cycle.
+            - The lower this value is, the smaller the loaded radius around the initial starting position will be.
+                - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
+        - `database` is the file-path to an ExCam database containing traffic camera locations and information.
+        - `alert_range` is the distance in miles away from a traffic camera that Assassin will trigger an alert.
+        - `speed_check` determines whether or not Assassin will considering the speed limit associated with a traffic camera.
+            - When the current speed exceeds the speed limit, a higher priority alert is trigged.
+            - When the current speed is lower than the speed limit, Assassin alerts with normal priority.
+            - When no speed limit data is available, Assassin will skip the speed check and alert normally regardless of the current speed.
+        - `enabled_types` controls which types of enforcement cameras Assassin will alert to.
+            - `speed` enables and disables speed camera alerts.
+            - `redlight` enables and disables red light camera alerts.
+            - `misc` enables and disables all other camera types, including unknown cameras.
 - `drone_alerts`
     - Drone alerts are Assassin's system for detector drone aircraft, speed cameras, and other autonomous wireless threats.
     - This setting has the following sub-values for configuration:
@@ -58,12 +61,14 @@ This section of configuration values will effect Assassin's general operation.
 - `alpr_alerts`
     - ALPR alerts are triggered by proximity to automated license plate reader cameras.
     - This setting has the following sub-values for configuration:
-        - `alert_range` is the alert distance in miles.
-        - `database` is the file-path to ALPR database.
+        - `alert_range` is the alert distance, in miles.
+        - `database` is the file-path to the ALPR database containing ALPR camera locations and information.
         - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
             - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
+            - Values of 180 or higher will effectively disable this filter.
         - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
             - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that on adjacent roads.
+            - Values of 180 or higher will effectively disable this filter.
 - `relay_alerts`
     - Relay alerts allow the user to connect custom relays via GPIO pins, and have Assassin alert to events from them.
     - The `enabled` configuration value enables and disables the entire relay alert system.
