@@ -345,13 +345,35 @@
             "type": "standalone"
         },
         {
-            "latitude": 41.4786,
-            "longitude": -81.43816,
+            "latitude": 41.478599,
+            "longitude": -81.438155,
             "brand": "Flock Safety",
             "name": "Falcon",
             "road": "SOM Center Road",
-            "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the front of cars traveling north on SOM Center Road.",
-            "direction": 0,
+            "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the back of cars traveling north on SOM Center Road just after they pass Shaker Boulevard.",
+            "direction": 350,
+            "operator": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.478265,
+            "longitude": -81.438139,,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "SOM Center Road",
+            "description": "A black camera on a standalone pole located on the east side of the road, facing the front of cars traveling north on SOM Center Road just before they pass Shaker Boulevard.",
+            "direction": 200,
+            "operator": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.478309,
+            "longitude": -81.438052,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "Shaker Boulevard",
+            "description": "A black camera on a standalone pole located on the south side of the road, facing the back of cars traveling west on Shaker Boulevard just after they pass SOM Center Road.",
+            "direction": 60,
             "operator": "",
             "type": "standalone"
         },
@@ -361,8 +383,8 @@
             "brand": "Flock Safety",
             "name": "Falcon",
             "road": "SOM Center Road",
-            "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the backs of cars traveling north on SOM Center Road.",
-            "direction": 20,
+            "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the backs of cars traveling north on SOM Center Road just after passing Old Kinsman Road.",
+            "direction": 10,
             "operator": "",
             "type": "standalone"
         },
@@ -383,8 +405,19 @@
             "brand": "Flock Safety",
             "name": "Falcon",
             "road": "Chagrin River Road",
-            "description": "Located on the west side of the road, facing the front of cars traveling south on Chagrin River Road.",
+            "description": "Located on the west side of the road, facing the front of cars traveling south on Chagrin River Road just after passing Woodland Road.",
             "direction": 0,
+            "operator": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.459216,
+            "longitude": -81.409562,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "South Woodland Road",
+            "description": "Located on the north side of the road, facing the back of cars traveling west on South Woodland Road just after passing Chagrin River Road.",
+            "direction": 250,
             "operator": "",
             "type": "standalone"
         },
@@ -1575,6 +1608,17 @@
             "direction": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.530530,
+            "longitude": -81.438748,
+            "brand": "",
+            "name": "",
+            "road": "SOM Center Road",
+            "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on SOM Center Road, just after passing Ridgebury Boulevard.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar"
         }
     ]
 }
