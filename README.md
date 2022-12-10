@@ -2,7 +2,7 @@
 
 **Copyright 2022 V0LT - Conner Vieira**
 
-The ultimate digital weapon for driving the technological world.
+The ultimate defense system for driving the technological world.
 
 
 ## Disclaimer
