@@ -14,11 +14,120 @@ It's important to make a quick note about platform compatability. While Assassin
 
 - Linux: Full support
     - Assassin is natively compatible with Linux, and all of it's features should be fully functional.
+    - This is the only platform officially supported.
+    - This is an overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [X] Drone detection
+            - [X] Bluetooth detection
+            - [X] Aircraft detection
+            - [X] Relay alerts
+        - Features
+            - [X] Status lighting
+            - [X] Audio alerts
+- BSD: Decent support
+    - Assassin should work well with BSD, but may require some tinkering.
+    - Linux and BSD share many packages, so it's likely possible to get all of Assassin's features to function on BSD.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [X] Drone detection
+            - [X] Bluetooth detection
+            - [X] Aircraft detection
+            - [ ] Relay alerts
+        - Features
+            - [X] Status lighting
+            - [X] Audio alerts
 - Android: Partial support
     - Assassin is compatible with Android, using [https://termux.dev/en/](Termux), but certain features may not be compatible.
     - Android support is useful if you don't have access to a full Linux computer, but still want to use some of Assassin's features.
     - Generally speaking, installation on Android will take a little more tinkering than Linux.
-- MacOS: 
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [] Drone detection
+            - [] Bluetooth detection
+            - [] Aircraft detection
+            - [] Relay alerts
+        - Features
+            - [X] Status lighting
+            - [] Audio alerts
+- MacOS: Minimal support
+    - Assassin is compatible with MacOS, but only to a minimal degree.
+    - GPS functionality is limited, and integration with external devices is exxtremely difficult.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [] Traffic enforcement camera alerting
+            - [] ALPR camera alerting
+            - [] Drone detection
+            - [] Bluetooth detection
+            - [] Aircraft detection
+            - [] Relay alerts
+        - Features
+            - [X] Status lighting
+            - [X] Audio alerts
+- Windows: No official support
+    - Assassin is not officially compatible with Windows, though it might be possible to get it to work with some tinkering.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [] Information dashboard
+            - [] Telemetry logging
+        - Alerts
+            - [] Traffic enforcement camera alerting
+            - [] ALPR camera alerting
+            - [] Drone detection
+            - [] Bluetooth detection
+            - [] Aircraft detection
+            - [] Relay alerts
+        - Features
+            - [] Status lighting
+            - [] Audio alerts
+- iOS: No support
+    - Due to the structure of Assassin's design, iOS support is nearly impossible without a massive overhaul.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [] Information dashboard
+            - [] Telemetry logging
+        - Alerts
+            - [] Traffic enforcement camera alerting
+            - [] ALPR camera alerting
+            - [] Drone detection
+            - [] Bluetooth detection
+            - [] Aircraft detection
+            - [] Relay alerts
+        - Features
+            - [] Status lighting
+            - [] Audio alerts
+
+
+## Quick Start
+
+This section contains a quick-start guide if you want to set up Assassin as quickly as possible on a Debian based Linux distribution. This skips optional steps, and is designed to get a basic install of Assassin quickly. It's highly recommended that you followed the full instructions below. If you've installed Assassin before, and just need a quick shortcut to a working installation, follow these steps.
+
+1. Install Python3
+    - `sudo apt-get install python3 python3-pip`
+2. Install `numpy`
+    - `pip3 install numpy`
+3. Install GPSD
+    - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3 gpsd`
+4. Download Assassin
+5. Configure Assassin
+6. Run Assassin
 
 
 ## Installation
@@ -27,7 +136,7 @@ This is the installation process for Assassin and all of it's dependencies. This
 
 1. Install Python3
     - If your system does not already have Python3, download and install it.
-    - You can install Python3 on a Debian based Linux machine using the following command: `sudo apt-get install python3`
+    - You can install Python3 on a Debian based Linux machine using the following command: `sudo apt-get install python3 python3-pip`
 2. Install required Python packages
     - Assasin requires the following Python libraries: `numpy`
     - These libraries can be install with this command: `pip3 install numpy`
@@ -35,7 +144,7 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Assassin requires a GPS connection for most of it's functionality.
     - To get GPS information, you'll need to install a GPS location provider.
     - Assassin is currently compatible with three GPS providers.
-        - GPSD: Linux users
+        - GPSD: Linux and BSD users
             - GPSD is a very common GPS library compatible with a wide gamut of GPS devices.
             - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
             - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
@@ -102,7 +211,7 @@ Many of Assassin's features are dependent on external hardware. This section pro
         - The Raspberry Pi 4 runs Assassin extremely well, and seems to handle any realistic usage case well.
         - The Raspberry Pi 3 runs Assassin reliably. It may suffer from longer startup times, but otherwise works well.
         - The Raspberry Pi 2 runs Assassin acceptably, but not smoothly. For the best experience, consider a faster processing device.
-    - Since Assassin is capable of interfacing with several external devices and sensors, a processing device with solid I/O is recommended.
+    - Since Assassin is capable of interfacing with several external devices and sensors at once, a processing device with solid I/O is recommended.
 - Location Services
     - Many of Assassin's core features are dependent on GPS data. As such, it is highly recommend that you install a GPS unit to make the most of Assassin.
     - Assassin uses GPSD as a location back-end, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
@@ -114,7 +223,7 @@ Many of Assassin's features are dependent on external hardware. This section pro
     - Assassin uses Airodump to detect wireless devices. Airodump is capable of using most consumer network adapters.
         - Practically all consumer devices operate on either 2.4GHz or 5.0GHz
         - Certain drones operate on 5.8GHz
-    - If your device has a built in wireless adapter, it's highly likely that Assassin can use it. However, external wireless receivers can increase range, especially if they're placed outside the body of the vehicle.
+    - If your device has a built in wireless adapter, it's highly likely that Airodump can use it. However, external wireless receivers can increase range, especially if they're placed outside the body of the vehicle.
 - Plane Detection
     - Assassin makes use of ADS-B technology in order to detect planes and collect information from them.
     - In order to enable plane detection functionality, you'll need to connect Assassin to an ADS-B receiver.
@@ -124,7 +233,7 @@ Many of Assassin's features are dependent on external hardware. This section pro
         - Any 1090MHz antenna that connects appropriately to your tuner should work just fine with Assassin.
             - It's highly recommended that you get an externally mounted antenna. Antennas located within the body of the car will have dramatically reduced range.
         - Assassin uses the dump1090-mutability software for it's backend.
-            - Verify that dump1090 can successfully connect to and interpret data from the tuner.
+            - Verify that Dump1090 can successfully connect to and interpret data from the tuner.
     - To stream data from Dump1090, you can download information live from Dump1090 on port 30003 to a CSV file using `wget`.
         - This file will be updated with live incoming ADS-B messages until the `wget` command is terminated.
         - Enter the full filepath to this CSV file in Assassin's configuration as the `adsb_message_file` in the `adsb_alerts` section.
