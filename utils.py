@@ -109,7 +109,7 @@ if (config["display"]["status_lighting"]["enabled"] == True): # Only import the 
 
 gps_enabled = config["general"]["gps_enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
 
-if (gps_enabled == True): # Only import the GPS libraries of the GPS configuration is enabled.
+if (gps_enabled == True and config["general"]["gps_provider"] == "gpsd"): # Only import the GPS libraries if GPS is enabled in the configuration, and the GPSD provider is selected.
     debug_message("Importing `gps` library")
     from gps import * # Required to access GPS information.
     debug_message("Importing `gpsd` library")
@@ -413,6 +413,16 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                     termux_response = json.loads(raw_termux_response) # Load the location information from the Termux response.
                     debug_message("Received termux-location information")
                     return termux_response["latitude"], termux_response["longitude"], termux_response["speed"], termux_response["altitude"], termux_response["bearing"], 0 # Return the fetched GPS information.
+                except:
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    debug_message("GPS fetch failed")
+            elif (config["general"]["gps_provider"] == "locateme"):
+                try: # Don't terminate the entire script if the GPS location fails to be aquired.
+                    debug_message("Fetching LocateMe information")
+                    raw_locateme_response = str(os.popen("locateme -f {LAT},{LON},{SPD},{ALT},{DIR},0").read()) # Execute the LocateMe location command.
+                    locateme_response = raw_locateme_response.split(",") # Load the location information from the LocateMe response.
+                    debug_message("Received LocateMe information")
+                    return float(locateme_response[0]), float(locateme_response[1]), float(locateme_response[2]), float(locateme_response[3]), float(locateme_response[4]), 0 # Return the fetched GPS information.
                 except:
                     return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
                     debug_message("GPS fetch failed")

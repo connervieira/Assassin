@@ -4,7 +4,7 @@
         "refresh_delay": 1.0,
         "debugging_output": false,
         "disable_console_clearing": false,
-        "gps_provider": "termux",
+        "gps_provider": "locateme",
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": false,

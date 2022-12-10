@@ -24,6 +24,8 @@ This section of configuration values will effect Assassin's general operation.
             - GPSD is suitable for nearly all devices, and is the default.
         - `termux`
             - Termux uses the `termux-api` package to make it possible to run Assasin on Android.
+        - `locateme`
+            - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
 - `gps_enabled`
     - This setting is used to globally enable and disable GPS functionality throughout Assassin.
     - It should be noted that the vast majority of Assassin's functionality depends on GPS. With it disabled, many important features will not function.

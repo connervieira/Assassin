@@ -60,5 +60,7 @@ October 30th, 2022
     - Drone alerts are now sorted by signal strength.
     - The total number of hazards is now displayed in the title of the alert.
 - Made the spacing between alerts more consistent.
-- Added support for Termux-API as a GPS location provider.
+- Added additional GPS location providers.
+    - Termux-API can be used to allow Assassin to run on Android.
+    - LocateMe can be used to make Assassin easier to run on MacOS.
 - [ ] Finished GPIO relay alerting.

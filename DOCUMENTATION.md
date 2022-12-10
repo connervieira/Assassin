@@ -34,16 +34,19 @@ This is the installation process for Assassin and all of it's dependencies. This
 3. Install a GPS location provider (Highly Recommended)
     - Assassin requires a GPS connection for most of it's functionality.
     - To get GPS information, you'll need to install a GPS location provider.
-    - Assassin is currently compatible with two GPS providers.
+    - Assassin is currently compatible with three GPS providers.
         - GPSD: Linux users
             - GPSD is a very common GPS library compatible with a wide gamut of GPS devices.
             - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
             - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
+            - It may also be necessary to start GPSD. You can test to see if GPSD is working properly using the `cgps` command.
         - Termux-API: Android users
             - `termux-location` is a GPS location provider that comes as part of the `termux-api` for Termux on Android.
             - You can install `termux-location` on Android from Termux using this command: `pkg install termux-api`
-    - It may also be necessary to start GPSD. You can test to see if GPSD is working properly using the `cgps` command.
-    - Without GPSD, Assassin would theoretically function, but in a severely limited capacity. Many of the core functions of Assassin would fail to operate.
+        - LocateMe: MacOS users
+            - LocateMe is a public domain program for MacOS used to access location information.
+            - It can be installed using the Homebrew package manager using the following command: `brew install locateme`
+            - Ideally, you should install GPSD to enable support for additional external GPS devices. However, LocateMe works well in a pinch.
 4. Install networking packages (Recommended)
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
