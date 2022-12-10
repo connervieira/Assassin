@@ -29,7 +29,9 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add Bluetooth alert sound.
         - [X] Add ADS-B alert sound.
         - [X] Normalize all sounds.
-    - [X] Add `information_displayed` to CONFIGURE.md
+    - [X] Add `information_displayed` to CONFIGURE.md.
+    - [X] Add text-to-speech support.
+    - Add weather alerts.
 - Version 2.0
     - [ ] Fix GPIO relay alert detection.
 

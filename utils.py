@@ -100,6 +100,12 @@ import numpy # Required to run more complex math calculations
 debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
+if (config["general"]["tts"]["enabled"] == True): # Only import the TTS libraries of text to speech functionality is enabled.
+    import pyttsx3 # Import the text-to-speech library.
+    tts = pyttsx3.init() # Initialize the text-to-speech engine.
+    tts.setProperty('rate', config["general"]["tts"]["speed"]) # Set the text-to-speech speed.
+
+
 if (config["display"]["status_lighting"]["enabled"] == True): # Only import the libraries required by the status lighting system if the status lighting is enabled. These two libraries have loading times much higher than other libraries, so this step can improve loading times.
     debug_message("Importing `requests` library")
     import requests # Required to make network requests
@@ -884,3 +890,16 @@ def fetch_aircraft_data(file):
     else: # The file supplied to load ADS-B messages from does not exist.
         display_notice("The ADS-B message file specified in the configuration does not exist. ADS-B messages can't be loaded.", 2)
         return {} # Return blank aircraft data.
+
+
+
+
+def speak(full_text, brief_text):
+    if (config["general"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
+        debug_message("Playing text-to-speech")
+        if (config["general"]["tts"]["brief"] == True): # Check to see if brief mode is enabled in the configuration.
+            tts.say(brief_text)
+            tts.runAndWait()
+        else:
+            tts.say(full_text)
+            tts.runAndWait()

@@ -68,4 +68,6 @@ October 30th, 2022
 - Added additional GPS location providers.
     - Termux-API can be used to allow Assassin to run on Android.
     - LocateMe can be used to make Assassin easier to run on MacOS.
+- All disabled alerts will now supply empty data, instead of none at all.
+    - This makes Assassin more stable, in the event that a disabled alert inadvertently gets called.
 - [ ] Finished GPIO relay alerting.

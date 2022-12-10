@@ -4,13 +4,18 @@
         "refresh_delay": 1.0,
         "debugging_output": false,
         "disable_console_clearing": false,
-        "gps_provider": "locateme",
+        "tts": {
+            "enabled": true,
+            "brief": false,
+            "speed": 250
+        },
+        "gps_provider": "gpsd",
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
             "longitude": 41.5,
             "latitude": -81.6,
-            "speed": 30,
+            "speed": 40,
             "altitude": 132.0,
             "heading": 45,
             "satellites": 6
@@ -19,7 +24,7 @@
         "traffic_camera_alerts": {
             "loaded_radius": 200,
             "database": "./assets/databases/enforcement_cameras.excam",
-            "alert_range": 0,
+            "alert_range": 100,
             "speed_check": false,
             "enabled_types": {
                 "speed": true,
@@ -60,7 +65,7 @@
             ]
         },
         "alpr_alerts": {
-            "alert_range": 2000,
+            "alert_range": 2,
             "database": "./assets/databases/alpr.json",
             "angle_threshold": 180,
             "direction_threshold": 180,
@@ -115,7 +120,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": false,
+            "enabled": true,
             "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
@@ -125,7 +130,7 @@
             "distance_threshold": 3,
             "base_altitude_threshold": 3000,
             "message_time_to_live": 60,
-            "threat_threshold": 1,
+            "threat_threshold": 0,
             "information_displayed": {
                 "location": true,
                 "distance": true,

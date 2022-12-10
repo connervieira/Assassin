@@ -29,6 +29,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [X] Status lighting
             - [X] Audio alerts
+            - [X] Text-to-speech
 - BSD: Decent support
     - Assassin should work well with BSD, but may require some tinkering.
     - Linux and BSD share many packages, so it's likely possible to get all of Assassin's features to function on BSD.
@@ -46,6 +47,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [X] Status lighting
             - [X] Audio alerts
+            - [X] Text-to-speech
 - Android: Partial support
     - Assassin is compatible with Android, using [https://termux.dev/en/](Termux), but certain features may not be compatible.
     - Android support is useful if you don't have access to a full Linux computer, but still want to use some of Assassin's features.
@@ -64,6 +66,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [X] Status lighting
             - [] Audio alerts
+            - [O] Text-to-speech
 - MacOS: Minimal support
     - Assassin is compatible with MacOS, but only to a minimal degree.
     - GPS functionality is limited, and integration with external devices is exxtremely difficult.
@@ -81,6 +84,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [X] Status lighting
             - [X] Audio alerts
+            - [O] Text-to-speech
 - Windows: No official support
     - Assassin is not officially compatible with Windows, though it might be possible to get it to work with some tinkering.
     - This is a general overview of the features supported on this platform.
@@ -97,6 +101,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [] Status lighting
             - [] Audio alerts
+            - [] Text-to-speech
 - iOS: No support
     - Due to the structure of Assassin's design, iOS support is nearly impossible without a massive overhaul.
     - This is a general overview of the features supported on this platform.
@@ -113,6 +118,7 @@ It's important to make a quick note about platform compatability. While Assassin
         - Features
             - [] Status lighting
             - [] Audio alerts
+            - [] Text-to-speech
 
 
 ## Quick Start
@@ -156,7 +162,7 @@ This is the installation process for Assassin and all of it's dependencies. This
             - LocateMe is a public domain program for MacOS used to access location information.
             - It can be installed using the Homebrew package manager using the following command: `brew install locateme`
             - Ideally, you should install GPSD to enable support for additional external GPS devices. However, LocateMe works well in a pinch.
-4. Install networking packages (Recommended)
+4. Optionally, install networking packages (Recommended)
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
 5. Optionally, install MPG321 (Recommended)
@@ -164,6 +170,9 @@ This is the installation process for Assassin and all of it's dependencies. This
     - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
     - You can install MPG321 using the following command on a Debian based Linux machine: `sudo apt-get install mpg321`
     - If you don't intend on using Assassin's audio features, this is step is optional.
+6. Optionally, install text-to-speech (Recommended)
+    - Assassin is capable of using PyTTSx3 to announce text-to-speech alerts.
+    - PyTTSx3 can be installed using the following command: `pip3 install pyttsx3`
 5. Optionally, install AirCrackNG (Recommended)
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`

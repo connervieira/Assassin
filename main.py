@@ -65,6 +65,7 @@ update_status_lighting = utils.update_status_lighting # Load the function used t
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
+speak = utils.speak # Load the function used to play text-to-speech.
 debug_message("Imported `utils.py`")
 
 
@@ -149,13 +150,13 @@ if (config["display"]["custom_startup_message"] != ""): # Only display the line 
     print(config["display"]["custom_startup_message"]) # Show the user's custom defined start-up message.
 
 
-time.sleep(1) # Wait two seconds to allow the start-up logo to remain on-screen for a moment.
-
+time.sleep(1) # Wait briefly to allow the start-up logo to remain on-screen for a moment.
 
 
 
 
 play_sound("startup")
+speak("Assassin has completed loading", "Loading complete")
 
 
 
@@ -164,13 +165,21 @@ play_sound("startup")
 active_alarm = "none" # Set the active alert indicator variable to a placeholder before starting the main loop.
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
+# Set placeholders for all the alert counters.
+count_alpr_alerts = [0, 0]
+count_traffic_camera_alerts = [0, 0]
+count_bluetooth_alerts = [0, 0]
+count_aircraft_alerts = [0, 0]
+count_drone_alerts = [0, 0]
+count_relay_alerts = [0, 0]
+
 
 debug_message("Starting main loop")
 
 while True: # Run forever in a loop until terminated.
     debug_message("Cycle started")
     if (config["general"]["active_config_refresh"] == True): # Check to see if the configuration indicates to actively refresh the configuration during runtime.
-        config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
+        config = load_config() # Reload the configuration.
         debug_message("Reloaded configuration")
 
 
@@ -195,21 +204,29 @@ while True: # Run forever in a loop until terminated.
     # Run traffic enforcement camera alert processing
     if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps_enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
         nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all  = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
+    else:
+        nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all = {}, [], [], [], []
 
 
     # Run ALPR camera alert processing
     if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
         nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
+    else:
+        nearest_alpr_camera, nearby_alpr_cameras = {}, []
 
 
     # Run drone alert processing
     if (config["general"]["drone_alerts"]["enabled"] == True): # Only run drone processing if drone alerts are enabled.
         detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards)
+    else:
+        detected_drone_hazards = []
 
 
     # Run relay-based alert processing.
     if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run relay alert processing if relay alerts are enabled.
         active_relay_alerts = relay_alert_processing()
+    else:
+        active_relay_alerts = []
 
 
     # Run Bluetooth alert processing.
@@ -217,11 +234,15 @@ while True: # Run forever in a loop until terminated.
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
     elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing([0.0000, 0.0000, 0.0, 0.0, 0.0, 0], detected_bluetooth_devices) # Run the Bluetooth alert processing function with dummy GPS data.
+    else:
+        detected_bluetooth_devices, bluetooth_threats = {}, {}
 
 
     # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
+    else:
+        aircraft_threats, aircraft_data = [], {}
 
 
     debug_message("Alert processing completed")
@@ -229,6 +250,63 @@ while True: # Run forever in a loop until terminated.
 
     if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
         update_status_lighting("normal") # Run the function to reset the status lighting to indicate normal operation.
+
+
+
+
+
+
+
+    # Record the number of active alerts
+    count_drone_alerts = [len(detected_drone_hazards)] + count_drone_alerts
+    count_aircraft_alerts = [len(aircraft_threats)] + count_aircraft_alerts
+    count_traffic_camera_alerts = [len(nearby_cameras_all)] + count_traffic_camera_alerts
+    count_alpr_alerts = [len(nearby_alpr_cameras)] + count_alpr_alerts
+    count_bluetooth_alerts = [len(bluetooth_threats)] + count_bluetooth_alerts
+    count_relay_alerts = [len(active_relay_alerts)] + count_relay_alerts
+
+    # TODO - Only keep alert counts for the past 100 cycles.
+
+
+
+
+    # Alert the user via text-to-speech, as necessary.
+    if (config["general"]["tts"]["enabled"] == True): # Check to make sure text-to-speech is enabled before doing any processing.
+        debug_message("Running text-to-speech processing")
+
+        # Process drone text to speech alerts.
+        if (count_drone_alerts[0] > count_drone_alerts[1]):
+            speak("New drone alert", "Drone")
+
+        # Process aircraft text to speech alerts.
+        if (count_aircraft_alerts[0] > count_aircraft_alerts[1]):
+            speak("New aircraft alert. " + str(round(aircraft_threats[0]["distance"]*10)/10) + " miles", "Aircraft")
+
+        # Process traffic camera text to speech alerts.
+        if (count_traffic_camera_alerts[0] > count_traffic_camera_alerts[1]):
+            speak("New traffic camera alert. " + str(round(nearest_enforcement_camera["dst"]*10)/10) + " miles", "Traffic camera")
+
+        # Process ALPR text to speech alerts.
+        if (count_alpr_alerts[0] > count_alpr_alerts[1]):
+            speak("New A. L. P. R. Alert. " + str(round(nearest_alpr_camera["distance"]*10)/10) + " miles", "A. L. P. R")
+
+        # Process Bluetooth text to speech alerts.
+        if (count_bluetooth_alerts[0] > count_bluetooth_alerts[1]):
+            speak("New Bluetooth alert", "Bluetooth")
+
+        # Process relay text to speech alerts.
+        if (count_relay_alerts[0] > count_relay_alerts[1]):
+            speak("New relay alert", "Relay")
+
+        debug_message("Completed Text-to-speech processing")
+
+
+
+
+
+
+
+
 
 
     clear() # Clear the console output at the beginning of every cycle.

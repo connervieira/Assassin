@@ -62,4 +62,4 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
         return nearest_alpr_camera, filtered_cameras
 
     else: # ALPR camera alerts are diabled.
-        return {"distance": 1000000000.0} # Return a blank placeholder in place of the nearest ALPR camera.
+        return {"distance": 1000000000.0}, {} # Return a blank placeholder in place of the nearest ALPR camera.
