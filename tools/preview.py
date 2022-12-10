@@ -4,9 +4,9 @@
 
 # Type - This is the type of database. The traffic enforcement camera database uses the 'excam' format. The ALPR database, and other custom databases use the 'json' format.
 # Database - This is an absolute file path to the database you want to preview.
-# Radius - If you're previewing an ExCam database, you'll be prompted to enter the radius you want to preview.
-# Longitude - If you're previewing an ExCam database, you'll be prompted to enter the longitude of the center point of the graph.
-# Latitude - If you're previewing an ExCam database, you'll be prompted to enter the latitude of the center point of the graph.
+# Longitude - This is the longitude of the center point of the graph.
+# Latitude - This is the latitude of the center point of the graph.
+# Radius - This is the radius you want to preview.
 
 
 
@@ -106,36 +106,37 @@ def load_traffic_cameras(current_lat, current_lon, database_file, radius):
 
 database_type = input("Type (excam, json): ")
 database_to_load = input("Database: ")
+current_latitude = float(input("Latitude: "))
+current_longitude = float(input("Longitude: "))
+load_radius = float(input("Radius: "))
 
 x = []
 y = []
 
 
 if (database_type == "json"):
-    loaded_database = load_database(database_to_load)
-    for entry in loaded_database["entries"]:
-        x.append(entry["longitude"])
-        y.append(entry["latitude"])
-elif (database_type == "excam"):
-    load_radius = input("Radius: ")
-    current_longitude = input("Longitude: ")
-    current_latitude = input("Latitude: ")
+    loaded_database = load_database(database_to_load) # Load the specified JSON database.
+    for entry in loaded_database["entries"]: # Iterate through each element in the loaded database.
+        if (get_distance(current_latitude, current_longitude, entry["latitude"], entry["longitude"]) <= load_radius): # Check to see if this entry is within the range specified by the user.
+            # Add this entry to the graph data.
+            y.append(entry["latitude"])
+            x.append(entry["longitude"])
 
-    loaded_traffic_camera_database = load_traffic_cameras(current_longitude, current_latitude, database_to_load, load_radius)
-    for camera in loaded_traffic_camera_database:
+elif (database_type == "excam"):
+    loaded_traffic_camera_database = load_traffic_cameras(current_longitude, current_latitude, database_to_load, load_radius) # Load the specified traffic camera database.
+    for camera in loaded_traffic_camera_database: # Iterate through each camera in the traffic camera database.
+        # Add this entry to the database.
         y.append(camera["lat"])
         x.append(camera["lon"])
 else:
     print ("Unknown database type")
 
 
-plt.scatter(x, y, label = "Title", color = "green", marker = "X", s = 30)
+# Set up the graph information.
+plt.scatter([current_longitude], [current_latitude], color = "blue", marker = "X", s = 100) # Display the user-specified location as a large blue marker.
+plt.scatter(x, y, color = "green", marker = "X", s = 30) # Display the database points as small green markers.
 plt.ylabel('Longitude')
 plt.xlabel('Latitude')
-# plot title
-plt.title('Title')
-# showing legend
-#plt.legend()
   
-# function to show the plot
+# Display the graph.
 plt.show()
