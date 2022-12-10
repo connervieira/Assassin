@@ -4,9 +4,10 @@
         "refresh_delay": 1.0,
         "debugging_output": false,
         "disable_console_clearing": false,
+        "gps_provider": "termux",
         "gps_enabled": true,
         "gps_demo_mode": {
-            "enabled": true,
+            "enabled": false,
             "longitude": 41.5,
             "latitude": -81.6,
             "speed": 30,
@@ -18,7 +19,7 @@
         "traffic_camera_alerts": {
             "loaded_radius": 200,
             "database": "./assets/databases/enforcement_cameras.excam",
-            "alert_range": 1,
+            "alert_range": 0,
             "speed_check": false,
             "enabled_types": {
                 "speed": true,
@@ -35,7 +36,7 @@
             }
         },
         "drone_alerts": {
-            "enabled": true,
+            "enabled": false,
             "database": "./assets/databases/drones.json",
             "save_detected_hazards": true,
             "save_detected_devices": false,
@@ -59,7 +60,7 @@
             ]
         },
         "alpr_alerts": {
-            "alert_range": 5,
+            "alert_range": 2,
             "database": "./assets/databases/alpr.json",
             "angle_threshold": 60,
             "direction_threshold": 60,

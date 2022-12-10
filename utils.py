@@ -395,16 +395,30 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
             debug_message("Returning demo GPS information")
             return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
-            try: # Don't terminate the entire script if the GPS location fails to be aquired.
-                debug_message("Connecting to GPSD")
-                gpsd.connect() # Connect to the GPS daemon.
-                debug_message("Fetching GPS information")
-                gps_data_packet = gpsd.get_current() # Get the current information.
-                debug_message("Received GPS information")
-                return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats # Return GPS information.
-            except: # If the current location can't be established, then return placeholder location data.
+            if (config["general"]["gps_provider"] == "gpsd"):
+                try: # Don't terminate the entire script if the GPS location fails to be aquired.
+                    debug_message("Connecting to GPSD")
+                    gpsd.connect() # Connect to the GPS daemon.
+                    debug_message("Fetching GPSD information")
+                    gps_data_packet = gpsd.get_current() # Get the current information.
+                    debug_message("Received GPSD information")
+                    return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats # Return GPS information.
+                except: # If the current location can't be established, then return placeholder location data.
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    debug_message("GPS fetch failed")
+            elif (config["general"]["gps_provider"] == "termux"):
+                try: # Don't terminate the entire script if the GPS location fails to be aquired.
+                    debug_message("Fetching termux-location information")
+                    raw_termux_response = str(os.popen("termux-location").read()) # Execute the Termux location command.
+                    termux_response = json.loads(raw_termux_response) # Load the location information from the Termux response.
+                    debug_message("Received termux-location information")
+                    return termux_response["latitude"], termux_response["longitude"], termux_response["speed"], termux_response["altitude"], termux_response["bearing"], 0 # Return the fetched GPS information.
+                except:
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    debug_message("GPS fetch failed")
+            else:
                 return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
-                debug_message("GPS fetch failed")
+                debug_message("Invalid location provider")
     else: # If GPS is disabled, then this function should never be called, but return a placeholder position regardless.
         return [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
         debug_message("GPS is disabled")
