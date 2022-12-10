@@ -416,6 +416,24 @@ while True: # Run forever in a loop until terminated.
             if (config["general"]["alpr_alerts"]["information_displayed"]["relative_facing"] == True): # Only display the relative facing angle of the camera if it is enabled in the configuration.
                 if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
                     print("        Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["brand"] == True): # Only display the brand of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["brand"] != ""):
+                    print("        Brand: " + str(nearest_alpr_camera["brand"])) # Display the brand of this camera.
+                else:
+                    print("        Brand: Unknown") # Display the brand of this camera as unknown.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["operator"] == True): # Only display the operator of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["operator"] != ""):
+                    print("        Operator: " + str(nearest_alpr_camera["operator"])) # Display the brand of this camera.
+                else:
+                    print("        Operator: Unknown") # Display the operator of this camera as unknown.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["type"] == True): # Only display the type of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["type"] != ""):
+                    print("        Type: " + str(nearest_alpr_camera["type"])) # Display the type of this camera.
+                else:
+                    print("        Type: Unknown") # Display the type of this camera as unknown.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["description"] == True): # Only display the description of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["description"] != ""):
+                    print("        Description: " + str(nearest_alpr_camera["description"])) # Display the description of this camera.
             print(style.end)
 
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.

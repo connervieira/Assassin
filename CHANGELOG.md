@@ -31,6 +31,11 @@ October 30th, 2022
 - Adjusted the configuration layout.
     - All alerts now have their own configuration sections.
 - Updated ALPR alerting.
+    - Each ALPR alert can now display additional information, including the following:
+        - Camera brand
+        - Camera operator
+        - Camera type
+        - Camera description
     - All information displayed in each alert can now be toggled on and off individually in the configuration.
     - ALPR alerts will now show the number of active alerts, in addition to the nearest alert.
     - ALPR alerts now display the location of the camera.

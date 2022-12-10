@@ -7,7 +7,7 @@
         "gps_provider": "locateme",
         "gps_enabled": true,
         "gps_demo_mode": {
-            "enabled": false,
+            "enabled": true,
             "longitude": 41.5,
             "latitude": -81.6,
             "speed": 30,
@@ -60,17 +60,21 @@
             ]
         },
         "alpr_alerts": {
-            "alert_range": 2,
+            "alert_range": 2000,
             "database": "./assets/databases/alpr.json",
-            "angle_threshold": 60,
-            "direction_threshold": 60,
+            "angle_threshold": 180,
+            "direction_threshold": 180,
             "information_displayed": {
                 "location": true,
                 "distance": true,
                 "street": true,
                 "bearing": false,
                 "absolute_facing": false,
-                "relative_facing": true
+                "relative_facing": true,
+                "brand": true,
+                "operator": true,
+                "type": true,
+                "description": true
             }
         },
         "relay_alerts": {
