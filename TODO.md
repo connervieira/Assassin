@@ -1,6 +1,6 @@
 # To Do
 
-This is a informal to-do list for Assassin. Keep in mind that this is not a complete changelog, nor is it an official declaration of upcoming features. This list is subject to change.
+This is a informal to-do list for Assassin. This is not a complete changelog, nor is it an official declaration of upcoming features. This list is subject to change.
 
 ### Planned
 
