@@ -87,8 +87,8 @@ y = []
 database_to_load = input("Database: ")
 
 
-distance_threshold = 5
-angle_threshold = 50
+distance_threshold = 15
+angle_threshold = 20
 
 
 loaded_database = load_database(database_to_load)
