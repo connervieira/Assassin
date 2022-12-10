@@ -8,42 +8,68 @@ This document contains the information you need to know to set up and use Assass
 Due to it's inherently customizable and open-ended philosophy, there isn't a single concrete way to set up Assassin as such, the documentation here may appear to be convoluted and complicated. This is simply to ensure that every environment and use-case is addressed. If these instructions are followed step-by-step, Assassin should operate smoothly and be configured to fit your usage situation.
 
 
+## Platforms
+
+It's important to make a quick note about platform compatability. While Assassin can be run on several platforms, it's level of compatability varies significantly. Below is a description of Assassin's level of support on each platform.
+
+- Linux: Full support
+    - Assassin is natively compatible with Linux, and all of it's features should be fully functional.
+- Android: Partial support
+    - Assassin is compatible with Android, using [https://termux.dev/en/](Termux), but certain features may not be compatible.
+    - Android support is useful if you don't have access to a full Linux computer, but still want to use some of Assassin's features.
+    - Generally speaking, installation on Android will take a little more tinkering than Linux.
+- MacOS: 
+
+
 ## Installation
 
 This is the installation process for Assassin and all of it's dependencies. This process is written assuming you're running a Debian based distribution of GNU/Linux, but it's theoretically possible to get Assassin to function smoothly on any Linux distribution.
 
-1. Install GPSD (Highly Recommended)
-    - GPSD is required for Assassin to communicate with GPS devices.
-    - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
-    - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
+1. Install Python3
+    - If your system does not already have Python3, download and install it.
+    - You can install Python3 on a Debian based Linux machine using the following command: `sudo apt-get install python3`
+2. Install required Python packages
+    - Assasin requires the following Python libraries: `numpy`
+    - These libraries can be install with this command: `pip3 install numpy`
+3. Install a GPS location provider (Highly Recommended)
+    - Assassin requires a GPS connection for most of it's functionality.
+    - To get GPS information, you'll need to install a GPS location provider.
+    - Assassin is currently compatible with two GPS providers.
+        - GPSD: Linux users
+            - GPSD is a very common GPS library compatible with a wide gamut of GPS devices.
+            - You can install GPSD using this command on a Debian based Linux machine: `sudo apt-get install gpsd gpsd-clients`
+            - You can install GPSD's Python libraries using this command on a Debian based Linux machine: `pip3 install gps gpsd-py3 gpsd`
+        - Termux-API: Android users
+            - `termux-location` is a GPS location provider that comes as part of the `termux-api` for Termux on Android.
+            - You can install `termux-location` on Android from Termux using this command: `pkg install termux-api`
     - It may also be necessary to start GPSD. You can test to see if GPSD is working properly using the `cgps` command.
     - Without GPSD, Assassin would theoretically function, but in a severely limited capacity. Many of the core functions of Assassin would fail to operate.
-2. Install networking packages (Recommended)
+4. Install networking packages (Recommended)
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
-3. Optionally, install MPG321 (Recommended)
+5. Optionally, install MPG321 (Recommended)
     - Assassin requires MPG321 in order to play audio effects for alerts.
     - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
     - You can install MPG321 using the following command on a Debian based Linux machine: `sudo apt-get install mpg321`
     - If you don't intend on using Assassin's audio features, this is step is optional.
-4. Optionally, install AirCrackNG (Recommended)
+5. Optionally, install AirCrackNG (Recommended)
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
     - If you don't plan on using Assassin's radio threat detection features, this step is optional.
-5. Optionally, install Bluez Tools (Recommended)
+6. Optionally, install Bluez Tools (Recommended)
     - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
     - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
         - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
     - If you don't plan on using Assassin's Bluetooth threat features, this step is optional.
-6. Optionally, install Dump1090 (Recommended)
+7. Optionally, install Dump1090 (Recommended)
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
-7. Optionally, install RaspAP
+8. Optionally, install RaspAP
     - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) (or similar program) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
     - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
     - If you already have an access point installed in the same area as Assassin, you can simply connect Assassin to it, and use SSH on a separate device to access the instance remotely.
-8. Download Assassin
+9. Download Assassin
     - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory to prevent conflicts.
 
 
