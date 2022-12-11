@@ -17,6 +17,13 @@ This section of configuration values will effect Assassin's general operation.
 - `disable_console_clearing`
     - This setting can be used to prevent Assassin from clearing the screen.
     - Under normal circumstances, this should not be used because it will make Assassin's output extremely chaotic and unpredictable. However, there may be some situations in which it may be useful to disable output clearing.
+- `tts`
+    - TTS, or text-to-speech, allows Assassin to read out information verbally.
+    - This section has the following sub-values for configuration.
+        - `enabled` determines whether text to speech is enabled.
+        - `brief` determines whether Assassin will use brief read-outs in place of the full length ones.
+            - Enabling this will reduce the amount of information in text-to-speed read-outs, but will dramatically shorten the time it takes to deliver them.
+        - `speed` determines the speed at which text-to-speech will be spoken.
 - `gps_provider`
     - This setting determines which GPS location provider Assassin will attempt to use.
     - Below are the options this value can be set to.
@@ -196,7 +203,21 @@ This section of configuration values effect Assassin's visual displays.
 This section of configuration values effect Assassin's audio functionality.
 
 - `sounds`
-    This configuration value determines all of the sounds that Assassin is capable of using.
+    - This configuration value determines all of the sounds that Assassin is capable of using.
+    - Different sounds are triggered at different times.
+        - The `heartbeat` sound plays at the beginning of every cycle.
+        - The `startup` sound is played when Assassin initially loads.
+        - The `camera` sounds are played during a traffic camera alert.
+            - `camera1` indicates a low priority alert.
+            - `camera2` indicates a medium priority alert.
+            - `camera3` indicates a high priority alert.
+        - The `alarm` sound plays during a heightened alarm state.
+            - This sound is reserved for times in which immediate action is required.
+            - Normal alert noises will play before this, and this sound will only be played if the other alerts aren't aknowledged and resolved.
+        - The `alpr` sound plays during an ALPR camera alert.
+        - The `drone` sound is played during an autonomous wireless threat alert.
+        - The `adsb` sound is played during an aircraft alert.
+        - The `bluetooth` sound is played during a Bluetooth alert.
     - Each sound has a `path`, `repeat`, and `delay` defined.
         - The `path` defines the file path of the sound file.
             - This file path can be relative to the Assassin directory, or an absolute path.

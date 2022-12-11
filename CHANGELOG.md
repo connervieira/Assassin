@@ -70,4 +70,7 @@ October 30th, 2022
     - LocateMe can be used to make Assassin easier to run on MacOS.
 - All disabled alerts will now supply empty data, instead of none at all.
     - This makes Assassin more stable, in the event that a disabled alert inadvertently gets called.
+- Updated some sounds effects.
+    - The aircraft alert sound effect is now much shorter.
+    - Added an optional heartbeat sound effect to indicate when Assassin is active.
 - [ ] Finished GPIO relay alerting.

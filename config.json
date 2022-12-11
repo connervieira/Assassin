@@ -5,7 +5,7 @@
         "debugging_output": false,
         "disable_console_clearing": false,
         "tts": {
-            "enabled": true,
+            "enabled": false,
             "brief": false,
             "speed": 250
         },
@@ -196,36 +196,41 @@
     },
     "audio": {
         "sounds": {
+            "heartbeat": {
+                "path": "./assets/sounds/heartbeat.mp3",
+                "repeat": "1",
+                "delay": "0.5"
+            },
             "startup": {
                 "path": "./assets/sounds/startup.mp3",
                 "repeat": "0",
-                "delay": "1.5"
+                "delay": "1"
             },
             "camera1": {
                 "path": "./assets/sounds/camera1.mp3",
                 "repeat": "0",
-                "delay": "1.5"
+                "delay": "1"
             },
             "camera2": {
                 "path": "./assets/sounds/camera2.mp3",
                 "repeat": "0",
-                "delay": "1.5"
+                "delay": "1"
             },
             "camera3": {
                 "path": "./assets/sounds/camera3.mp3",
                 "repeat": "0",
-                "delay": "1.5"
+                "delay": "1"
+            },
+            "alarm": {
+                "path": "./assets/sounds/alarm.mp3",
+                "repeat": "0",
+                "delay": "1"
             },
             "alpr": {
                 "path": "./assets/sounds/alpr.mp3",
                 "repeat": "0",
                 "delay": "0.3"
              },
-            "alarm": {
-                "path": "./assets/sounds/alarm.mp3",
-                "repeat": "0",
-                "delay": "1"
-            },
             "drone": {
                 "path": "./assets/sounds/drone.mp3",
                 "repeat": "0",

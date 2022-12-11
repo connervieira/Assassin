@@ -178,6 +178,7 @@ debug_message("Starting main loop")
 
 while True: # Run forever in a loop until terminated.
     debug_message("Cycle started")
+    play_sound("heartbeat")
     if (config["general"]["active_config_refresh"] == True): # Check to see if the configuration indicates to actively refresh the configuration during runtime.
         config = load_config() # Reload the configuration.
         debug_message("Reloaded configuration")
