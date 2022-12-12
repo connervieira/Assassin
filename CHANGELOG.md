@@ -77,4 +77,6 @@ October 30th, 2022
 - Updated interface coloring.
     - Multiple alerts now share the same color.
     - Colors are now used to indicate categories, not specific alerts.
+- Added a configuration option to disable diagonal arrows.
+    - When diagonal arrows are disabled, Assassin will point in increments of 90 degrees instead of 45.
 - [ ] Finished GPIO relay alerting.

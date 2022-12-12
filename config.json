@@ -120,7 +120,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
@@ -168,6 +168,7 @@
         "shape_alerts": false,
         "ascii_art_header": true,
         "custom_startup_message": "",
+        "diagonal_arrows": false,
         "status_lighting": {
             "enabled": false,
             "base_url": "http://wled.local/win&A=255",
