@@ -130,7 +130,7 @@ This section contains a quick-start guide if you want to set up Assassin as quic
 2. Install `numpy`
     - `pip3 install numpy`
 3. Install GPSD
-    - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3 gpsd`
+    - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3`
 4. Download Assassin
 5. Configure Assassin
 6. Run Assassin
