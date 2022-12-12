@@ -259,6 +259,7 @@ After configuring Assassin, you can try it out for the first time!
     - After Assassin finishes loading, you should see a quick message displaying the "Assassin" name.
 2. Use Assassin
     - Assassin runs on a cycle, where new information will be received, processed, and displayed at regular intervals. At this point, no user intervention is required.
+    - See [USAGE.md](USAGE.md) for more information.
 3. Quit Assassin
     - When you finish using Assassin, simply press Ctrl + C to terminate the program.
 

@@ -380,8 +380,6 @@ while True: # Run forever in a loop until terminated.
     if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
 
-    print(style.end)
-
 
 
 
@@ -395,11 +393,12 @@ while True: # Run forever in a loop until terminated.
 
 
 
+
     # Display Bluetooth monitoring alerts.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
         debug_message("Displaying Bluetooth alerts")
         if (len(bluetooth_threats) > 0): # Check to see if at least one Bluetooth threat was detected.
-            print(style.pink + "Bluetooth Hazards: " + str(len(bluetooth_threats))) # Display the Bluetooth alert title.
+            print(style.purple + "Bluetooth Hazards: " + str(len(bluetooth_threats))) # Display the Bluetooth alert title.
             for threat in bluetooth_threats: # Iterate through all of the active Bluetooth threats.
                 print("    " + str(threat['address']))
                 if (config["general"]["bluetooth_monitoring"]["information_displayed"]["name"] == True): # Only display the device name if it is enabled in the configuration.
@@ -415,59 +414,6 @@ while True: # Run forever in a loop until terminated.
 
             play_sound("bluetooth") # Play the alert sound associated with Bluetooth alerts, if one is configured to run.
             
-
-
-
-    # Display traffic camera alerts.
-    if (config["general"]["gps_enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
-        debug_message("Displaying traffic enforcement camera alerts")
-        # Display the nearest traffic camera, if applicable.
-        if (nearest_enforcement_camera["dst"] < float(config["general"]["traffic_camera_alerts"]["alert_range"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.
-            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-                update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
-
-
-            print(style.blue + "Traffic Enforcement Cameras: " + str(len(nearby_cameras_all)))
-            print("    Nearest:")
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["type"] == True): # Only display the camera type if it is enabled in the configuration.
-                if (nearest_enforcement_camera == nearest_speed_camera): # Check to see if the overall nearest camera is the nearest speed camera.
-                    print("        Type: Speed Camera")
-                elif (nearest_enforcement_camera == nearest_redlight_camera): # Check to see if the overall nearest camera is the nearest red light camera.
-                    print("        Type: Red Light Camera")
-                elif (nearest_enforcement_camera == nearest_misc_camera): # Check to see if the overall nearest camera is the nearest general traffic camera.
-                    print("        Type: General Traffic Camera")
-                else:
-                    print("        Type: Unknown")
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearest_enforcement_camera["lat"]) + ", " + str(nearest_enforcement_camera["lon"]) + " (" + get_arrow_direction(nearest_enforcement_camera["bearing"] - current_location[4]) + " " + str(round(nearest_enforcement_camera["bearing"] - current_location[4])) + "°)") # Display the location of the traffic camera.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
-                print("        Distance: " + str(round(nearest_enforcement_camera["dst"]*1000)/1000) + " miles") # Display the current distance to the traffic camera.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
-                if (nearest_enforcement_camera["str"] != None): # Check to see if street data exists for this camera.
-                    print("        Street: " + str(nearest_enforcement_camera["str"])) # Display the street that the traffic camera is on.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
-                if (nearest_enforcement_camera["spd"] != None): # Check to see if speed limit data exists for this camera.
-                    print("        Speed: " + str(round(int(nearest_enforcement_camera["spd"]) * 0.6213712)) + " mph") # Display the speed limit of the traffic camera, converted to miles per hour.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing if it is enabled in the configuration.
-                print("        Bearing: " + str(get_cardinal_direction(nearest_enforcement_camera["bearing"])) + " " + str(round(nearest_enforcement_camera["bearing"])) + "°") # Display the absolute direction towards this camera.
-            print(style.end + style.end)
-
-
-            display_shape("circle") # Display an ASCII circle in the console output, if Assassin is configured to do so.
-
-            # Play audio alerts, as necessary.
-            if (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
-                if (nearest_enforcement_camera["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
-                    if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
-                        active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
-                        play_sound("alarm")
-
-                play_sound("camera3")
-            elif (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]) * 0.25)): # Check to see if the nearest camera is within 25% of the traffic camera alert radius.
-                play_sound("camera2")
-            elif (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]))): # Check to see if the nearest camera is within the traffic camera alert radius.
-                play_sound("camera1")
-
 
 
 
@@ -522,6 +468,61 @@ while True: # Run forever in a loop until terminated.
 
 
 
+
+    # Display traffic camera alerts.
+    if (config["general"]["gps_enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
+        debug_message("Displaying traffic enforcement camera alerts")
+        # Display the nearest traffic camera, if applicable.
+        if (nearest_enforcement_camera["dst"] < float(config["general"]["traffic_camera_alerts"]["alert_range"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.
+            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+                update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
+
+            print(style.blue + "Traffic Enforcement Cameras: " + str(len(nearby_cameras_all)))
+            print("    Nearest:")
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["type"] == True): # Only display the camera type if it is enabled in the configuration.
+                if (nearest_enforcement_camera == nearest_speed_camera): # Check to see if the overall nearest camera is the nearest speed camera.
+                    print("        Type: Speed Camera")
+                elif (nearest_enforcement_camera == nearest_redlight_camera): # Check to see if the overall nearest camera is the nearest red light camera.
+                    print("        Type: Red Light Camera")
+                elif (nearest_enforcement_camera == nearest_misc_camera): # Check to see if the overall nearest camera is the nearest general traffic camera.
+                    print("        Type: General Traffic Camera")
+                else:
+                    print("        Type: Unknown")
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
+                print("        Location: " + str(nearest_enforcement_camera["lat"]) + ", " + str(nearest_enforcement_camera["lon"]) + " (" + get_arrow_direction(nearest_enforcement_camera["bearing"] - current_location[4]) + " " + str(round(nearest_enforcement_camera["bearing"] - current_location[4])) + "°)") # Display the location of the traffic camera.
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
+                print("        Distance: " + str(round(nearest_enforcement_camera["dst"]*1000)/1000) + " miles") # Display the current distance to the traffic camera.
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
+                if (nearest_enforcement_camera["str"] != None): # Check to see if street data exists for this camera.
+                    print("        Street: " + str(nearest_enforcement_camera["str"])) # Display the street that the traffic camera is on.
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
+                if (nearest_enforcement_camera["spd"] != None): # Check to see if speed limit data exists for this camera.
+                    print("        Speed: " + str(round(int(nearest_enforcement_camera["spd"]) * 0.6213712)) + " mph") # Display the speed limit of the traffic camera, converted to miles per hour.
+            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing if it is enabled in the configuration.
+                print("        Bearing: " + str(get_cardinal_direction(nearest_enforcement_camera["bearing"])) + " " + str(round(nearest_enforcement_camera["bearing"])) + "°") # Display the absolute direction towards this camera.
+            print(style.end)
+
+
+            display_shape("circle") # Display an ASCII circle in the console output, if Assassin is configured to do so.
+
+            # Play audio alerts, as necessary.
+            if (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
+                if (nearest_enforcement_camera["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
+                    if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
+                        active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
+                        play_sound("alarm")
+
+                play_sound("camera3")
+            elif (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]) * 0.25)): # Check to see if the nearest camera is within 25% of the traffic camera alert radius.
+                play_sound("camera2")
+            elif (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]))): # Check to see if the nearest camera is within the traffic camera alert radius.
+                play_sound("camera1")
+
+
+
+
+
+
     # Display drone alerts.
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
         debug_message("Displaying drone alerts")
@@ -529,7 +530,7 @@ while True: # Run forever in a loop until terminated.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("autonomousthreat") # Update the status lighting to indicate that at least one autonomous threat was detected.
 
-            print(style.cyan + "Autonomous Hazards: " + str(len(detected_drone_hazards)))
+            print(style.blue + "Autonomous Hazards: " + str(len(detected_drone_hazards)))
             for hazard in detected_drone_hazards: # Iterate through each detected hazard.
                 print("    " + hazard["mac"] + "") # Show this hazard's MAC address.
                 if (config["general"]["drone_alerts"]["information_displayed"]["threat_type"] == True): # Only display the threat type if it is enabled in the configuration.
@@ -571,7 +572,7 @@ while True: # Run forever in a loop until terminated.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 
-            print(style.yellow + "Aircraft Threats: " + str(len(aircraft_threats)))
+            print(style.blue + "Aircraft Threats: " + str(len(aircraft_threats)))
             for threat in aircraft_threats: # Iterate through each detected hazard.
                 print("    " + threat["id"] + ":") # Show this hazard's MAC address.
                 if (config["general"]["adsb_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.

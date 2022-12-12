@@ -73,4 +73,8 @@ October 30th, 2022
 - Updated some sounds effects.
     - The aircraft alert sound effect is now much shorter.
     - Added an optional heartbeat sound effect to indicate when Assassin is active.
+- Re-arranged the dispaly order of alerts.
+- Updated interface coloring.
+    - Multiple alerts now share the same color.
+    - Colors are now used to indicate categories, not specific alerts.
 - [ ] Finished GPIO relay alerting.

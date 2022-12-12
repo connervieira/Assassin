@@ -76,9 +76,9 @@
                 "bearing": false,
                 "absolute_facing": false,
                 "relative_facing": true,
-                "brand": true,
-                "operator": true,
-                "type": true,
+                "brand": false,
+                "operator": false,
+                "type": false,
                 "description": true
             }
         },
@@ -124,7 +124,7 @@
             "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
-            "maximum_aircraft_speed": 175,
+            "maximum_aircraft_speed": 200,
             "minimum_aircraft_altitude": 0,
             "maximum_aircraft_altitude": 8000,
             "distance_threshold": 3,

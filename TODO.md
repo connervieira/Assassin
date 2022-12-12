@@ -31,7 +31,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Normalize all sounds.
     - [X] Add `information_displayed` to CONFIGURE.md.
     - [X] Add text-to-speech support.
-    - Add weather alerts.
+    - [ ] Add weather alerts.
+    - [ ] Add speed trap alerts.
 - Version 2.0
     - [ ] Fix GPIO relay alert detection.
 
@@ -40,6 +41,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
+- [ ] Add crowd source alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.
 - [ ] Add more extensive vehicle integration using OBD-II.
