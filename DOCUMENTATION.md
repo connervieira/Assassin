@@ -167,6 +167,7 @@ This is the installation process for Assassin and all of it's dependencies. This
 6. Optionally, install text-to-speech (Recommended)
     - Assassin is capable of using PyTTSx3 to announce text-to-speech alerts.
     - PyTTSx3 can be installed using the following command: `pip3 install pyttsx3`
+    - If you don't plan on using Assassin's text-to-speech functionality, this step is optional.
 5. Optionally, install AirCrackNG (Recommended)
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
@@ -181,7 +182,7 @@ This is the installation process for Assassin and all of it's dependencies. This
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
 8. Optionally, install RaspAP
-    - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) (or similar program) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
+    - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
     - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
     - If you already have an access point installed in the same area as Assassin, you can simply connect Assassin to it, and use SSH on a separate device to access the instance remotely.
 9. Download Assassin

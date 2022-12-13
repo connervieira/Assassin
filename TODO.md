@@ -40,7 +40,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
-- [ ] Add crowd source alerts.
+- [ ] Add crowd sourced alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.
 - [ ] Add more extensive vehicle integration using OBD-II.

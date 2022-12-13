@@ -52,7 +52,7 @@ def load_drone_alerts():
 
 
         # Run Airodump based on the Assassin configuration.
-        airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
+        airodump_command = "sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down; sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor; sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up; sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
         if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
             os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
             proc = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
@@ -85,6 +85,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
         for device in line_split_output: # Iterate through each detected device, and separate it's information into a sub-list.
             detected_devices.append(device.split(",")) # Add the information from each detected device to the access point list.
 
+
         # Remove invalid entries from the listed of detected devices.
         for device in detected_devices: # Iterate through each entry in the list of devices.
             if (len(device) <= 3): # Check to see if this entry is shorter than expected.
@@ -108,7 +109,6 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
         active_radio_devices = {} # Set a placeholder dictionary to store the active radio devices. Information stored in this dictionary is volatile and are not saved to disk.
 
         for device in detected_devices: # Iterate through each device detected in the previous step.
-
             device_information = {} # Create a blank placeholder that will be used to store this device's information.
 
             if (len(device) == 15): # This hazard is an access point.
@@ -140,7 +140,6 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
 
 
             if (device_information != {}): # Check to see if the device_information has been populated by data.
-
                 # Handle historical device recording.
                 if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
                     current_timestamp = str(round(time.time())) # Get the current timestamp. This value is saved to variable because it's theoretically possible for the time to change between the time the database entry is changed and the time information is added to it.
@@ -153,7 +152,6 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
 
                 # Handle active device recording.
                 active_radio_devices[device_information["mac"]] = device_information # Add this device to the device information
-
 
 
 

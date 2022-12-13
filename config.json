@@ -1,7 +1,7 @@
 {
     "general": {
         "active_config_refresh": false,
-        "refresh_delay": 1.0,
+        "refresh_delay": 1,
         "debugging_output": false,
         "disable_console_clearing": false,
         "tts": {
@@ -13,15 +13,15 @@
         "gps_enabled": true,
         "gps_demo_mode": {
             "enabled": true,
-            "longitude": 41.5,
-            "latitude": -81.6,
-            "speed": 40,
+            "longitude": 41,
+            "latitude": -81,
+            "speed": 35,
             "altitude": 132.0,
             "heading": 45,
             "satellites": 6
         },
         "telemetry": {
-            "enabled": true,
+            "enabled": false,
             "directory": "./",
             "file": "AssassinTelemetry{T}.gpx",
             "information": {
@@ -32,10 +32,10 @@
             }
         },
         "traffic_camera_alerts": {
-            "loaded_radius": 200,
+            "loaded_radius": 500,
             "database": "./assets/databases/enforcement_cameras.excam",
-            "alert_range": 100,
-            "speed_check": false,
+            "alert_range": 1,
+            "speed_check": true,
             "enabled_types": {
                 "speed": true,
                 "redlight": true,
@@ -55,9 +55,9 @@
             "database": "./assets/databases/drones.json",
             "save_detected_hazards": true,
             "save_detected_devices": false,
-            "monitoring_device": "wlp1s0b1",
+            "monitoring_device": "wlp40s0",
             "monitoring_mode": "manual",
-            "hazard_latch_time": 20,
+            "hazard_latch_time": 8,
             "information_displayed": {
                 "threat_type": true,
                 "company": true,
@@ -75,7 +75,7 @@
             ]
         },
         "alpr_alerts": {
-            "alert_range": 2,
+            "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
             "angle_threshold": 180,
             "direction_threshold": 180,
@@ -118,16 +118,16 @@
         },
         "adsb_alerts": {
             "enabled": false,
-            "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
-            "minimum_vehicle_speed": 0,
+            "adsb_message_file": "",
+            "minimum_vehicle_speed": 60,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 200,
-            "minimum_aircraft_altitude": 0,
+            "minimum_aircraft_altitude": 500,
             "maximum_aircraft_altitude": 8000,
             "distance_threshold": 3,
             "base_altitude_threshold": 3000,
             "message_time_to_live": 60,
-            "threat_threshold": 0,
+            "threat_threshold": 2,
             "information_displayed": {
                 "location": true,
                 "distance": true,
@@ -137,7 +137,7 @@
                 "absolute_heading": false,
                 "relative_heading": true,
                 "time": true,
-                "callsign": true,
+                "callsign": false,
                 "climb": false
             }
         }
@@ -180,7 +180,7 @@
         "notices": {
             "1": {
                 "wait_for_input": false,
-                "delay": 3.0
+                "delay": 2.0
             },
             "2": {
                 "wait_for_input": false,
@@ -202,7 +202,7 @@
             "startup": {
                 "path": "./assets/sounds/startup.mp3",
                 "repeat": "0",
-                "delay": "1"
+                "delay": "3"
             },
             "camera1": {
                 "path": "./assets/sounds/camera1.mp3",
@@ -227,12 +227,12 @@
             "alpr": {
                 "path": "./assets/sounds/alpr.mp3",
                 "repeat": "0",
-                "delay": "0.3"
+                "delay": "0.5"
              },
             "drone": {
                 "path": "./assets/sounds/drone.mp3",
                 "repeat": "0",
-                "delay": "1"
+                "delay": "0.5"
             },
             "adsb": {
                 "path": "./assets/sounds/adsb.mp3",

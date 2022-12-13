@@ -924,7 +924,7 @@ def speak(full_text, brief_text):
 debug_message("Creating `utc_datetime` function")
 def utc_datetime(timestamp):
     timestamp = float(timestamp)
-    return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%SZ')
+    return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
 
 
@@ -932,7 +932,7 @@ debug_message("Creating `save_gpx` function")
 def save_gpx(location_history, file_path):
     if (type(location_history) == list): # Check to make sure the location_history provided is a list.
         if (os.path.isdir(config["general"]["telemetry"]["directory"]) == True): # Check to make sure the save directory specified in the configuration exists and is actually a directory.
-            file_contents = '<?xml version="1.0" encoding="UTF-8" ?>\n<gpx version="1.0" creator="V0LT Assassin">\n    <time>' + utc_datetime(location_history[0]["time"]) + '2022-08-15T04:06:42.000Z</time>\n    <trk>\n        <trkseg>\n' # Set-up the start of the file.
+            file_contents = '<?xml version="1.0" encoding="UTF-8" ?>\n<gpx version="1.0" creator="V0LT Assassin">\n    <time>' + utc_datetime(location_history[0]["time"]) + '</time>\n    <trk>\n        <trkseg>\n' # Set-up the start of the file.
 
             for point in location_history: # Iterate through each point in the location history .
                 file_contents = file_contents + '            ' # Add indents to the beginning of each point line to make the file human-readable.

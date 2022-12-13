@@ -22,7 +22,7 @@ October 30th, 2022
 
 ### First stable release
 
-*To be determined*
+December 13th, 2022
 
 - Added several tools.
     - Added database preview tool.
@@ -73,6 +73,8 @@ October 30th, 2022
 - Updated some sounds effects.
     - The aircraft alert sound effect is now much shorter.
     - Added an optional heartbeat sound effect to indicate when Assassin is active.
+    - Added a drone sound effect.
+    - Added a start-up sound effect.
 - Re-arranged the dispaly order of alerts.
 - Updated interface coloring.
     - Multiple alerts now share the same color.

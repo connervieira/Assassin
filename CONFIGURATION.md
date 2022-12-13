@@ -47,11 +47,13 @@ This section of configuration values will effect Assassin's general operation.
         - `file` is the file-name that Assassin will write the telemetry data to.
             - This file name should be a GPX file.
             - The `{T}` string will be replaced by the timestamp that the first location point was recorded.
+                - If the `{T}` string doesn't appear anywhere in the file name, then Assassin will overwrite the file every time it runs.
             - Example: `AssassinTelemetry{T}.gpx`
         - `information` specifies what information will be saved to the telemetry file.
             - `altitude` is the GPS altitude.
             - `satellites` is the number of GPS satellites used to get the location.
             - `speed` is the current GPS speed in meters-per-second.
+                - It should be noted that the speed can easily be determined from location information and timestamps, regardless of whether it directly is embedded in the file.
             - `source` is the location back-end Assassin used to get the location.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
@@ -83,10 +85,13 @@ This section of configuration values will effect Assassin's general operation.
         - `save_detected_devices` determines whether or not Assassin will save the all radio devices it detects to a local file for later analysis.
             - Be warned that this file can become extremely large in just a few minutes, especially if you happen to be in an area with a lot of radio traffic.
         - `monitoring_device` determines the wireless device that Assassin will attempt to use to run wireless network analysis.
-        - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it. Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
-            - This setting can only be set to "manual" or "automatic"
+            - To list the network devices available on your system, use the `iwconfig` command. Note that this lists all network interfaces, not just wireless ones.
+        - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it.
+            - Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
+            - This setting can only be set to `manual` or `automatic`
         - `hazard_latch_time` is how long (in seconds) Assassin will latch onto alerts after they are no longer detected before dismissing them.
-        - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to. This is useful if you only want to alert to certain types of autonomous threats.
+        - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to.
+            - This is useful if you only want to alert to certain types of autonomous threats without needing to completely remove them from the database.
         - `information_displayed` determines what information is displayed in alerts.
             - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `alpr_alerts`
@@ -108,7 +113,8 @@ This section of configuration values will effect Assassin's general operation.
     - This setting has the following sub-values for configuration:
         - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
         - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
-        - `minimum_followin_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
+            - Longer times will detect mode devices, but will also cause Assassin to take longer to refresh.
+        - `minimum_following_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
         - `log_devices` determines whether Assassin will log all of the Bluetooth devices it detects, and has the following sub-values:
             - `enabled` determines whether device logging is active.
             - `filename` determines the name of the file that Assassin will write logged devices to.
