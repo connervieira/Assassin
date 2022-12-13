@@ -118,6 +118,14 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load B
     detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
 
 
+# Load the weather alert system. 
+if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather alert system if weather alerts are enabled.
+    import weather
+    get_weather_data = weather.get_weather_data
+    weather_alert_processing = weather.weather_alert_processing
+    weather_data = { "requested" : 0 } # Set the current weather information to a placeholder.
+    last_weather_data = { "requested" : 0 } # Set the last round's weather information to a placeholder.
+
 
 
 
@@ -227,6 +235,16 @@ while True: # Run forever in a loop until terminated.
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
     else:
         aircraft_threats, aircraft_data = [], {}
+
+
+    # Process weather alerts.
+    if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run weather alert processing if it is enabled in the configuration.
+        last_weather_data = weather_data
+        weather_data = get_weather_data(current_location, last_weather_data)
+        weather_alerts = weather_alert_processing(weather_data)
+    else:
+        weather_alerts = {}
+
 
 
     debug_message("Alert processing completed")
@@ -357,6 +375,8 @@ while True: # Run forever in a loop until terminated.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
     if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
+
+    print("") # Add a line break after displaying the main information display.
 
 
 
@@ -570,6 +590,31 @@ while True: # Run forever in a loop until terminated.
             play_sound("adsb") # Play the sound effect associated with a potential ADS-B aircraft threat being detected.
 
 
+
+    # Display weather alerts.
+    if (config["general"]["weather_alerts"]["enabled"] == True): # Check to make sure weather alerts are enabled before displaying weather alerts.
+        debug_message("Displaying weather alerts")
+        if (len(weather_alerts) > 0): # Check to see if there are any active weather alerts.
+            print(style.yellow + "Weather Alerts: " + str(len(weather_alerts))) # Display the weather alerts title.
+
+            # Display visibility alerts.
+            if ("visibility" in weather_alerts): # Check to see if there is a visibility alert.
+                if (weather_alerts["visibility"][1] == "below"): # Check to see if the alert is below the low threshold.
+                    print("    Visibility low: " + str(weather_alerts["visibility"][0]))
+                elif (weather_alerts["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
+                    print("    Visibility high: " + str(weather_alerts["visibility"][0]))
+                else: # Check to see if the alert is another case. This should never happen, and indicates a bug if it does.
+                    print("    Visibility unknown alert: " + str(weather_alerts["visibility"][0]))
+
+            # Display temperature alerts.
+            if ("temperature" in weather_alerts): # Check to see if there is a temperature alert.
+                if (weather_alerts["temperature"][1] == "below"): # Check to see if the alert is below the low threshold.
+                    print("    Temperature low: " + str(weather_alerts["temperature"][0]))
+                elif (weather_alerts["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
+                    print("    Temperature high: " + str(weather_alerts["temperature"][0]))
+                else: # Check to see if the alert is another case. This should never happen, and indicates a bug if it does.
+                    print("    Temperature unknown alert: " + str(weather_alerts["temperature"][0]))
+            print(style.end)
 
 
 

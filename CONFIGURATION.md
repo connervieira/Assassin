@@ -58,6 +58,19 @@ This section of configuration values will effect Assassin's general operation.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
     - It's important to note that this setting doesn't guarantee Assassin will refresh exactly at the interval specified. This delay is added in addition to the natural delay created by processing alerts and handling data.
+- `weather_alerts`
+    - Weather alerts are triggered when certain weather metrics match given criteria.
+    - This feature is internet dependent.
+    - This setting has the following sub-values for configuration:
+        - `enabled` is a boolean that determines if weather alerts are active.
+        - `api_key` is an [OpenWeatherMap](https://openweathermap.org) API key to retrieve weather information.
+        - `refresh_interval` is an integer that determines how often Assassin will fetch new weather data.
+            - This should be a number low enough that you receive regular updates, but not so low that you burn through allocated API requests too quickly.
+        - `criteria` contains a dictionary of weather metrics, and the criteria under which an alert should be shown.
+            - `visibility` is the current visibility, measured in meters.
+                - This value maxes out at 10,000 meters, and will never go above it.
+            - `temperature` is the current temperature, measured in celcius.
+            - `preciptiation` is the current chance of preciptiation.
 - `traffic_camera_alerts`
     - Traffic camera alerts are triggered by proximity to enforcement cameras, like speed cameras, red light cameras, and lane monitoring cameras.
     - This setting has the following sub-values for configuration:

@@ -31,6 +31,21 @@
                 "source": true
             }
         },
+        "weather_alerts": {
+            "enabled": false,
+            "api_key": "",
+            "refresh_interval": 60,
+            "criteria": {
+                "visibility": {
+                    "below": 1000,
+                    "above": 10000
+                },
+                "temperature": {
+                    "below": 0,
+                    "above": 50
+                }
+            }
+        },
         "traffic_camera_alerts": {
             "loaded_radius": 500,
             "database": "./assets/databases/enforcement_cameras.excam",

@@ -32,7 +32,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Add text-to-speech support.
     - [X] Add customizable file name to telemetry logging.
 - Version 2.0
-    - [ ] Add weather alerts.
+    - [X] Add weather alerts.
+    - [ ] Add GPS spoofing detection.
     - [ ] Add speed trap alerts.
 
 

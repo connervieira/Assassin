@@ -5,7 +5,7 @@ This document contains a list of all the changes for each version of Assassin.
 
 ## Version 0.9
 
-### Initial release
+### Initial Release
 
 October 30th, 2022
 
@@ -20,7 +20,7 @@ October 30th, 2022
 
 ## Version 1.0
 
-### First stable release
+### First Stable Release 
 
 December 13th, 2022
 
@@ -85,3 +85,14 @@ December 13th, 2022
 - Added a configuration option to disable diagonal arrows.
     - When diagonal arrows are disabled, Assassin will point in increments of 90 degrees instead of 45.
 - Removed relay alert logic.
+
+
+## Version 2.0
+
+### Internet Update
+
+*Release date to be determined*
+
+This update adds support for optional internet based alerts to improve situational awareness even more.
+
+- Added weather alert system.
