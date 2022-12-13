@@ -742,25 +742,39 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
     while heading > 360: # Check to see if the heading exceeds 360 degrees
         heading = heading - 360 # Reduce the heading by 360 degrees until it falls under the 360 degree threshold.
 
-    direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
-    if (direction == 0 or direction == 8):
-        return "↑"
-    elif (direction == 1):
-        return "⬈"
-    elif (direction == 2):
-        return "→"
-    elif (direction == 3):
-        return "⬊"
-    elif (direction == 4):
-        return "↓"
-    elif (direction == 5):
-        return "⬋"
-    elif (direction == 6):
-        return "←"
-    elif (direction == 7):
-        return "⬉"
-    else: # This case should never occur.
-        return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+    if (config["display"]["diagonal_arrows"] == True): # Check to see if diagonal arrows are enabled in the configuration.
+        direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
+        if (direction == 0 or direction == 8):
+            return "↑"
+        elif (direction == 1):
+            return "⬈"
+        elif (direction == 2):
+            return "→"
+        elif (direction == 3):
+            return "⬊"
+        elif (direction == 4):
+            return "↓"
+        elif (direction == 5):
+            return "⬋"
+        elif (direction == 6):
+            return "←"
+        elif (direction == 7):
+            return "⬉"
+        else: # This case should never occur.
+            return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+
+    else: # Diagonal arrows are disabled in the configuration, so round to the nearest 90 degrees instead.
+        direction = round(heading / 90) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
+        if (direction == 0 or direction == 4):
+            return "↑"
+        elif (direction == 1):
+            return "→"
+        elif (direction == 2):
+            return "↓"
+        elif (direction == 3):
+            return "←"
+        else: # This case should never occur.
+            return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
 
 
 

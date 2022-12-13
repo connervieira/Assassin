@@ -80,3 +80,5 @@ October 30th, 2022
 - Updated telemetry logging.
     - Assassin now logs telemetry information to a GPX file.
     - Data points, file names, and save directories can be customized in the configuration.
+- Added a configuration option to disable diagonal arrows.
+    - When diagonal arrows are disabled, Assassin will point in increments of 90 degrees instead of 45.

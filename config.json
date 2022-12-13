@@ -178,6 +178,7 @@
         "shape_alerts": false,
         "ascii_art_header": true,
         "custom_startup_message": "",
+        "diagonal_arrows": false,
         "status_lighting": {
             "enabled": false,
             "base_url": "http://wled.local/win&A=255",
