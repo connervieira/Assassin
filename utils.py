@@ -45,7 +45,7 @@ class style:
 import time # Required to add delays and handle dates/times
 
 # Define the function to print debugging information when the configuration specifies to do so.
-debugging_time_record = time.time()
+debugging_time_record = time.time() # This value holds the time that the previous debug message was displayed.
 def debug_message(message):
     if (config["general"]["debugging_output"] == True): # Only print the message if the debugging output configuration value is set to true.
         global debugging_time_record
@@ -399,7 +399,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps_demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
             debug_message("Returning demo GPS information")
-            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
+            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             if (config["general"]["gps_provider"] == "gpsd"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -408,9 +408,9 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                     debug_message("Fetching GPSD information")
                     gps_data_packet = gpsd.get_current() # Get the current information.
                     debug_message("Received GPSD information")
-                    return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats # Return GPS information.
+                    return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats, "V0LT Assassin - GPSD Device" # Return GPS information.
                 except: # If the current location can't be established, then return placeholder location data.
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             elif (config["general"]["gps_provider"] == "termux"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -418,25 +418,26 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                     raw_termux_response = str(os.popen("termux-location").read()) # Execute the Termux location command.
                     termux_response = json.loads(raw_termux_response) # Load the location information from the Termux response.
                     debug_message("Received termux-location information")
-                    return termux_response["latitude"], termux_response["longitude"], termux_response["speed"], termux_response["altitude"], termux_response["bearing"], 0 # Return the fetched GPS information.
+                    return termux_response["latitude"], termux_response["longitude"], termux_response["speed"], termux_response["altitude"], termux_response["bearing"], 0, "V0LT Assassin - Termux-API" # Return the fetched GPS information.
                 except:
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             elif (config["general"]["gps_provider"] == "locateme"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
                     debug_message("Fetching LocateMe information")
                     raw_locateme_response = str(os.popen("locateme -f {LAT},{LON},{SPD},{ALT},{DIR},0").read()) # Execute the LocateMe location command.
                     locateme_response = raw_locateme_response.split(",") # Load the location information from the LocateMe response.
+                    locateme_respose.append("V0LT Assassin - MacOS Location Services via LocateMe") # Append the location provider to the information.
                     debug_message("Received LocateMe information")
                     return float(locateme_response[0]), float(locateme_response[1]), float(locateme_response[2]), float(locateme_response[3]), float(locateme_response[4]), 0 # Return the fetched GPS information.
                 except:
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             else:
-                return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+                return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                 debug_message("Invalid location provider")
     else: # If GPS is disabled, then this function should never be called, but return a placeholder position regardless.
-        return [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Return a default placeholder location.
+        return [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
         debug_message("GPS is disabled")
 
 
@@ -894,6 +895,7 @@ def fetch_aircraft_data(file):
 
 
 
+debug_message("Creating `speak` function")
 def speak(full_text, brief_text):
     if (config["general"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
         debug_message("Playing text-to-speech")
@@ -903,3 +905,36 @@ def speak(full_text, brief_text):
         else:
             tts.say(full_text)
             tts.runAndWait()
+
+
+debug_message("Creating `utc_datetime` function")
+def utc_datetime(timestamp):
+    timestamp = float(timestamp)
+    return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+
+debug_message("Creating `save_gpx` function")
+def save_gpx(location_history, file_path):
+    if (type(location_history) == list): # Check to make sure the location_history provided is a list.
+        if (os.path.isdir(config["general"]["telemetry"]["directory"]) == True): # Check to make sure the save directory specified in the configuration exists and is actually a directory.
+            file_contents = '<?xml version="1.0" encoding="UTF-8" ?>\n<gpx version="1.0" creator="V0LT Assassin">\n    <time>' + utc_datetime(location_history[0]["time"]) + '2022-08-15T04:06:42.000Z</time>\n    <trk>\n        <trkseg>\n' # Set-up the start of the file.
+
+            for point in location_history: # Iterate through each point in the location history .
+                file_contents = file_contents + '            ' # Add indents to the beginning of each point line to make the file human-readable.
+                file_contents = file_contents + '<trkpt lat="' + str(point["lat"]) + '" lon="' + str(point["lon"]) + '">' # Add the latitude and longitude to this point.
+                file_contents = file_contents + '<time>' + str(utc_datetime(point["time"])) + '</time>' # Add the time to this point.
+                file_contents = file_contents + '<ele>' + str(point["alt"]) + '</ele>' # Add the elevation to this point.
+                file_contents = file_contents + '<sat>' + str(point["sat"]) + '</sat>' # Add the number of satellites to this point.
+                file_contents = file_contents + '<speed>' + str(point["spd"]) + '</speed>' # Add the speed to this point.
+                file_contents = file_contents + '<src>' + str(point["src"]) + '</src>' # Add the location source to this point.
+                file_contents = file_contents + '</trkpt>\n' # Close this point.
+
+            file_contents = file_contents + "        </trkseg>\n    </trk>\n</gpx>" # Set-up the end of the file.
+
+            file_name = config["general"]["telemetry"]["file"].replace("{T}", str(round(location_history[0]["time"]))) # Set up the file name that the telemetry information will be saved to.
+            file_path = config["general"]["telemetry"]["directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
+            save_to_file(file_path, file_contents, True) # Save the telemetry data to a file.
+
+    else:
+        display_notice("The location history supplied to save_gpx() isn't a valid list. This is most likely a bug. Telemetry logging could not be recorded.", 2)

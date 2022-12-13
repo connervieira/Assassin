@@ -66,6 +66,7 @@ play_sound = utils.play_sound # Load the function used to play sounds specified 
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
 speak = utils.speak # Load the function used to play text-to-speech.
+save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
 debug_message("Imported `utils.py`")
 
 
@@ -173,6 +174,7 @@ count_aircraft_alerts = [0, 0]
 count_drone_alerts = [0, 0]
 count_relay_alerts = [0, 0]
 
+location_history = []
 
 debug_message("Starting main loop")
 
@@ -191,14 +193,12 @@ while True: # Run forever in a loop until terminated.
 
     # Get the current location.
     if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
-        last_location = current_location # Set the last location to the current location immediately before we update the current location for the next cycle.
-        if ("current_location_time" in locals()  == True): # Check to see if the current location time variable exists. This variable will not exist on the first cycle.
-            last_location_time = current_location_time # Record when the last location was received before recording the next location.
         current_location = get_gps_location() # Get the current location.
-        current_location_time = time.time() # Record when this location was received.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
     else: # GPS functionality is disabled.
-        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location to a placeholder. This should be unnecessary, but this will prevent fatal errors if the current location is unexpectedly called despite GPS functionality being disabled.
+        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location to a placeholder.
+
+    location_history.append({"lat" : current_location[0], "lon" : current_location[1], "spd" : current_location[2], "alt" : current_location[3], "sat" : current_location[5], "time" : time.time(), "src": current_location[6]})# Add the most recently recorded location to the beginning of the location history list.
 
 
 
@@ -610,15 +610,9 @@ while True: # Run forever in a loop until terminated.
 
 
     # Record telemetry data according to the configuration.
-    if (config["general"]["record_telemetry"] == True): # Check to see if Assassin is configured to record telemetry data.
+    if (config["general"]["telemetry"]["enabled"] == True): # Check to see if Assassin is configured to record telemetry data.
         debug_message("Recording telemetry data")
-        if (config["general"]["gps_enabled"] == True): # Check to see if GPS features are enabled.
-            export_data = str(round(time.time())) + "," + str(current_speed) + "," + str(current_location[0]) + "," + str(current_location[1]) + "," + str(current_location[3]) + "," + str(current_location[4]) + "," + str(current_location[5]) + "\n" # Add all necessary information to the export data.
-        else:
-            export_data = str(round(time.time())) + "," + str("0") + "," + str("0.000") + "," + str("0.000") + "," + str("0") + "," + str("0") + "," + str("0") + "\n" # Add all necessary information to the export data, using placeholders for information that depends on GPS.
-
-        add_to_file(assassin_root_directory + "/information_recording.csv", export_data, True) # Add the export data to the end of the file and write it to disk.
-        debug_message("Telemetry recorded")
+        save_gpx(location_history, config["general"]["telemetry"]["directory"]) # Save the location history to a GPX file.
 
 
 

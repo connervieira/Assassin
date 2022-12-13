@@ -20,7 +20,17 @@
             "heading": 45,
             "satellites": 6
         },
-        "record_telemetry": false,
+        "telemetry": {
+            "enabled": true,
+            "directory": "./",
+            "file": "AssassinTelemetry{T}.gpx",
+            "information": {
+                "altitude": true,
+                "satellites": true,
+                "speed": true,
+                "source": true
+            }
+        },
         "traffic_camera_alerts": {
             "loaded_radius": 200,
             "database": "./assets/databases/enforcement_cameras.excam",
@@ -120,7 +130,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_file": "/home/cvieira/Downloads/ADSB-Data.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 50,
@@ -198,7 +208,7 @@
         "sounds": {
             "heartbeat": {
                 "path": "./assets/sounds/heartbeat.mp3",
-                "repeat": "1",
+                "repeat": "0",
                 "delay": "0.5"
             },
             "startup": {

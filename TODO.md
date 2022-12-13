@@ -31,16 +31,17 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Normalize all sounds.
     - [X] Add `information_displayed` to CONFIGURE.md.
     - [X] Add text-to-speech support.
+    - [X] Add customizable file name to telemetry logging.
+- Version 2.0
     - [ ] Add weather alerts.
     - [ ] Add speed trap alerts.
-- Version 2.0
-    - [ ] Fix GPIO relay alert detection.
 
 
 ### Hypothetical
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
+- [ ] Fix GPIO relay alert detection.
 - [ ] Add crowd source alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.

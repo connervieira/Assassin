@@ -39,9 +39,20 @@ This section of configuration values will effect Assassin's general operation.
 - `gps_demo_mode`
     - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
     - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
-- `record_telemetry`
-    - This setting determines whether Assassin will record telemetry data about it's location, speed, direction, and operating state to a CSV file.
-    - To be clear, this information is never sent to an external service or logged for sake of analytics. All information collected remains local on the device.
+- `telemetry`
+    - This setting configures Assassin's telemetry recording behavior.
+    - This setting has the following sub-values for configuration:
+        - `enabled` determines whether Assassin will record telemetry at all.
+        - `directory` is the directory that Assassin will save telemetry files to.
+        - `file` is the file-name that Assassin will write the telemetry data to.
+            - This file name should be a GPX file.
+            - The `{T}` string will be replaced by the timestamp that the first location point was recorded.
+            - Example: `AssassinTelemetry{T}.gpx`
+        - `information` specifies what information will be saved to the telemetry file.
+            - `altitude` is the GPS altitude.
+            - `satellites` is the number of GPS satellites used to get the location.
+            - `speed` is the current GPS speed in meters-per-second.
+            - `source` is the location back-end Assassin used to get the location.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
     - It's important to note that this setting doesn't guarantee Assassin will refresh exactly at the interval specified. This delay is added in addition to the natural delay created by processing alerts and handling data.

@@ -77,4 +77,6 @@ October 30th, 2022
 - Updated interface coloring.
     - Multiple alerts now share the same color.
     - Colors are now used to indicate categories, not specific alerts.
-- [ ] Finished GPIO relay alerting.
+- Updated telemetry logging.
+    - Assassin now logs telemetry information to a GPX file.
+    - Data points, file names, and save directories can be customized in the configuration.
