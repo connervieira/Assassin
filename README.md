@@ -44,14 +44,8 @@ Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, 
 
 ### ADS-B Aircraft Detection
 
-Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services, and is entirely self contained.
+Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services, and is entirely self contained and undetectable.
 
-
-### Custom Relay Alerts
-
-This feature is a work in progress, and isn't currently operational.
-
-When installed on appropriate hardware, Assassin can monitor GPIO to detect when a relay opens or closes, then display alerts in response. This allows Assassin to natively interface with motion detectors, proximity detection systems, contact switches, and other custom hardware.
 
 
 ## Features
