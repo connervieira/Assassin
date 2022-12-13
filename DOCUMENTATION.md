@@ -25,7 +25,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [X] Drone detection
             - [X] Bluetooth detection
             - [X] Aircraft detection
-            - [X] Relay alerts
         - Features
             - [X] Status lighting
             - [X] Audio alerts
@@ -43,7 +42,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [X] Drone detection
             - [X] Bluetooth detection
             - [X] Aircraft detection
-            - [ ] Relay alerts
         - Features
             - [X] Status lighting
             - [X] Audio alerts
@@ -62,7 +60,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [] Drone detection
             - [] Bluetooth detection
             - [] Aircraft detection
-            - [] Relay alerts
         - Features
             - [X] Status lighting
             - [] Audio alerts
@@ -80,7 +77,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [] Drone detection
             - [] Bluetooth detection
             - [] Aircraft detection
-            - [] Relay alerts
         - Features
             - [X] Status lighting
             - [X] Audio alerts
@@ -97,7 +93,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [] Drone detection
             - [] Bluetooth detection
             - [] Aircraft detection
-            - [] Relay alerts
         - Features
             - [] Status lighting
             - [] Audio alerts
@@ -114,7 +109,6 @@ It's important to make a quick note about platform compatability. While Assassin
             - [] Drone detection
             - [] Bluetooth detection
             - [] Aircraft detection
-            - [] Relay alerts
         - Features
             - [] Status lighting
             - [] Audio alerts

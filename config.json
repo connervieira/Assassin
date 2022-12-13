@@ -92,19 +92,6 @@
                 "description": true
             }
         },
-        "relay_alerts": {
-            "enabled": false,
-            "alerts": {
-                "perimeter_monitoring": {
-                    "title": "Perimeter Monitoring",
-                    "message": "Vehicle perimeter has been breached",
-                    "gpio_pin": 22,
-                    "alert_on_closed": true,
-                    "minimum_activiation_speed": "0",
-                    "maximum_activiation_speed": "0.5"
-                }
-            }
-        },
         "bluetooth_monitoring": {
             "enabled": false,
             "scan_time": 1,

@@ -8,7 +8,6 @@ Tasks in this section are actively planned, and are likely to be completed some 
 
 - Version 1.0
     - [X] Add configuration options for how warning messages are displayed.
-    - [X] Add support for detecting motion using a motion detector relay.
     - [X] Add wireless access point logging.
     - [X] Fix drone hazard logging.
     - [X] Add ADS-B monitoring to detect planes.
@@ -41,7 +40,6 @@ Tasks in this section are actively planned, and are likely to be completed some 
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
-- [ ] Fix GPIO relay alert detection.
 - [ ] Add crowd source alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.

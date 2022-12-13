@@ -18,9 +18,6 @@ The information display is shown at the top of the Assassin interface, and conta
 
 Assassin uses 'alerts' to inform the user of important information. Below is a list of all the alerts Assassin is currently capable of displaying.
 
-- Relay alerts
-    - Relay alerts are triggered by custom configured relay switches, and can be activated by any number of external devices.
-    - This type of alert can be used to indicate when a motion sensor is triggered, an external device loses power, or one of a vast number of other events occurs.
 - Bluetooth alerts
     - Bluetooth alerts are triggered when a Bluetooth device has been detected following for a certain distance.
     - This alert can be useful to detect Bluetooth trackers, or even to detect the precense of known bad devices using a blacklist.

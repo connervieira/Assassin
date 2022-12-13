@@ -100,15 +100,6 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
     detected_drone_hazards = []
 
 
-# Load the relay alert system.
-if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only load relay alerts if relay alerts are enabled.
-    import relay
-    relay_alert_processing = relay.relay_alert_processing
-    load_relay_alerts = relay.load_relay_alerts
-
-    load_relay_alerts()
-
-
 # Load the ALPR camera alert system.
 if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
     import alprcameras
@@ -172,7 +163,6 @@ count_traffic_camera_alerts = [0, 0]
 count_bluetooth_alerts = [0, 0]
 count_aircraft_alerts = [0, 0]
 count_drone_alerts = [0, 0]
-count_relay_alerts = [0, 0]
 
 location_history = []
 
@@ -223,13 +213,6 @@ while True: # Run forever in a loop until terminated.
         detected_drone_hazards = []
 
 
-    # Run relay-based alert processing.
-    if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run relay alert processing if relay alerts are enabled.
-        active_relay_alerts = relay_alert_processing()
-    else:
-        active_relay_alerts = []
-
-
     # Run Bluetooth alert processing.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
@@ -264,7 +247,6 @@ while True: # Run forever in a loop until terminated.
     count_traffic_camera_alerts = [len(nearby_cameras_all)] + count_traffic_camera_alerts
     count_alpr_alerts = [len(nearby_alpr_cameras)] + count_alpr_alerts
     count_bluetooth_alerts = [len(bluetooth_threats)] + count_bluetooth_alerts
-    count_relay_alerts = [len(active_relay_alerts)] + count_relay_alerts
 
     # TODO - Only keep alert counts for the past 100 cycles.
 
@@ -294,10 +276,6 @@ while True: # Run forever in a loop until terminated.
         # Process Bluetooth text to speech alerts.
         if (count_bluetooth_alerts[0] > count_bluetooth_alerts[1]):
             speak("New Bluetooth alert", "Bluetooth")
-
-        # Process relay text to speech alerts.
-        if (count_relay_alerts[0] > count_relay_alerts[1]):
-            speak("New relay alert", "Relay")
 
         debug_message("Completed Text-to-speech processing")
 
@@ -379,17 +357,6 @@ while True: # Run forever in a loop until terminated.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
     if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
-
-
-
-
-    # Display relay-based alerts.
-    if (config["general"]["relay_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only display relay-based alerts if relay alerts are enabled in the configuration.
-        debug_message("Displaying relay alerts")
-        for alert in active_relay_alerts: # Iterate through each active alert, and print it to the screen.
-            print(style.green + alert["title"])
-            print("    " + alert["message"] + style.end)
-
 
 
 
