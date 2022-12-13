@@ -47,6 +47,11 @@ Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, 
 Assassin can interface with ADS-B receivers in order to independently detect nearby aircraft, and collect data like location, altitude, speed, heading, flight number, squawk code, and more. This feature doesn't depend on the internet or any other external services, and is entirely self contained and undetectable.
 
 
+### Weather Alerts
+
+When connected to the internet, Assassin can fetch weather information, and display alerts when customizable criteria are met.
+
+
 
 ## Features
 
