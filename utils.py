@@ -113,9 +113,9 @@ if (config["display"]["status_lighting"]["enabled"] == True): # Only import the 
     import validators # Required to validate URLs
 
 
-gps_enabled = config["general"]["gps_enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
+gps_enabled = config["general"]["gps"]["enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
 
-if (gps_enabled == True and config["general"]["gps_provider"] == "gpsd"): # Only import the GPS libraries if GPS is enabled in the configuration, and the GPSD provider is selected.
+if (gps_enabled == True and config["general"]["gps"]["provider"] == "gpsd"): # Only import the GPS libraries if GPS is enabled in the configuration, and the GPSD provider is selected.
     debug_message("Importing `gps` library")
     from gps import * # Required to access GPS information.
     debug_message("Importing `gpsd` library")
@@ -397,11 +397,11 @@ debug_message("Creating `get_gps_location` function")
 def get_gps_location(): # Placeholder that should be updated at a later date.
     debug_message("Getting GPS location")
     if (gps_enabled == True): # Check to see if GPS is enabled.
-        if (config["general"]["gps_demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
+        if (config["general"]["gps"]["demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
             debug_message("Returning demo GPS information")
-            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
+            return float(config["general"]["gps"]["demo_mode"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["latitude"]), float(config["general"]["gps"]["demo_mode"]["speed"]), float(config["general"]["gps"]["demo_mode"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["heading"]), int(config["general"]["gps"]["demo_mode"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
-            if (config["general"]["gps_provider"] == "gpsd"):
+            if (config["general"]["gps"]["provider"] == "gpsd"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
                     debug_message("Connecting to GPSD")
                     gpsd.connect() # Connect to the GPS daemon.
@@ -412,7 +412,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                 except: # If the current location can't be established, then return placeholder location data.
                     return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
-            elif (config["general"]["gps_provider"] == "termux"):
+            elif (config["general"]["gps"]["provider"] == "termux"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
                     debug_message("Fetching termux-location information")
                     raw_termux_response = str(os.popen("termux-location").read()) # Execute the Termux location command.
@@ -422,7 +422,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
                 except:
                     return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
-            elif (config["general"]["gps_provider"] == "locateme"):
+            elif (config["general"]["gps"]["provider"] == "locateme"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
                     debug_message("Fetching LocateMe information")
                     raw_locateme_response = str(os.popen("locateme -f {LAT},{LON},{SPD},{ALT},{DIR},0").read()) # Execute the LocateMe location command.
@@ -952,3 +952,32 @@ def save_gpx(location_history, file_path):
 
     else:
         display_notice("The location history supplied to save_gpx() isn't a valid list. This is most likely a bug. Telemetry logging could not be recorded.", 2)
+
+
+
+
+debug_message("Creating `detect_location_spoof` function")
+def detect_location_spoof(location_history):
+    gps_alerts = {}
+
+    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True): # Check to make sure GPS spoof detection is enabled before processing alerts.
+        if (type(location_history) == list): # Check to make sure the location history provided is actually a list.
+            reversed_location_history = list(reversed(list(location_history))) # Reverse the location history list.
+            location_history = reversed_location_history[:10] # Remove all by the first 10 elements in the location history.
+
+            for i in range(0, len(location_history) - 1): # Iterate through each element in the list.
+                distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
+                time_difference = abs(location_history[i]["time"] - location_history[i+1]["time"]) # Get the time difference between the two points.
+                miles_per_second = distance / time_difference
+                miles_per_hour = 60 * 60 * miles_per_second
+                if (miles_per_hour >= float(config["general"]["gps"]["spoof_detection"]["max_speed"])): # Check to see if the calculated GPS speed is excessively high.
+                    gps_alerts["maxspeed"] = {}
+                    gps_alerts["maxspeed"]["active"] = True
+                    gps_alerts["maxspeed"]["speed"] = miles_per_hour
+
+                if (config["general"]["gps"]["spoof_detection"]["no_data_alert"] == True): # Only detect 'no data' alerts if they are enabled in the configuration.
+                    if (float(location_history[i]["lat"]) == 0.0 and float(location_history[i]["lon"]) == 0.0 and float(location_history[i]["spd"]) == 0.0 and float(location_history[i]["spd"]) == 0.0):
+                        gps_alerts["nodata"] = {}
+                        gps_alerts["nodata"]["active"] = True
+
+    return gps_alerts

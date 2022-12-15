@@ -9,16 +9,23 @@
             "brief": false,
             "speed": 250
         },
-        "gps_provider": "gpsd",
-        "gps_enabled": true,
-        "gps_demo_mode": {
+        "gps": {
             "enabled": true,
-            "longitude": 41,
-            "latitude": -81,
-            "speed": 35,
-            "altitude": 132.0,
-            "heading": 45,
-            "satellites": 6
+            "provider": "gpsd",
+            "demo_mode": {
+                "enabled": true,
+                "longitude": 41,
+                "latitude": -81,
+                "speed": 30,
+                "altitude": 210,
+                "heading": 45,
+                "satellites": 6
+            },
+            "spoof_detection": {
+                "enabled": true,
+                "max_speed": 0,
+                "no_data_alert": true
+            }
         },
         "telemetry": {
             "enabled": false,

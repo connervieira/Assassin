@@ -21,7 +21,7 @@ config = load_config() # Load and load the configuration file.
 
 
 def load_traffic_camera_database():
-    if (float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
+    if (float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
         debug_message("Loading traffic enforcement camera database")
         current_location = [0, 0] # Set the "current location" to a placeholder.
         previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
@@ -51,7 +51,7 @@ def load_traffic_camera_database():
 
 
 def traffic_camera_alert_processing(current_location, loaded_traffic_camera_database):
-    if (config["general"]["gps_enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
+    if (config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
         debug_message("Processing traffic enforcement camera alerts")
         # Create placeholders for each camera type so we can add the closet camera for each category in the next step .
         nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearest_traffic_camera = {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}

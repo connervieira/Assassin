@@ -67,6 +67,7 @@ display_notice = utils.display_notice  # Load the function used to display notic
 fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
+detect_location_spoof = utils.detect_location_spoof # Load the function used to detect GPS spoofing attempts.
 debug_message("Imported `utils.py`")
 
 
@@ -76,7 +77,7 @@ debug_message("Imported `utils.py`")
 # Load functionality plugins
 
 # Load the traffic camera alert system
-if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps_enabled"] == True): # Only load traffic enforcement camera information if traffic camera alerts are enabled.
+if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only load traffic enforcement camera information if traffic camera alerts are enabled.
     import trafficcameras
     load_traffic_camera_database = trafficcameras.load_traffic_camera_database
     traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
@@ -85,7 +86,7 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
 
 
 # Load the ADS-B aircraft alert system.
-if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
+if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
     import aircraft
     adsb_alert_processing = aircraft.adsb_alert_processing
 
@@ -101,7 +102,7 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
 
 
 # Load the ALPR camera alert system.
-if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
+if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
     import alprcameras
     load_alpr_camera_database = alprcameras.load_alpr_camera_database
     alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
@@ -166,11 +167,14 @@ active_alarm = "none" # Set the active alert indicator variable to a placeholder
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
 # Set placeholders for all the alert counters.
-count_alpr_alerts = [0, 0]
-count_traffic_camera_alerts = [0, 0]
-count_bluetooth_alerts = [0, 0]
-count_aircraft_alerts = [0, 0]
-count_drone_alerts = [0, 0]
+alert_count = {}
+alert_count["drone"] = [0, 0]
+alert_count["aircraft"] = [0, 0]
+alert_count["traffic_camera"] = [0, 0]
+alert_count["alpr"] = [0, 0]
+alert_count["bluetooth"] = [0, 0]
+alert_count["weather"] = [0, 0]
+alert_count["gps"] = [0, 0]
 
 location_history = []
 
@@ -190,25 +194,33 @@ while True: # Run forever in a loop until terminated.
 
 
     # Get the current location.
-    if (config["general"]["gps_enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
+    if (config["general"]["gps"]["enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
         current_location = get_gps_location() # Get the current location.
         current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
     else: # GPS functionality is disabled.
-        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location to a placeholder.
+        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
 
     location_history.append({"lat" : current_location[0], "lon" : current_location[1], "spd" : current_location[2], "alt" : current_location[3], "sat" : current_location[5], "time" : time.time(), "src": current_location[6]})# Add the most recently recorded location to the beginning of the location history list.
 
 
 
+
+    # Run GPS spoofing alert processing.
+    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True and config["general"]["gps"]["enabled"]): # Check to make sure GPS spoof detection is enabled before processing alerts.
+        gps_alerts = detect_location_spoof(location_history) # Process GPS alerts.
+    else: # GPS spoof detection is disabled.
+        gps_alerts = {} # Return a blank placeholder dictionary in place of the true alerts.
+
+
     # Run traffic enforcement camera alert processing
-    if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps_enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
+    if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
         nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all  = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
     else:
         nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all = {}, [], [], [], []
 
 
     # Run ALPR camera alert processing
-    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
+    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
         nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
     else:
         nearest_alpr_camera, nearby_alpr_cameras = {}, []
@@ -222,23 +234,23 @@ while True: # Run forever in a loop until terminated.
 
 
     # Run Bluetooth alert processing.
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
+    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
-    elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps_enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
+    elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing([0.0000, 0.0000, 0.0, 0.0, 0.0, 0], detected_bluetooth_devices) # Run the Bluetooth alert processing function with dummy GPS data.
     else:
         detected_bluetooth_devices, bluetooth_threats = {}, {}
 
 
     # Process ADS-B alerts.
-    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
     else:
         aircraft_threats, aircraft_data = [], {}
 
 
     # Process weather alerts.
-    if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Only run weather alert processing if it is enabled in the configuration.
+    if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run weather alert processing if it is enabled in the configuration.
         last_weather_data = weather_data
         weather_data = get_weather_data(current_location, last_weather_data)
         weather_alerts = weather_alert_processing(weather_data)
@@ -260,13 +272,23 @@ while True: # Run forever in a loop until terminated.
 
 
     # Record the number of active alerts
-    count_drone_alerts = [len(detected_drone_hazards)] + count_drone_alerts
-    count_aircraft_alerts = [len(aircraft_threats)] + count_aircraft_alerts
-    count_traffic_camera_alerts = [len(nearby_cameras_all)] + count_traffic_camera_alerts
-    count_alpr_alerts = [len(nearby_alpr_cameras)] + count_alpr_alerts
-    count_bluetooth_alerts = [len(bluetooth_threats)] + count_bluetooth_alerts
+    alert_count["drone"] = [len(detected_drone_hazards)] + alert_count["drone"]
+    alert_count["aircraft"] = [len(aircraft_threats)] + alert_count["aircraft"]
+    alert_count["traffic_camera"] = [len(nearby_cameras_all)] + alert_count["traffic_camera"]
+    alert_count["alpr"] = [len(nearby_alpr_cameras)] + alert_count["alpr"]
+    alert_count["bluetooth"] = [len(bluetooth_threats)] + alert_count["bluetooth"]
+    alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
+    alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
 
-    # TODO - Only keep alert counts for the past 100 cycles.
+
+    # Only keep alert counts from the past 100 cycles.
+    alert_count["drone"] = alert_count["drone"][:100]
+    alert_count["aircraft"] = alert_count["aircraft"][:100]
+    alert_count["traffic_camera"] = alert_count["traffic_camera"][:100]
+    alert_count["alpr"] = alert_count["alpr"][:100]
+    alert_count["bluetooth"] = alert_count["bluetooth"][:100]
+    alert_count["weather"] = alert_count["weather"][:100]
+    alert_count["gps"] = alert_count["gps"][:100]
 
 
 
@@ -276,24 +298,32 @@ while True: # Run forever in a loop until terminated.
         debug_message("Running text-to-speech processing")
 
         # Process drone text to speech alerts.
-        if (count_drone_alerts[0] > count_drone_alerts[1]):
+        if (alert_count["drone"][0] > alert_count["drone"][1]):
             speak("New drone alert", "Drone")
 
         # Process aircraft text to speech alerts.
-        if (count_aircraft_alerts[0] > count_aircraft_alerts[1]):
+        if (alert_count["aircraft"][0] > alert_count["aircraft"][1]):
             speak("New aircraft alert. " + str(round(aircraft_threats[0]["distance"]*10)/10) + " miles", "Aircraft")
 
         # Process traffic camera text to speech alerts.
-        if (count_traffic_camera_alerts[0] > count_traffic_camera_alerts[1]):
+        if (alert_count["traffic_camera"][0] > alert_count["traffic_camera"][1]):
             speak("New traffic camera alert. " + str(round(nearest_enforcement_camera["dst"]*10)/10) + " miles", "Traffic camera")
 
         # Process ALPR text to speech alerts.
-        if (count_alpr_alerts[0] > count_alpr_alerts[1]):
+        if (alert_count["alpr"][0] > alert_count["alpr"][1]):
             speak("New A. L. P. R. Alert. " + str(round(nearest_alpr_camera["distance"]*10)/10) + " miles", "A. L. P. R")
 
         # Process Bluetooth text to speech alerts.
-        if (count_bluetooth_alerts[0] > count_bluetooth_alerts[1]):
+        if (alert_count["bluetooth"][0] > alert_count["bluetooth"][1]):
             speak("New Bluetooth alert", "Bluetooth")
+
+        # Process weather text to speech alerts.
+        if (alert_count["weather"][0] > alert_count["weather"][1]):
+            speak("New weather alert", "Weather")
+
+        # Process GPS text to speech alerts.
+        if (alert_count["gps"][0] > alert_count["gps"][1]):
+            speak("New GPS alert", "GPS")
 
         debug_message("Completed Text-to-speech processing")
 
@@ -343,7 +373,7 @@ while True: # Run forever in a loop until terminated.
 
     debug_message("Displaying basic dashboard")
 
-    if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the large speed display is enabled in the configuration.
+    if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps"]["enabled"] == True): # Check to see the large speed display is enabled in the configuration.
         current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
         current_speed = round(current_speed * 10**int(config["display"]["displays"]["speed"]["decimal_places"]))/10**int(config["display"]["displays"]["speed"]["decimal_places"]) # Round off the current speed to a certain number of decimal places as specific in the configuration.
         display_number(current_speed) # Display the current speed in a large ASCII font.
@@ -354,16 +384,16 @@ while True: # Run forever in a loop until terminated.
     if (config["display"]["displays"]["date"]  == True): # Check to see the date display is enabled in the configuration.
         print("Date: " + str(time.strftime('%A, %B %d, %Y'))) # Print the current date to the console.
 
-    if (config["display"]["displays"]["speed"]["small_display"] == True and config["general"]["gps_enabled"] == True): # Check to see the small speed display is enabled in the configuration.
+    if (config["display"]["displays"]["speed"]["small_display"] == True and config["general"]["gps"]["enabled"] == True): # Check to see the small speed display is enabled in the configuration.
         print("Speed: " + str(current_speed) + " " + str(config["display"]["displays"]["speed"]["unit"])) # Print the current speed to the console.
 
-    if (config["display"]["displays"]["location"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current location display is enabled in the configuration.
+    if (config["display"]["displays"]["location"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the current location display is enabled in the configuration.
         print("Position: " + str(current_location[0]) + " " + str(current_location[1])) # Print the current location as coordinates to the console.
 
-    if (config["display"]["displays"]["altitude"] == True and config["general"]["gps_enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
+    if (config["display"]["displays"]["altitude"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
         print("Altitude: " + str(current_location[3]) + " meters") # Print the current altitude to the console.
 
-    if ((config["display"]["displays"]["heading"]["degrees"] == True or config["display"]["displays"]["heading"]["direction"] == True) and config["general"]["gps_enabled"] == True): # Check to see if the current heading display is enabled in the configuration.
+    if ((config["display"]["displays"]["heading"]["degrees"] == True or config["display"]["displays"]["heading"]["direction"] == True) and config["general"]["gps"]["enabled"] == True): # Check to see if the current heading display is enabled in the configuration.
         if (config["display"]["displays"]["heading"]["direction"] == True and config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees are both enabled.
             print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(current_location[4]) + "°)") # Print the current heading to the console in cardinal directions.
         elif (config["display"]["displays"]["heading"]["direction"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees is enabled.
@@ -371,12 +401,31 @@ while True: # Run forever in a loop until terminated.
         elif (config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in degrees is enabled.
             print("Heading: " + str(current_location[4]) + "°") # Print the current heading to the console in degrees.
 
-    if (config["display"]["displays"]["satellites"] == True and config["general"]["gps_enabled"] == True): # Check to see if the satellite display is enabled in the configuration.
+    if (config["display"]["displays"]["satellites"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the satellite display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
-    if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
+    if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
 
     print("") # Add a line break after displaying the main information display.
+
+
+
+
+
+
+    # Display GPS spoofing alerts.
+    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True):
+        debug_message("Displaying GPS alerts")
+        if (len(gps_alerts) > 0): # Check to see if there are any GPS alerts to display.
+            print(style.green + "GPS Alerts: " + str(len(gps_alerts))) # Display the GPS alert title.
+            if ("maxspeed" in gps_alerts): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
+                if (gps_alerts["maxspeed"]["active"] == True):
+                    print("    Unexpected high speed: " + str(gps_alerts["maxspeed"]["speed"]))
+            if ("nodata" in gps_alerts): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
+                if (gps_alerts["nodata"]["active"] == True):
+                    print("    No GPS data")
+            print(style.end)
+
 
 
 
@@ -405,7 +454,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display ALPR camera alerts.
-    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps_enabled"] == True): # Only display nearby ALPR camera alerts if they are enabled.
+    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only display nearby ALPR camera alerts if they are enabled.
         if (len(nearby_alpr_cameras) > 0): # Only iterate through the nearby cameras if there are any nearby cameras to begin with.
             debug_message("Displaying ALPR camera alerts")
 
@@ -457,7 +506,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display traffic camera alerts.
-    if (config["general"]["gps_enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
+    if (config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
         debug_message("Displaying traffic enforcement camera alerts")
         # Display the nearest traffic camera, if applicable.
         if (nearest_enforcement_camera["dst"] < float(config["general"]["traffic_camera_alerts"]["alert_range"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.
@@ -553,7 +602,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Display ADS-B aircraft alerts
-    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if ADS-B alerts are enabled.
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Displaying ADS-B alerts")
         if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is travelling above the minimum alert speed.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.

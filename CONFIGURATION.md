@@ -24,21 +24,36 @@ This section of configuration values will effect Assassin's general operation.
         - `brief` determines whether Assassin will use brief read-outs in place of the full length ones.
             - Enabling this will reduce the amount of information in text-to-speed read-outs, but will dramatically shorten the time it takes to deliver them.
         - `speed` determines the speed at which text-to-speech will be spoken.
-- `gps_provider`
-    - This setting determines which GPS location provider Assassin will attempt to use.
-    - Below are the options this value can be set to.
-        - `gpsd`
-            - GPSD is suitable for nearly all devices, and is the default.
-        - `termux`
-            - Termux uses the `termux-api` package to make it possible to run Assasin on Android.
-        - `locateme`
-            - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
-- `gps_enabled`
-    - This setting is used to globally enable and disable GPS functionality throughout Assassin.
-    - It should be noted that the vast majority of Assassin's functionality depends on GPS. With it disabled, many important features will not function.
-- `gps_demo_mode`
-    - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
-    - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
+- `gps`
+    - This setting configure's Assassin's GPS behavior.
+    - This setting has the following sub-values for configuration:
+        - `enabled`
+            - This setting is used to globally enable and disable GPS functionality throughout Assassin.
+            - It should be noted that the vast majority of Assassin's functionality depends on GPS. With it disabled, many important features will not function.
+        - `provider`
+            - This setting determines which GPS location provider Assassin will attempt to use.
+            - Below are the options this value can be set to.
+                - `gpsd`
+                    - GPSD is suitable for nearly all devices, and is the default.
+                - `termux`
+                    - Termux uses the `termux-api` package to make it possible to run Assasin on Android.
+                - `locateme`
+                    - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
+        - `demo_mode`
+            - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
+            - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
+        - `spoof_detection`
+            - This section contains settings for configuring Assassin's GPS spoof detection settings.
+            - Assassin can detect GPS spoofing attempts by taking notice of unrealistic GPS behavior.
+                - It should be noted that this feature can not block spoofing attempts, and will only detect them.
+            - This feature has the following sub-values for configuration:
+                - `enabled` determines whether spoof detection is on or off.
+                - `max_speed` is an integer determines the detected travelled speed that needs to be reached for a spoofing alert to be triggered.
+                    - This metric independently calculates the speed using distance and time, and can be used to detected unexplained dramatic changes in position.
+                    - You should set this value to the fastest speed you ever expect to go, plus a significant marging for jitter due to bridges, tunnels, and other obstructions that may decrease accuracy.
+                    - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
+                - `no_data_alert` is a boolean that determines whether or not Assassin will trigger an alert when there is no GPS data received.
+                    - Generally, this is just because the GPS device hasn't connected to any satellites, but it can also be caused by jamming attempts.
 - `telemetry`
     - This setting configures Assassin's telemetry recording behavior.
     - This setting has the following sub-values for configuration:

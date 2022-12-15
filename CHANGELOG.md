@@ -96,3 +96,6 @@ December 13th, 2022
 This update adds support for optional internet based alerts to improve situational awareness even more.
 
 - Added weather alert system.
+- Rearranged GPS configuration options.
+    - All GPS settings are now in their own category.
+- Added basic GPS spoof detection system.

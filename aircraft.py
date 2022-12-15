@@ -21,7 +21,7 @@ config = load_config()
 
 
 def adsb_alert_processing(current_location):
-    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to see if ADS-B alerts are enabled.
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Processing ADS-B alerts")
         aircraft_data = fetch_aircraft_data(config["general"]["adsb_alerts"]["adsb_message_file"]) # Fetch the most recent aircraft data.
 

@@ -41,7 +41,7 @@ def load_alpr_camera_database():
 
 
 def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
-    if (os.path.exists(config["general"]["alpr_alerts"]["database"]) == True and config["general"]["alpr_alerts"]["database"] != "" and config["general"]["gps_enabled"] == True): # Check to see if a valid ALPR database has been configured.
+    if (os.path.exists(config["general"]["alpr_alerts"]["database"]) == True and config["general"]["alpr_alerts"]["database"] != "" and config["general"]["gps"]["enabled"] == True): # Check to see if a valid ALPR database has been configured.
         debug_message("Processing ALPR camera alerts")
         nearby_alpr_cameras = nearby_database_poi(current_location, loaded_alpr_camera_database, float(config["general"]["alpr_alerts"]["alert_range"])) # Get nearby entries from this POI database.
 

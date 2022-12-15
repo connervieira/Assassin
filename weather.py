@@ -33,7 +33,7 @@ def get_weather_data(location, last_weather_data):
 
 
 def weather_alert_processing(weather_data):
-    if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps_enabled"] == True): # Check to make sure weather alerts are enabled.
+    if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to make sure weather alerts are enabled.
         debug_message("Processing weather alerts")
         weather_alerts = {} # Set the list of active weather alerts to a blank placeholder.
 
