@@ -4,11 +4,6 @@
         "refresh_delay": 1,
         "debugging_output": false,
         "disable_console_clearing": false,
-        "tts": {
-            "enabled": false,
-            "brief": false,
-            "speed": 250
-        },
         "gps": {
             "enabled": true,
             "provider": "gpsd",
@@ -216,6 +211,12 @@
         }
     },
     "audio": {
+        "provider": "playsound",
+        "tts": {
+            "enabled": false,
+            "brief": false,
+            "speed": 250
+        },
         "sounds": {
             "heartbeat": {
                 "path": "./assets/sounds/heartbeat.mp3",
@@ -265,7 +266,12 @@
             "bluetooth": {
                 "path": "./assets/sounds/bluetooth.mp3",
                 "repeat": "0",
-                "delay": "1"
+                "delay": "0.5"
+            },
+            "gps": {
+                "path": "./assets/sounds/gps.mp3",
+                "repeat": "1",
+                "delay": "0.5"
             }
         } 
     }

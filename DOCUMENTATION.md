@@ -159,10 +159,12 @@ This is the installation process for Assassin and all of it's dependencies. This
 4. Optionally, install networking packages (Recommended)
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
-5. Optionally, install MPG321 (Recommended)
-    - Assassin requires MPG321 in order to play audio effects for alerts.
-    - If you don't install MPG321, Assassin will encounter errors when audio alerts are enabled in the configuration.
-    - You can install MPG321 using the following command on a Debian based Linux machine: `sudo apt-get install mpg321`
+5. Optionally, install an audio provider (Recommended)
+    - Assassin requires an audio provider in order to play audio effects for alerts.
+    - There are currently two compatible options.
+        - `MPG321` is a command line audio provider. It can be installed on a Debian based Linux machine with the following command: `sudo apt-get install mpg321`
+        - `playsound` is a Python library used to play audio files. It can be installed with the following command: `pip3 install playsound`
+    - If you don't install an audio provider, Assassin will encounter errors when audio alerts are enabled in the configuration.
     - If you don't intend on using Assassin's audio features, this is step is optional.
 6. Optionally, install text-to-speech (Recommended)
     - Assassin is capable of using PyTTSx3 to announce text-to-speech alerts.

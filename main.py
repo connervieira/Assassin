@@ -294,7 +294,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Alert the user via text-to-speech, as necessary.
-    if (config["general"]["tts"]["enabled"] == True): # Check to make sure text-to-speech is enabled before doing any processing.
+    if (config["audio"]["tts"]["enabled"] == True): # Check to make sure text-to-speech is enabled before doing any processing.
         debug_message("Running text-to-speech processing")
 
         # Process drone text to speech alerts.
@@ -425,6 +425,8 @@ while True: # Run forever in a loop until terminated.
                 if (gps_alerts["nodata"]["active"] == True):
                     print("    No GPS data")
             print(style.end)
+
+            play_sound("gps") # Play the alert sound associated with GPS alerts, if one is configured to run.
 
 
 

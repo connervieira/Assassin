@@ -100,10 +100,13 @@ import numpy # Required to run more complex math calculations
 debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
-if (config["general"]["tts"]["enabled"] == True): # Only import the TTS libraries of text to speech functionality is enabled.
+if (config["audio"]["tts"]["enabled"] == True): # Only import the TTS libraries of text to speech functionality is enabled.
     import pyttsx3 # Import the text-to-speech library.
     tts = pyttsx3.init() # Initialize the text-to-speech engine.
-    tts.setProperty('rate', config["general"]["tts"]["speed"]) # Set the text-to-speech speed.
+    tts.setProperty('rate', config["audio"]["tts"]["speed"]) # Set the text-to-speech speed.
+
+if (config["audio"]["provider"] == "playsound"): # Check to see if the configured audio provider is playsound.
+    from playsound import playsound # Import the playsound library.
 
 
 if (config["display"]["status_lighting"]["enabled"] == True): # Only import the libraries required by the status lighting system if the status lighting is enabled. These two libraries have loading times much higher than other libraries, so this step can improve loading times.
@@ -807,8 +810,14 @@ def play_sound(sound_id):
             if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
                 debug_message("Playing sound " + str(sound_id))
                 for i in range(0, int(config["audio"]["sounds"][str(sound_id)]["repeat"])): # Repeat the sound several times, if the configuration says to do so.
-                    os.system("mpg321 " + config["audio"]["sounds"][str(sound_id)]["path"] + " > /dev/null 2>&1 &") # Play the sound file associated with this sound ID in the configuration.
-                    time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
+                    if (config["audio"]["provider"] == "mpg321"): # Check to see if the configured audio provider is MPG321.
+                        os.system("mpg321 " + config["audio"]["sounds"][str(sound_id)]["path"] + " > /dev/null 2>&1 &") # Play the sound file associated with this sound ID in the configuration.
+                        time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
+                    elif (config["audio"]["provider"] == "playsound"): # Check to see if the configured audio provider is playsound.
+                        playsound(config["audio"]["sounds"][str(sound_id)]["path"], False) # Play the sound file associated with this sound ID in the configuration.
+                        time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
+                    else:
+                        display_notice("The audio provider is configured incorrectly.", 2)
             elif (str(config["audio"]["sounds"][str(sound_id)]["path"]) == ""): # The file path associated with this sound ID is left blank, and therefore the sound can't be played.
                 display_notice("The sound file path associated with sound ID (" + str(sound_id) + ") is blank.", 2)
             elif (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == False): # The file path associated with this sound ID does not exist, and therefore the sound can't be played.
@@ -911,9 +920,9 @@ def fetch_aircraft_data(file):
 
 debug_message("Creating `speak` function")
 def speak(full_text, brief_text):
-    if (config["general"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
+    if (config["audio"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
         debug_message("Playing text-to-speech")
-        if (config["general"]["tts"]["brief"] == True): # Check to see if brief mode is enabled in the configuration.
+        if (config["audio"]["tts"]["brief"] == True): # Check to see if brief mode is enabled in the configuration.
             tts.say(brief_text)
             tts.runAndWait()
         else:

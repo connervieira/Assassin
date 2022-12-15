@@ -240,6 +240,10 @@ This section of configuration values effect Assassin's visual displays.
 
 This section of configuration values effect Assassin's audio functionality.
 
+- `provider` determines the backend that Assassin will use to play audio.
+    - This value can be set to the following options:
+        - `mpg321` will use the MPG321 command line utility.
+        - `playsound` will use Python's playsound library.
 - `sounds`
     - This configuration value determines all of the sounds that Assassin is capable of using.
     - Different sounds are triggered at different times.
@@ -256,6 +260,7 @@ This section of configuration values effect Assassin's audio functionality.
         - The `drone` sound is played during an autonomous wireless threat alert.
         - The `adsb` sound is played during an aircraft alert.
         - The `bluetooth` sound is played during a Bluetooth alert.
+        - The `gps` sound is played during a GPS spoof detection alert.
     - Each sound has a `path`, `repeat`, and `delay` defined.
         - The `path` defines the file path of the sound file.
             - This file path can be relative to the Assassin directory, or an absolute path.
