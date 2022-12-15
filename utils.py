@@ -963,7 +963,7 @@ def detect_location_spoof(location_history):
     if (config["general"]["gps"]["spoof_detection"]["enabled"] == True): # Check to make sure GPS spoof detection is enabled before processing alerts.
         if (type(location_history) == list): # Check to make sure the location history provided is actually a list.
             reversed_location_history = list(reversed(list(location_history))) # Reverse the location history list.
-            location_history = reversed_location_history[:10] # Remove all by the first 10 elements in the location history.
+            location_history = reversed_location_history[:int(config["general"]["gps"]["spoof_detection"]["look_back"])] # Remove all but the first elements in the location history.
 
             for i in range(0, len(location_history) - 1): # Iterate through each element in the list.
                 distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.

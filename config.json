@@ -23,6 +23,7 @@
             },
             "spoof_detection": {
                 "enabled": true,
+                "look_back": 10,
                 "max_speed": 0,
                 "no_data_alert": true
             }

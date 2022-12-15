@@ -48,7 +48,10 @@ This section of configuration values will effect Assassin's general operation.
                 - It should be noted that this feature can not block spoofing attempts, and will only detect them.
             - This feature has the following sub-values for configuration:
                 - `enabled` determines whether spoof detection is on or off.
-                - `max_speed` is an integer determines the detected travelled speed that needs to be reached for a spoofing alert to be triggered.
+                - `look_back` is an integer that determines the how many cycles Assassin will look back through when analyzing GPS trends.
+                    - Shorter values will lead to faster processing, and shorter alert latch times.
+                    - Longer values will detect older alerts, and will latch onto alerts for longer.
+                - `max_speed` is an integer that determines the detected travelled speed that needs to be reached for a spoofing alert to be triggered.
                     - This metric independently calculates the speed using distance and time, and can be used to detected unexplained dramatic changes in position.
                     - You should set this value to the fastest speed you ever expect to go, plus a significant marging for jitter due to bridges, tunnels, and other obstructions that may decrease accuracy.
                     - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
