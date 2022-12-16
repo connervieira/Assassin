@@ -2279,6 +2279,50 @@
             "direction": 80,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.240163,
+            "longitude": -81.440387,
+            "brand": "",
+            "name": "",
+            "road": "Main Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Main Street, as they pass Streetsboro Street.",
+            "direction": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.239808,
+            "longitude": -81.440458,
+            "brand": "",
+            "name": "",
+            "road": "Main Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on Main Street, as they pass Streetsboro Street.",
+            "direction": 0,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.239993,
+            "longitude": -81.440646,
+            "brand": "",
+            "name": "",
+            "road": "Streetsboro Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading west on Streetsboro Street, as they pass Main Street.",
+            "direction": 90,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.239951,
+            "longitude": -81.440188,
+            "brand": "",
+            "name": "",
+            "road": "Streetsboro Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading east on Streetsboro Street, as they pass Main Street.",
+            "direction": 270,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
         }
     ]
 }
