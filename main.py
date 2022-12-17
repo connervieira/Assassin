@@ -391,18 +391,19 @@ while True: # Run forever in a loop until terminated.
         print("Position: " + str(current_location[0]) + " " + str(current_location[1])) # Print the current location as coordinates to the console.
 
     if (config["display"]["displays"]["altitude"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the current altitude display is enabled in the configuration.
-        print("Altitude: " + str(current_location[3]) + " meters") # Print the current altitude to the console.
+        print("Altitude: " + str(round(current_location[3]*100)/100) + " meters") # Print the current altitude to the console.
 
     if ((config["display"]["displays"]["heading"]["degrees"] == True or config["display"]["displays"]["heading"]["direction"] == True) and config["general"]["gps"]["enabled"] == True): # Check to see if the current heading display is enabled in the configuration.
         if (config["display"]["displays"]["heading"]["direction"] == True and config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees are both enabled.
-            print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(current_location[4]) + "°)") # Print the current heading to the console in cardinal directions.
+            print("Heading: " + str(get_cardinal_direction(current_location[4])) + " (" + str(round(current_location[4])) + "°)") # Print the current heading to the console in cardinal directions.
         elif (config["display"]["displays"]["heading"]["direction"] == True): # Check to see if the configuration value to display the current heading in cardinal directions and degrees is enabled.
             print("Heading: " + str(get_cardinal_direction(current_location[4]))) # Print the current heading to the console in cardinal directions.
         elif (config["display"]["displays"]["heading"]["degrees"] == True): # Check to see if the configuration value to display the current heading in degrees is enabled.
-            print("Heading: " + str(current_location[4]) + "°") # Print the current heading to the console in degrees.
+            print("Heading: " + str(round(current_location[4])) + "°") # Print the current heading to the console in degrees.
 
     if (config["display"]["displays"]["satellites"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the satellite display is enabled in the configuration.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
+
     if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
         print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
 

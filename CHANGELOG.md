@@ -101,3 +101,4 @@ This update adds support for optional internet based alerts to improve situation
     - All GPS settings are now in their own category.
 - Added basic GPS spoof detection system.
 - Moved text-to-speech configuration to the 'audio' section.
+- Added rounding to altitude and heading displays.

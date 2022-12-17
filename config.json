@@ -19,7 +19,7 @@
             "spoof_detection": {
                 "enabled": true,
                 "look_back": 10,
-                "max_speed": 0,
+                "max_speed": 300,
                 "no_data_alert": true
             }
         },
@@ -166,8 +166,8 @@
             "date": true,
             "speed": {
                 "small_display": true,
-                "large_display": false,
-                "decimal_places": 2,
+                "large_display": true,
+                "decimal_places": 1,
                 "unit": "mph"
             },
             "location": true,
