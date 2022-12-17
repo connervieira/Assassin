@@ -128,6 +128,14 @@ if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather
     last_weather_data = { "requested" : 0 } # Set the last round's weather information to a placeholder.
 
 
+# Load the attention alert system. 
+if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load attention monitoring system if attention alerts are enabled.
+    import attention
+    process_attention_alerts = attention.process_attention_alerts
+    attention_alerts = {}
+
+
+
 
 
 
@@ -175,6 +183,7 @@ alert_count["alpr"] = [0, 0]
 alert_count["bluetooth"] = [0, 0]
 alert_count["weather"] = [0, 0]
 alert_count["gps"] = [0, 0]
+alert_count["attention"] = [0, 0]
 
 location_history = []
 
@@ -258,6 +267,14 @@ while True: # Run forever in a loop until terminated.
         weather_alerts = {}
 
 
+    # Process attention alerts.
+    if (config["general"]["attention_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run attention monitoring alert processing if it is enabled in the configuration.
+        attention_alerts = process_attention_alerts(float(current_speed))
+    else:
+        attention_alerts = {}
+        
+
+
 
     debug_message("Alert processing completed")
 
@@ -279,6 +296,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["bluetooth"] = [len(bluetooth_threats)] + alert_count["bluetooth"]
     alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
     alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
+    alert_count["attention"] = [len(attention_alerts)] + alert_count["attention"]
 
 
     # Only keep alert counts from the past 100 cycles.
@@ -289,6 +307,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["bluetooth"] = alert_count["bluetooth"][:100]
     alert_count["weather"] = alert_count["weather"][:100]
     alert_count["gps"] = alert_count["gps"][:100]
+    alert_count["attention"] = alert_count["attention"][:100]
 
 
 
@@ -324,6 +343,10 @@ while True: # Run forever in a loop until terminated.
         # Process GPS text to speech alerts.
         if (alert_count["gps"][0] > alert_count["gps"][1]):
             speak("New GPS alert", "GPS")
+
+        # Process attention text to speech alerts.
+        if (alert_count["gps"][0] > alert_count["gps"][1]):
+            speak("Attention threshold reached", "Attention")
 
         debug_message("Completed Text-to-speech processing")
 
@@ -421,7 +444,7 @@ while True: # Run forever in a loop until terminated.
             print(style.green + "GPS Alerts: " + str(len(gps_alerts))) # Display the GPS alert title.
             if ("maxspeed" in gps_alerts): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
                 if (gps_alerts["maxspeed"]["active"] == True):
-                    print("    Unexpected high speed: " + str(gps_alerts["maxspeed"]["speed"]))
+                    print("    Unexpected high speed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
             if ("nodata" in gps_alerts): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
                 if (gps_alerts["nodata"]["active"] == True):
                     print("    No GPS data")
@@ -666,6 +689,20 @@ while True: # Run forever in a loop until terminated.
                     print("    Temperature high: " + str(weather_alerts["temperature"][0]))
                 else: # Check to see if the alert is another case. This should never happen, and indicates a bug if it does.
                     print("    Temperature unknown alert: " + str(weather_alerts["temperature"][0]))
+            print(style.end)
+
+
+
+    # Display attention alerts.
+    if (config["general"]["attention_monitoring"]["enabled"] == True): # Check to make sure attention monitoring is enabled before displaying attention alerts.
+        debug_message("Displaying attention monitoring alerts")
+        if (len(attention_alerts) > 0): # Check to see if there are any active attention monitoring alerts.
+            print(style.yellow + "Attention Alerts: " + str(len(attention_alerts))) # Display the attention monitoring alerts title.
+
+            # Display visibility alerts.
+            if ("time" in attention_alerts): # Check to see if there is a time-related attention alert.
+                print("    Attentive Time: " + str(math.floor(round(attention_alerts["time"]["time"])/60)) + " min " + str(round(attention_alerts["time"]["time"]) % 60) + " sec") # Display the time-related attention alert.
+
             print(style.end)
 
 

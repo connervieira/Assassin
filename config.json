@@ -6,7 +6,7 @@
         "disable_console_clearing": false,
         "gps": {
             "enabled": true,
-            "provider": "gpsd",
+            "provider": "termux",
             "demo_mode": {
                 "enabled": true,
                 "longitude": 41,
@@ -21,6 +21,14 @@
                 "look_back": 10,
                 "max_speed": 300,
                 "no_data_alert": true
+            }
+        },
+        "attention_monitoring": {
+            "enabled": true,
+            "reset_time": 10,
+            "reset_speed": 3,
+            "triggers": {
+                "time": 0.1
             }
         },
         "telemetry": {

@@ -39,6 +39,12 @@ Assassin uses 'alerts' to inform the user of important information. Below is a l
     - Many law enforcement organizations use aircraft to issue traffic citations on remote, rural highways where ground enforcement may not be practical due to infrequent intersections, limited access, low traffic volume, or other reasons.
         - Like all other aircraft, these planes and helicopters are required to have ADS-B transmitters to share important safety information with other aircraft and air traffic controllers.
     - Assassin can interface with an ADS-B receiver to detect nearby aircraft, and alert to those that match criteria like speed, altitude, and distance.
+- Weather alerts
+    - Weather alerts are triggered when certain weather criteria are met.
+    - This feature uses an internet-based weather information provider to alert the driver when potentially dangerous or important weather conditions are present.
+- Attention monitoring
+    - Assassin can monitor the time spent driving, and alert the driver when they've broken a threshold without stopping for a break.
+    - Long, continuous sessions of driving can decrease awareness and increase reaction time.
 
 ### Colors
 
@@ -65,8 +71,8 @@ Assassin uses text coloring to make it quick and easy to identify information. B
     - While not necessarily part of this category, the Assassin start-up header will also be displayed in red.
 - Yellow
     - Yellow text is used to indicate safety related alerts.
-    - Currently, this color is not used to display any alerts, but it will likely be used in the future.
-    - While not necessarily part of this category, non-fatal warnings will also be displayed in yellow.
+    - Alerts related to weather and driver attention will appear in this color.
+    - While not necessarily part of the category, non-fatal system warnings will also be displayed in yellow.
 
 
 ## Audio

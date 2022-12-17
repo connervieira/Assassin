@@ -25,7 +25,7 @@ This section of configuration values will effect Assassin's general operation.
             - Enabling this will reduce the amount of information in text-to-speed read-outs, but will dramatically shorten the time it takes to deliver them.
         - `speed` determines the speed at which text-to-speech will be spoken.
 - `gps`
-    - This setting configure's Assassin's GPS behavior.
+    - This setting configures Assassin's GPS behavior.
     - This setting has the following sub-values for configuration:
         - `enabled`
             - This setting is used to globally enable and disable GPS functionality throughout Assassin.
@@ -57,6 +57,16 @@ This section of configuration values will effect Assassin's general operation.
                     - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
                 - `no_data_alert` is a boolean that determines whether or not Assassin will trigger an alert when there is no GPS data received.
                     - Generally, this is just because the GPS device hasn't connected to any satellites, but it can also be caused by jamming attempts.
+- `attention_monitoring`
+    - This setting determines whether Assassin's driver attention alerts will be enabled.
+    - This setting has the following sub-values for configuration:
+        - `enabled` determines whether attention monitoring is active or not.
+        - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.
+            - This should be short enough that breaks from driving will cause a reset, but long enough that stopping for traffic won't.
+        - `reset_speed` is the speed at which Assassin considers the driver to be actively driving. Any time this speed is exceeded, the reset time resets.
+            - This speed uses the units specified by the `display > displays > speed > unit` configuration value.
+        - `triggers` lists criteria that will trigger an attention alert.
+            - `time` is the length in time, in minutes, that need to elapse before Assassin triggers an attention alert.
 - `telemetry`
     - This setting configures Assassin's telemetry recording behavior.
     - This setting has the following sub-values for configuration:

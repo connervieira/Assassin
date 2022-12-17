@@ -102,3 +102,4 @@ This update adds support for optional internet based alerts to improve situation
 - Added basic GPS spoof detection system.
 - Moved text-to-speech configuration to the 'audio' section.
 - Added rounding to altitude and heading displays.
+- Added driver attention monitoring alert system.
