@@ -57,6 +57,11 @@ Assassin can detect potential GPS spoofing attempts by monitoring location histo
 When connected to the internet, Assassin can fetch weather information, and display alerts when customizable criteria are met.
 
 
+### Attention Monitoring
+
+Assassin can monitor the time spend actively driving, and optionally display an alert when a threshold has been broken, and prompt the driver to take a break.
+
+
 
 ## Features
 
@@ -136,6 +141,10 @@ Assassin's extreme customizability can be a bit overwhelming to new users. For t
 ### Modular
 
 Assassin is designed to be as modular as possible. This makes it customizable, fault tolerant, and easy to modify.
+
+### Filtered
+
+Given the high volume of information processed by Assassin, it's common for dozens of alerts to be processed at once. Assassin comes with complex, customizable filtering to reduce annoying false alerts.
 
 
 ## Installing

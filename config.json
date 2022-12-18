@@ -11,7 +11,7 @@
                 "enabled": true,
                 "longitude": 41,
                 "latitude": -81,
-                "speed": 30,
+                "speed": 0,
                 "altitude": 210,
                 "heading": 45,
                 "satellites": 6
@@ -25,10 +25,10 @@
         },
         "attention_monitoring": {
             "enabled": true,
-            "reset_time": 10,
+            "reset_time": 120,
             "reset_speed": 3,
             "triggers": {
-                "time": 0.1
+                "time": 0.01
             }
         },
         "telemetry": {
