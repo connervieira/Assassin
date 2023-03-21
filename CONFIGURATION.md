@@ -254,9 +254,9 @@ This section of configuration values effect Assassin's audio functionality.
     - This value can be set to the following options:
         - `mpg321` will use the MPG321 command line utility.
         - `playsound` will use Python's playsound library.
-- `sounds`
+- `sounds` contains settings related to how Assassin handles audio alerts.
     - This configuration value determines all of the sounds that Assassin is capable of using.
-    - Different sounds are triggered at different times.
+    - Different sounds are triggered by different events.
         - The `heartbeat` sound plays at the beginning of every cycle.
         - The `startup` sound is played when Assassin initially loads.
         - The `camera` sounds are played during a traffic camera alert.
@@ -283,4 +283,7 @@ This section of configuration values effect Assassin's audio functionality.
 
 This section contains configuration values that control how Assassin interacts with external services.
 
-TODO: Document external service configuration values.
+- `local` contains settings relating to how Assassin communicates with local programs.
+    - `enabled` is a boolean value that determines whether or not Assassin will publish information for local programs to read.
+    - `interface_directory` is a string that determines an absolute directory path where Assassin will store files used to publish information to external programs.
+        - Example: `/home/assassin/Documents/Assassin/interface`
