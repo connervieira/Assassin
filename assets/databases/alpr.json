@@ -2323,6 +2323,17 @@
             "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
-        }
+        },
+        {
+            "latitude": 41.588701,
+            "longitude": -81.52688,
+            "brand": "",
+            "name": "",
+            "road": "Miller Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading west on Miller Street, as they pass East 222nd Street.",
+            "facing": 100,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        
     ]
 }
