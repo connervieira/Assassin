@@ -1,6 +1,6 @@
 # Assassin
 
-**Copyright 2022 V0LT - Conner Vieira**
+**Copyright 2023 V0LT - Conner Vieira**
 
 The ultimate defense system for driving the technological world.
 
@@ -34,7 +34,7 @@ Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detec
 
 ### Traffic Enforcement Camera Defense
 
-Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras. When an imminent threat is detected, Assassin can be configured to enter a panic mode, where a large on-screen warning is displayed until the vehicle speed falls below the camera threshold speed.
+Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras.
 
 
 ### Bluetooth Threat Defense

@@ -115,4 +115,6 @@ This update adds the ability to interface with external services. This enables n
     - ALPR camera alerts are now sorted by distance in the back-end.
     - Fixed an issue where ALPR alerts would be filtered improperly.
 - Fixed an issue where Bluetooth alerts wouldn't be color coded properly when multiple alerts were displayed.
-- Fixed a bug in the aircraft distance sorting algorithm.
+- Improved ADS-B alert handling.
+    - Fixed a bug in the aircraft distance sorting algorithm where 1 aircraft would be thrown out during the sorting process.
+    - The direction of the aircraft is now display relative to the current direction of movement.

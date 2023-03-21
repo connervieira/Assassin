@@ -129,7 +129,102 @@ if (gps_enabled == True and config["general"]["gps"]["provider"] == "gpsd"): # O
 
 
 
+# Define the function that will be used to clear the screen.
+debug_message("Creating `clear` function")
+def clear():
+    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
+        if os.name == "nt": # Use 'cls' command if host is Windows
+            os.system ("cls")
+        else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
+            os.system ("clear")
+
+
+
+def is_json(string):
+    try:
+        json_object = json.loads(string) # Try to load string as JSON information.
+    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
+        return False # Return 'false' to indicate that the string is not JSON.
+
+    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
+
+
+
+
+# Define the function that will be used to save files for exported data.
+debug_message("Creating `save_to_file` function")
+def save_to_file(file_name, contents, silence = False):
+    debug_message("Saving file: " + str(file_name))
+    fh = None
+    success = False
+    try:
+        fh = open(file_name, 'w')
+        fh.write(contents)
+        success = True   
+        if (silence == False):
+            print("Successfully saved at " + file_name + ".")
+            debug_message("Saved file")
+    except IOError as e:
+        success = False
+        if (silence == False):
+            print(e)
+            debug_message("Failed to save file")
+    finally:
+        try:
+            if fh:
+                fh.close()
+        except:
+            success = False
+    return success
+
+
+
+# Define the fuction that will be used to add to the end of a file.
+debug_message("Creating `add_to_file` function")
+def add_to_file(file_name, contents, silence=False):
+    debug_message("Adding to file: " + str(file_name))
+    fh = None
+    success = False
+    try:
+        fh = open(file_name, 'a')
+        fh.write(contents)
+        success = True
+        if (silence == False):
+            print("Successfully saved at " + file_name + ".")
+            debug_message("File saved")
+    except IOError as e:
+        success = False
+        if (silence == False):
+            print(e)
+            debug_message("Failed to save file")
+    finally:
+        try:
+            if fh:
+                fh.close()
+        except:
+            success = False
+    return success
+
+
+
+
+
+
 debug_message("Creating `display_notice` function")
+
+error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
+if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
+    save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+
+error_file = open(error_file_location, "r") # Open the error log file for reading.
+error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
+error_file.close() # Close the error log file.
+
+if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
+    error_log = json.loads(error_file_contents) # Read and load the error log from the file.
+else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
+    error_log = json.loads("{}") # Load a blank placeholder dictionary.
+
 def display_notice(message, level=1):
     level = int(level) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
@@ -149,6 +244,8 @@ def display_notice(message, level=1):
             time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 3): # The level is set to 3, indicating an error.
+        error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
+        save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
         if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -189,76 +286,6 @@ def process_gpx(gpx_file):
 
     return gpx_data
 
-
-
-
-
-# Define the function that will be used to clear the screen.
-debug_message("Creating `clear` function")
-def clear():
-    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
-        if os.name == "nt": # Use 'cls' command if host is Windows
-            os.system ("cls")
-        else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
-            os.system ("clear")
-
-
-
-# Define the function that will be used to save files for exported data.
-debug_message("Creating `save_to_file` function")
-def save_to_file(file_name, contents, silence = False):
-    debug_message("Saving file: " + str(file_name))
-    fh = None
-    success = False
-    try:
-        fh = open(file_name, 'w')
-        fh.write(contents)
-        success = True   
-        if (silence == False):
-            print("Successfully saved at " + file_name + ".")
-            debug_message("Saved file")
-    except IOError as e:
-        success = False
-        if (silence == False):
-            print(e)
-            display_notice("Failed to save!", 2)
-            debug_message("Failed to save file")
-    finally:
-        try:
-            if fh:
-                fh.close()
-        except:
-            success = False
-    return success
-
-
-
-# Define the fuction that will be used to add to the end of a file.
-debug_message("Creating `add_to_file` function")
-def add_to_file(file_name, contents, silence=False):
-    debug_message("Adding to file: " + str(file_name))
-    fh = None
-    success = False
-    try:
-        fh = open(file_name, 'a')
-        fh.write(contents)
-        success = True
-        if (silence == False):
-            print("Successfully saved at " + file_name + ".")
-            debug_message("File saved")
-    except IOError as e:
-        success = False
-        if (silence == False):
-            print(e)
-            display_warning("Failed to save!", 2)
-            debug_message("Failed to save file")
-    finally:
-        try:
-            if fh:
-                fh.close()
-        except:
-            success = False
-    return success
 
 
 
@@ -449,46 +476,47 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
 # Define a simple function to calculate the approximate distance between two points in miles.
 debug_message("Creating `get_distance` function")
 def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
+    try:
+        # Convert the coordinates received.
+        lat1 = float(lat1)
+        lon1 = float(lon1)
+        lat2 = float(lat2)
+        lon2 = float(lon2)
 
-    # Convert the coordinates received.
-    lat1 = float(lat1)
-    lon1 = float(lon1)
-    lat2 = float(lat2)
-    lon2 = float(lon2)
+        # Verify the coordinates received, if efficient mode is disabled.
+        if (efficient_mode == False):
+            if (lat1 > 180 or lat1 < -180):
+                display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
+                lat1 = 0 # Default to a safe value.
+            if (lon1 > 90 or lon1 < -90):
+                display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
+                lon1 = 0 # Default to a safe value.
+            if (lat2 > 180 or lat2 < -180):
+                display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
+                lat2 = 0 # Default to a safe value.
+            if (lon2 > 90 or lon2 < -90):
+                display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
+                lon2 = 0 # Default to a safe value.
 
-    # Verify the coordinates received, if efficient mode is disabled.
-    if (efficient_mode == False):
-        if (lat1 > 180 or lat1 < -180):
-            display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
-            lat1 = 0 # Default to a safe value.
-        if (lon1 > 90 or lon1 < -90):
-            display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
-            lon1 = 0 # Default to a safe value.
-        if (lat2 > 180 or lat2 < -180):
-            display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
-            lat2 = 0 # Default to a safe value.
-        if (lon2 > 90 or lon2 < -90):
-            display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
-            lon2 = 0 # Default to a safe value.
+        if (lon1 == lon2 and lat1 == lat2): # Check to see if the coordinates are the same.
+            distance = 0 # The points are the same, so they are 0 miles apart.
+        else: # The points are different, so calculate the distance between them
+            # Convert the coordinates into radians.
+            lat1 = math.radians(lat1)
+            lon1 = math.radians(lon1)
+            lat2 = math.radians(lat2)
+            lon2 = math.radians(lon2)
 
-    if (lon1 == lon2 and lat1 == lat2): # Check to see if the coordinates are the same.
-        distance = 0 # The points are the same, so they are 0 miles apart.
+            # Calculate the distance.
+            distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
 
-    else: # The points are different, so calculate the distance between them
-        # Convert the coordinates into radians.
-        lat1 = math.radians(lat1)
-        lon1 = math.radians(lon1)
-        lat2 = math.radians(lat2)
-        lon2 = math.radians(lon2)
+            # Convert the distance from kilometers to miles.
+            distance = distance * 0.6213712
 
-        # Calculate the distance.
-        distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
-
-        # Convert the distance from kilometers to miles.
-        distance = distance * 0.6213712
-
-    # Return the calculated distance.
-    return distance
+        # Return the calculated distance.
+        return distance
+    except:
+        return 0.0
 
 
 

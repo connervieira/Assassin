@@ -57,32 +57,28 @@ This section of configuration values will effect Assassin's general operation.
                     - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
                 - `no_data_alert` is a boolean that determines whether or not Assassin will trigger an alert when there is no GPS data received.
                     - Generally, this is just because the GPS device hasn't connected to any satellites, but it can also be caused by jamming attempts.
-- `attention_monitoring`
-    - This setting determines whether Assassin's driver attention alerts will be enabled.
-    - This setting has the following sub-values for configuration:
-        - `enabled` determines whether attention monitoring is active or not.
-        - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.
-            - This should be short enough that breaks from driving will cause a reset, but long enough that stopping for traffic won't.
-        - `reset_speed` is the speed at which Assassin considers the driver to be actively driving. Any time this speed is exceeded, the reset time resets.
-            - This speed uses the units specified by the `display > displays > speed > unit` configuration value.
-        - `triggers` lists criteria that will trigger an attention alert.
-            - `time` is the length in time, in minutes, that need to elapse before Assassin triggers an attention alert.
-- `telemetry`
-    - This setting configures Assassin's telemetry recording behavior.
-    - This setting has the following sub-values for configuration:
-        - `enabled` determines whether Assassin will record telemetry at all.
-        - `directory` is the directory that Assassin will save telemetry files to.
-        - `file` is the file-name that Assassin will write the telemetry data to.
-            - This file name should be a GPX file.
-            - The `{T}` string will be replaced by the timestamp that the first location point was recorded.
-                - If the `{T}` string doesn't appear anywhere in the file name, then Assassin will overwrite the file every time it runs.
-            - Example: `AssassinTelemetry{T}.gpx`
-        - `information` specifies what information will be saved to the telemetry file.
-            - `altitude` is the GPS altitude.
-            - `satellites` is the number of GPS satellites used to get the location.
-            - `speed` is the current GPS speed in meters-per-second.
-                - It should be noted that the speed can easily be determined from location information and timestamps, regardless of whether it directly is embedded in the file.
-            - `source` is the location back-end Assassin used to get the location.
+- `attention_monitoring` contains settings related to driver attention alerts.
+    - `enabled` determines whether attention monitoring is active or not.
+    - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.
+        - This should be short enough that breaks from driving will cause a reset, but long enough that stopping for traffic won't.
+    - `reset_speed` is the speed at which Assassin considers the driver to be actively driving. Any time this speed is exceeded, the reset timer resets.
+        - This speed uses the units specified by the `display > displays > speed > unit` configuration value.
+    - `triggers` lists criteria that will trigger an attention alert.
+        - `time` is the length in time, in minutes, that need to elapse before Assassin triggers an attention alert.
+- `telemetry` contains settings related to Assassin's telemetry recording behavior.
+    - `enabled` determines whether Assassin will record telemetry at all.
+    - `directory` is the directory that Assassin will save telemetry files to.
+    - `file` is the file-name that Assassin will write the telemetry data to.
+        - This file name should be a GPX file.
+        - The `{T}` string will be replaced by the timestamp that the first location point was recorded.
+            - If the `{T}` string doesn't appear anywhere in the file name, then Assassin will overwrite the file every time it runs.
+        - Example: `AssassinTelemetry{T}.gpx`
+    - `information` specifies what information will be saved to the telemetry file.
+        - `altitude` is the GPS altitude.
+        - `satellites` is the number of GPS satellites used to get the location.
+        - `speed` is the current GPS speed in meters-per-second.
+            - It should be noted that the speed can easily be determined from location information and timestamps, regardless of whether it directly is embedded in the file.
+        - `source` is the location back-end Assassin used to get the location.
 - `refresh_delay`
     - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
     - It's important to note that this setting doesn't guarantee Assassin will refresh exactly at the interval specified. This delay is added in addition to the natural delay created by processing alerts and handling data.
@@ -222,9 +218,6 @@ This section of configuration values effect Assassin's visual displays.
         - `direction` determines whether or not the current heading will be displayed as a cardinal direction, such as 'N', 'SW', or 'E'.
     - `satellites` can be toggled on and off, and shows how many GPS satellites are connected.
     - `planes` can be toggled on and off, and shows many many aircraft are being detected. This is dependent on the ADS-B alerts system and requires `adsb_alerts` to be enabled.
-- `large_critical_display`
-    - This setting allows the user to determine whether or not they want critical messages to be shown in large ASCII font.
-    - This can be useful to allow the user to quickly see critically important information at a glance, such as an imminent threat that requires immediate action.
 - `shape_alerts`
     - This setting allows the user to turn on and off Assassin's "shape alerts", which are large ASCII shapes displayed when important events occur.
     - Shape alerts take up a lot of space on screen, but make it easy for the driver to understand a situation simply using their peripheral vision.

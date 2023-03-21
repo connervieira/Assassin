@@ -45,8 +45,8 @@ def adsb_alert_processing(current_location):
                     relative_heading = 360 + relative_heading # Convert the relative heading to a positive number.
                 aircraft_data[key]["relativeheading"] = relative_heading # Add the relative heading of the aircraft to its data.
 
-                # Calculate the direction to the aircraft relative to the current position.
-                relative_direction = calculate_bearing(current_location[0], current_location[1], aircraft_data[key]["latitude"], aircraft_data[key]["longitude"])
+                # Calculate the direction to the aircraft relative to the current position and direction of movement.
+                relative_direction = calculate_bearing(current_location[0], current_location[1], aircraft_data[key]["latitude"], aircraft_data[key]["longitude"]) - current_location[4]
                 if (relative_direction < 0): # Check to see if the direction to the aircraft is negative.
                     relative_direction = 360 + relative_direction
                 aircraft_data[key]["direction"] = relative_direction # Add the direction to the aircraft to its data.

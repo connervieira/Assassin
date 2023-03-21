@@ -171,7 +171,6 @@ speak("Assassin has completed loading", "Loading complete")
 
 
 
-active_alarm = "none" # Set the active alert indicator variable to a placeholder before starting the main loop.
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
 # Set placeholders for all the complete alert dictionary.
@@ -387,29 +386,6 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Display any critical alarm messages that the user should know about as soon as possible.
-    if (active_alarm == "speedcameralimitexceeded"):
-        if (config["display"]["large_critical_display"] == True):
-            print(style.red + style.bold)
-            print(" $$$$$$\\  $$\\       $$$$$$\\  $$\\      $$\\       $$$$$$$\\   $$$$$$\\  $$\\      $$\\ $$\\   $$\\ ")
-            print("$$  __$$\\ $$ |     $$  __$$\\ $$ | $\\  $$ |      $$  __$$\\ $$  __$$\\ $$ | $\\  $$ |$$$\\  $$ |")
-            print("$$ /  \\__|$$ |     $$ /  $$ |$$ |$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |$$$\\ $$ |$$$$\\ $$ |")
-            print("\\$$$$$$\\  $$ |     $$ |  $$ |$$ $$ $$\\$$ |      $$ |  $$ |$$ |  $$ |$$ $$ $$\\$$ |$$ $$\\$$ |")
-            print(" \\____$$\\ $$ |     $$ |  $$ |$$$$  _$$$$ |      $$ |  $$ |$$ |  $$ |$$$$  _$$$$ |$$ \\$$$$ |")
-            print("$$\\   $$ |$$ |     $$ |  $$ |$$$  / \\$$$ |      $$ |  $$ |$$ |  $$ |$$$  / \\$$$ |$$ |\\$$$ |")
-            print("\\$$$$$$  |$$$$$$$$\ $$$$$$  |$$  /   \\$$ |      $$$$$$$  | $$$$$$  |$$  /   \\$$ |$$ | \$$ |")
-            print(" \\______/ \________|\\______/ \\__/     \\__|      \\_______/  \\______/ \\__/     \\__|\\__|  \\__|")
-            print(style.red + "SPEED CAMERA LIMIT EXCEEDED" + style.end)
-            print(style.end)
-        else:
-            print(style.red + style.bold + "SLOW DOWN" + style.end)
-            print(style.red + "SPEED CAMERA LIMIT EXCEEDED" + style.end)
-
-
-    active_alarm = "none" # Reset the active alert to none at the beginning of each session.
-
-
-
 
 
 
@@ -592,7 +568,6 @@ while True: # Run forever in a loop until terminated.
             if (nearest_enforcement_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["alert_range"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
                 if (nearest_enforcement_camera["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
                     if (float(nearest_enforcement_camera["spd"]) < float(convert_speed(float(current_location[2]), "mph"))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
-                        active_alarm = "speedcameralimitexceeded" # Set an active alarm indicating that the speed camera speed limit has been exceeded.
                         play_sound("alarm")
 
                 play_sound("camera3")
