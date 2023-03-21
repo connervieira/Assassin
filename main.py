@@ -174,6 +174,9 @@ speak("Assassin has completed loading", "Loading complete")
 active_alarm = "none" # Set the active alert indicator variable to a placeholder before starting the main loop.
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
+# Set placeholders for all the complete alert dictionary.
+all_alerts = {}
+
 # Set placeholders for all the alert counters.
 alert_count = {}
 alert_count["drone"] = [0, 0]
@@ -223,9 +226,9 @@ while True: # Run forever in a loop until terminated.
 
     # Run traffic enforcement camera alert processing
     if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
-        nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all  = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
+        nearest_enforcement_camera, nearby_cameras_all = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
     else:
-        nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all = {}, [], [], [], []
+        nearest_enforcement_camera, nearby_cameras_all = {}, []
 
 
     # Run ALPR camera alert processing
@@ -288,7 +291,25 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Record the number of active alerts
+    # Collect all alerts.
+    all_alerts = dict(list(all_alerts.items())[-10:]) # Trim the dictionary of all alerts to the last 10 entries.
+    current_time = time.time() # Get the current time.
+    all_alerts[current_time] = {}
+    all_alerts[current_time]["drone"] = detected_drone_hazards
+    all_alerts[current_time]["aircraft"] = aircraft_threats
+    all_alerts[current_time]["traffic_camera"] = nearby_cameras_all
+    all_alerts[current_time]["alpr"] = nearby_alpr_cameras
+    all_alerts[current_time]["bluetooth"] = bluetooth_threats
+    all_alerts[current_time]["weather"] = weather_alerts
+    all_alerts[current_time]["gps"] = gps_alerts
+    all_alerts[current_time]["attention"] = attention_alerts
+
+
+    if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+        save_to_file(config["external"]["local"]["interface_directory"] + "/alerts.json", json.dumps(all_alerts)) # Save all current alerts to disk.
+
+
+    # Record the number of active alerts.
     alert_count["drone"] = [len(detected_drone_hazards)] + alert_count["drone"]
     alert_count["aircraft"] = [len(aircraft_threats)] + alert_count["aircraft"]
     alert_count["traffic_camera"] = [len(nearby_cameras_all)] + alert_count["traffic_camera"]
@@ -542,11 +563,11 @@ while True: # Run forever in a loop until terminated.
             print(style.blue + "Traffic Enforcement Cameras: " + str(len(nearby_cameras_all)))
             print("    Nearest:")
             if (config["general"]["traffic_camera_alerts"]["information_displayed"]["type"] == True): # Only display the camera type if it is enabled in the configuration.
-                if (nearest_enforcement_camera == nearest_speed_camera): # Check to see if the overall nearest camera is the nearest speed camera.
+                if (nearest_enforcement_camera["type"] == "speed"): # Check to see if the overall nearest camera is the nearest speed camera.
                     print("        Type: Speed Camera")
-                elif (nearest_enforcement_camera == nearest_redlight_camera): # Check to see if the overall nearest camera is the nearest red light camera.
+                elif (nearest_enforcement_camera["type"] == "redlight"): # Check to see if the overall nearest camera is the nearest red light camera.
                     print("        Type: Red Light Camera")
-                elif (nearest_enforcement_camera == nearest_misc_camera): # Check to see if the overall nearest camera is the nearest general traffic camera.
+                elif (nearest_enforcement_camera["type"] == "misc"): # Check to see if the overall nearest camera is the nearest general traffic camera.
                     print("        Type: General Traffic Camera")
                 else:
                     print("        Type: Unknown")

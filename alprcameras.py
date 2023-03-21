@@ -58,6 +58,18 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
             if (entry["distance"] < nearest_alpr_camera["distance"]): # Check to see if the distance to this camera is lower than the current closest camera.
                 nearest_alpr_camera = entry # Make the current camera the new closest camera.
 
+        # Sort the ALPR cameras list by distance.
+        sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
+        for i in range(1, len(filtered_cameras)): # Run once for every entry in the list of nearby ALPR cameras.
+            current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance.
+            for element in filtered_cameras:
+                if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
+                    current_closest = element # Set this aircraft to the current closest known aircraft.
+            sorted_cameras.append(current_closest) # Add the closest aircraft from this cycle to the list.
+            filtered_cameras.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+        filtered_cameras = sorted_cameras # Set the original list of cameras to the sorted list.
+
+
         debug_message("Processed ALPR camera alerts")
         return nearest_alpr_camera, filtered_cameras
 

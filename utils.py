@@ -518,35 +518,6 @@ def load_traffic_cameras(current_lat, current_lon, database_file, radius):
 
 
 
-# Define the function that will be used to get nearby speed, red light, and traffic cameras from a loaded database.
-debug_message("Creating `nearby_traffic_cameras` function")
-def nearby_traffic_cameras(current_lat, current_lon, database_information, radius=1.0): # This function is used to get a list of all traffic enforcement cameras within a certain range of a given location.
-    nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras = [], [], [] # Create empty placeholder lists for each camera type.
-
-    if (len(database_information) > 0): # Check to see if the supplied database information has data in it.
-        camera_id = 0 # This will be incremented up by 1 for each camera iterated through in the database.
-        for camera in database_information: # Iterate through each camera in the loaded database.
-            camera_id = camera_id + 1
-            camera["id"] = camera_id
-            current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
-            if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
-                camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
-                camera["bearing"] = calculate_bearing(camera["lat"], camera["lon"], current_lat, current_lon)
-                if (camera["flg"] == 0 or camera["flg"] == 2 or camera["flg"] == 3): # Check to see if this particular camera is speed related.
-                    nearby_speed_cameras.append(camera) # Add this camera to the "nearby speed camera" list.
-                elif (camera["flg"] == 1): # Check to see if this particular camera is red-light related.
-                    nearby_redlight_cameras.append(camera) # Add this camera to the "nearby red light camera" list.
-                else:
-                    nearby_misc_cameras.append(camera) # Add this camera to the "nearby general traffic camera" list.
-
-    else: # The supplied database information was empty.
-        pass
-
-    return nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras # Return the list of nearby cameras for all types.
-
-
-
-
 
 
 

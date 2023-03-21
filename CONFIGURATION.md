@@ -51,7 +51,7 @@ This section of configuration values will effect Assassin's general operation.
                 - `look_back` is an integer that determines the how many cycles Assassin will look back through when analyzing GPS trends.
                     - Shorter values will lead to faster processing, and shorter alert latch times.
                     - Longer values will detect older alerts, and will latch onto alerts for longer.
-                - `max_speed` is an integer that determines the detected travelled speed that needs to be reached for a spoofing alert to be triggered.
+                - `max_speed` is an integer that determines the detected travelled speed (in miles per hour) that needs to be reached for a spoofing alert to be triggered.
                     - This metric independently calculates the speed using distance and time, and can be used to detected unexplained dramatic changes in position.
                     - You should set this value to the fastest speed you ever expect to go, plus a significant marging for jitter due to bridges, tunnels, and other obstructions that may decrease accuracy.
                     - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
@@ -172,7 +172,7 @@ This section of configuration values will effect Assassin's general operation.
     - ADS-B functionality is dependent on GPS, and requires that `gps_enabled` be set to `true`. If GPS functionality is disabled, ADS-B alerts will be disabled regardless of whether they are enabled in the configuration.
     - This setting has the following sub-values for configuration:
         - The `enabled` value enables and disables the entire ADS-B system.
-        - The `adsb_message_file` is the filepath to the CSV ADS-B data that Assassin will use. This file should usually be data streamed live from Drump1090 on port 30003.
+        - The `adsb_message_file` is the filepath to the CSV ADS-B data that Assassin will use. This file should usually be data streamed live from Dump1090 on port 30003.
             - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
         - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while the car is on residential roads.
         - The `minimum_aircraft_speed` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while an aircraft isn't at cruising speed.
@@ -278,3 +278,9 @@ This section of configuration values effect Assassin's audio functionality.
             - When `repeat` is set to zero for a particular sound, that sould will be disabled.
         - The `delay` setting defines how long code execution will be paused to allow the sound effect time to play.
             - It's important to note that this delay does not include the time spent playing the audio file. Therefore, a 0.5 second audio file with a 1 second delay will only leave 0.5 seconds of delay after the sound has finished playing.
+
+## External Service Configuration
+
+This section contains configuration values that control how Assassin interacts with external services.
+
+TODO: Document external service configuration values.

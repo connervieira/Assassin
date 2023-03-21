@@ -9,10 +9,11 @@ debug_message = utils.debug_message
 load_traffic_cameras = utils.load_traffic_cameras
 get_gps_location = utils.get_gps_location
 convert_speed = utils.convert_speed
-nearby_traffic_cameras = utils.nearby_traffic_cameras
 display_notice = utils.display_notice
 save_to_file = utils.save_to_file
 add_to_file = utils.add_to_file
+get_distance = utils.get_distance
+calculate_bearing = utils.calculate_bearing
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
@@ -39,7 +40,7 @@ def load_traffic_camera_database():
             if (str(config["general"]["traffic_camera_alerts"]["database"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
                 display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 2)
             elif (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == False): # The traffic camera alert database specified in the configuration does not exist.
-                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["traffic_camera_alerts"]) + ") does not exist.", 2)
+                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["database"]) + ") does not exist.", 2)
             else:
                 display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
         debug_message("Loaded traffic enforcement camera database")
@@ -50,53 +51,57 @@ def load_traffic_camera_database():
 
 
 
+
+# Define the function that will be used to get nearby speed, red light, and traffic cameras from a loaded database.
+debug_message("Creating `nearby_traffic_cameras` function")
+def nearby_traffic_cameras(current_lat, current_lon, database_information, radius=1.0): # This function is used to get a list of all traffic enforcement cameras within a certain range of a given location.
+    nearby_cameras = [] # Create empty an placeholder list for the nearby cameras.
+
+    if (len(database_information) > 0): # Check to see if the supplied database information has data in it.
+        camera_id = 0 # This will be incremented up by 1 for each camera iterated through in the database.
+        for camera in database_information: # Iterate through each camera in the loaded database.
+            camera_id = camera_id + 1
+            camera["id"] = camera_id
+            current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
+            if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
+                camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
+                camera["bearing"] = calculate_bearing(camera["lat"], camera["lon"], current_lat, current_lon)
+                camera["flags"] = str("{0:012b}".format(camera["flg"]))[::-1] # Convert the flag integer into a binary bitmask.
+                if (camera["flags"][0] == "1" or camera["flags"][2] == "1" or camera["flags"][3] == "1"): # Check to see if this particular camera is speed related.
+                    camera["type"] = "speed"
+                elif (camera["flags"][1] == "1"): # Check to see if this particular camera is red-light related.
+                    camera["type"] = "redlight"
+                else:
+                    camera["type"] = "misc"
+
+                if (config["general"]["traffic_camera_alerts"]["enabled_types"][camera["type"]] == True): # Check to see if this camera type is enabled in the configuration.
+                    nearby_cameras.append(camera) # Add this camera to the nearby camera list.
+
+    else: # The supplied database information was empty.
+        pass
+
+    return nearby_cameras # Return the list of nearby cameras.
+
+
+
+
+
 def traffic_camera_alert_processing(current_location, loaded_traffic_camera_database):
     if (config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
         debug_message("Processing traffic enforcement camera alerts")
         # Create placeholders for each camera type so we can add the closet camera for each category in the next step .
-        nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearest_traffic_camera = {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}, {"dst": 10000000.0}
+        nearest_camera = {"dst": 10000000.0}
 
-        nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras = nearby_traffic_cameras(current_location[0], current_location[1], loaded_traffic_camera_database, float(config["general"]["traffic_camera_alerts"]["alert_range"])) # Get all traffic cameras within the configured radius.
+        nearby_cameras = nearby_traffic_cameras(current_location[0], current_location[1], loaded_traffic_camera_database, float(config["general"]["traffic_camera_alerts"]["alert_range"])) # Get all traffic cameras within the configured radius.
 
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["speed"] == True): # Only process alerts for speed cameras if enabled in the configuration.
-            for camera in nearby_speed_cameras: # Iterate through all nearby speed cameras.
-                if (camera["dst"] < nearest_speed_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
-                    nearest_speed_camera = camera # Make the current camera the new closest camera.
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["redlight"] == True): # Only process alerts for red light cameras if enabled in the configuration.
-            for camera in nearby_redlight_cameras: # Iterate through all nearby red-light cameras.
-                if (camera["dst"] < nearest_redlight_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
-                    nearest_redlight_camera = camera # Make the current camera the new closest camera.
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["misc"] == True): # Only process alerts for general traffic cameras if enabled in the configuration.
-            for camera in nearby_misc_cameras: # Iterate through all nearby miscellaneous cameras.
-                if (camera["dst"] < nearest_misc_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
-                    nearest_misc_camera = camera # Make the current camera the new closest camera.
+        for camera in nearby_cameras: # Iterate through all nearby cameras.
+            if (camera["dst"] < nearest_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
+                nearest_camera = camera # Make the current camera the new closest camera.
 
-
-        # Create a list of all nearby cameras.
-        nearby_cameras_all = [] # Set the list of all traffic cameras to a blank placeholder list.
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["speed"] == True): # Only process alerts for general traffic cameras if enabled in the configuration.
-            for camera in nearby_speed_cameras: # Iterate through all nearby speed cameras.
-                nearby_cameras_all.append(camera) # Add the speed cameras to the complete list of all nearby cameras.
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["redlight"] == True): # Only process alerts for general traffic cameras if enabled in the configuration.
-            for camera in nearby_redlight_cameras: # Iterate through all nearby red light cameras.
-                nearby_cameras_all.append(nearby_redlight_cameras) # Add the red light cameras to the complete list of all nearby cameras.
-        if (config["general"]["traffic_camera_alerts"]["enabled_types"]["misc"] == True): # Only process alerts for general traffic cameras if enabled in the configuration.
-            for camera in nearby_misc_cameras: # Iterate through all nearby general traffic cameras.
-                nearby_cameras_all.append(nearby_misc_cameras) # Add the general traffic cameras to the complete list of all nearby cameras.
-
-
-        if (nearest_speed_camera["dst"] < nearest_redlight_camera["dst"] and nearest_speed_camera["dst"] < nearest_misc_camera["dst"]): # Check to see if the nearest speed camera is closer than nearest of the other camera types
-            nearest_enforcement_camera = nearest_speed_camera # Set the overall nearest camera to the nearest speed camera.
-        elif (nearest_redlight_camera["dst"] < nearest_speed_camera["dst"] and nearest_redlight_camera["dst"] < nearest_misc_camera["dst"]): # Check to see if the nearest red-light camera is closer than nearest of the other camera types
-            nearest_enforcement_camera = nearest_redlight_camera # Set the overall nearest camera to the nearest red-light camera.
-        elif (nearest_misc_camera["dst"] < nearest_speed_camera["dst"] and nearest_misc_camera["dst"] < nearest_redlight_camera["dst"]): # Check to see if the nearest miscellaneous camera is closer than nearest of the other camera types
-            nearest_enforcement_camera = nearest_misc_camera # Set the overall nearest camera to the nearest miscellaneous camera.
-        else:
-            nearest_enforcement_camera = {"dst": 1000000000.0, "lat": 0.0, "lon": 0.0, "spd": 0, "str": ""} # Set the nearest overall enforcement camera to a blank placeholder.
 
         debug_message("Processed traffic enforcement camera alerts")
-        return nearest_enforcement_camera, nearest_speed_camera, nearest_redlight_camera, nearest_misc_camera, nearby_cameras_all # Return the nearest cameras of each type.
+        return nearest_camera, nearby_cameras # Return the nearby cameras.
 
 
-    else: # Traffic enforcement camera alert processing is disabled, so return blank placeholder information.
-        return {}, {}, {}, {}
+    else: # Traffic enforcement camera alert processing is disabled, so return blank placeholder information to avoid errors.
+        return {}, []

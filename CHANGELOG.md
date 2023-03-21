@@ -90,11 +90,11 @@ December 13th, 2022
 
 ## Version 2.0
 
-### Internet Update
+### Interface Update
 
 *Release date to be determined*
 
-This update adds support for optional internet based alerts to improve situational awareness even more.
+This update adds the ability to interface with external services. This enables new features, like a graphical user interface and internet based alerts.
 
 - Added weather alert system.
 - Rearranged GPS configuration options.
@@ -103,3 +103,10 @@ This update adds support for optional internet based alerts to improve situation
 - Moved text-to-speech configuration to the 'audio' section.
 - Added rounding to altitude and heading displays.
 - Added driver attention monitoring alert system.
+- Re-developed traffic camera alert handling.
+    - Simplified the traffic camera alert handling process.
+    - Fixed an issue where the type of a given camera couldn't be identified.
+    - Fixed an issue where traffic camera alerts were stored in unexpected ways.
+        - Previously, traffic camera alerts were held in disorganized duplicate nested lists depending on the number of alerts, instead of all in one single list.
+- Added local interface support, where all alerts can be stored in a local file to communicate with external local programs.
+- ALPR camera alerts are now sorted by distance in the back-end to make it easier to handle ALPR alerts externally.
