@@ -35,7 +35,6 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Add weather alerts.
     - [X] Add GPS spoofing detection.
     - [X] Add driving attention timer.
-    - [ ] Add speed trap alerts.
     - [ ] Improve ADS-B data intake process.
 
 

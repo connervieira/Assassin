@@ -48,24 +48,25 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
         # Remove false alerts in the nearby ALPR cameras list.
         filtered_cameras = [] # This is a placeholder list that will receive all of the cameras that pass the filtering process.
         for camera in nearby_alpr_cameras:
-            if (bearing_difference(0, float(camera["relativefacing"])) < float(config["general"]["alpr_alerts"]["angle_threshold"])): # Check to make sure the camera's relative bearing is inside the threshold.
-                if (bearing_difference(0, float(camera["bearing"]) - current_location[4]) < float(config["general"]["alpr_alerts"]["direction_threshold"])): # Check to make sure the relative direction to this camera is within the threshold.
+            camera["direction"] = camera["bearing"] - current_location[4]
+            if (bearing_difference(current_location[4], float(camera["facing"])) < float(config["general"]["alpr_alerts"]["angle_threshold"])): # Check to make sure the camera's relative bearing is inside the threshold.
+                if (bearing_difference(current_location[4], float(camera["bearing"])) < float(config["general"]["alpr_alerts"]["direction_threshold"])): # Check to make sure the relative facing to this camera is within the threshold.
                     filtered_cameras.append(camera) # Add this camera to the filtered list.
 
         nearest_alpr_camera = {"distance": 1000000000.0}
-
         for entry in filtered_cameras: # Iterate through all nearby ALPR cameras.
             if (entry["distance"] < nearest_alpr_camera["distance"]): # Check to see if the distance to this camera is lower than the current closest camera.
                 nearest_alpr_camera = entry # Make the current camera the new closest camera.
 
         # Sort the ALPR cameras list by distance.
         sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
-        for i in range(1, len(filtered_cameras)): # Run once for every entry in the list of nearby ALPR cameras.
-            current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance.
+        for i in range(0, len(filtered_cameras)): # Run once for every entry in the list of nearby ALPR cameras.
+            print ("Run")
+            current_closest = {"distance": 100000000000} # Set the current closest camera to placeholder data with an extremely far distance.
             for element in filtered_cameras:
-                if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
-                    current_closest = element # Set this aircraft to the current closest known aircraft.
-            sorted_cameras.append(current_closest) # Add the closest aircraft from this cycle to the list.
+                if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this camera is shorter than the current known closest camera.
+                    current_closest = element # Set this camera to the current closest known camera.
+            sorted_cameras.append(current_closest) # Add the closest camera from this cycle to the list.
             filtered_cameras.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
         filtered_cameras = sorted_cameras # Set the original list of cameras to the sorted list.
 

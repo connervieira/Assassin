@@ -108,5 +108,11 @@ This update adds the ability to interface with external services. This enables n
     - Fixed an issue where the type of a given camera couldn't be identified.
     - Fixed an issue where traffic camera alerts were stored in unexpected ways.
         - Previously, traffic camera alerts were held in disorganized duplicate nested lists depending on the number of alerts, instead of all in one single list.
+    - Fixed an issue where the calculated bearing to a speed camera was reversed.
+    - Traffic cameras are now sorted by distance in the back-end.
 - Added local interface support, where all alerts can be stored in a local file to communicate with external local programs.
-- ALPR camera alerts are now sorted by distance in the back-end to make it easier to handle ALPR alerts externally.
+- Refined ALPR camera alerts.
+    - ALPR camera alerts are now sorted by distance in the back-end.
+    - Fixed an issue where ALPR alerts would be filtered improperly.
+- Fixed an issue where Bluetooth alerts wouldn't be color coded properly when multiple alerts were displayed.
+- Fixed a bug in the aircraft distance sorting algorithm.

@@ -9,17 +9,17 @@
             "provider": "termux",
             "demo_mode": {
                 "enabled": true,
-                "longitude": 41,
-                "latitude": -81,
-                "speed": 0,
-                "altitude": 210,
-                "heading": 45,
+                "longitude": 41.53870,
+                "latitude": -81.55905,
+                "speed": 27,
+                "altitude": 200,
+                "heading": 300,
                 "satellites": 6
             },
             "spoof_detection": {
                 "enabled": true,
                 "look_back": 10,
-                "max_speed": 300,
+                "max_speed": 400,
                 "no_data_alert": true
             }
         },
@@ -28,7 +28,7 @@
             "reset_time": 120,
             "reset_speed": 3,
             "triggers": {
-                "time": 0.01
+                "time": 180.0 
             }
         },
         "telemetry": {
@@ -48,12 +48,12 @@
             "refresh_interval": 60,
             "criteria": {
                 "visibility": {
-                    "below": 1000,
+                    "below": 2000,
                     "above": 10000
                 },
                 "temperature": {
-                    "below": 0,
-                    "above": 50
+                    "below": 5,
+                    "above": 40
                 }
             }
         },
@@ -73,7 +73,7 @@
                 "distance": true,
                 "street": true,
                 "speed": true,
-                "bearing": false
+                "bearing": true 
             }
         },
         "drone_alerts": {
@@ -83,7 +83,7 @@
             "save_detected_devices": false,
             "monitoring_device": "wlp40s0",
             "monitoring_mode": "manual",
-            "hazard_latch_time": 8,
+            "hazard_latch_time": 10,
             "information_displayed": {
                 "threat_type": true,
                 "company": true,
@@ -101,10 +101,10 @@
             ]
         },
         "alpr_alerts": {
-            "alert_range": 0.5,
+            "alert_range": 2,
             "database": "./assets/databases/alpr.json",
-            "angle_threshold": 180,
-            "direction_threshold": 180,
+            "angle_threshold": 30,
+            "direction_threshold": 30,
             "information_displayed": {
                 "location": true,
                 "distance": true,
@@ -121,7 +121,7 @@
         "bluetooth_monitoring": {
             "enabled": false,
             "scan_time": 1,
-            "minimum_following_distance": 1,
+            "minimum_following_distance": 0,
             "log_devices": {
                 "enabled": false,
                 "filename": "bluetooth_devices.json"
@@ -145,12 +145,12 @@
         "adsb_alerts": {
             "enabled": false,
             "adsb_message_file": "",
-            "minimum_vehicle_speed": 60,
+            "minimum_vehicle_speed": 50,
             "minimum_aircraft_speed": 50,
             "maximum_aircraft_speed": 200,
             "minimum_aircraft_altitude": 500,
             "maximum_aircraft_altitude": 8000,
-            "distance_threshold": 3,
+            "distance_threshold": 5,
             "base_altitude_threshold": 3000,
             "message_time_to_live": 60,
             "threat_threshold": 2,
@@ -278,9 +278,15 @@
             },
             "gps": {
                 "path": "./assets/sounds/gps.mp3",
-                "repeat": "1",
+                "repeat": "0",
                 "delay": "0.5"
             }
         } 
+    },
+    "external": {
+        "local": {
+            "enabled": true,
+            "interface_directory": "/home/cvieira/Downloads/assassin/"
+        }
     }
 }

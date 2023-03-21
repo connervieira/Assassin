@@ -72,7 +72,7 @@ def adsb_alert_processing(current_location):
         if (len(aircraft_threats) > 1): # Only sort the aircraft threats list if there is more than 1 entry in it.
             debug_message("Sorting ADS-B threats")
             sorted_aircraft_threats = [] # Set the sorted aircraft threats to a blank placeholder so each entry can be added one by one in the next steps.
-            for i in range(1, len(aircraft_threats)): # Run once for every entry in the aircraft threat list.
+            for i in range(0, len(aircraft_threats)): # Run once for every entry in the aircraft threat list.
                 current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance.
                 for element in aircraft_threats:
                     if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.

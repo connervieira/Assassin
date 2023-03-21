@@ -1,4 +1,10 @@
 {
+    "Test Brand": {
+        "MAC": [
+            "bc671c"
+        ],
+        "type": "aircraft"
+    },
     "DJI Technology": {
         "MAC": [
             "60601f",

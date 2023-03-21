@@ -490,7 +490,7 @@ while True: # Run forever in a loop until terminated.
                     print("        Distance: " + str(threat['distance_followed']))
                 if (config["general"]["bluetooth_monitoring"]["information_displayed"]["time"] == True): # Only display the following time if it is enabled in the configuration.
                     print("        Time: " + str(int(threat['lastseentime']) - int(threat['firstseentime']))+ " seconds")
-                print(style.end)
+            print(style.end)
 
 
             display_shape("square") # Display an ASCII square in the console output to represent a device, if Assassin is configured to do so.
@@ -511,7 +511,7 @@ while True: # Run forever in a loop until terminated.
             print(style.purple + loaded_alpr_camera_database["name"] + " Cameras: " + str(len(nearby_alpr_cameras))) # Display the number of active ALPR alerts.
             print("    Nearest:")
             if (config["general"]["alpr_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearest_alpr_camera["latitude"]) + ", " + str(nearest_alpr_camera["longitude"]) + " (" + get_arrow_direction(nearest_alpr_camera["bearing"] - current_location[4]) + " " + str(round(nearest_alpr_camera["bearing"] - current_location[4])) + "°)") # Display the distance to this POI.
+                print("        Location: " + str(nearest_alpr_camera["latitude"]) + ", " + str(nearest_alpr_camera["longitude"]) + " (" + get_arrow_direction(nearest_alpr_camera["direction"]) + " " + str(round(nearest_alpr_camera["direction"])) + "°)") # Display the distance to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["distance"] == True): # Only display the distance to the camera if it is enabled in the configuration.
                 print("        Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
@@ -519,8 +519,8 @@ while True: # Run forever in a loop until terminated.
             if (config["general"]["alpr_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing to the camera if it is enabled in the configuration.
                 print("        Bearing: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["absolute_facing"] == True): # Only display the absolute facing angle of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["direction"] != ""): # Check to see if this POI has direction information.
-                    print("        Absolute Facing: " + get_cardinal_direction(nearest_alpr_camera["direction"]) + " " + str(nearest_alpr_camera["direction"]) + "°") # Display the direction this camera is facing.
+                if (nearest_alpr_camera["facing"] != ""): # Check to see if this POI has direction information.
+                    print("        Absolute Facing: " + get_cardinal_direction(nearest_alpr_camera["facing"]) + " " + str(nearest_alpr_camera["facing"]) + "°") # Display the direction this camera is facing.
             if (config["general"]["alpr_alerts"]["information_displayed"]["relative_facing"] == True): # Only display the relative facing angle of the camera if it is enabled in the configuration.
                 if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
                     print("        Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
@@ -572,7 +572,7 @@ while True: # Run forever in a loop until terminated.
                 else:
                     print("        Type: Unknown")
             if (config["general"]["traffic_camera_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearest_enforcement_camera["lat"]) + ", " + str(nearest_enforcement_camera["lon"]) + " (" + get_arrow_direction(nearest_enforcement_camera["bearing"] - current_location[4]) + " " + str(round(nearest_enforcement_camera["bearing"] - current_location[4])) + "°)") # Display the location of the traffic camera.
+                print("        Location: " + str(nearest_enforcement_camera["lat"]) + ", " + str(nearest_enforcement_camera["lon"]) + " (" + get_arrow_direction(nearest_enforcement_camera["direction"]) + " " + str(round(nearest_enforcement_camera["direction"])) + "°)") # Display the location of the traffic camera.
             if (config["general"]["traffic_camera_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
                 print("        Distance: " + str(round(nearest_enforcement_camera["dst"]*1000)/1000) + " miles") # Display the current distance to the traffic camera.
             if (config["general"]["traffic_camera_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.

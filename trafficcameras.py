@@ -65,7 +65,7 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
             current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
             if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
                 camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
-                camera["bearing"] = calculate_bearing(camera["lat"], camera["lon"], current_lat, current_lon)
+                camera["bearing"] = calculate_bearing(current_lat, current_lon, camera["lat"], camera["lon"])
                 camera["flags"] = str("{0:012b}".format(camera["flg"]))[::-1] # Convert the flag integer into a binary bitmask.
                 if (camera["flags"][0] == "1" or camera["flags"][2] == "1" or camera["flags"][3] == "1"): # Check to see if this particular camera is speed related.
                     camera["type"] = "speed"
@@ -95,9 +95,20 @@ def traffic_camera_alert_processing(current_location, loaded_traffic_camera_data
         nearby_cameras = nearby_traffic_cameras(current_location[0], current_location[1], loaded_traffic_camera_database, float(config["general"]["traffic_camera_alerts"]["alert_range"])) # Get all traffic cameras within the configured radius.
 
         for camera in nearby_cameras: # Iterate through all nearby cameras.
+            camera["direction"] = camera["bearing"] - current_location[4] # Calculate the direction to this camera, relative to the current direction of movement.
             if (camera["dst"] < nearest_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
                 nearest_camera = camera # Make the current camera the new closest camera.
 
+        # Sort the cameras list by distance.
+        sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
+        for i in range(0, len(nearby_cameras)): # Run once for every entry in the list of nearby cameras.
+            current_closest = {"dst": 100000000000} # Set the current closest camera to placeholder data with an extremely far distance.
+            for element in nearby_cameras:
+                if (element["dst"] < current_closest["dst"]): # Check to see if the distance to this camera is closer than the current known closest camera.
+                    current_closest = element # Set this camera to the current closest known camera .
+            sorted_cameras.append(current_closest) # Add the closest camera from this cycle to the list.
+            nearby_cameras.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+        nearby_cameras = sorted_cameras # Set the original list of cameras to the sorted list.
 
         debug_message("Processed traffic enforcement camera alerts")
         return nearest_camera, nearby_cameras # Return the nearby cameras.

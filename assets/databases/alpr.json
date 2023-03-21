@@ -9,7 +9,7 @@
         "name": "str",
         "road": "str",
         "description": "str",
-        "direction": "int",
+        "facing": "int",
         "operator": "str",
         "type": "str"
     },
@@ -21,7 +21,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the west side of the road, reading the license plates on the back of vehicles traveling south on County Line Road just after passing Fairmount Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "standalone"
         },
@@ -32,7 +32,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the east side of the road, reading the license plates on the back of vehicles traveling north on County Line Road just after passing Fairmount Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "standalone"
         },
@@ -43,7 +43,7 @@
             "name": "Falcon",
             "road": "Fairmount Boulevard",
             "description": "A black, solar powered unit placed on a pole on the south side of the road, reading the license plates on the back of vehicles traveling west on Fairmount Boulevard just after passing County Line Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "standalone"
         },
@@ -54,7 +54,7 @@
             "name": "Falcon",
             "road": "Chagrin River Road",
             "description": "A black, solar powered unit placed on a black pole on the side of the road, scanning the license plates on the backs of cars headed south, entering Hunting Valley.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "standalone"
         },
@@ -65,7 +65,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed east on Mayfield Road, just after passing SOM Center Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -76,7 +76,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed west on Mayfield Road, just after passing SOM Center Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -87,7 +87,7 @@
             "name": "",
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of vehicles just as they hit the start of a bridge.",
-            "direction": 75,
+            "facing": 75,
             "operator": "",
             "type": "standalone"
         },
@@ -98,7 +98,7 @@
             "name": "",
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the right side of the road, facing the backs of cars on I-90 East.",
-            "direction": 45,
+            "facing": 45,
             "operator": "",
             "type": "standalone"
         },
@@ -109,7 +109,7 @@
             "name": "",
             "road": "I-90 West",
             "description": "Located on a tall silver pole on the right side of the road, facing the backs of cars on I-90 West.",
-            "direction": 225,
+            "facing": 225,
             "operator": "",
             "type": "standalone"
         },
@@ -120,7 +120,7 @@
             "name": "",
             "road": "I-90 East",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of cars on I-90 East, just as they begin to cross a bridge.",
-            "direction": 70,
+            "facing": 70,
             "operator": "",
             "type": "standalone"
         },
@@ -131,7 +131,7 @@
             "name": "",
             "road": "I-90 West",
             "description": "Located on a tall silver pole on the left side of the road, facing the backs of cars on I-90 West, just after they finish crossing a bridge.",
-            "direction": 250,
+            "facing": 250,
             "operator": "",
             "type": "standalone"
         },
@@ -142,7 +142,7 @@
             "name": "",
             "road": "Turney Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed south-east on Turney Road, just after passing Granger Road.",
-            "direction": 150,
+            "facing": 150,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -153,7 +153,7 @@
             "name": "",
             "road": "Turney Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed north-west on Turney Road, just after passing Granger Road.",
-            "direction": 330,
+            "facing": 330,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -164,7 +164,7 @@
             "name": "",
             "road": "Pearl Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars headed north-east on Pearl road, just after they pass York Road and Stumph Road.",
-            "direction": 30,
+            "facing": 30,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -175,7 +175,7 @@
             "name": "",
             "road": "Stumph Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north-west on Stump Road, just after crossing Pearl Road.",
-            "direction": 325,
+            "facing": 325,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -186,7 +186,7 @@
             "name": "",
             "road": "Pearl Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed south-west on Pearl Road, just after passing Stumph Road and York Road.",
-            "direction": 230,
+            "facing": 230,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -197,7 +197,7 @@
             "name": "",
             "road": "York Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south-east on York Road, just after passing Pearl Road.",
-            "direction": 130,
+            "facing": 130,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -208,7 +208,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling south on Country Line Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "standalone"
         },
@@ -219,7 +219,7 @@
             "name": "Falcon",
             "road": "Cedar Road",
             "description": "Mounted on a tall black pole on the east side of the of a fork in Cedar Road, facing the backs of cars traveling west from Chagrin River Road to Cedar Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "standalone"
         },
@@ -230,7 +230,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling north on the round-about between Gates Mills Boulevard and SOM Center Road.",
-            "direction": 30,
+            "facing": 30,
             "operator": "",
             "type": "standalone"
         },
@@ -241,7 +241,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "Mounted on a tall black pole on the east side of the road, facing the backs of cars traveling north on SOM Center Road just after passing Fairmount Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "standalone"
         },
@@ -252,7 +252,7 @@
             "name": "Falcon",
             "road": "Fairmount Boulevard",
             "description": "Mounted on a tall black pole on the south side of the road, facing the backs of cars traveling east on Fairmount Boulevard just after passing SOM Center Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "standalone"
         },
@@ -263,7 +263,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "A solar powered unit placed on a tall black pole on the east side of the road, reading the license plates on the backs of cars traveling north on SOM Center Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "standalone"
         },
@@ -274,7 +274,7 @@
             "name": "Falcon",
             "road": "West Hill Drive",
             "description": "On the south side of the road, facing the backs of cars traveling east on West Hill Drive.",
-            "direction": 40,
+            "facing": 40,
             "operator": "",
             "type": "standalone"
         },
@@ -285,7 +285,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "3 small black camera units mounted on a traffic signal cross bar, each facing the back of cars traveling west on the 3 lanes of Mayfield Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -296,7 +296,7 @@
             "name": "Falcon",
             "road": "Old Mill Road",
             "description": "A black solar powered unit mounted on a pole on the south side of the road, facing the backs of cars traveling east on Old Mill Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "standalone"
         },
@@ -307,7 +307,7 @@
             "name": "Falcon",
             "road": "Cedar Road",
             "description": "A black, solar powered unit placed on a pole on the north side of the road, facing front of vehicles traveling west on Cedar Road just before reaching SOM Center Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "standalone"
         },
@@ -318,7 +318,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "A discrete black unit placed on a standalone pole on the west side of the road, facing the backs of cars traveling south on SOM Center Road, just after passing Cedar Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "standalone"
         },
@@ -329,7 +329,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the back of cars traveling north on SOM Center Road just after they pass Shaker Boulevard.",
-            "direction": 350,
+            "facing": 350,
             "operator": "",
             "type": "standalone"
         },
@@ -340,7 +340,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "A black camera on a standalone pole located on the east side of the road, facing the front of cars traveling north on SOM Center Road just before they pass Shaker Boulevard.",
-            "direction": 200,
+            "facing": 200,
             "operator": "",
             "type": "standalone"
         },
@@ -351,7 +351,7 @@
             "name": "Falcon",
             "road": "Shaker Boulevard",
             "description": "A black camera on a standalone pole located on the south side of the road, facing the back of cars traveling west on Shaker Boulevard just after they pass SOM Center Road.",
-            "direction": 60,
+            "facing": 60,
             "operator": "",
             "type": "standalone"
         },
@@ -362,7 +362,7 @@
             "name": "Falcon",
             "road": "SOM Center Road",
             "description": "A black solar powered camera on a standalone pole located on the east side of the road, facing the backs of cars traveling north on SOM Center Road just after passing Old Kinsman Road.",
-            "direction": 10,
+            "facing": 10,
             "operator": "",
             "type": "standalone"
         },
@@ -373,7 +373,7 @@
             "name": "Falcon",
             "road": "Old Kinsman Road",
             "description": "A black solar powered camera on a standalone pole located on the sound side of the road, facing the backs of cars traveling east on Old Kinsman Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "standalone"
         },
@@ -384,7 +384,7 @@
             "name": "Falcon",
             "road": "Chagrin River Road",
             "description": "Located on the west side of the road, facing the front of cars traveling south on Chagrin River Road just after passing Woodland Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "standalone"
         },
@@ -395,7 +395,7 @@
             "name": "Falcon",
             "road": "South Woodland Road",
             "description": "Located on the north side of the road, facing the back of cars traveling west on South Woodland Road just after passing Chagrin River Road.",
-            "direction": 250,
+            "facing": 250,
             "operator": "",
             "type": "standalone"
         },
@@ -406,7 +406,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "A compact silver camera mounted on a traffic light cross bar facing the backs of cars traveling west on Chagrin Boulevard as they pass Brainard Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -417,7 +417,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "A compact silver camera mounted on a traffic light cross bar facing the backs of cars traveling east on Chagrin Boulevard as they pass Brainard Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -428,7 +428,7 @@
             "name": "",
             "road": "Liberty Tunnel",
             "description": "A thin white camera mounted on the support post of a street lamp on the west side of the road, facing the backs of cars traveling south entering the Liberty Tunnel.",
-            "direction": 200,
+            "facing": 200,
             "operator": "",
             "type": "streetlamp_supportpost"
         },
@@ -439,7 +439,7 @@
             "name": "",
             "road": "Liberty Tunnel",
             "description": "A thin white camera mounted on the support post of a street lamp on the east side of the road, facing the backs of cars traveling north existing the Liberty Tunnel.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "streetlamp_supportpost"
         },
@@ -450,7 +450,7 @@
             "name": "",
             "road": "Liberty Tunnel",
             "description": "A small white camera mounted on a traffic light cross bar at the corner of the intersection, facing the backs of cars traveling south exiting the Liberty Tunnel.",
-            "direction": 230,
+            "facing": 230,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -461,7 +461,7 @@
             "name": "",
             "road": "Cochran Road",
             "description": "A small white camera facing the backs of cars traveling north on Cochran Road.",
-            "direction": 330,
+            "facing": 330,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -472,7 +472,7 @@
             "name": "",
             "road": "Washington Road",
             "description": "A small white camera facing the backs of cars traveling south on Washington Road just after passing Cochran Road.",
-            "direction": 200,
+            "facing": 200,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -483,7 +483,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling west on Mayfield Road just after passing Lander Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -494,7 +494,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling east on Mayfield Road just after passing Lander Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -505,7 +505,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling west on Mayfield Road just after passing Richmond Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -516,7 +516,7 @@
             "name": "",
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar facing the backs of cars traveling north on Richmond Road just after passing Mayfield Road.",
-            "direction": 10,
+            "facing": 10,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -527,7 +527,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Mayfield Road, just after passing South Belvoir Boulevard.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -538,7 +538,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling west on Mayfield Road just after passing South Belvoir Boulevard.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -549,7 +549,7 @@
             "name": "",
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Richmond Road just after passing Cedar Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -560,7 +560,7 @@
             "name": "",
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Richmond Road just after passing Cedar Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -571,7 +571,7 @@
             "name": "",
             "road": "Cedar Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling west on Cedar Road just after passing Richmond Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -582,7 +582,7 @@
             "name": "",
             "road": "Cedar Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling east on Cedar Road just after passing Richmond Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -593,7 +593,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bars, facing the backs of cars traveling south west on Euclid Avenue just after passing Ford Drive.",
-            "direction": 220,
+            "facing": 220,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -604,7 +604,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bars, facing the front of cars traveling south west on Euclid Avenue as they pass Ford Drive.",
-            "direction": 50,
+            "facing": 50,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -615,7 +615,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north east on Euclid Avenue just after passing Mayfield Road.",
-            "direction": 50,
+            "facing": 50,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -626,7 +626,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north east on Euclid Avenue as they pass Mayfield Road.",
-            "direction": 230,
+            "facing": 230,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -637,7 +637,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north west on Mayfield Road as they pass Euclid Avenue.",
-            "direction": 130,
+            "facing": 130,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -648,7 +648,7 @@
             "name": "",
             "road": "Ford Drive",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south east on Ford Drive as they pass Euclid Avenue.",
-            "direction": 310,
+            "facing": 310,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -659,7 +659,7 @@
             "name": "",
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling south on Ridge Road just before passing Pearl Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -670,7 +670,7 @@
             "name": "",
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars traveling north on Ridge Road, just before passing Pearl Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -681,7 +681,7 @@
             "name": "",
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north on Ridge Road, as they cross Snow Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -692,7 +692,7 @@
             "name": "",
             "road": "Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south on Ridge Road as they cross Snow Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -703,7 +703,7 @@
             "name": "",
             "road": "Snow Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling west on Snow Road as they pass Ridge Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -714,7 +714,7 @@
             "name": "",
             "road": "Snow Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling east on Snow Road as they pass Ridge Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -725,7 +725,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar facing the front of cars traveling west on Mayfield Road as they pass Warrensville Center Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -736,7 +736,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling east on Mayfield Road as they pass Warrensville Center Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -747,7 +747,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling north on Warrensville Center Road as they pass Mayfield Road.",
-            "direction": 180,
+            "facing": 180,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -758,7 +758,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars traveling south on Warrensville Center Road as they pass Mayfield Road.",
-            "direction": 0,
+            "facing": 0,
             "operator": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -769,7 +769,7 @@
             "name": "Falcon",
             "road": "Gates Mills Boulevard",
             "description": "Mounted on the north west side of the road, facing the backs of cars traveling north east on Gates Mills Boulevard.",
-            "direction": 50,
+            "facing": 50,
             "operator": "",
             "type": "standalone"
         },
@@ -780,7 +780,7 @@
             "name": "Falcon",
             "road": "Wilson Mills Road",
             "description": "A small black solar powered unit mounted on a utility pole facing the backs of cars traveling east on Wilson Mills Road.",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "utilitypole"
         },
@@ -791,7 +791,7 @@
             "name": "Falcon",
             "road": "Wilson Mills Road",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling west on Wilson Mills Road.",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "standalone"
         },
@@ -802,7 +802,7 @@
             "name": "Falcon",
             "road": "Alpha Drive",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
-            "direction": 340,
+            "facing": 340,
             "operator": "",
             "type": "standalone"
         },
@@ -813,7 +813,7 @@
             "name": "",
             "road": "Alpha Drive",
             "description": "A white, hardwired unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Alpha Drive.",
-            "direction": 340,
+            "facing": 340,
             "operator": "",
             "type": "standalone"
         },
@@ -824,7 +824,7 @@
             "name": "Falcon",
             "road": "Wilson Mills Road",
             "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling west on Wilson Mills Road",
-            "direction": 270,
+            "facing": 270,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -835,7 +835,7 @@
             "name": "Falcon",
             "road": "Wilson Mills Road",
             "description": "Two white camera units mounted on a metal crossbar, facing the backs of cars traveling east on Wilson Mills Road",
-            "direction": 90,
+            "facing": 90,
             "operator": "",
             "type": "trafficlight_crossbar"
         },
@@ -846,7 +846,7 @@
             "name": "Falcon",
             "road": "Chillicothe Road",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling north on Chillicothe Road.",
-            "direction": 340,
+            "facing": 340,
             "owner": "Russell Township Ohio",
             "type": "standalone"
         },
@@ -857,7 +857,7 @@
             "name": "Falcon",
             "road": "Chillicothe Road",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling south on Chillicothe Road.",
-            "direction": 160,
+            "facing": 160,
             "owner": "Russell Township Ohio",
             "type": "standalone"
         },
@@ -868,7 +868,7 @@
             "name": "Falcon",
             "road": "Bell Street",
             "description": "A black solar powered unit mounted on a stand-alone pole on the side of the road, facing the backs of cars traveling east on Bell Street.",
-            "direction": 80,
+            "facing": 80,
             "owner": "Russell Township Ohio",
             "type": "standalone"
         },
@@ -879,7 +879,7 @@
             "name": "Falcon",
             "road": "Washington Street",
             "description": "Russell Township Ohio",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "standalone"
         },
@@ -890,7 +890,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light cross bar, facing the backs of cars headed south on SOM Center Road, just after passing Marsol Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar"
         },
@@ -901,7 +901,7 @@
             "name": "",
             "road": "I-80 East",
             "description": "A two-camera unit mounted on a stand-alone weather station on the right side of the road, facing the backs of cars passing by.",
-            "direction": 30,
+            "facing": 30,
             "owner": "",
             "type": "standalone"
         },
@@ -912,7 +912,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Northfield Road, as they pass Ledge Road and Eaton Ridge Road.",
-            "direction": 20,
+            "facing": 20,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -923,7 +923,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Northfield Road, as they pass Ledge Road and Eaton Ridge Road.",
-            "direction": 200,
+            "facing": 200,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -934,7 +934,7 @@
             "name": "",
             "road": "Ledge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Ledge Road, as they pass Northfield Road.",
-            "direction": 110,
+            "facing": 110,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -945,7 +945,7 @@
             "name": "",
             "road": "Eaton Ridge Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Eaton Ridge Road, as they pass Northfield Road.",
-            "direction": 290,
+            "facing": 290,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -956,7 +956,7 @@
             "name": "",
             "road": "Summer Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Summer Road, as they enter Aurora Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -967,7 +967,7 @@
             "name": "",
             "road": "Bedford Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Bedford Road, as they pass Aurora Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -978,7 +978,7 @@
             "name": "",
             "road": "Freeway Drive",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Freeway Drive, as they pass Aurora Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -989,7 +989,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Aurora Road, as they pass Bedford Road and Freeway Drive.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1000,7 +1000,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Aurora Road, as they pass Bedford Road and Freeway Drive.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1011,7 +1011,7 @@
             "name": "",
             "road": "Center Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Center Road, as they pass Rockside Road.",
-            "direction": 200,
+            "facing": 200,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1022,7 +1022,7 @@
             "name": "",
             "road": "Rockside Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Rockside Road, as they pass Center Road.",
-            "direction": 290,
+            "facing": 290,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1033,7 +1033,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Northfield Road, as they pass Rockside Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1044,7 +1044,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Northfield Road, as they pass Rockside Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1055,7 +1055,7 @@
             "name": "",
             "road": "Rockside Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Rockside Road, as they pass Northfield Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1066,7 +1066,7 @@
             "name": "",
             "road": "Rockside Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Rockside Road, as they pass Northfield Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1077,7 +1077,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Chagrin Boulevard, as they pass Richmond Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1088,7 +1088,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Chagrin Boulevard, as they pass Richmond Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1099,7 +1099,7 @@
             "name": "",
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Richmond Road, as they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1110,7 +1110,7 @@
             "name": "",
             "road": "Richmond Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Richmond Road, as they pass Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1121,7 +1121,7 @@
             "name": "",
             "road": "Kirtland Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north-west on Kirtland Road, as they pass Clocktower Drive.",
-            "direction": 140,
+            "facing": 140,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1132,7 +1132,7 @@
             "name": "",
             "road": "Kirtland Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south-east on Kirtland Road, as they pass Clocktower Drive.",
-            "direction": 325,
+            "facing": 325,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1143,7 +1143,7 @@
             "name": "",
             "road": "Clocktower Drive",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south-west on Clocktower Drive, as they pass Kirtland Road.",
-            "direction": 55,
+            "facing": 55,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1154,7 +1154,7 @@
             "name": "",
             "road": "Clocktower Drive",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north-east on Clocktower Drive, as they pass Kirtland Road.",
-            "direction": 230,
+            "facing": 230,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1165,7 +1165,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Mayfield Road, as they pass Taylor Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1176,7 +1176,7 @@
             "name": "",
             "road": "Mayfield Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Mayfield Road, as they pass Taylor Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1187,7 +1187,7 @@
             "name": "",
             "road": "Taylor Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Taylor Road, as they pass Mayfield Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1198,7 +1198,7 @@
             "name": "",
             "road": "Taylor Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Taylor Road, as they pass Mayfield Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1209,7 +1209,7 @@
             "name": "",
             "road": "East 105th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 105th Street, as they pass Euclid Avenue.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1220,7 +1220,7 @@
             "name": "",
             "road": "East 105th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 105th Street, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1231,7 +1231,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Euclid Avenue, as they pass East 105th Street.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1242,7 +1242,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Euclid Avenue, as they pass East 105th Street.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1253,7 +1253,7 @@
             "name": "",
             "road": "East 100th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 100th Street, as they pass Euclid Avenue.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1264,7 +1264,7 @@
             "name": "",
             "road": "East 100th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 100th Street, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1275,7 +1275,7 @@
             "name": "",
             "road": "East 89th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 89th Street, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1286,7 +1286,7 @@
             "name": "",
             "road": "East 89th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 89th Street, as they pass Euclid Avenue.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1297,7 +1297,7 @@
             "name": "",
             "road": "East 93rd Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on East 93rd Street, as they pass Euclid Avenue.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1308,7 +1308,7 @@
             "name": "",
             "road": "East 93rd Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 93rd Street, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1319,7 +1319,7 @@
             "name": "",
             "road": "East 85th Street",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on East 85th Street, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1330,7 +1330,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Euclid Avenue, as they pass East 85th Street.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1341,7 +1341,7 @@
             "name": "",
             "road": "Chillicothe Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed south on Chillicothe Road, as they pass Chardon Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1352,7 +1352,7 @@
             "name": "",
             "road": "Chillicothe Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed north on Chillicothe Road, as they pass Chardon Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1363,7 +1363,7 @@
             "name": "",
             "road": "Chardon Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed west on Chardon Road, as they pass Chillicothe Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1374,7 +1374,7 @@
             "name": "",
             "road": "Chardon Road",
             "description": "Mounted on a traffic light cross bar, facing the front of cars headed east on Chardon Road, as they pass Chillicothe Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1385,7 +1385,7 @@
             "name": "",
             "road": "Saint Clair Avenue",
             "description": "Mounted on a street lamp crossbar above a traffic light, facing the front of cars headed north-east on Saint Clair Avenue, as they pass East 72nd Street.",
-            "direction": 260,
+            "facing": 260,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1396,7 +1396,7 @@
             "name": "",
             "road": "East 72nd Street",
             "description": "Mounted on a street lamp crossbar above a traffic light, facing the front of cars headed north-east on East 72nd Street, as they enter Saint Clair Avenue.",
-            "direction": 5,
+            "facing": 5,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1407,7 +1407,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north-east on Euclid Avenue, just after passing SOM Center Road.",
-            "direction": 70,
+            "facing": 70,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1418,7 +1418,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-east on Euclid Avenue, as they pass SOM Center Road.",
-            "direction": 250,
+            "facing": 250,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1429,7 +1429,7 @@
             "name": "",
             "road": "Euclid Avenue",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-west on Euclid Avenue, as they pass SOM Center Road.",
-            "direction": 70,
+            "facing": 70,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1440,7 +1440,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Euclid Avenue.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1451,7 +1451,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Euclid Avenue.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1462,7 +1462,7 @@
             "name": "",
             "road": "Broadway",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-east on Broadway, as they pass Erie Avenue.",
-            "direction": 320,
+            "facing": 320,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1473,7 +1473,7 @@
             "name": "",
             "road": "Broadway",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-west on Broadway, as they pass Erie Avenue.",
-            "direction": 130,
+            "facing": 130,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1484,7 +1484,7 @@
             "name": "",
             "road": "Erie Avenue",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north-east on Erie Avenue, as they pass Broadway.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1495,7 +1495,7 @@
             "name": "",
             "road": "Erie Avenue",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south-west on Erie Avenue, as they pass Broadway.",
-            "direction": 50,
+            "facing": 50,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1506,7 +1506,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Aurora Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1517,7 +1517,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Aurora Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1528,7 +1528,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Aurora Road, as they pass SOM Center Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1539,7 +1539,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Aurora Road, as they pass SOM Center Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1550,7 +1550,7 @@
             "name": "",
             "road": "Pettibone Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Pettibone Road, as they pass SOM Center Road.",
-            "direction": 80,
+            "facing": 80,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1561,7 +1561,7 @@
             "name": "",
             "road": "Pettibone Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Pettibone Road, as they pass SOM Center Road.",
-            "direction": 255,
+            "facing": 255,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1572,7 +1572,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on SOM Center Road, as they pass Pettibone Road.",
-            "direction": 10,
+            "facing": 10,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1583,7 +1583,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on SOM Center Road, as they pass Pettibone Road.",
-            "direction": 190,
+            "facing": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1594,7 +1594,7 @@
             "name": "",
             "road": "SOM Center Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on SOM Center Road, just after passing Ridgebury Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar"
         },
@@ -1605,7 +1605,7 @@
             "name": "",
             "road": "Valley View Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed north-west on Valley View Road, just before passing Aurora Road.",
-            "direction": 120,
+            "facing": 120,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1616,7 +1616,7 @@
             "name": "",
             "road": "North Bedford Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed north-west on Valley View Road, just before passing Aurora Road.",
-            "direction": 300,
+            "facing": 300,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1627,7 +1627,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed west on Aurora Road, just before passing Valley View Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1638,7 +1638,7 @@
             "name": "",
             "road": "Aurora Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed east on Aurora Road, just before passing Valley View Road.",
-            "direction": 300,
+            "facing": 300,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1649,7 +1649,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Chagrin Boulevard, as they pass South Green Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1660,7 +1660,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass South Green Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1671,7 +1671,7 @@
             "name": "",
             "road": "South Green Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on South Green Road, as they pass Chagrin Boulevard.",
-            "direction": 190,
+            "facing": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1682,7 +1682,7 @@
             "name": "",
             "road": "South Green Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on South Green Road, as they pass Chagrin Boulevard.",
-            "direction": 10,
+            "facing": 10,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1693,7 +1693,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Chagrin Boulevard, as they pass Warrensville Center Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1704,7 +1704,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass Warrensville Center Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1715,7 +1715,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Warrensville Center Road, as they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1726,7 +1726,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed south on Warrensville Center Road, just after they pass Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar"
         },
@@ -1737,7 +1737,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Warrensville Center Road, as they pass Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1748,7 +1748,7 @@
             "name": "",
             "road": "Warrensville Center Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on Warrensville Center Road, just after they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar"
         },
@@ -1759,7 +1759,7 @@
             "name": "",
             "road": "Lomond Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Lomond Boulevard, as they enter Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1770,7 +1770,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Chagrin Boulevard, as they pass Lomond Boulevard.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1781,7 +1781,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass Lomond Boulevard.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1792,7 +1792,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass Farnsleigh Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1803,7 +1803,7 @@
             "name": "",
             "road": "Farnsleigh Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Farnsleigh Road, as they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1814,7 +1814,7 @@
             "name": "",
             "road": "Park East Drive",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Park East Drive, as they pass Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1825,7 +1825,7 @@
             "name": "",
             "road": "Enterprise Parkway",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Enterprise Parkway, as they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1836,7 +1836,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Chagrin Boulevard, as they pass Enterprise Parkway.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1847,7 +1847,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass Park East Drive.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1858,7 +1858,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Chagrin Boulevard, as they pass Fire Station Drive.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1869,7 +1869,7 @@
             "name": "",
             "road": "Chagrin Boulevard",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Chagrin Boulevard, as they pass Commerce Park.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1880,7 +1880,7 @@
             "name": "",
             "road": "Fire Station Drive",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Fire Station Drive, as they pass Chagrin Boulevard.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1891,7 +1891,7 @@
             "name": "",
             "road": "Commerce Park",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Commerce Park, as they pass Chagrin Boulevard.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1902,7 +1902,7 @@
             "name": "",
             "road": "Park Avenue",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed north on Park Avenue, as they pass East Aurora Road.",
-            "direction": 190,
+            "facing": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1913,7 +1913,7 @@
             "name": "",
             "road": "Crow Drive",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed north on Crow Drive, as they pass East Aurora Road.",
-            "direction": 10,
+            "facing": 10,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1924,7 +1924,7 @@
             "name": "",
             "road": "East Aurora Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed west on East Aurora Road, as they pass Crow Drive.",
-            "direction": 100,
+            "facing": 100,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1935,7 +1935,7 @@
             "name": "",
             "road": "East Aurora Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed east on East Aurora Road, as they pass Park Avenue.",
-            "direction": 280,
+            "facing": 280,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1946,7 +1946,7 @@
             "name": "",
             "road": "East Aurora Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on East Aurora Road, as they pass Shepard Road.",
-            "direction": 290,
+            "facing": 290,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1957,7 +1957,7 @@
             "name": "",
             "road": "East Aurora Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on East Aurora Road, as they pass Shepard Road.",
-            "direction": 110,
+            "facing": 110,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1968,7 +1968,7 @@
             "name": "",
             "road": "Shepard Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Shepard Road, as they pass East Aurora Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1979,7 +1979,7 @@
             "name": "",
             "road": "Shepard Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Shepard Road, as they pass East Aurora Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -1990,7 +1990,7 @@
             "name": "",
             "road": "East Aurora Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed east on East Aurora Road, as they pass Chamberlin Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2001,7 +2001,7 @@
             "name": "",
             "road": "Chamberlin Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on Chamberlin Road, just after they pass East Aurora Road.",
-            "direction": 340,
+            "facing": 340,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2012,7 +2012,7 @@
             "name": "",
             "road": "Emery Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Emery Road, just before they pass Northfield Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2023,7 +2023,7 @@
             "name": "",
             "road": "Emery Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Emery Road, as they pass Northfield Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2034,7 +2034,7 @@
             "name": "",
             "road": "Emery Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed east on Emery Road, just before they pass Northfield Road.",
-            "direction": 260,
+            "facing": 260,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2045,7 +2045,7 @@
             "name": "",
             "road": "Emery Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed west on Emery Road, as they pass Northfield Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2056,7 +2056,7 @@
             "name": "",
             "road": "Emery Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed west on Emery Road, just after they pass Northfield Road.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2067,7 +2067,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the back of cars headed south on Northfield Road, just after they pass Emery Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2078,7 +2078,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the front of cars headed south on Northfield Road, as they pass Emery Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2089,7 +2089,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the front of cars headed north on Northfield Road, just before they pass Emery Road.",
-            "direction": 160,
+            "facing": 160,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2100,7 +2100,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on Northfield Road, just after they pass Emery Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2111,7 +2111,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Northfield Road, as they pass Emery Road.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2122,7 +2122,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the back of cars headed north on Northfield Road, just after they pass Miles Road.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2133,7 +2133,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed north on Northfield Road, as they pass Miles Road.",
-            "direction": 190,
+            "facing": 190,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2144,7 +2144,7 @@
             "name": "",
             "road": "Miles Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the back of cars headed east on Miles Road, just after they pass Northfield Road.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2155,7 +2155,7 @@
             "name": "",
             "road": "Miles Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed east on Miles Road, as they pass Northfield Road.",
-            "direction": 290,
+            "facing": 290,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2166,7 +2166,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed south on Northfield Road, as they pass Miles Road.",
-            "direction": 20,
+            "facing": 20,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2177,7 +2177,7 @@
             "name": "",
             "road": "Miles Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the back of cars headed west on Miles Road, just after they pass Northfield Road.",
-            "direction": 280,
+            "facing": 280,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2188,7 +2188,7 @@
             "name": "",
             "road": "Miles Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar, facing the front of cars headed west on Miles Road, just after they pass Northfield Road.",
-            "direction": 100,
+            "facing": 100,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2199,7 +2199,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed south on Northfield Road, just before they pass a commercial entrance.",
-            "direction": 320,
+            "facing": 320,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2210,7 +2210,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light crossbar, facing the front of cars headed north on Northfield Road, as they pass a commercial entrance.",
-            "direction": 160,
+            "facing": 160,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2221,7 +2221,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on a traffic light crossbar, facing the back of cars headed north on Northfield Road, just after they pass a commercial entrance.",
-            "direction": 340,
+            "facing": 340,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2232,7 +2232,7 @@
             "name": "",
             "road": "",
             "description": "Mounted on a traffic light crossbar, facing the front of cars entering a commercial area, as they pass Northfield Road.",
-            "direction": 260,
+            "facing": 260,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2243,7 +2243,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the back of cars headed south on Northfield Road, just after they pass a commercial entrance.",
-            "direction": 165,
+            "facing": 165,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2254,7 +2254,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the front of cars headed south on Northfield Road, as they pass a commercial entrance.",
-            "direction": 340,
+            "facing": 340,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2265,7 +2265,7 @@
             "name": "",
             "road": "Northfield Road",
             "description": "Mounted on an elevated mount above a traffic light crossbar as part of a pod of multiple cameras, facing the front of cars headed north on Northfield Road, just before they pass a commercial entrance.",
-            "direction": 140,
+            "facing": 140,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2276,7 +2276,7 @@
             "name": "",
             "road": "",
             "description": "Mounted on a traffic light crossbar, facing the front of cars entering a commercial area, as they pass Northfield Road.",
-            "direction": 80,
+            "facing": 80,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2287,7 +2287,7 @@
             "name": "",
             "road": "Main Street",
             "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Main Street, as they pass Streetsboro Street.",
-            "direction": 180,
+            "facing": 180,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2298,7 +2298,7 @@
             "name": "",
             "road": "Main Street",
             "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on Main Street, as they pass Streetsboro Street.",
-            "direction": 0,
+            "facing": 0,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2309,7 +2309,7 @@
             "name": "",
             "road": "Streetsboro Street",
             "description": "Mounted on a traffic light crossbar, facing the front of cars heading west on Streetsboro Street, as they pass Main Street.",
-            "direction": 90,
+            "facing": 90,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         },
@@ -2320,7 +2320,7 @@
             "name": "",
             "road": "Streetsboro Street",
             "description": "Mounted on a traffic light crossbar, facing the front of cars heading east on Streetsboro Street, as they pass Main Street.",
-            "direction": 270,
+            "facing": 270,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
         }

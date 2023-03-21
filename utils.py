@@ -603,8 +603,8 @@ def nearby_database_poi(current_location, database_information, radius=1.0): # T
         if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
             entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
 
-        if (entry["direction"] != ""): # Check to see if this POI has direction information.
-            entry["relativefacing"] = entry["direction"] - current_location[4] # Calculate the direction of this POI relative to the current direction of motion.
+        if (entry["facing"] != ""): # Check to see if this POI has direction information.
+            entry["relativefacing"] = entry["facing"] - current_location[4] # Calculate the direction of this POI relative to the current direction of motion.
             if (entry["relativefacing"] < 0): # If the relative facing direction of the POI is negative, then convert it to a positive direction.
                 entry["relativefacing"] = 360 + entry["relativefacing"] # Convert the relative facing direction to a positive value.
 

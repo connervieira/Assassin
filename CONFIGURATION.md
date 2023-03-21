@@ -142,10 +142,10 @@ This section of configuration values will effect Assassin's general operation.
         - `database` is the file-path to the ALPR database containing ALPR camera locations and information.
         - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
             - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
-            - Values of 180 or higher will effectively disable this filter.
+            - Values higher than 180 will effectively disable this filter.
         - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
-            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that on adjacent roads.
-            - Values of 180 or higher will effectively disable this filter.
+            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
+            - Values higher than 180 will effectively disable this filter.
         - `information_displayed` determines what information is displayed in alerts.
             - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `bluetooth_monitoring`
