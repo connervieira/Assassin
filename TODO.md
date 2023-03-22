@@ -36,15 +36,14 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Add GPS spoofing detection.
     - [X] Add driving attention timer.
     - [ ] Improve ADS-B data intake process.
+    - [ ] Add crowd sourced alerts.
 
 
 ### Hypothetical
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
-- [ ] Add crowd sourced alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.
 - [ ] Add more extensive vehicle integration using OBD-II.
 - [ ] Add integration for radar detectors.
-- [ ] Add optical motion detection using a webcam.

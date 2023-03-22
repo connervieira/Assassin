@@ -92,9 +92,9 @@ December 13th, 2022
 
 ### Interface Update
 
-*Release date to be determined*
+March 22nd, 2023
 
-This update adds the ability to interface with external services. This enables new features, like a graphical user interface and internet based alerts.
+This update adds the ability to interface with external services to enable new functionality, like a graphical user interface and internet based alerts.
 
 - Added weather alert system.
 - Rearranged GPS configuration options.

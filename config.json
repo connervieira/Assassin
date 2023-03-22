@@ -8,7 +8,7 @@
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": true,
+                "enabled": false,
                 "longitude": 41.0,
                 "latitude": -81.0,
                 "speed": 25,
@@ -73,7 +73,7 @@
                 "distance": true,
                 "street": true,
                 "speed": true,
-                "bearing": true 
+                "bearing": false
             }
         },
         "drone_alerts": {
