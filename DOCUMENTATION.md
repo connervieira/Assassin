@@ -183,10 +183,8 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
-8. Optionally, install RaspAP
-    - If you're installing Assassin on a Raspberry Pi, you may find it useful to install a program like [RaspAP](https://github.com/RaspAP/raspap-webgui) in order to remotely manage your Assassin instance, and eliminate the need for a full keyboard and display.
-    - Assassin works entirely via command line, meaning any set up that enables SSH access to the host will allow for remote management of Assassin.
-    - If you already have an access point installed in the same area as Assassin, you can simply connect Assassin to it, and use SSH on a separate device to access the instance remotely.
+8. Optionally, install a graphical interface
+    - Assassin is capable of being used fully from the command line. However, you may find it useful to install a graphical interface like [Marksman](https://v0lttech.com/marksman.php).
 9. Download Assassin
     - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory to prevent conflicts.
 
@@ -213,11 +211,8 @@ After installing Assassin, you should do some quick configuration in order to ge
 Many of Assassin's features are dependent on external hardware. This section provides basic information on feature-specific hardware.
 
 - Processor
-    - Assassin is specific designed to be extremely lightweight, so it should run smoothly on devices like the Raspberry Pi.
-        - The Raspberry Pi 4 runs Assassin extremely well, and seems to handle any realistic usage case well.
-        - The Raspberry Pi 3 runs Assassin reliably. It may suffer from longer startup times, but otherwise works well.
-        - The Raspberry Pi 2 runs Assassin acceptably, but not smoothly. For the best experience, consider a faster processing device.
-    - Since Assassin is capable of interfacing with several external devices and sensors at once, a processing device with solid I/O is recommended.
+    - Assassin is specific designed to be extremely lightweight, so it should run smoothly on single board computers.
+    - Since Assassin is capable of interfacing with several external devices and sensors at once, a processing device with reliable I/O is recommended.
 - Location Services
     - Many of Assassin's core features are dependent on GPS data. As such, it is highly recommend that you install a GPS unit to make the most of Assassin.
     - Assassin uses GPSD as a location back-end, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
@@ -258,7 +253,7 @@ After configuring Assassin, you can try it out for the first time!
     - Assassin runs on a cycle, where new information will be received, processed, and displayed at regular intervals. At this point, no user intervention is required.
     - See [USAGE.md](USAGE.md) for more information.
 3. Quit Assassin
-    - When you finish using Assassin, simply press Ctrl + C to terminate the program.
+    - When you finish using Assassin, simply hold Ctrl + C to terminate the program.
 
 
 ## Debugging
