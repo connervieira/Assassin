@@ -36,6 +36,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Add GPS spoofing detection.
     - [X] Add driving attention timer.
     - [ ] Improve ADS-B data intake process.
+    - [ ] Prevent GPS alerts from occurring during the initial lock.
     - [ ] Add crowd sourced alerts.
 
 

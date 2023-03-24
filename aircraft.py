@@ -7,17 +7,127 @@ import utils
 style = utils.style
 load_config = utils.load_config
 debug_message = utils.debug_message
-fetch_aircraft_data = utils.fetch_aircraft_data
 get_distance = utils.get_distance
 calculate_bearing = utils.calculate_bearing
 display_notice = utils.display_notice
 save_to_file = utils.save_to_file
 add_to_file = utils.add_to_file
 
+import subprocess
+
 
 # Locate and load the configuration file.
 config = load_config()
 
+
+
+
+
+# Define the function used to fetch aircraft data from the Dump1090 ADS-B message output. This function is also responsible for managing the raw message data itself.
+debug_message("Creating `fetch_aircraft_data` function")
+def fetch_aircraft_data(file):
+    debug_message("Fetching aircraft data")
+
+    if (os.path.exists(str(file)) == True): # Check to see if the filepath supplied exists before attempting to load it.
+        debug_message("Reading raw ADS-B messages")
+
+        message_file = open(file)
+        file_contents = message_file.readlines()
+        message_file.close()
+        raw_output = []
+        for line in file_contents:
+            raw_output.append(line.split(","))
+        raw_output = [item for item in raw_output if len(item) > 7] # Filter out any messages that aren't the expected length.
+                
+
+        save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
+
+
+        # Iterate through all received messages, and delete any that have exceeded the time-to-live threshold set in the configuration.
+        debug_message("Removing expired messages")
+        messages_pruned_count = 0 # This is a placeholder variable that will be incremented by 1 for each message removed. This is used for debugging purposes.
+        for message in reversed(raw_output): # Iterate through each message (line) in the file, in reverse order to prevent list entries from being shuffled around during the pruning process.
+            try:
+                message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
+            except:
+                message_timestamp = 0
+            message_age = time.time() - message_timestamp # Calculate the age of this message.
+            if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
+                raw_output.remove(message) # Remove this message from the raw data.
+                messages_pruned_count = messages_pruned_count + 1 # Increment the pruned message counter by 1.
+
+        if (messages_pruned_count > 0): # Check to see if any messages were pruned.
+            debug_message("Pruned " + str(messages_pruned_count) + " messages")
+
+        debug_message("Generating pruned CSV data")
+        new_raw_csv_string = "" # This is a placeholder string that will be appended to in the next steps.
+        for line in raw_output: # Iterate through each line of the pruned CSV data.
+            for entry in line: # Iterate through each field in this line.
+                new_raw_csv_string = new_raw_csv_string + str(entry) + "," # Add this entry to the line.
+            new_raw_csv_string = new_raw_csv_string[:-1] # Remove the last comma in the line.
+            new_raw_csv_string = new_raw_csv_string + "\n" # Add a line break at the end of the last line.
+
+        add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file. The `add_to_file` function is used so that messages received during the data handling process are not overwritten and lost.
+
+
+
+        debug_message("Collecting aircraft data")
+        aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
+        for entry in raw_output: # Iterate through each entry in the CSV list data.
+            if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
+                individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
+            else:
+                individual_data = {"latitude":"0", "longitude":"0", "altitude":"0", "speed":"0", "heading":0, "climb":"0", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
+
+            if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
+                individual_data["id"] = entry[4] # Get the aircraft's identification.
+            if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
+                individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
+            if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
+                individual_data["longitude"] = entry[15] # Get the aircraft's longitude.
+            if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
+                individual_data["altitude"] = entry[11] # Get the aircraft's altitude.
+            if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
+                individual_data["speed"] = entry[12] # Get the aircraft's ground speed.
+            if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
+                try:
+                    individual_data["heading"] = int(entry[13]) # Get the aircraft's compass heading.
+                except:
+                    individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading.
+            if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
+                individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
+            if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
+                individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
+            if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
+                individual_data["time"] = str(round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple()))) # Convert the human readable timestamp into a Unix timestamp.
+            else:
+                display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
+
+            aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
+            
+        return aircraft_data # Return the processed aircraft data.
+
+    else: # The file supplied to load ADS-B messages from does not exist.
+        display_notice("The ADS-B message file specified in the configuration does not exist. ADS-B messages can't be loaded.", 2)
+        return {} # Return blank aircraft data.
+
+
+
+
+def start_adsb_monitoring():
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        if (config["general"]["adsb_alerts"]["adsb_message_file"] != ""): # Check to see if an ADS-B message file has been set.
+            stop_command = ["sudo", "killall", "dump1090-mutability"] # This command is responsible for killing any existing instances of Dump1090.
+            start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
+            stream_command = ["wget", "http://localhost:30003/", "-O", config["general"]["adsb_alerts"]["adsb_message_file"], "--quiet"] # This command is responsible for streaming data from Dump1090.
+
+            subprocess.Popen(stop_command) # Execute the command to stop existing instances of Dump1090.
+            time.sleep(2) # Given Dump1090 time to exit.
+            subprocess.Popen(start_command) # Execute the command to start Dump1090 in the background.
+            time.sleep(3) # Given Dump1090 time to start up.
+            subprocess.Popen(stream_command) # Execute the command to stream data from Dump1090 in the background.
+        else:
+            display_notice("ADS-B alerts are enabled, but no message file was set.", 3)
 
 
 def adsb_alert_processing(current_location):

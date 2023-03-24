@@ -58,7 +58,7 @@
             }
         },
         "traffic_camera_alerts": {
-            "loaded_radius": 500,
+            "loaded_radius": 0,
             "database": "./assets/databases/enforcement_cameras.excam",
             "alert_range": 1,
             "speed_check": true,
@@ -152,7 +152,7 @@
             "maximum_aircraft_altitude": 8000,
             "distance_threshold": 5,
             "base_altitude_threshold": 3000,
-            "message_time_to_live": 60,
+            "message_time_to_live": 10,
             "threat_threshold": 1,
             "information_displayed": {
                 "location": true,

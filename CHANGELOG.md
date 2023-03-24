@@ -118,3 +118,14 @@ This update adds the ability to interface with external services to enable new f
 - Improved ADS-B alert handling.
     - Fixed a bug in the aircraft distance sorting algorithm where 1 aircraft would be thrown out during the sorting process.
     - The direction of the aircraft is now display relative to the current direction of movement.
+
+
+## Version 3.0
+
+### Placeholder Name
+
+*Release date to be determined*
+
+- Improved aircraft alert processing.
+    - The ADS-B intake process is now automatic, and is managed by Assassin.
+    - Aircraft with no location data are now filtered from the alert display.

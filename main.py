@@ -1,12 +1,12 @@
 # Assassin
 
-# Copyright (C) 2022 V0LT - Conner Vieira 
+# Copyright (C) 2023 V0LT - Conner Vieira 
 
-# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License along with this program (LICENSE.md)
+# You should have received a copy of the GNU General Public License along with this program (LICENSE)
 # If not, see https://www.gnu.org/licenses/ to read the license agreement.
 
 
@@ -64,7 +64,6 @@ get_arrow_direction = utils.get_arrow_direction # Load the function used to conv
 update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
-fetch_aircraft_data = utils.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
 detect_location_spoof = utils.detect_location_spoof # Load the function used to detect GPS spoofing attempts.
@@ -88,7 +87,12 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
 # Load the ADS-B aircraft alert system.
 if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
     import aircraft
+    fetch_aircraft_data = aircraft.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
+    start_adsb_monitoring = aircraft.start_adsb_monitoring
     adsb_alert_processing = aircraft.adsb_alert_processing
+
+    start_adsb_monitoring()
+
 
 
 # Load the drone/autonomous threat alert system.
@@ -631,28 +635,31 @@ while True: # Run forever in a loop until terminated.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 
             print(style.blue + "Aircraft Threats: " + str(len(aircraft_threats)))
-            for threat in aircraft_threats: # Iterate through each detected hazard.
-                print("    " + threat["id"] + ":") # Show this hazard's MAC address.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                    print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + "°)") # Show the coordinates of this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
-                    print("        Distance: " + str(round(threat["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["threat_level"] == True): # Only display the threat level if it is enabled in the configuration.
-                    print("        Threat Level: " + str(threat["threatlevel"])) # Show the distance to this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
-                    print("        Speed: " + str(threat["speed"]) + " knots") # Show the speed of this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["altitude"] == True): # Only display the altitude if it is enabled in the configuration.
-                    print("        Altitude: " + str(threat["altitude"]) + " feet") # Show the altitude of this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["absolute_heading"] == True): # Only display the absolute heading if it is enabled in the configuration.
-                    print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["relative_heading"] == True): # Only display the relative heading if it is enabled in the configuration.
-                    print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]) + " (" + str(threat["relativeheading"]) + "°)") # Show the direction of this aircraft relative to the current direction of movement.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["time"] == True): # Only display the message age if it is enabled in the configuration.
-                    print("        Time: " + str(round((time.time() - float(threat["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["callsign"] == True): # Only display the callsign if it is enabled in the configuration.
-                    print("        Callsign: " + str(threat["callsign"])) # Show the callsign of this aircraft.
-                if (config["general"]["adsb_alerts"]["information_displayed"]["climb"] == True): # Only display the climb rate if it is enabled in the configuration.
-                    print("        Climb: " + str(threat["climb"]) + " feet per minute") # Show the vertical climb rate of this aircraft.
+            for threat in aircraft_threats: # Iterate through each detected potential threat.
+                if (float(threat["longitude"]) == 0.0 and float(threat["latitude"]) == 0.0): # Check to see if this aircraft is missing position data.
+                    print("    " + threat["id"] + ": Incomplete data") # Show this aircraft as invalid.
+                else:
+                    print("    " + threat["id"] + ":") # Show this hazard's identifier.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
+                        print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + "°)") # Show the coordinates of this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
+                        print("        Distance: " + str(round(threat["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["threat_level"] == True): # Only display the threat level if it is enabled in the configuration.
+                        print("        Threat Level: " + str(threat["threatlevel"])) # Show the distance to this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
+                        print("        Speed: " + str(threat["speed"]) + " knots") # Show the speed of this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["altitude"] == True): # Only display the altitude if it is enabled in the configuration.
+                        print("        Altitude: " + str(threat["altitude"]) + " feet") # Show the altitude of this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["absolute_heading"] == True): # Only display the absolute heading if it is enabled in the configuration.
+                        print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["relative_heading"] == True): # Only display the relative heading if it is enabled in the configuration.
+                        print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]) + " (" + str(threat["relativeheading"]) + "°)") # Show the direction of this aircraft relative to the current direction of movement.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["time"] == True): # Only display the message age if it is enabled in the configuration.
+                        print("        Time: " + str(round((time.time() - float(threat["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["callsign"] == True): # Only display the callsign if it is enabled in the configuration.
+                        print("        Callsign: " + str(threat["callsign"])) # Show the callsign of this aircraft.
+                    if (config["general"]["adsb_alerts"]["information_displayed"]["climb"] == True): # Only display the climb rate if it is enabled in the configuration.
+                        print("        Climb: " + str(threat["climb"]) + " feet per minute") # Show the vertical climb rate of this aircraft.
 
             print(style.end) # End the font styling from the aircraft ADS-B threat display.
 
