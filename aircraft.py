@@ -31,12 +31,12 @@ def fetch_aircraft_data(file):
     if (os.path.exists(str(file)) == True): # Check to see if the filepath supplied exists before attempting to load it.
         debug_message("Reading raw ADS-B messages")
 
-        message_file = open(file)
-        file_contents = message_file.readlines()
-        message_file.close()
-        raw_output = []
-        for line in file_contents:
-            raw_output.append(line.split(","))
+        message_file = open(file) # Open the ADS-B message file.
+        file_contents = message_file.readlines() # Read the ADS-B message file line by line.
+        message_file.close() # Close the ADS-B message file.
+        raw_output = [] # Set the raw message output to a blank placeholder list.
+        for line in file_contents: # Iterate through each line in the ADS-B file contents.
+            raw_output.append(line.split(",")) # Add each line to the complete output.
         raw_output = [item for item in raw_output if len(item) > 7] # Filter out any messages that aren't the expected length.
                 
 
@@ -64,7 +64,7 @@ def fetch_aircraft_data(file):
         for line in raw_output: # Iterate through each line of the pruned CSV data.
             for entry in line: # Iterate through each field in this line.
                 new_raw_csv_string = new_raw_csv_string + str(entry) + "," # Add this entry to the line.
-            new_raw_csv_string = new_raw_csv_string[:-1] # Remove the last comma in the line.
+            new_raw_csv_string = new_raw_csv_string[:-1] # Remove the last comma in the line. TODO: Improve efficiency.
             new_raw_csv_string = new_raw_csv_string + "\n" # Add a line break at the end of the last line.
 
         add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file. The `add_to_file` function is used so that messages received during the data handling process are not overwritten and lost.
@@ -116,13 +116,14 @@ def fetch_aircraft_data(file):
 
 def start_adsb_monitoring():
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        debug_message("Starting ADS-B monitoring")
         if (config["general"]["adsb_alerts"]["adsb_message_file"] != ""): # Check to see if an ADS-B message file has been set.
             stop_command = ["sudo", "killall", "dump1090-mutability"] # This command is responsible for killing any existing instances of Dump1090.
             start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
             stream_command = ["wget", "http://localhost:30003/", "-O", config["general"]["adsb_alerts"]["adsb_message_file"], "--quiet"] # This command is responsible for streaming data from Dump1090.
 
             subprocess.Popen(stop_command) # Execute the command to stop existing instances of Dump1090.
-            time.sleep(2) # Given Dump1090 time to exit.
+            time.sleep(1) # Given Dump1090 time to exit.
             subprocess.Popen(start_command) # Execute the command to start Dump1090 in the background.
             time.sleep(3) # Given Dump1090 time to start up.
             subprocess.Popen(stream_command) # Execute the command to stream data from Dump1090 in the background.
