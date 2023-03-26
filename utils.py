@@ -62,6 +62,7 @@ import json # Required to process JSON data
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
 
+
 def load_config():
     # Locate and load the configuration file.
     if (os.path.exists(str(assassin_root_directory + "/config.json")) == True): # Check to see if the configuration file exists in the default location.
@@ -153,13 +154,13 @@ def is_json(string):
 
 # Define the function that will be used to save files for exported data.
 debug_message("Creating `save_to_file` function")
-def save_to_file(file_name, contents, silence = False):
+def save_to_file(file_name, contents, silence=True):
     debug_message("Saving file: " + str(file_name))
-    fh = None
+    file = None
     success = False
     try:
-        fh = open(file_name, 'w')
-        fh.write(contents)
+        file = open(file_name, 'w')
+        file.write(contents)
         success = True   
         if (silence == False):
             print("Successfully saved at " + file_name + ".")
@@ -171,8 +172,8 @@ def save_to_file(file_name, contents, silence = False):
             debug_message("Failed to save file")
     finally:
         try:
-            if fh:
-                fh.close()
+            if file:
+                file.close()
         except:
             success = False
     return success
@@ -181,13 +182,13 @@ def save_to_file(file_name, contents, silence = False):
 
 # Define the fuction that will be used to add to the end of a file.
 debug_message("Creating `add_to_file` function")
-def add_to_file(file_name, contents, silence=False):
+def add_to_file(file_name, contents, silence=True):
     debug_message("Adding to file: " + str(file_name))
-    fh = None
+    file = None
     success = False
     try:
-        fh = open(file_name, 'a')
-        fh.write(contents)
+        file = open(file_name, 'a')
+        file.write(contents)
         success = True
         if (silence == False):
             print("Successfully saved at " + file_name + ".")
@@ -199,8 +200,8 @@ def add_to_file(file_name, contents, silence=False):
             debug_message("Failed to save file")
     finally:
         try:
-            if fh:
-                fh.close()
+            if file:
+                file.close()
         except:
             success = False
     return success

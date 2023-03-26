@@ -35,15 +35,17 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Add weather alerts.
     - [X] Add GPS spoofing detection.
     - [X] Add driving attention timer.
+- Version 3.0
     - [X] Improve ADS-B data intake process.
+    - [X] Solve run-away ADS-B message file size.
     - [ ] Prevent GPS alerts from occurring during the initial lock.
-    - [ ] Add crowd sourced alerts.
 
 
 ### Hypothetical
 
 Tasks in this section are purely hypothetical, and may not ever be finished.
 
+- [ ] Add crowd sourced alerts.
 - [ ] Add the ability to activate GPIO pins on alerts.
 - [ ] Add the ability to import custom GPS alert databases.
 - [ ] Add more extensive vehicle integration using OBD-II.

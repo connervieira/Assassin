@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 
+
 import utils
 style = utils.style
 load_config = utils.load_config
@@ -15,11 +16,50 @@ add_to_file = utils.add_to_file
 
 import subprocess
 
+import threading
+import socket
 
 # Locate and load the configuration file.
 config = load_config()
 
 
+
+def receive_messages():
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(("localhost", 30003))
+    client.send(b"GET / HTTP/1.1\r\n\r\n")
+
+    while True:
+        received_data = client.recv(1024)
+        if (len(received_data) == 0): # Check to see if the connection has been closed.
+            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client.connect(("localhost", 30003))
+            client.send(b"GET / HTTP/1.1\r\n\r\n")
+        
+        received_data = received_data.decode("utf-8")
+        received_data = received_data.replace("\\r", "")
+        received_data = received_data.replace("\r", "")
+        received_data = received_data.replace("\\n", "")
+        if (len(received_data) > 3):
+            if (received_data[0:3] == "MSG"):
+                add_to_file(config["general"]["adsb_alerts"]["adsb_message_file"], received_data)
+
+
+
+def start_adsb_monitoring():
+    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
+        debug_message("Starting ADS-B monitoring")
+        if (config["general"]["adsb_alerts"]["adsb_message_file"] != ""): # Check to see if an ADS-B message file has been set.
+            start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
+
+            debug_message("Starting ADS-B receiver")
+            subprocess.Popen(start_command) # Execute the command to start Dump1090 in the background.
+            time.sleep(3) # Give Dump1090 time to start up.
+            debug_message("Opening ADS-B message stream")
+            adsb_message_receive_thread = threading.Thread(target=receive_messages, name="ADSBMessageStream")
+            adsb_message_receive_thread.start()
+        else:
+            display_notice("ADS-B alerts are enabled, but no message file was set. ADS-B monitoring could not be started", 3)
 
 
 
@@ -34,13 +74,12 @@ def fetch_aircraft_data(file):
         message_file = open(file) # Open the ADS-B message file.
         file_contents = message_file.readlines() # Read the ADS-B message file line by line.
         message_file.close() # Close the ADS-B message file.
+        save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
         raw_output = [] # Set the raw message output to a blank placeholder list.
         for line in file_contents: # Iterate through each line in the ADS-B file contents.
             raw_output.append(line.split(",")) # Add each line to the complete output.
-        raw_output = [item for item in raw_output if len(item) > 7] # Filter out any messages that aren't the expected length.
-                
+        raw_output = [item for item in raw_output if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
 
-        save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
 
 
         # Iterate through all received messages, and delete any that have exceeded the time-to-live threshold set in the configuration.
@@ -59,15 +98,17 @@ def fetch_aircraft_data(file):
         if (messages_pruned_count > 0): # Check to see if any messages were pruned.
             debug_message("Pruned " + str(messages_pruned_count) + " messages")
 
-        debug_message("Generating pruned CSV data")
-        new_raw_csv_string = "" # This is a placeholder string that will be appended to in the next steps.
+        debug_message("Generating pruned CSV data from " + str(len(raw_output)) + " messages")
+        new_raw_csv_string = "" # This is a placeholder string that will hold the entire contents of the new CSV file.
         for line in raw_output: # Iterate through each line of the pruned CSV data.
+            next_csv_line = "" # This is a placeholder string that holds the contents of the current line of the CSV file.
+            line[0] = "MSG"
             for entry in line: # Iterate through each field in this line.
-                new_raw_csv_string = new_raw_csv_string + str(entry) + "," # Add this entry to the line.
-            new_raw_csv_string = new_raw_csv_string[:-1] # Remove the last comma in the line. TODO: Improve efficiency.
-            new_raw_csv_string = new_raw_csv_string + "\n" # Add a line break at the end of the last line.
+                next_csv_line = next_csv_line + str(entry) + "," # Add each entry to the line.
+            next_csv_line = next_csv_line[:-1] # Remove the last comma in the line.
+            new_raw_csv_string = new_raw_csv_string + next_csv_line # Add a line break at the end of the last line.
 
-        add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file. The `add_to_file` function is used so that messages received during the data handling process are not overwritten and lost.
+        add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file.
 
 
 
@@ -82,24 +123,42 @@ def fetch_aircraft_data(file):
             if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
                 individual_data["id"] = entry[4] # Get the aircraft's identification.
             if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
-                individual_data["latitude"] = entry[14] # Get the aircraft's latitude.
+                try:
+                    individual_data["latitude"] = float(entry[14])
+                except:
+                    individual_data["latitude"] = 0.0
             if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
-                individual_data["longitude"] = entry[15] # Get the aircraft's longitude.
+                try:
+                    individual_data["longitude"] = float(entry[15])
+                except:
+                    individual_data["longitude"] = 0.0
             if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
-                individual_data["altitude"] = entry[11] # Get the aircraft's altitude.
+                try:
+                    individual_data["altitude"] = float(entry[11])
+                except:
+                    individual_data["altitude"] = 0.0
             if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
-                individual_data["speed"] = entry[12] # Get the aircraft's ground speed.
+                try:
+                    individual_data["speed"] = float(entry[12])
+                except:
+                    individual_data["speed"] = 0.0
             if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
                 try:
                     individual_data["heading"] = int(entry[13]) # Get the aircraft's compass heading.
                 except:
                     individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading.
             if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
-                individual_data["climb"] = entry[16] # Get the aircraft's vertical climb rate.
+                try:
+                    individual_data["climb"] = float(entry[16]) # Get the aircraft's vertical climb rate.
+                except:
+                    individual_data["climb"] = 0.0
             if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
                 individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
             if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
-                individual_data["time"] = str(round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple()))) # Convert the human readable timestamp into a Unix timestamp.
+                try:
+                    individual_data["time"] = round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Convert the human readable timestamp into a Unix timestamp.
+                except:
+                    individual_data["time"] = 0
             else:
                 display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
 
@@ -113,22 +172,6 @@ def fetch_aircraft_data(file):
 
 
 
-
-def start_adsb_monitoring():
-    if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
-        debug_message("Starting ADS-B monitoring")
-        if (config["general"]["adsb_alerts"]["adsb_message_file"] != ""): # Check to see if an ADS-B message file has been set.
-            stop_command = ["sudo", "killall", "dump1090-mutability"] # This command is responsible for killing any existing instances of Dump1090.
-            start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
-            stream_command = ["wget", "http://localhost:30003/", "-O", config["general"]["adsb_alerts"]["adsb_message_file"], "--quiet"] # This command is responsible for streaming data from Dump1090.
-
-            subprocess.Popen(stop_command) # Execute the command to stop existing instances of Dump1090.
-            time.sleep(1) # Given Dump1090 time to exit.
-            subprocess.Popen(start_command) # Execute the command to start Dump1090 in the background.
-            time.sleep(3) # Given Dump1090 time to start up.
-            subprocess.Popen(stream_command) # Execute the command to stream data from Dump1090 in the background.
-        else:
-            display_notice("ADS-B alerts are enabled, but no message file was set.", 3)
 
 
 def adsb_alert_processing(current_location):

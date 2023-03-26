@@ -129,3 +129,5 @@ This update adds the ability to interface with external services to enable new f
 - Improved aircraft alert processing.
     - The ADS-B intake process is now automatic, and is managed by Assassin.
     - Aircraft with no location data are now filtered from the alert display.
+    - Improved the resiliency of the data intake process.
+    - Fixed an issue where the message intake file could grow exponentially.
