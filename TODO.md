@@ -38,6 +38,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - Version 3.0
     - [X] Improve ADS-B data intake process.
     - [X] Solve run-away ADS-B message file size.
+    - [ ] Improve drone detection process.
     - [ ] Prevent GPS alerts from occurring during the initial lock.
 
 
