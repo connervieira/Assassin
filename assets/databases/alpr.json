@@ -2334,6 +2334,149 @@
             "facing": 100,
             "owner": "",
             "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1551457,
+            "longitude": -80.0843573,
+            "brand": "",
+            "name": "",
+            "road": "Liberty Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on Liberty Street, as they pass Main Street.",
+            "facing": 35,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1552833,
+            "longitude": -80.0841511,
+            "brand": "",
+            "name": "",
+            "road": "Liberty Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Liberty Street, as they pass Main Street.",
+            "facing": 210,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1578138,
+            "longitude": -80.0887868,
+            "brand": "",
+            "name": "",
+            "road": "Center Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on Center Street, as they pass Main Street.",
+            "facing": 50,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1579290,
+            "longitude": -80.0885459,
+            "brand": "",
+            "name": "",
+            "road": "Center Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Center Street, as they pass Main Street.",
+            "facing": 220,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1629256,
+            "longitude": -80.0962849,
+            "brand": "",
+            "name": "",
+            "road": "Highland Avenue",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Highland Avenue, as they enter Main Street.",
+            "facing": 220,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1657605,
+            "longitude": -80.1037378,
+            "brand": "",
+            "name": "",
+            "road": "Breckenridge Street",
+            "description": "Mounted on a traffic light support post, facing the front of cars heading south on Breckenridge Street, as they enter Main Street.",
+            "facing": 40,
+            "owner": "",
+            "type": "trafficlight_supportpost_monitor"
+        },
+        {
+            "latitude": 41.1666087,
+            "longitude": -80.1063442,
+            "brand": "",
+            "name": "",
+            "road": "Industrial Drive",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on Industrial Drive, as they pass Main Street.",
+            "facing": 30,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1668008,
+            "longitude": -80.1061967,
+            "brand": "",
+            "name": "",
+            "road": "Ivan Drive",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on Ivan Drive, as they pass Main Street.",
+            "facing": 210,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1684188,
+            "longitude": -80.1107128,
+            "brand": "",
+            "name": "",
+            "road": "George Junior Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on George Junior Road, as they pass Main Street.",
+            "facing": 180,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1682873,
+            "longitude": -80.1107717,
+            "brand": "",
+            "name": "",
+            "road": "George Junior Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on George Junior Road, as they pass Main Street.",
+            "facing": 5,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.1697576,
+            "longitude": -80.1140045,
+            "brand": "",
+            "name": "",
+            "road": "",
+            "description": "Mounted on a traffic light support post, facing the front of cars exiting a commercial area on to Main Street.",
+            "facing": 175,
+            "owner": "",
+            "type": "trafficlight_supportpost_monitor"
+        },
+        {
+            "latitude": 41.1695792,
+            "longitude": -80.1141010,
+            "brand": "",
+            "name": "",
+            "road": "Main Street",
+            "description": "Mounted on a traffic light support post, facing the back of cars heading east on Main Street, as they pass an entrace to a commercial area.",
+            "facing": 90,
+            "owner": "",
+            "type": "trafficlight_supportpost_monitor"
+        },
+        {
+            "latitude": 41.1695792,
+            "longitude": -80.1141061,
+            "brand": "",
+            "name": "",
+            "road": "Main Street",
+            "description": "Mounted on a traffic light support post, facing the front of cars heading east on Main Street, just before they pass an entrace to a commercial area.",
+            "facing": 320,
+            "owner": "",
+            "type": "trafficlight_supportpost_monitor"
         }
     ]
 }
