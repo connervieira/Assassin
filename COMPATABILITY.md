@@ -1,0 +1,55 @@
+# Compatability
+
+This document explains which platforms Assassin is compatible with.
+
+
+- Linux: Full support
+    - Assassin is natively compatible with Linux, and all of it's features should be fully functional.
+    - This is the only platform officially supported.
+    - This is an overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [X] Drone detection
+            - [X] Bluetooth detection
+            - [X] Aircraft detection
+        - Features
+            - [X] Status lighting
+            - [X] Audio alerts
+            - [X] Text-to-speech
+- BSD: Strong support
+    - Assassin should work well with BSD, but may require some tinkering.
+    - Linux and BSD share many packages, so it's likely possible to get all of Assassin's features to function on BSD.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [X] Drone detection
+            - [X] Bluetooth detection
+            - [X] Aircraft detection
+        - Features
+            - [X] Status lighting
+            - [X] Audio alerts
+            - [X] Text-to-speech
+- Android: Partial support
+    - Assassin is compatible with Android, using [https://termux.dev/en/](Termux), but certain features may not be compatible.
+    - Android support is useful if you don't have access to a full Linux computer, but still want to use some of Assassin's features.
+    - Generally speaking, installation on Android will take a little more tinkering than Linux.
+    - This is a general overview of the features supported on this platform.
+        - General
+            - [X] Information dashboard
+            - [X] Telemetry logging
+        - Alerts
+            - [X] Traffic enforcement camera alerting
+            - [X] ALPR camera alerting
+            - [] Drone detection
+            - [] Bluetooth detection
+            - [] Aircraft detection
+        - Features
+            - [X] Status lighting
