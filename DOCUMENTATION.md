@@ -83,7 +83,7 @@ This is the installation process for Assassin and all of it's dependencies. This
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - Assassin needs the ability to execute the Dump1090 command as root with passwordless authentication.
-        - To grant these permissions, authenticate as root with the command `sudo su`, then execute this command, replacing `[username]` with the username you will be running Assassin as: `echo "[username] ALL=(ALL) NOPASSWD: /usr/bin/dump1090-mutability, /usr/bin/killall dump1090-mutability" >> /etc/sudoers`
+        - To grant these permissions, authenticate as root with the command `sudo su`, then execute this command, replacing `[username]` with the username you will be running Assassin as: `echo "[username] ALL=(ALL) NOPASSWD: /usr/bin/dump1090-mutability" >> /etc/sudoers`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
 8. Optionally, install a graphical interface.
     - Assassin is capable of being used fully from the command line. However, you may find it useful to install a graphical interface like [Marksman](https://v0lttech.com/marksman.php).
