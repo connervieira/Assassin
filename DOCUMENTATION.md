@@ -55,7 +55,7 @@ This is the installation process for Assassin and all of it's dependencies. This
         - LocateMe: MacOS users
             - LocateMe is a public domain program for MacOS used to access location information.
             - It can be installed using the Homebrew package manager using the following command: `brew install locateme`
-            - Ideally, you should install GPSD to enable support for additional external GPS devices. However, LocateMe works well in a pinch.
+            - Ideally, you should install GPSD to enable support for additional external GPS devices. However, LocateMe works well if GPSD can't be used.
 4. Optionally, install networking packages (Recommended).
     - `pip3 install validators requests`
     - If you planning on using any of Assassin's networking features (like status lighting interfacing), then you'll need to install networking libraries.
@@ -82,13 +82,15 @@ This is the installation process for Assassin and all of it's dependencies. This
 7. Optionally, install Dump1090 (Recommended).
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
-    - Assassin needs the ability to execute the Dump1090 command as root with passwordless authentication.
-        - To grant these permissions, authenticate as root with the command `sudo su`, then execute this command, replacing `[username]` with the username you will be running Assassin as: `echo "[username] ALL=(ALL) NOPASSWD: /usr/bin/dump1090-mutability" >> /etc/sudoers`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
-8. Optionally, install a graphical interface.
+8. Grant neccesary permissions (Highly Recommended).
+    - In order to manage external processes required for certain features, Assassin needs the ability to use password-less `sudo` for certain executables.
+    - It should be noted that Assassin is intended to be installed on dedicated hardware. As such, granting these permissions will also grant the same permissions to any other process being run by the specified user.
+    - To grant these permissions, authenticate as root with the command `sudo su`, then execute this command, replacing `[username]` with the username you will be running Assassin as: `echo "[username] ALL=(ALL) NOPASSWD: /usr/bin/dump1090-mutability, /usr/bin/kill, /usr/bin/killall, /usr/sbin/iwconfig, /usr/sbin/ifconfig, /usr/sbin/airodump-ng" >> /etc/sudoers`
+9. Optionally, install a graphical interface.
     - Assassin is capable of being used fully from the command line. However, you may find it useful to install a graphical interface like [Marksman](https://v0lttech.com/marksman.php).
-9. Download Assassin.
-    - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory to prevent conflicts.
+10. Download Assassin.
+    - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory itself to prevent conflicts.
 
 
 ## Configuration
