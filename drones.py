@@ -3,6 +3,7 @@ import json # Required to process JSON data.
 import time # Required to handle time information and execute delays.
 import datetime # Required to interpret human-readable dates and times.
 import signal # Required to manage sub-proceses.
+import subprocess # Required to manage sub-proceses.
 
 import utils
 style = utils.style
@@ -52,14 +53,25 @@ def load_drone_alerts():
 
 
         # Run Airodump based on the Assassin configuration.
-        airodump_command = "sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down; sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor; sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up; sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w airodump_data --output-format csv --background 1 --write-interval 1" # Set up the command to start airodump.
+        airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data --output-format csv --write-interval 1 --background 1" # Set up the command to start airodump.
         if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
-            os.popen("rm -f " + assassin_root_directory + "/airodump_data*.csv") # Delete any previous airodump data.
-            proc = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
-            time.sleep(1) # Wait for 1 second to give airodump time to start.
+            debug_message("Starting Airodump-NG")
+            os.popen("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
+            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;")
+            os.popen("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;")
+            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;")
+            os.popen("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
+            airodump_process = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
+            time.sleep(3) # Wait for 1 second to give airodump time to start.
         elif (config["general"]["drone_alerts"]["monitoring_mode"] == "manual"):
-            print("Please manually execute the following command in the Assassin root directory:")
-            print(style.italic + airodump_command + style.end)
+            debug_message("Waiting for Airodump-NG to be started")
+            print("Please manually execute the following commands in the Assassin root directory:")
+            print(style.italic)
+            print("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;")
+            print("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;")
+            print("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;")
+            print("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
+            print(airodump_command + style.end)
             input("Press enter to continue once the command is running.")
 
 
@@ -77,7 +89,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
         debug_message("Processing drone alerts")
 
-        grab_output_command = "cat " + assassin_root_directory + "/airodump_data-01.csv" # Set up the command to grab the contents of airodump's CSV output file.
+        grab_output_command = "cat " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv" # Set up the command to grab the contents of airodump's CSV output file.
         command_output = str(os.popen(grab_output_command).read()) # Execute the output file grab command.
 
         line_split_output = command_output.split("\n") # Split the raw command output into a list, line by line.
@@ -154,6 +166,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
                 active_radio_devices[device_information["mac"]] = device_information # Add this device to the device information
 
 
+        debug_message("Detected " + str(len(active_radio_devices)) + " wireless devices")
 
         if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
             save_to_file(assassin_root_directory + "/" + "/radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
@@ -163,7 +176,9 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
             for mac in drone_threat_database[company]["MAC"]: # Iterate through each MAC address prefix for this manufacturer in the threat database.
                 for device in active_radio_devices: # Iterate through each active radio device.
                     device_information = active_radio_devices[device] # Get the information for the current device in the iteration.
-                    if (''.join(c for c in device_information["mac"] if c.isalnum())[:6].lower() == mac.lower()): # Check to see if the first 6 characters of this device matches the MAC address of this company.
+                    device_mac = ''.join(c for c in device_information["mac"] if c.isalnum()).lower() 
+                    threat_mac = ''.join(c for c in mac if c.isalnum()).lower() 
+                    if (device_mac[:len(threat_mac)] == threat_mac): # Check to see if the first 6 characters of this device matches the MAC address of this company.
                         if (drone_threat_database[company]["type"] in config["general"]["drone_alerts"]["alert_types"]): # Check to see if the company associated with the device matches one of the device types in the list of device types Assassin is configured to alert to.
                             device_information["threat"] = True # Change this device's threat status to positive.
                             device_information["company"] = company # Add this device's associated company to this device's data.
