@@ -41,9 +41,13 @@ It's important to clarify what Assassin is actually designed for, to avoid confu
     - Nearly all tuners will work with Assassin. Any standardized tuner that works with `dump1090` should work fine.
         - Below are some common ADS-B tuners used in Assassin installations:
             - [AirNav RadarBox FlightStick 1090](https://www.radarbox.com/flightstick1090)
+            - [RTL-SDR Blog V3 R860](https://www.ebay.com/itm/272411458376)
     - Any 1090MHz antenna that connects appropriately to your tuner should work just fine with Assassin.
         - It's highly recommended that you get an externally mounted antenna. Antennas located within the body of the car will have dramatically reduced range.
-    - Assassin uses the dump1090-mutability command line utility as its backend.
+        - Below are some common ADS-B antennas used in Assassin installations:
+            - [ThePiHut 3dBi 1090MHz Antenna](https://thepihut.com/products/3dbi-ads-b-1090mhz-sma-antenna-w-magnetic-base)
+            - [Bingfu Dual Band Aviation Antenna](https://bingfushop.com/products/bingfu-dual-band-978mhz-1090mhz-5dbi-magnetic-base-sma-male-mcx-antenna-for-aviation-dual-band-978mhz-1090mhz-ads-b-receiver-rtl-sdr-software-defined-radio-usb-stick-dongle-tuner-receiver)
+    - Assassin uses the `dump1090-mutability` command line utility as its backend.
         - You should verify that Dump1090 can successfully connect to and interpret data from the tuner.
 
 ### Bluetooth
@@ -58,4 +62,6 @@ It's important to clarify what Assassin is actually designed for, to avoid confu
     - Practically all consumer devices operate on either 2.4GHz or 5.0GHz
     - Certain drones operate on 5.8GHz
 - If your device has a built in wireless adapter, it's possible that Airodump can use it. However, external wireless receivers can increase range, especially if they're placed outside the body of the vehicle.
+- Below are some common WiFi adapters used in Assassin installations:
+    - [ALFA AWUS036ACM](https://www.alfa.com.tw/products/awus036acm)
 
