@@ -2477,6 +2477,50 @@
             "facing": 320,
             "owner": "",
             "type": "trafficlight_supportpost_monitor"
+        },
+        {
+            "latitude": 41.2373063,
+            "longitude": -80.7662240,
+            "brand": "",
+            "name": "",
+            "road": "North Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading north on North Road, as they pass Market Street.",
+            "facing": 160,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.2370405,
+            "longitude": -80.7660778,
+            "brand": "",
+            "name": "",
+            "road": "North Road",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading south on North Road, as they pass Market Street.",
+            "facing": 340,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.2371577,
+            "longitude": -80.7664064,
+            "brand": "",
+            "name": "",
+            "road": "Market Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading west on Market Street, as they pass North Road.",
+            "facing": 85,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
+        },
+        {
+            "latitude": 41.2371563,
+            "longitude": -80.7658313,
+            "brand": "",
+            "name": "",
+            "road": "Market Street",
+            "description": "Mounted on a traffic light crossbar, facing the front of cars heading east on Market Street, as they pass North Road.",
+            "facing": 260,
+            "owner": "",
+            "type": "trafficlight_crossbar_monitor"
         }
     ]
 }
