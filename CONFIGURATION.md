@@ -150,7 +150,8 @@ This section of configuration values will effect Assassin's general operation.
     - This setting has the following sub-values for configuration:
         - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
         - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
-            - Longer times will detect mode devices, but will also cause Assassin to take longer to refresh.
+            - Longer times will detect more devices, but will also cause Assassin to take longer to detect new devices.
+        - `latch_time` is a decimal number that determines how long an alert will remain active after it is no longer detected, measured in seconds.
         - `minimum_following_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
         - `log_devices` determines whether Assassin will log all of the Bluetooth devices it detects, and has the following sub-values:
             - `enabled` determines whether device logging is active.
@@ -218,6 +219,7 @@ This section of configuration values effect Assassin's visual displays.
         - `direction` determines whether or not the current heading will be displayed as a cardinal direction, such as 'N', 'SW', or 'E'.
     - `satellites` can be toggled on and off, and shows how many GPS satellites are connected.
     - `planes` can be toggled on and off, and shows many many aircraft are being detected. This is dependent on the ADS-B alerts system and requires `adsb_alerts` to be enabled.
+    - `bluetooth` can be toggled on and off, and shows many many total Bluetooth devices are being detected. This is dependent on the Bluetooth alerts system and requires `bluetooth_monitoring` to be enabled.
 - `shape_alerts`
     - This setting allows the user to turn on and off Assassin's "shape alerts", which are large ASCII shapes displayed when important events occur.
     - Shape alerts take up a lot of space on screen, but make it easy for the driver to understand a situation simply using their peripheral vision.

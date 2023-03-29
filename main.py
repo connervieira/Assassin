@@ -120,9 +120,11 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load B
     load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
     bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
     start_bluetooth_scanning = bluetoothdevices.start_bluetooth_scanning
+    fetch_nearby_bluetooth_devices = bluetoothdevices.fetch_nearby_bluetooth_devices
 
     detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
     start_bluetooth_scanning()
+
 
 
 # Load the weather alert system. 
@@ -431,7 +433,9 @@ while True: # Run forever in a loop until terminated.
         print("Satellites: " + str(current_location[5])) # Print the current altitude satellite count to the console.
 
     if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
-        print("Planes: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
+        print("Aircraft: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
+    if (config["display"]["displays"]["bluetooth"] == True and config["general"]["bluetooth_monitoring"]["enabled"] == True): # Check to see if the Bluetooth device count display is enabled in the configuration.
+        print("Bluetooth: " + str(len(fetch_nearby_bluetooth_devices()))) # Print the current detected Bluetooth device count to the console.
 
     print("") # Add a line break after displaying the main information display.
 

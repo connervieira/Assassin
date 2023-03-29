@@ -122,7 +122,7 @@ This update adds the ability to interface with external services to enable new f
 
 ## Version 3.0
 
-### Placeholder Name
+### Stability Update
 
 *Release date to be determined*
 
@@ -131,7 +131,12 @@ This update adds the ability to interface with external services to enable new f
     - Aircraft with no location data are now filtered from the alert display.
     - Improved the resiliency of the data intake process.
     - Fixed an issue where the message intake file could grow exponentially.
+    - Renamed the "Planes" display to "Aircraft".
 - Improved drone alert process.
     - The wireless threat database can now contain full MAC addresses to identify individual devices.
     - The drone detection process now considers all Airodump-NG output files, not just the first.
     - Automatic start-up mode is not significantly more reliable.
+- Improved the Bluetooth alert process.
+    - Bluetooth scanning is now done on a separate thread to prevent Assassin from freezing during scanning.
+    - There is now a dedicated Bluetooth display in the main information display that shows the number of Bluetooth devices currently detected.
+    - Added alert latch time configuration value to prevent alerts from being displayed until Assassin restarts after they are triggered.

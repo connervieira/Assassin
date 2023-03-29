@@ -50,7 +50,7 @@ def load_bluetooth_log_file():
 
 
 
-def scan_bluetooth():
+def scan_bluetooth(): # This function scans for nearby Bluetooth devices.
     debug_message("Scanning for Bluetooth devices")
     try:
         devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
@@ -63,13 +63,18 @@ def scan_bluetooth():
 
 
 nearby_bluetooth_devices = {}
-def bluetooth_scan_cycle():
+def bluetooth_scan_cycle(): # This function repeatedly executes the Bluetooth scan function in a cycle.
     global nearby_bluetooth_devices
     while True:
         nearby_bluetooth_devices = scan_bluetooth()
 
 
-def start_bluetooth_scanning():
+def fetch_nearby_bluetooth_devices(): # This function fetches the list of nearby Bluetooth devices without doing any scanning itself.
+    global nearby_bluetooth_devices
+    return nearby_bluetooth_devices
+
+
+def start_bluetooth_scanning(): # This function starts the Bluetooth scanning cycle in a separate thread.
     bluetooth_scan_thread = threading.Thread(target=bluetooth_scan_cycle, name="BluetoothScanThread")
     bluetooth_scan_thread.start()
 
@@ -109,7 +114,8 @@ def bluetooth_alert_processing(current_location, detected_bluetooth_devices):
             device["address"] = address # Add this device's hardware address to its information.
             device["distance_followed"] = get_distance(device["firstseenlocation"][0], device["firstseenlocation"][1], device["lastseenlocation"][0], device["lastseenlocation"][1]) # Calculate the distance that this device has been following Assassin by determining the distance between the first detected location and the last detected location.
             if ((device["distance_followed"] >= float(config["general"]["bluetooth_monitoring"]["minimum_following_distance"]) and address not in config["general"]["bluetooth_monitoring"]["whitelist"]["devices"]) or address in config["general"]["bluetooth_monitoring"]["blacklist"]["devices"]): # Check to see if the distance this device has followed Assassin is greater than or equal to the threshold set in the configuration for alerting. Also check to make sure this device is not in the whitelist. If this device is in the blacklist, the alert regardless of other conditions.
-                bluetooth_threats.append(device) # Add this device to the list of active Bluetooth threats.
+                if (time.time() - float(device["lastseentime"]) < float(config["general"]["bluetooth_monitoring"]["latch_time"])): # Check to see if the last time this device was seen is within the latch time range.
+                    bluetooth_threats.append(device) # Add this device to the list of active Bluetooth threats.
 
 
 
