@@ -2,18 +2,18 @@
     "general": {
         "active_config_refresh": false,
         "refresh_delay": 0.5,
-        "debugging_output": false,
-        "disable_console_clearing": false,
+        "debugging_output": true,
+        "disable_console_clearing": true,
         "gps": {
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": false,
+                "enabled": true,
                 "longitude": 41.0,
-                "latitude": -81.0,
+                "latitude": -80.0,
                 "speed": 25,
                 "altitude": 200,
-                "heading": 270,
+                "heading": 0,
                 "satellites": 6
             },
             "spoof_detection": {
@@ -121,6 +121,7 @@
         "bluetooth_monitoring": {
             "enabled": false,
             "scan_time": 1,
+            "latch_time": 10,
             "minimum_following_distance": 0,
             "log_devices": {
                 "enabled": false,
@@ -145,14 +146,14 @@
         "adsb_alerts": {
             "enabled": false,
             "adsb_message_file": "",
-            "minimum_vehicle_speed": 50,
+            "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 10,
             "maximum_aircraft_speed": 200,
             "minimum_aircraft_altitude": 500,
             "maximum_aircraft_altitude": 8000,
             "distance_threshold": 5,
             "base_altitude_threshold": 3000,
-            "message_time_to_live": 10,
+            "message_time_to_live": 60,
             "threat_threshold": 1,
             "information_displayed": {
                 "location": true,
@@ -185,7 +186,8 @@
                 "direction": true 
             },
             "satellites": true,
-            "planes": true
+            "planes": true,
+            "bluetooth": true
         },
         "shape_alerts": false,
         "ascii_art_header": true,
@@ -285,7 +287,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/cvieira/Downloads/assassin/"
+            "interface_directory": ""
         }
     }
 }
