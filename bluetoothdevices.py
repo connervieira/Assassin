@@ -16,6 +16,7 @@ import os # Required to use certain operating system functions.
 import json # Required to process JSON data.
 import time # Required to handle time information and execute delays.
 import bluetooth # Required to interface with Bluetooth adapters.
+import threading # Required to manage background threads.
 
 import utils
 style = utils.style
@@ -49,17 +50,37 @@ def load_bluetooth_log_file():
 
 
 
+def scan_bluetooth():
+    debug_message("Scanning for Bluetooth devices")
+    try:
+        devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
+    except:
+        display_notice("Couldn't detect nearby Bluetooth devices due to an unknown problem.", 2) # Display a warning that Bluetooth devices could not be detected.
+        devices = {}  # Set the nearby Bluetooth device list to an empty placeholder, since Bluetooth devices could not be detected.
+
+    debug_message("Detected " + str(len(devices)) + " Bluetooth devices")
+    return devices
+
+
+nearby_bluetooth_devices = {}
+def bluetooth_scan_cycle():
+    global nearby_bluetooth_devices
+    while True:
+        nearby_bluetooth_devices = scan_bluetooth()
+
+
+def start_bluetooth_scanning():
+    bluetooth_scan_thread = threading.Thread(target=bluetooth_scan_cycle, name="BluetoothScanThread")
+    bluetooth_scan_thread.start()
+
+
 
 def bluetooth_alert_processing(current_location, detected_bluetooth_devices):
     if (config["general"]["gps"]["enabled"] == False): # Check to see if GPS functionality is enabled. If this is the case, Assassin won't be able to detect when Bluetooth devices are following, but blacklist alerts will still work.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0] # Set the current location information to a dummy placeholder.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only conduct Bluetooth alert processing if Bluetooth alerts are enabled in the configuration.
+        global nearby_bluetooth_devices
         debug_message("Processing Bluetooth alerts")
-        try:
-            nearby_bluetooth_devices = bluetooth.discover_devices(int(config["general"]["bluetooth_monitoring"]["scan_time"]), lookup_names = True) # Scan for nearby Bluetooth devices for the amount of time specified in the configuration.
-        except:
-            display_notice("Couldn't detect nearby Bluetooth devices.", 2) # Display a warning that Bluetooth devices could not be detected.
-            nearby_bluetooth_devices = {}  # Set the nearby Bluetooth device list to an empty placeholder, since Bluetooth devices could not be detected.
 
         for address, name in nearby_bluetooth_devices:
             if (address in detected_bluetooth_devices): # This device has been seen before, so update it's existing dictionary entry.

@@ -119,8 +119,10 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load B
     import bluetoothdevices
     load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
     bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
+    start_bluetooth_scanning = bluetoothdevices.start_bluetooth_scanning
 
     detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
+    start_bluetooth_scanning()
 
 
 # Load the weather alert system. 
