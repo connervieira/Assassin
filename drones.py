@@ -70,13 +70,12 @@ def load_drone_alerts():
         airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data --output-format csv --write-interval 1 --background 1" # Set up the command to start airodump.
         if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
             debug_message("Starting Airodump-NG")
-            os.popen("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
-            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;")
-            os.popen("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;")
-            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;")
+            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;") # Disable the configured network device.
+            os.popen("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;") # Switch the configured network device to monitor mode.
+            os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;") # Enable the configured network device.
             os.popen("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
             airodump_process = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
-            time.sleep(3) # Wait for 1 second to give airodump time to start.
+            time.sleep(3) # Wait to give `airodump-ng` time to start.
         elif (config["general"]["drone_alerts"]["monitoring_mode"] == "manual"):
             debug_message("Waiting for Airodump-NG to be started")
             print("Please manually execute the following commands in the Assassin root directory:")
