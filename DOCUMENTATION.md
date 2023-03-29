@@ -90,6 +90,7 @@ This is the installation process for Assassin and all of it's dependencies. This
 9. Optionally, install a graphical interface.
     - Assassin is capable of being used fully from the command line. However, you may find it useful to install a graphical interface like [Marksman](https://v0lttech.com/marksman.php).
 10. Download Assassin.
+    - Under normal circumstances, you shouldn't download Assassin directly from the git repository, since this version is often incomplete and unstable. Stable releases can be found at <https://v0lttech.com/assassin.php>
     - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory itself to prevent conflicts.
 
 
