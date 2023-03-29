@@ -39,8 +39,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Improve ADS-B data intake process.
     - [X] Solve run-away ADS-B message file size.
     - [X] Improve drone detection process.
-    - [ ] Improve Bluetooth scanning process.
-    - [ ] Prevent GPS alerts from occurring during the initial lock.
+    - [X] Improve Bluetooth scanning process.
 
 
 ### Hypothetical

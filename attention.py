@@ -27,7 +27,7 @@ config = load_config()
 
 # Define the function to print debugging information when the configuration specifies to do so.
 attention_timer_start = time.time() # This variable holds the time that the attention timer was started.
-attention_reset_start = time.time() # This variable holds the time that the attention was lost. This is used to trigger a timer reset after a certain period of time.
+attention_reset_start = time.time() - (float(config["general"]["attention_monitoring"]["reset_time"])*60) # This variable holds the time that the attention was lost. This is used to trigger a timer reset after a certain period of time. This value is initialize at the reset time threshold so that the attention timer doesn't start until the vehicle starts moving for the first time.
 
 def process_attention_alerts(speed):
     if (config["general"]["attention_monitoring"]["enabled"] == True): # Check to make sure attention monitoring is enabled before processing alerts.
@@ -49,5 +49,15 @@ def process_attention_alerts(speed):
 
         return attention_alerts # Return the dictionary of active attention alerts.
 
-    else:
+    else: # Attention monitoring is disabled.
         return {} # Return a blank placeholder dictionary.
+
+def get_current_attention_time():
+    if (config["general"]["attention_monitoring"]["enabled"] == True): # Check to make sure attention monitoring is enabled before processing alerts.
+        global attention_timer_start
+        global attention_reset_start
+        attention_time = time.time() - attention_timer_start
+        reset_time = time.time() - attention_reset_start
+        return [attention_time, reset_time]
+    else: # Attention monitoring is disabled.
+        return [0.0, 0.0]

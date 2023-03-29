@@ -186,8 +186,9 @@
                 "direction": true 
             },
             "satellites": true,
-            "planes": true,
-            "bluetooth": true
+            "planes": false,
+            "bluetooth": false,
+            "attention": true
         },
         "shape_alerts": false,
         "ascii_art_header": true,
@@ -286,7 +287,7 @@
     },
     "external": {
         "local": {
-            "enabled": true,
+            "enabled": false,
             "interface_directory": ""
         }
     }

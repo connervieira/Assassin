@@ -46,6 +46,7 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only import
 
 
 # Load the rest of the utility functions from utils.py
+debug_message("Loading `utils.py` functions")
 style = utils.style # Load the style from the utils script.
 clear = utils.clear # Load the screen clearing function from the utils script.
 process_gpx = utils.process_gpx # Load the GPX processing function from the utils script.
@@ -67,7 +68,6 @@ display_notice = utils.display_notice  # Load the function used to display notic
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
 detect_location_spoof = utils.detect_location_spoof # Load the function used to detect GPS spoofing attempts.
-debug_message("Imported `utils.py`")
 
 
 
@@ -77,6 +77,7 @@ debug_message("Imported `utils.py`")
 
 # Load the traffic camera alert system
 if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only load traffic enforcement camera information if traffic camera alerts are enabled.
+    debug_message("Initializing traffic camera alert system")
     import trafficcameras
     load_traffic_camera_database = trafficcameras.load_traffic_camera_database
     traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
@@ -86,6 +87,7 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
 
 # Load the ADS-B aircraft alert system.
 if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
+    debug_message("Initializing aircraft alert system")
     import aircraft
     fetch_aircraft_data = aircraft.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
     start_adsb_monitoring = aircraft.start_adsb_monitoring
@@ -97,6 +99,7 @@ if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["g
 
 # Load the drone/autonomous threat alert system.
 if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone processing if drone alerts are enabled.
+    debug_message("Initializing drone alert system")
     import drones
     drone_alert_processing = drones.drone_alert_processing
     load_drone_alerts = drones.load_drone_alerts
@@ -107,6 +110,7 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
 
 # Load the ALPR camera alert system.
 if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
+    debug_message("Initializing ALPR camera system")
     import alprcameras
     load_alpr_camera_database = alprcameras.load_alpr_camera_database
     alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
@@ -116,6 +120,7 @@ if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["gener
 
 # Load the Bluetooth device alert system. 
 if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load Bluetooth monitoring system if Bluetooth monitoring is enabled.
+    debug_message("Initializing Bluetooth monitoring system")
     import bluetoothdevices
     load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
     bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
@@ -129,6 +134,7 @@ if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load B
 
 # Load the weather alert system. 
 if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather alert system if weather alerts are enabled.
+    debug_message("Initializing weather alert system")
     import weather
     get_weather_data = weather.get_weather_data
     weather_alert_processing = weather.weather_alert_processing
@@ -138,8 +144,10 @@ if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather
 
 # Load the attention alert system. 
 if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load attention monitoring system if attention alerts are enabled.
+    debug_message("Initializing attention monitoring system")
     import attention
     process_attention_alerts = attention.process_attention_alerts
+    get_current_attention_time = attention.get_current_attention_time
     attention_alerts = {}
 
 
@@ -436,6 +444,8 @@ while True: # Run forever in a loop until terminated.
         print("Aircraft: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
     if (config["display"]["displays"]["bluetooth"] == True and config["general"]["bluetooth_monitoring"]["enabled"] == True): # Check to see if the Bluetooth device count display is enabled in the configuration.
         print("Bluetooth: " + str(len(fetch_nearby_bluetooth_devices()))) # Print the current detected Bluetooth device count to the console.
+    if (config["display"]["displays"]["attention"] == True and config["general"]["attention_monitoring"]["enabled"] == True): # Check to see if the attention timer display is enabled in the configuration.
+        print("Attention: " + str(datetime.timedelta(seconds=round(get_current_attention_time()[0]))) + " active (" + str(datetime.timedelta(seconds=round(get_current_attention_time()[1]))) + " reset)") # Print the current active attention time to the console.
 
     print("") # Add a line break after displaying the main information display.
 

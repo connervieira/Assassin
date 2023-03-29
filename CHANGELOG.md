@@ -140,3 +140,5 @@ This update adds the ability to interface with external services to enable new f
     - Bluetooth scanning is now done on a separate thread to prevent Assassin from freezing during scanning.
     - There is now a dedicated Bluetooth display in the main information display that shows the number of Bluetooth devices currently detected.
     - Added alert latch time configuration value to prevent alerts from being displayed until Assassin restarts after they are triggered.
+- Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
+- Added attention monitoring timer display option.

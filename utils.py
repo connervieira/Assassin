@@ -102,11 +102,13 @@ debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
 if (config["audio"]["tts"]["enabled"] == True): # Only import the TTS libraries of text to speech functionality is enabled.
+    debug_message("Importing `pyttxs3` library")
     import pyttsx3 # Import the text-to-speech library.
     tts = pyttsx3.init() # Initialize the text-to-speech engine.
     tts.setProperty('rate', config["audio"]["tts"]["speed"]) # Set the text-to-speech speed.
 
 if (config["audio"]["provider"] == "playsound"): # Check to see if the configured audio provider is playsound.
+    debug_message("Importing `playsound` library")
     from playsound import playsound # Import the playsound library.
 
 
@@ -141,6 +143,7 @@ def clear():
 
 
 
+debug_message("Creating `is_json` function")
 def is_json(string):
     try:
         json_object = json.loads(string) # Try to load string as JSON information.
@@ -212,22 +215,24 @@ def add_to_file(file_name, contents, silence=True):
 
 
 debug_message("Creating `display_notice` function")
+if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+    error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
+    if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
+        save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
 
-error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
-if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
-    save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+    error_file = open(error_file_location, "r") # Open the error log file for reading.
+    error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
+    error_file.close() # Close the error log file.
 
-error_file = open(error_file_location, "r") # Open the error log file for reading.
-error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
-error_file.close() # Close the error log file.
-
-if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
-    error_log = json.loads(error_file_contents) # Read and load the error log from the file.
-else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
-    error_log = json.loads("{}") # Load a blank placeholder dictionary.
+    if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
+        error_log = json.loads(error_file_contents) # Read and load the error log from the file.
+    else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
+        error_log = json.loads("{}") # Load a blank placeholder dictionary.
+else: # Interfacing with local services is disabled.
+    error_log = {} # Set the error log to a blank placeholder.
 
 def display_notice(message, level=1):
-    level = int(level) # Convert the message level to an integer.
+    level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
 
     if (level == 1): # The level is set to 1, indicating a standard notice.
@@ -245,8 +250,9 @@ def display_notice(message, level=1):
             time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 3): # The level is set to 3, indicating an error.
-        error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
-        save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
+            save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
         if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -803,6 +809,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
 
 
 
+# This function is used to play a given sound as defined in the configuration.
 debug_message("Creating `play_sound` function")
 def play_sound(sound_id):
     if (str(sound_id) in config["audio"]["sounds"]): # Check to see that a sound with the specified sound ID exists in the configuration.
@@ -831,6 +838,7 @@ def play_sound(sound_id):
 
 
 
+# This function is used to convert a text sample into audible speech and play it.
 debug_message("Creating `speak` function")
 def speak(full_text, brief_text):
     if (config["audio"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
@@ -843,13 +851,15 @@ def speak(full_text, brief_text):
             tts.runAndWait()
 
 
+
+# This function converts a human-readable UTC timestamp into a Unix epoch timestamp.
 debug_message("Creating `utc_datetime` function")
 def utc_datetime(timestamp):
     timestamp = float(timestamp)
     return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
 
-
+# This function takes the location history and exports it into a GPX file.
 debug_message("Creating `save_gpx` function")
 def save_gpx(location_history, file_path):
     if (type(location_history) == list): # Check to make sure the location_history provided is a list.
@@ -878,6 +888,7 @@ def save_gpx(location_history, file_path):
 
 
 
+# This function is used to detect GPS location spoofing and other similar GPS problems.
 debug_message("Creating `detect_location_spoof` function")
 def detect_location_spoof(location_history):
     gps_alerts = {}
