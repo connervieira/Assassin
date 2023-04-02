@@ -75,7 +75,6 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
         # Sort the ALPR cameras list by distance.
         sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
         for i in range(0, len(filtered_cameras)): # Run once for every entry in the list of nearby ALPR cameras.
-            print ("Run")
             current_closest = {"distance": 100000000000} # Set the current closest camera to placeholder data with an extremely far distance.
             for element in filtered_cameras:
                 if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this camera is shorter than the current known closest camera.
