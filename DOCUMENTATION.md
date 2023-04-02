@@ -17,22 +17,26 @@ It's important to make a quick note about platform compatability. While Assassin
 
 ## Quick Start
 
-This section contains a quick-start guide if you want to set up Assassin as quickly as possible on a Debian based Linux distribution. This skips optional steps, and is designed to get a basic install of Assassin quickly. It's highly recommended that you follow the full instructions below. If you've installed Assassin before, and just need a quick shortcut to a working installation, follow these steps.
+This section contains a quick-start guide if you want to set up Assassin as quickly as possible on a Debian based Linux distribution. These instructions are designed to get a basic install of Assassin quickly. It is recommended that you follow the full instructions below to get the most control over your installation. If you've installed Assassin before, and just need a quick shortcut to a working installation, you may find the quick start instructions useful.
 
 1. Install Python3
     - `sudo apt-get install python3 python3-pip`
-2. Install `numpy`
-    - `pip3 install numpy`
+2. Install Python packages
+    - `pip3 install numpy playsound pyttsx3`
 3. Install GPSD
     - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3`
-4. Download Assassin
-5. Configure Assassin
-6. Run Assassin
+4. Install Bluetooth tools.
+    - `sudo apt-get install bluez-tools; pip3 install PyBluez`
+5. Install other dependencies
+    - `sudo apt-get install mpg321 aircrack-ng dump1090-mutability`
+6. Download Assassin
+7. Configure Assassin
+8. Run Assassin
 
 
 ## Installation
 
-This is the installation process for Assassin and all of it's dependencies. This process is written assuming you're running a Debian based distribution of GNU/Linux, but it's theoretically possible to get Assassin to function smoothly on any Linux distribution.
+This is the full installation process for Assassin and all of its dependencies. This process is written assuming you're running a Debian based distribution of GNU/Linux, but it's theoretically possible to get Assassin to function smoothly on any Linux distribution.
 
 1. Install Python3.
     - If your system does not already have Python3, download and install it.
