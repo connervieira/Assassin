@@ -4,19 +4,18 @@
 
 
 
-# Copyright (C) 2022 V0LT - Conner Vieira 
+# Copyright (C) 2023 V0LT - Conner Vieira 
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License along with this program (LICENSE.md)
+# You should have received a copy of the GNU General Public License along with this program (LICENSE)
 # If not, see https://www.gnu.org/licenses/ to read the license agreement.
 
 
 
 
-import matplotlib.pyplot as plt # Required to create graphs.
 import os # Required to handle files.
 import json # Required to load custom databases.
 import lzma # Required to load ExCam database.
@@ -80,15 +79,12 @@ def load_database(database_to_load):
     return loaded_database # Return the loaded database information.
 
 
-x = []
-y = []
-
 
 database_to_load = input("Database: ")
 
 
-distance_threshold = 15
-angle_threshold = 20
+distance_threshold = 25 # This is the number of feet between two entries before they are considered duplicates.
+angle_threshold = 15 # This is the angle different between to entries before they are considered duplicates.
 
 
 loaded_database = load_database(database_to_load)
@@ -101,8 +97,8 @@ for entry1 in duplicate_scanned_database["entries"]:
     duplicate_scanned_database["entries"].remove(entry1)
     for entry2 in duplicate_scanned_database["entries"]:
         distance = get_distance(entry1_information["latitude"], entry1_information["longitude"], entry2["latitude"], entry2["longitude"])
-        if (distance < distance_threshold / 5280): # Check to see if these database entries are within 5 feet of each other.
-            if (entry1_information["direction"] -  entry2["direction"] < angle_threshold / 2 and entry1_information["direction"] -  entry2["direction"] >  -1 * (angle_threshold / 2)):
+        if (distance < distance_threshold / 5280): # Check to see if these database entries are within a certain distance of each other.
+            if ((abs(entry1_information["facing"] - entry2["facing"]) < angle_threshold) or (abs(entry1_information["facing"] - entry2["facing"] - 360) < angle_threshold)):
                 if (entry1_information["brand"] == entry2["brand"]):
                     print("Duplicate POI:")
                     print("    Distance: " + str(distance * 5280))
@@ -113,7 +109,7 @@ for entry1 in duplicate_scanned_database["entries"]:
 
 # Find entries with broken direction information.
 for entry in loaded_database["entries"]:
-    if (entry["direction"] < 0 or entry["direction"] > 360):
+    if (entry["facing"] < 0 or entry["facing"] > 360):
         print("Malformed Direction:")
-        print("    Direction: " + str(entry["direction"]))
+        print("    Direction: " + str(entry["facing"]))
         print("    Entry: " + str(entry))
