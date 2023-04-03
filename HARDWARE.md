@@ -32,6 +32,8 @@ It's important to clarify what Assassin is actually designed for, to avoid confu
 - Assassin primarily uses GPSD as a location back-end, which means practically any generic USB GPS will work with Assassin. Simply locate a GPS that is compatible with GPSD, and connect it to your central Assassin device.
     - Provided you have GPSD installed and setup on your processing device, the USB GPS should be automatically recognized.
     - You can test your GPS with the `cgps` command.
+- Below are some common GPS modules used in Assassin installations:
+    - [VK-162 GPS](https://www.pishop.us/product/gps-antenna-vk-162/)
 
 ### ADS-B
 
