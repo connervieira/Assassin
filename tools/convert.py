@@ -88,11 +88,11 @@ for entry in input_database["elements"]:
         new_entry_data["description"] = ""
 
     if "direction" in entry["tags"].keys():
-        new_entry_data["direction"] = int(entry["tags"]["direction"])
+        new_entry_data["facing"] = int(entry["tags"]["direction"])
     elif "camera:direction" in entry["tags"].keys():
-        new_entry_data["direction"] = int(entry["tags"]["camera:direction"])
+        new_entry_data["facing"] = int(entry["tags"]["camera:direction"])
     else:
-        new_entry_data["direction"] = ""
+        new_entry_data["facing"] = ""
 
     if "operator" in entry["tags"].keys():
         new_entry_data["operator"] = str(entry["tags"]["operator"])
