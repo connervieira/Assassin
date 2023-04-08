@@ -142,3 +142,4 @@ This update adds the ability to interface with external services to enable new f
     - Added alert latch time configuration value to prevent alerts from being displayed until Assassin restarts after they are triggered.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.
+- GPS alerts overspeed alerts are no longer triggered when no GPS data is received.

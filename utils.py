@@ -899,14 +899,15 @@ def detect_location_spoof(location_history):
             location_history = reversed_location_history[:int(config["general"]["gps"]["spoof_detection"]["look_back"])] # Remove all but the first elements in the location history.
 
             for i in range(0, len(location_history) - 1): # Iterate through each element in the list.
-                distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
-                time_difference = abs(location_history[i]["time"] - location_history[i+1]["time"]) # Get the time difference between the two points.
-                miles_per_second = distance / time_difference
-                miles_per_hour = 60 * 60 * miles_per_second
-                if (miles_per_hour >= float(config["general"]["gps"]["spoof_detection"]["max_speed"])): # Check to see if the calculated GPS speed is excessively high.
-                    gps_alerts["maxspeed"] = {}
-                    gps_alerts["maxspeed"]["active"] = True
-                    gps_alerts["maxspeed"]["speed"] = miles_per_hour
+                if (location_history[i]["lat"] != 0.0 and location_history[i]["lon"] != 0.0 and location_history[i+1]["lat"] != 0.0 and location_history[i+1]["lon"] != 0.0): # Only run speed alert processing if both location points are defined.
+                    distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
+                    time_difference = abs(location_history[i]["time"] - location_history[i+1]["time"]) # Get the time difference between the two points.
+                    miles_per_second = distance / time_difference
+                    miles_per_hour = 60 * 60 * miles_per_second
+                    if (miles_per_hour >= float(config["general"]["gps"]["spoof_detection"]["max_speed"])): # Check to see if the calculated GPS speed is excessively high.
+                        gps_alerts["maxspeed"] = {}
+                        gps_alerts["maxspeed"]["active"] = True
+                        gps_alerts["maxspeed"]["speed"] = miles_per_hour
 
                 if (config["general"]["gps"]["spoof_detection"]["no_data_alert"] == True): # Only detect 'no data' alerts if they are enabled in the configuration.
                     if (float(location_history[i]["lat"]) == 0.0 and float(location_history[i]["lon"]) == 0.0 and float(location_history[i]["spd"]) == 0.0 and float(location_history[i]["spd"]) == 0.0):
