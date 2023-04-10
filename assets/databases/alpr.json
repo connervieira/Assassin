@@ -21,7 +21,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the west side of the road, reading the license plates on the back of vehicles traveling south on County Line Road just after passing Fairmount Road.",
-            "facing": 180,
+            "facing": 165,
             "operator": "",
             "type": "standalone"
         },
@@ -32,7 +32,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "A black, solar powered unit placed on a pole on the east side of the road, reading the license plates on the back of vehicles traveling north on County Line Road just after passing Fairmount Road.",
-            "facing": 0,
+            "facing": 345,
             "operator": "",
             "type": "standalone"
         },
@@ -43,7 +43,7 @@
             "name": "Falcon",
             "road": "Fairmount Boulevard",
             "description": "A black, solar powered unit placed on a pole on the south side of the road, reading the license plates on the back of vehicles traveling west on Fairmount Boulevard just after passing County Line Road.",
-            "facing": 270,
+            "facing": 290,
             "operator": "",
             "type": "standalone"
         },
@@ -208,7 +208,7 @@
             "name": "Falcon",
             "road": "County Line Road",
             "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling south on County Line Road.",
-            "facing": 180,
+            "facing": 170,
             "operator": "",
             "type": "standalone"
         },
