@@ -148,6 +148,11 @@ This update adds the ability to interface with external services to enable new f
         - Overspeed alerts can now be configured to prioritize the highest speed alert when multiple alerts are triggered at once.
     - Added support for frozen GPS alerts, where alerts can be triggered when exactly identitical GPS data is received repeatedly.
     - GPS alerts are now detected in chronological order, such that the process looks through the location history in order from oldest to most recent.
+    - Alert types in the GPS alert display are now capitalized.
+- Modified the loading process for ALPR camera and traffic cameras.
+    - ALPR cameras now load based on the current location.
+        - The loaded radius can be set in the configuration.
+    - The initial GPS location lock is now acquired separately from the loading process, then passed to the loading functions.
 - Re-organized the GPS demo-mode configuration.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.

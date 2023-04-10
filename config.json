@@ -10,8 +10,8 @@
             "demo_mode": {
                 "enabled": true,
                 "data": {
-                    "longitude": 41.0,
-                    "latitude": -80.0,
+                    "longitude": 41.0613,
+                    "latitude": -80.0398,
                     "speed": 25,
                     "altitude": 200,
                     "heading": 0,
@@ -116,8 +116,9 @@
         "alpr_alerts": {
             "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
-            "angle_threshold": 45,
-            "direction_threshold": 30,
+            "loaded_radius": 500,
+            "angle_threshold": 60,
+            "direction_threshold": 20,
             "information_displayed": {
                 "location": true,
                 "distance": true,

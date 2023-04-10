@@ -112,7 +112,7 @@ This section of configuration values will effect Assassin's general operation.
 - `traffic_camera_alerts`
     - Traffic camera alerts are triggered by proximity to enforcement cameras, like speed cameras, red light cameras, and lane monitoring cameras.
     - This setting has the following sub-values for configuration:
-        - `loaded_radius` determines the radius around the current location that Assassin will load traffic enforcement cameras from on start-up.
+        - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load traffic enforcement cameras during start-up.
             - The higher this value is, the longer Assassin will take the process traffic camera alerts each cycle.
             - The lower this value is, the smaller the loaded radius around the initial starting position will be.
                 - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
@@ -150,6 +150,10 @@ This section of configuration values will effect Assassin's general operation.
     - This setting has the following sub-values for configuration:
         - `alert_range` is the alert distance, in miles.
         - `database` is the file-path to the ALPR database containing ALPR camera locations and information.
+        - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load ALPR cameras during start-up.
+            - The higher this value is, the longer Assassin will take the process ALPR camera alerts each cycle.
+            - The lower this value is, the smaller the loaded radius around the initial starting position will be.
+                - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
         - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
             - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
             - Values higher than 180 will effectively disable this filter.

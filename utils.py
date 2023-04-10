@@ -897,14 +897,15 @@ def process_gps_alerts(location_history):
         debug_message("Processing GPS alerts")
         if (type(location_history) == list): # Check to make sure the location history provided is actually a list.
             reversed_location_history = list(reversed(list(location_history))) # Reverse the location history list.
-            location_history = list(reversed(list(reversed_location_history[:int(config["general"]["gps"]["alerts"]["look_back"])]))) # Remove all but the first elements in the location history.
+            location_history = reversed_location_history[:int(config["general"]["gps"]["alerts"]["look_back"])] # Remove all but the first elements in the location history.
+            location_history = list(reversed(list(location_history))) # Return the location history to chronological order.
 
 
             sequential_no_data = 0 # This is a placeholder that will count the number of sequential instances of no data being returned by GPS requests.
             sequential_identical = 0 # This is a placeholder that will count the number of sequential instances of identical data being returned by multiple GPS requests.
             for i in range(0, len(location_history) - 1): # Iterate through each element in the list, minus 1.
 
-                # Process 'overspeed' alerts.
+                # Process overspeed alerts.
                 if (config["general"]["gps"]["alerts"]["overspeed"]["enabled"] == True):
                     if (location_history[i]["lat"] != 0.0 and location_history[i]["lon"] != 0.0 and location_history[i+1]["lat"] != 0.0 and location_history[i+1]["lon"] != 0.0): # Only run speed alert processing if both location points are defined.
                         distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
@@ -928,7 +929,7 @@ def process_gps_alerts(location_history):
                                 gps_alerts["maxspeed"]["speed"] = miles_per_hour
 
 
-                # Process 'no-data' alerts.
+                # Process no-data alerts.
                 if (config["general"]["gps"]["alerts"]["no_data"]["enabled"] == True): # Only detect 'no data' alerts if they are enabled in the configuration.
                     if (float(location_history[i+1]["lat"]) == 0.0 and float(location_history[i+1]["lon"]) == 0.0 and float(location_history[i+1]["spd"]) == 0.0 and float(location_history[i+1]["alt"]) == 0.0): # Check to see if there is no GPS data.
                         sequential_no_data = sequential_no_data + 1 # Increment the sequential no-data instance counter.
@@ -940,7 +941,7 @@ def process_gps_alerts(location_history):
                         gps_alerts["nodata"]["active"] = True
 
 
-                # Process 'frozen data' alerts.
+                # Process frozen data alerts.
                 if (config["general"]["gps"]["alerts"]["frozen"]["enabled"] == True): # Only detect 'frozen data' alerts if they are enabled in the configuration.
                     if (float(location_history[i]["lat"]) == float(location_history[i+1]["lat"]) and float(location_history[i]["lon"]) == float(location_history[i+1]["lon"]) and float(location_history[i]["spd"]) == float(location_history[i+1]["spd"]) and float(location_history[i]["alt"]) == float(location_history[i+1]["alt"])): # Check to see if these two entries in the location history are identical.
                         sequential_identical = sequential_identical + 1 # Increment the sequential identical-data instance counter.
@@ -951,5 +952,6 @@ def process_gps_alerts(location_history):
                         gps_alerts["frozen"] = {}
                         gps_alerts["frozen"]["active"] = True
 
+        debug_message("Processed GPS alerts")
 
     return gps_alerts

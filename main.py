@@ -55,7 +55,6 @@ add_to_file = utils.add_to_file # Load the file appending function from the util
 display_shape = utils.display_shape # Load the shape displaying function from the utils script.
 countdown = utils.countdown # Load the timer countdown function from the utils script.
 get_gps_location = utils.get_gps_location # Load the function to get the current GPS location.
-get_distance = utils.get_distance # Load the function to get the distance between to global positions.
 calculate_bearing = utils.calculate_bearing # Load the function used to calculate the bearing between two coordinate pairs.
 nearby_database_poi = utils.nearby_database_poi # Load the function used to check for general nearby points of interest.
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
@@ -72,6 +71,17 @@ process_gps_alerts = utils.process_gps_alerts # Load the function used to detect
 
 
 
+debug_message("Acquiring initial location")
+initial_location = [0, 0] # Set the "current location" to a placeholder.
+previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
+while (initial_location[0] == 0 and initial_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
+    if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
+        time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
+
+    previous_gps_attempt = True
+    initial_location = get_gps_location() # Attempt to get the current GPS location.
+
+
 
 # Load functionality plugins
 
@@ -82,7 +92,7 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
     load_traffic_camera_database = trafficcameras.load_traffic_camera_database
     traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
 
-    loaded_traffic_camera_database = load_traffic_camera_database()
+    loaded_traffic_camera_database = load_traffic_camera_database(initial_location)
 
 
 # Load the ADS-B aircraft alert system.
@@ -115,7 +125,7 @@ if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["gener
     load_alpr_camera_database = alprcameras.load_alpr_camera_database
     alpr_camera_alert_processing = alprcameras.alpr_camera_alert_processing
 
-    loaded_alpr_camera_database = load_alpr_camera_database()
+    loaded_alpr_camera_database = load_alpr_camera_database(initial_location)
 
 
 # Load the Bluetooth device alert system. 
@@ -461,13 +471,13 @@ while True: # Run forever in a loop until terminated.
             print(style.green + "GPS Alerts: " + str(len(gps_alerts))) # Display the GPS alert title.
             if ("maxspeed" in gps_alerts): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
                 if (gps_alerts["maxspeed"]["active"] == True):
-                    print("    Calculated overspeed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
+                    print("    Calculated Overspeed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
             if ("nodata" in gps_alerts): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
                 if (gps_alerts["nodata"]["active"] == True):
-                    print("    No GPS data")
+                    print("    No GPS Data")
             if ("frozen" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
                 if (gps_alerts["frozen"]["active"] == True):
-                    print("    GPS frozen")
+                    print("    GPS Frozen")
             print(style.end)
 
             play_sound("gps") # Play the alert sound associated with GPS alerts, if one is configured to run.

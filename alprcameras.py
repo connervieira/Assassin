@@ -26,19 +26,31 @@ display_notice = utils.display_notice
 save_to_file = utils.save_to_file
 add_to_file = utils.add_to_file
 bearing_difference = utils.bearing_difference
+get_distance = utils.get_distance
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
 config = load_config() # Load and load the configuration file.
 
 
-def load_alpr_camera_database():
-    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0): # Check to see if ALPR camera alerts are enabled.
+def load_alpr_camera_database(current_location):
+    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and float(config["general"]["alpr_alerts"]["loaded_radius"]) > 0): # Check to see if ALPR camera alerts are enabled.
         debug_message("Loading ALPR camera database")
+
+        current_location = [0, 0] # Set the current location to a placeholder.
+        previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
+        while (current_location[0] == 0 and current_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
+            if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
+                time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
+
+            previous_gps_attempt = True
+            current_location = get_gps_location() # Attempt to get the current GPS location.
+
+
         if (str(config["general"]["alpr_alerts"]["database"]) != "" and os.path.exists(str(config["general"]["alpr_alerts"]["database"]))): # Check to see if the ALPR camera database exists.
-            loaded_alpr_camera_database = json.load(open(str(config["general"]["alpr_alerts"]["database"]))) # Load the ALPR database.
+            complete_camera_database = json.load(open(str(config["general"]["alpr_alerts"]["database"]))) # Load the ALPR database.
         else:
-            loaded_alpr_camera_database = {} # Load a blank database of ALPR cameras, since the actual database couldn't be loaded.
+            complete_camera_database = {}  # Load a blank database of ALPR cameras, since the actual database couldn't be loaded.
             if (str(config["general"]["alpr_alerts"]["database"]) == ""): # The ALPR alert database specified in the configuration is blank.
                 display_notice("ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified.", 2)
             elif (os.path.exists(str(config["general"]["alpr_alerts"]["database"])) == False): # The ALPR alert database specified in the configuration does not exist.
@@ -46,8 +58,16 @@ def load_alpr_camera_database():
             else:
                 display_notice("An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
 
-        debug_message("Loaded ALPR camera database")
-        return loaded_alpr_camera_database # Return the loaded database information.
+
+        loaded_camera_database = complete_camera_database.copy() # Set the database of cameras in range to the complete database as a placeholder.
+        loaded_camera_database["entries"] = [] # Remove all entries from the placeholder database.
+
+        for camera in complete_camera_database["entries"]: # Iterate through all entries in the database.
+            if (get_distance(current_location[0], current_location[1], camera['latitude'], camera['longitude']) < float(config["general"]["alpr_alerts"]["loaded_radius"])): # Check to see if this entry is within the load radius.
+                loaded_camera_database["entries"].append(camera) # Add this entry to the database of cameras that are within range.
+
+        debug_message("Loaded " + str(len(loaded_camera_database["entries"])) + " entries from ALPR camera database")
+        return loaded_camera_database # Return the loaded database information.
 
     else: # ALPR camera alerts are disabled in the configuration.
         return {} # Return a blank placeholder database in place of the loaded ALPR camera database.
