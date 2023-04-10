@@ -40,6 +40,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Solve run-away ADS-B message file size.
     - [X] Improve drone detection process.
     - [X] Improve Bluetooth scanning process.
+    - [X] Refine GPS alert processing.
 
 
 ### Hypothetical
