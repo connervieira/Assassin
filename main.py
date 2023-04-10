@@ -67,7 +67,7 @@ play_sound = utils.play_sound # Load the function used to play sounds specified 
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
-detect_location_spoof = utils.detect_location_spoof # Load the function used to detect GPS spoofing attempts.
+process_gps_alerts = utils.process_gps_alerts # Load the function used to detect GPS problems.
 
 
 
@@ -227,33 +227,33 @@ while True: # Run forever in a loop until terminated.
     else: # GPS functionality is disabled.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
 
-    location_history.append({"lat" : current_location[0], "lon" : current_location[1], "spd" : current_location[2], "alt" : current_location[3], "sat" : current_location[5], "time" : time.time(), "src": current_location[6]})# Add the most recently recorded location to the beginning of the location history list.
+    location_history.append({"lat" : current_location[0], "lon" : current_location[1], "spd" : current_location[2], "alt" : current_location[3], "hdg": current_location[4], "sat" : current_location[5], "time" : time.time(), "src": current_location[6]})# Add the most recently recorded location to the beginning of the location history list.
 
 
 
 
-    # Run GPS spoofing alert processing.
-    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True and config["general"]["gps"]["enabled"]): # Check to make sure GPS spoof detection is enabled before processing alerts.
-        gps_alerts = detect_location_spoof(location_history) # Process GPS alerts.
-    else: # GPS spoof detection is disabled.
+    # Run GPS alert processing.
+    if (config["general"]["gps"]["alerts"]["enabled"] == True and config["general"]["gps"]["enabled"]): # Check to make sure GPS alerts are enabled before processing alerts.
+        gps_alerts = process_gps_alerts(location_history) # Process GPS alerts.
+    else: # GPS alert detection is disabled.
         gps_alerts = {} # Return a blank placeholder dictionary in place of the true alerts.
 
 
-    # Run traffic enforcement camera alert processing
+    # Run traffic enforcement camera alert processing.
     if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
         nearest_enforcement_camera, nearby_cameras_all = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
     else:
         nearest_enforcement_camera, nearby_cameras_all = {}, []
 
 
-    # Run ALPR camera alert processing
+    # Run ALPR camera alert processing.
     if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
         nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
     else:
         nearest_alpr_camera, nearby_alpr_cameras = {}, []
 
 
-    # Run drone alert processing
+    # Run drone alert processing.
     if (config["general"]["drone_alerts"]["enabled"] == True): # Only run drone processing if drone alerts are enabled.
         detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards)
     else:
@@ -454,17 +454,20 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    # Display GPS spoofing alerts.
-    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True):
+    # Display GPS alerts.
+    if (config["general"]["gps"]["alerts"]["enabled"] == True):
         debug_message("Displaying GPS alerts")
         if (len(gps_alerts) > 0): # Check to see if there are any GPS alerts to display.
             print(style.green + "GPS Alerts: " + str(len(gps_alerts))) # Display the GPS alert title.
             if ("maxspeed" in gps_alerts): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
                 if (gps_alerts["maxspeed"]["active"] == True):
-                    print("    Unexpected high speed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
+                    print("    Calculated overspeed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
             if ("nodata" in gps_alerts): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
                 if (gps_alerts["nodata"]["active"] == True):
                     print("    No GPS data")
+            if ("frozen" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
+                if (gps_alerts["frozen"]["active"] == True):
+                    print("    GPS frozen")
             print(style.end)
 
             play_sound("gps") # Play the alert sound associated with GPS alerts, if one is configured to run.

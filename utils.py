@@ -436,7 +436,7 @@ def get_gps_location(): # Placeholder that should be updated at a later date.
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps"]["demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
             debug_message("Returning demo GPS information")
-            return float(config["general"]["gps"]["demo_mode"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["latitude"]), float(config["general"]["gps"]["demo_mode"]["speed"]), float(config["general"]["gps"]["demo_mode"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["heading"]), int(config["general"]["gps"]["demo_mode"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
+            return float(config["general"]["gps"]["demo_mode"]["data"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["latitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["speed"]), float(config["general"]["gps"]["demo_mode"]["data"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["heading"]), int(config["general"]["gps"]["demo_mode"]["data"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             if (config["general"]["gps"]["provider"] == "gpsd"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -888,30 +888,68 @@ def save_gpx(location_history, file_path):
 
 
 
-# This function is used to detect GPS location spoofing and other similar GPS problems.
-debug_message("Creating `detect_location_spoof` function")
-def detect_location_spoof(location_history):
+# This function is used to detect GPS problems.
+debug_message("Creating `process_gps_alerts` function")
+def process_gps_alerts(location_history):
     gps_alerts = {}
 
-    if (config["general"]["gps"]["spoof_detection"]["enabled"] == True): # Check to make sure GPS spoof detection is enabled before processing alerts.
+    if (config["general"]["gps"]["alerts"]["enabled"] == True): # Check to make sure GPS alerts are enabled before processing alerts.
+        debug_message("Processing GPS alerts")
         if (type(location_history) == list): # Check to make sure the location history provided is actually a list.
             reversed_location_history = list(reversed(list(location_history))) # Reverse the location history list.
-            location_history = reversed_location_history[:int(config["general"]["gps"]["spoof_detection"]["look_back"])] # Remove all but the first elements in the location history.
+            location_history = list(reversed(list(reversed_location_history[:int(config["general"]["gps"]["alerts"]["look_back"])]))) # Remove all but the first elements in the location history.
 
-            for i in range(0, len(location_history) - 1): # Iterate through each element in the list.
-                if (location_history[i]["lat"] != 0.0 and location_history[i]["lon"] != 0.0 and location_history[i+1]["lat"] != 0.0 and location_history[i+1]["lon"] != 0.0): # Only run speed alert processing if both location points are defined.
-                    distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
-                    time_difference = abs(location_history[i]["time"] - location_history[i+1]["time"]) # Get the time difference between the two points.
-                    miles_per_second = distance / time_difference
-                    miles_per_hour = 60 * 60 * miles_per_second
-                    if (miles_per_hour >= float(config["general"]["gps"]["spoof_detection"]["max_speed"])): # Check to see if the calculated GPS speed is excessively high.
-                        gps_alerts["maxspeed"] = {}
-                        gps_alerts["maxspeed"]["active"] = True
-                        gps_alerts["maxspeed"]["speed"] = miles_per_hour
 
-                if (config["general"]["gps"]["spoof_detection"]["no_data_alert"] == True): # Only detect 'no data' alerts if they are enabled in the configuration.
-                    if (float(location_history[i]["lat"]) == 0.0 and float(location_history[i]["lon"]) == 0.0 and float(location_history[i]["spd"]) == 0.0 and float(location_history[i]["spd"]) == 0.0):
+            sequential_no_data = 0 # This is a placeholder that will count the number of sequential instances of no data being returned by GPS requests.
+            sequential_identical = 0 # This is a placeholder that will count the number of sequential instances of identical data being returned by multiple GPS requests.
+            for i in range(0, len(location_history) - 1): # Iterate through each element in the list, minus 1.
+
+                # Process 'overspeed' alerts.
+                if (config["general"]["gps"]["alerts"]["overspeed"]["enabled"] == True):
+                    if (location_history[i]["lat"] != 0.0 and location_history[i]["lon"] != 0.0 and location_history[i+1]["lat"] != 0.0 and location_history[i+1]["lon"] != 0.0): # Only run speed alert processing if both location points are defined.
+                        distance = get_distance(location_history[i]["lat"], location_history[i]["lon"], location_history[i+1]["lat"], location_history[i+1]["lon"]) # Get the distance between the two points.
+                        time_difference = abs(location_history[i]["time"] - location_history[i+1]["time"]) # Get the time difference between the two points.
+                        miles_per_second = distance / time_difference
+                        miles_per_hour = 60 * 60 * miles_per_second
+                        if (miles_per_hour >= float(config["general"]["gps"]["alerts"]["overspeed"]["max_speed"])): # Check to see if the calculated GPS speed is excessively high.
+                            if (config["general"]["gps"]["alerts"]["overspeed"]["prioritize_highest"] == True): # Check to see if the configuration value to prioritize the highest speed is enabled.
+                                if ("maxspeed" in gps_alerts and "active" in gps_alerts["maxspeed"] and gps_alerts["maxspeed"]["active"] == True): # Check to see if there is already a GPS overspeed alert active.
+                                    if (gps_alerts["maxspeed"]["speed"] <= gps_alerts["maxspeed"]["speed"]): # Only overwrite the max-speed alert if this alert is a higher speed.
+                                        gps_alerts["maxspeed"] = {}
+                                        gps_alerts["maxspeed"]["active"] = True
+                                        gps_alerts["maxspeed"]["speed"] = miles_per_hour
+                                else: # There is no active overspeed alert.
+                                    gps_alerts["maxspeed"] = {}
+                                    gps_alerts["maxspeed"]["active"] = True
+                                    gps_alerts["maxspeed"]["speed"] = miles_per_hour
+                            else: # The configuration value to prioritize the highest speed is disabled.
+                                gps_alerts["maxspeed"] = {}
+                                gps_alerts["maxspeed"]["active"] = True
+                                gps_alerts["maxspeed"]["speed"] = miles_per_hour
+
+
+                # Process 'no-data' alerts.
+                if (config["general"]["gps"]["alerts"]["no_data"]["enabled"] == True): # Only detect 'no data' alerts if they are enabled in the configuration.
+                    if (float(location_history[i+1]["lat"]) == 0.0 and float(location_history[i+1]["lon"]) == 0.0 and float(location_history[i+1]["spd"]) == 0.0 and float(location_history[i+1]["alt"]) == 0.0): # Check to see if there is no GPS data.
+                        sequential_no_data = sequential_no_data + 1 # Increment the sequential no-data instance counter.
+                    else:
+                        sequential_no_data = 0 # Reset the sequential no-data instance counter.
+
+                    if (sequential_no_data >= config["general"]["gps"]["alerts"]["no_data"]["length"]): # Check to see if the number of sequential no-data occurrances is greater than or equal to the trigger.
                         gps_alerts["nodata"] = {}
                         gps_alerts["nodata"]["active"] = True
+
+
+                # Process 'frozen data' alerts.
+                if (config["general"]["gps"]["alerts"]["frozen"]["enabled"] == True): # Only detect 'frozen data' alerts if they are enabled in the configuration.
+                    if (float(location_history[i]["lat"]) == float(location_history[i+1]["lat"]) and float(location_history[i]["lon"]) == float(location_history[i+1]["lon"]) and float(location_history[i]["spd"]) == float(location_history[i+1]["spd"]) and float(location_history[i]["alt"]) == float(location_history[i+1]["alt"])): # Check to see if these two entries in the location history are identical.
+                        sequential_identical = sequential_identical + 1 # Increment the sequential identical-data instance counter.
+                    else:
+                        sequential_identical = 0 # Reset the sequential identical-data instance counter.
+
+                    if (sequential_identical >= config["general"]["gps"]["alerts"]["frozen"]["length"]): # Check to see if the number of sequential identical data occurrances is greater than or equal to the trigger.
+                        gps_alerts["frozen"] = {}
+                        gps_alerts["frozen"]["active"] = True
+
 
     return gps_alerts

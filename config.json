@@ -9,18 +9,31 @@
             "provider": "gpsd",
             "demo_mode": {
                 "enabled": true,
-                "longitude": 41.0,
-                "latitude": -80.0,
-                "speed": 25,
-                "altitude": 200,
-                "heading": 0,
-                "satellites": 6
+                "data": {
+                    "longitude": 41.0,
+                    "latitude": -80.0,
+                    "speed": 25,
+                    "altitude": 200,
+                    "heading": 0,
+                    "satellites": 6
+                }
             },
-            "spoof_detection": {
+            "alerts": {
                 "enabled": true,
                 "look_back": 10,
-                "max_speed": 400,
-                "no_data_alert": true
+                "overspeed": {
+                    "enabled": true,
+                    "max_speed": 400,
+                    "prioritize_highest": true
+                },
+                "no_data": {
+                    "enabled": true,
+                    "length": 2
+                },
+                "frozen": {
+                    "enabled": true,
+                    "length": 5
+                }
             }
         },
         "attention_monitoring": {
@@ -287,8 +300,8 @@
     },
     "external": {
         "local": {
-            "enabled": false,
-            "interface_directory": ""
+            "enabled": true,
+            "interface_directory": "/home/cvieira/Downloads/assassin"
         }
     }
 }

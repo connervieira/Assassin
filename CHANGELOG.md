@@ -140,6 +140,14 @@ This update adds the ability to interface with external services to enable new f
     - Bluetooth scanning is now done on a separate thread to prevent Assassin from freezing during scanning.
     - There is now a dedicated Bluetooth display in the main information display that shows the number of Bluetooth devices currently detected.
     - Added alert latch time configuration value to prevent alerts from being displayed until Assassin restarts after they are triggered.
+- Improved GPS alert process.
+    - The GPS alert configuration section has been re-organized for sake of clarity.
+    - GPS no-data alerts can now be configured the require multiple sequential instances of no GPS data being returned before an alert is triggered.
+    - Improved overspeed alerts.
+        - GPS alerts overspeed alerts are no longer triggered when no GPS data is received.
+        - Overspeed alerts can now be configured to prioritize the highest speed alert when multiple alerts are triggered at once.
+    - Added support for frozen GPS alerts, where alerts can be triggered when exactly identitical GPS data is received repeatedly.
+    - GPS alerts are now detected in chronological order, such that the process looks through the location history in order from oldest to most recent.
+- Re-organized the GPS demo-mode configuration.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.
-- GPS alerts overspeed alerts are no longer triggered when no GPS data is received.

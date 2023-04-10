@@ -36,27 +36,41 @@ This section of configuration values will effect Assassin's general operation.
                 - `gpsd`
                     - GPSD is suitable for nearly all devices, and is the default.
                 - `termux`
-                    - Termux uses the `termux-api` package to make it possible to run Assasin on Android.
+                    - Termux uses the `termux-api` package to make it possible to run Assassin on Android.
                 - `locateme`
                     - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
         - `demo_mode`
             - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
             - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
-        - `spoof_detection`
-            - This section contains settings for configuring Assassin's GPS spoof detection settings.
-            - Assassin can detect GPS spoofing attempts by taking notice of unrealistic GPS behavior.
-                - It should be noted that this feature can not block spoofing attempts, and will only detect them.
-            - This feature has the following sub-values for configuration:
-                - `enabled` determines whether spoof detection is on or off.
-                - `look_back` is an integer that determines the how many cycles Assassin will look back through when analyzing GPS trends.
-                    - Shorter values will lead to faster processing, and shorter alert latch times.
-                    - Longer values will detect older alerts, and will latch onto alerts for longer.
+        - `alerts` contains settings that control the behavior of various GPS alerts.
+            - `enabled` is a boolean that enables and disables all GPS alerts.
+            - `look_back` is an integer that determines the how many cycles Assassin will look back through the GPS history when analyzing GPS trends.
+                - Shorter values will lead to marginally faster processing, and shorter alert latch times.
+                - Longer values will detect older alerts, and will latch onto alerts for longer.
+                - It should be noted that the true look back length is effectively one less than this value, since GPS alerts often compare two values. 
+            - `overspeed` contains settings that control the behavior of GPS over-speed alerts.
+                - `enabled` determines whether overspeed detection is on or off.
                 - `max_speed` is an integer that determines the detected travelled speed (in miles per hour) that needs to be reached for a spoofing alert to be triggered.
                     - This metric independently calculates the speed using distance and time, and can be used to detected unexplained dramatic changes in position.
                     - You should set this value to the fastest speed you ever expect to go, plus a significant marging for jitter due to bridges, tunnels, and other obstructions that may decrease accuracy.
-                    - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold much higher.
-                - `no_data_alert` is a boolean that determines whether or not Assassin will trigger an alert when there is no GPS data received.
-                    - Generally, this is just because the GPS device hasn't connected to any satellites, but it can also be caused by jamming attempts.
+                    - True spoofing attempts will generally cause your detected position to move hundreds of miles in a matter of seconds, so you can safely set this threshold very high.
+                - `prioritize_highest` is a boolean value that determines whether Assassin will prioritize the alert with the highest speed when multiple alerts are found in the location history.
+                    - When this is set to `false`, the most recent alert will always be prioritized.
+            - `no_data` contains settings that control alert behavior when there is no GPS data received.
+                - `enabled` is a boolean that determines whether or not Assassin will trigger an alert when there is no GPS data received.
+                - `length` is an integer value that determines how many sequential GPS requests need to return no data before an alert is triggered.
+                    - Setting this to a value of 0 will always trigger alerts, even when GPS data is successfully returned.
+                    - Setting this value to 1 will trigger an alert the moment no GPS data is returned.
+                    - Setting this value to values higher than 1 will wait to trigger alerts until no data is returned multiple times sequentially.
+            - `frozen` contains settings that control alert behavior when the GPS repeatedly returns identitical data, indicating that the GPS might be frozen.
+                - `enabled` is a boolean that determines whether or not Assassin will trigger an alert when the GPS appears to be frozen.
+                - `length` is an integer value that determines how many sequential GPS requests need to be identitical, not including the first instance.
+                    - For example:
+                        - If you want to trigger an alert when identitical GPS data is returned 3 times sequentially, then this value should be set to 2.
+                        - If you want to trigger an alert when identitical GPS data is returned 5 times sequentially, then this value should be set to 4.
+                    - Setting this to a value of 0 will always trigger alerts, even when GPS data is successfully returned.
+                    - Setting this value to 1 will trigger an alert the moment two instances of identical GPS data are returned sequentially.
+                    - Setting this value to values higher than 1 will wait to trigger alerts until identitical data is returned multiple times sequentially.
 - `attention_monitoring` contains settings related to driver attention alerts.
     - `enabled` determines whether attention monitoring is active or not.
     - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.
