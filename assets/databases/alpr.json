@@ -207,8 +207,30 @@
             "brand": "Flock Safety",
             "name": "Falcon",
             "road": "County Line Road",
-            "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling south on Country Line Road.",
+            "description": "Mounted on a tall black pole on the west side of the road, facing the backs of cars traveling south on County Line Road.",
             "facing": 180,
+            "operator": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.4596919,
+            "longitude": -81.3947403,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "County Line Road",
+            "description": "Mounted on a tall black pole on the west side of the road, facing the front of cars traveling south on County Line Road.",
+            "facing": 25,
+            "operator": "",
+            "type": "standalone"
+        },
+        {
+            "latitude": 41.4596566,
+            "longitude": -81.3948032,
+            "brand": "Flock Safety",
+            "name": "Falcon",
+            "road": "Woodland Road",
+            "description": "Mounted on a tall black pole on the north side of the road, facing the back of cars traveling west on Woodland Road.",
+            "facing": 245,
             "operator": "",
             "type": "standalone"
         },
@@ -393,8 +415,8 @@
             "longitude": -81.409562,
             "brand": "Flock Safety",
             "name": "Falcon",
-            "road": "South Woodland Road",
-            "description": "Located on the north side of the road, facing the back of cars traveling west on South Woodland Road just after passing Chagrin River Road.",
+            "road": "Woodland Road",
+            "description": "Located on the north side of the road, facing the back of cars traveling west on Woodland Road just after passing Chagrin River Road.",
             "facing": 250,
             "operator": "",
             "type": "standalone"
