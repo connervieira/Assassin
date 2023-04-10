@@ -20,7 +20,6 @@ style = utils.style
 load_config = utils.load_config
 debug_message = utils.debug_message
 load_traffic_cameras = utils.load_traffic_cameras
-get_gps_location = utils.get_gps_location
 convert_speed = utils.convert_speed
 display_notice = utils.display_notice
 save_to_file = utils.save_to_file

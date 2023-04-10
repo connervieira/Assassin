@@ -54,7 +54,6 @@ save_to_file = utils.save_to_file # Load the file saving function from the utils
 add_to_file = utils.add_to_file # Load the file appending function from the utils script.
 display_shape = utils.display_shape # Load the shape displaying function from the utils script.
 countdown = utils.countdown # Load the timer countdown function from the utils script.
-get_gps_location = utils.get_gps_location # Load the function to get the current GPS location.
 calculate_bearing = utils.calculate_bearing # Load the function used to calculate the bearing between two coordinate pairs.
 nearby_database_poi = utils.nearby_database_poi # Load the function used to check for general nearby points of interest.
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
@@ -66,9 +65,11 @@ play_sound = utils.play_sound # Load the function used to play sounds specified 
 display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
-process_gps_alerts = utils.process_gps_alerts # Load the function used to detect GPS problems.
 
 
+import gpslocation
+get_gps_location = gpslocation.get_gps_location # Load the function to get the current GPS location.
+process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to detect GPS problems.
 
 
 debug_message("Acquiring initial location")
@@ -238,7 +239,6 @@ while True: # Run forever in a loop until terminated.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
 
     location_history.append({"lat" : current_location[0], "lon" : current_location[1], "spd" : current_location[2], "alt" : current_location[3], "hdg": current_location[4], "sat" : current_location[5], "time" : time.time(), "src": current_location[6]})# Add the most recently recorded location to the beginning of the location history list.
-
 
 
 

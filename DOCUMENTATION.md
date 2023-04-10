@@ -42,7 +42,7 @@ This is the full installation process for Assassin and all of its dependencies. 
     - If your system does not already have Python3, download and install it.
     - You can install Python3 on a Debian based Linux machine using the following command: `sudo apt-get install python3 python3-pip`
 2. Install required Python packages.
-    - Assasin requires the following Python libraries: `numpy`
+    - Assassin requires the following Python libraries: `numpy`
     - These libraries can be installed with this command: `pip3 install numpy`
 3. Install a GPS location provider (Highly Recommended).
     - Assassin requires a GPS connection for most of it's functionality.

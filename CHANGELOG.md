@@ -156,3 +156,4 @@ This update adds the ability to interface with external services to enable new f
 - Re-organized the GPS demo-mode configuration.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.
+- Moved GPS functions to a dedicated file for sake of organization.
