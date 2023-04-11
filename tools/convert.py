@@ -58,14 +58,14 @@ if (output_database["description"] == ""): # If the user leaves the database des
 output_database["author"] = "OpenStreetMap Contributors"
 output_database["created"] = str(round(time.time()))
 output_database["modified"] = str(round(time.time()))
-output_database["elements"] = {'brand': 'str', 'name': 'str', 'road': 'str', 'description': 'str', 'direction': 'int', 'operator': 'str'}
+output_database["elements"] = {'brand': 'str', 'model': 'str', 'road': 'str', 'description': 'str', 'facing': 'int', 'operator': 'str', 'mount': 'str'}
 output_database["entries"] = []
 
 for entry in input_database["elements"]:
     new_entry_data = {} # Set the new entry data to a placeholder.
 
-    new_entry_data["latitude"] = entry["lat"]
-    new_entry_data["longitude"] = entry["lon"]
+    new_entry_data["lat"] = entry["lat"]
+    new_entry_data["lon"] = entry["lon"]
 
     if "brand" in entry["tags"].keys():
         new_entry_data["brand"] = str(entry["tags"]["brand"])
@@ -73,9 +73,9 @@ for entry in input_database["elements"]:
         new_entry_data["brand"] = ""
 
     if "name" in entry["tags"].keys():
-        new_entry_data["name"] = str(entry["tags"]["name"])
+        new_entry_data["model"] = str(entry["tags"]["name"])
     else:
-        new_entry_data["name"] = ""
+        new_entry_data["model"] = ""
 
     if "addr:street" in entry["tags"].keys():
         new_entry_data["road"] = str(entry["tags"]["addr:street"])

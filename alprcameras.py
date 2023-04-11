@@ -53,7 +53,7 @@ def load_alpr_camera_database(current_location):
         loaded_camera_database["entries"] = [] # Remove all entries from the placeholder database.
 
         for camera in complete_camera_database["entries"]: # Iterate through all entries in the database.
-            if (get_distance(current_location[0], current_location[1], camera['latitude'], camera['longitude']) < float(config["general"]["alpr_alerts"]["loaded_radius"])): # Check to see if this entry is within the load radius.
+            if (get_distance(current_location[0], current_location[1], camera['lat'], camera['lon']) < float(config["general"]["alpr_alerts"]["loaded_radius"])): # Check to see if this entry is within the load radius.
                 loaded_camera_database["entries"].append(camera) # Add this entry to the database of cameras that are within range.
 
         debug_message("Loaded " + str(len(loaded_camera_database["entries"])) + " entries from ALPR camera database")

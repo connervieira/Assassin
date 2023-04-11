@@ -117,10 +117,10 @@ y = []
 if (database_type == "json"):
     loaded_database = load_database(database_to_load) # Load the specified JSON database.
     for entry in loaded_database["entries"]: # Iterate through each element in the loaded database.
-        if (get_distance(current_latitude, current_longitude, entry["latitude"], entry["longitude"]) <= load_radius): # Check to see if this entry is within the range specified by the user.
+        if (get_distance(current_latitude, current_longitude, entry["lat"], entry["lon"]) <= load_radius): # Check to see if this entry is within the range specified by the user.
             # Add this entry to the graph data.
-            y.append(entry["latitude"])
-            x.append(entry["longitude"])
+            y.append(entry["lat"])
+            x.append(entry["lon"])
 
 elif (database_type == "excam"):
     loaded_traffic_camera_database = load_traffic_cameras(current_longitude, current_latitude, database_to_load, load_radius) # Load the specified traffic camera database.

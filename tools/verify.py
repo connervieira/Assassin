@@ -6,11 +6,11 @@
 
 # Copyright (C) 2023 V0LT - Conner Vieira 
 
-# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-# You should have received a copy of the GNU General Public License along with this program (LICENSE)
+# You should have received a copy of the GNU Affero General Public License along with this program (LICENSE)
 # If not, see https://www.gnu.org/licenses/ to read the license agreement.
 
 
@@ -96,14 +96,14 @@ for entry1 in duplicate_scanned_database["entries"]:
     entry1_information = entry1
     duplicate_scanned_database["entries"].remove(entry1)
     for entry2 in duplicate_scanned_database["entries"]:
-        distance = get_distance(entry1_information["latitude"], entry1_information["longitude"], entry2["latitude"], entry2["longitude"])
+        distance = get_distance(entry1_information["lat"], entry1_information["lon"], entry2["lat"], entry2["lon"])
         if (distance < distance_threshold / 5280): # Check to see if these database entries are within a certain distance of each other.
             if ((abs(entry1_information["facing"] - entry2["facing"]) < angle_threshold) or (abs(entry1_information["facing"] - entry2["facing"] - 360) < angle_threshold)):
-                if (entry1_information["brand"] == entry2["brand"]):
-                    print("Duplicate POI:")
-                    print("    Distance: " + str(distance * 5280))
-                    print("    Entry 1: " + str(entry1))
-                    print("    Entry 2: " + str(entry2))
+                #if (entry1_information["brand"] == entry2["brand"]):
+                print("Duplicate POI:")
+                print("    Distance: " + str(distance * 5280))
+                print("    Entry 1: " + str(entry1))
+                print("    Entry 2: " + str(entry2))
 
 
 

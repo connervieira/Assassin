@@ -27,7 +27,6 @@ December 13th, 2022
 - Added several tools.
     - Added database preview tool.
     - Added database verify tool.
-- Added several new ALPR cameras to the database.
 - Adjusted the configuration layout.
     - All alerts now have their own configuration sections.
 - Updated ALPR alerting.
@@ -153,7 +152,6 @@ April 10th, 2023
     - ALPR cameras now load based on the current location.
         - The loaded radius can be set in the configuration.
     - The initial GPS location lock is now acquired separately from the loading process, then passed to the loading functions.
-- Added several ALPR cameras.
 - Re-organized the GPS demo-mode configuration.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.
@@ -166,4 +164,5 @@ April 10th, 2023
 
 *Release date to be determined*
 
-- Added several ALPR cameras.
+- Refined the POI database format.
+    - The ALPR camera database has been updated to reflect these changes, and includes additional refinements as well.

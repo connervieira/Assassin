@@ -571,9 +571,9 @@ def nearby_database_poi(current_location, database_information, radius=1.0): # T
     current_heading = current_location[2]
     nearby_database_information = [] # Create a placeholder list to add the nearby POIs to in the next steps.
     for entry in database_information["entries"]: # Iterate through each entry in the loaded database information.
-        current_distance = get_distance(current_lat, current_lon, entry['latitude'], entry['longitude']) # Get the current distance to the POI in question.
+        current_distance = get_distance(current_lat, current_lon, entry['lat'], entry['lon']) # Get the current distance to the POI in question.
         entry["distance"] = current_distance # Append the current POI's distance to it's database information.
-        entry["bearing"] = calculate_bearing(current_lat, current_lon, entry["latitude"], entry["longitude"]) # Calculate the bearing to the POI.
+        entry["bearing"] = calculate_bearing(current_lat, current_lon, entry["lat"], entry["lon"]) # Calculate the bearing to the POI.
         if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
             entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
 

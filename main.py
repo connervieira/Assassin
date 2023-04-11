@@ -520,7 +520,7 @@ while True: # Run forever in a loop until terminated.
             print(style.purple + loaded_alpr_camera_database["name"] + " Cameras: " + str(len(nearby_alpr_cameras))) # Display the number of active ALPR alerts.
             print("    Nearest:")
             if (config["general"]["alpr_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearest_alpr_camera["latitude"]) + ", " + str(nearest_alpr_camera["longitude"]) + " (" + get_arrow_direction(nearest_alpr_camera["direction"]) + " " + str(round(nearest_alpr_camera["direction"])) + "°)") # Display the distance to this POI.
+                print("        Location: " + str(nearest_alpr_camera["lat"]) + ", " + str(nearest_alpr_camera["lon"]) + " (" + get_arrow_direction(nearest_alpr_camera["direction"]) + " " + str(round(nearest_alpr_camera["direction"])) + "°)") # Display the distance to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["distance"] == True): # Only display the distance to the camera if it is enabled in the configuration.
                 print("        Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
@@ -544,10 +544,10 @@ while True: # Run forever in a loop until terminated.
                 else:
                     print("        Operator: Unknown") # Display the operator of this camera as unknown.
             if (config["general"]["alpr_alerts"]["information_displayed"]["type"] == True): # Only display the type of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["type"] != ""):
-                    print("        Type: " + str(nearest_alpr_camera["type"])) # Display the type of this camera.
+                if (nearest_alpr_camera["mount"] != ""):
+                    print("        Mount: " + str(nearest_alpr_camera["mount"])) # Display the mount type of this camera.
                 else:
-                    print("        Type: Unknown") # Display the type of this camera as unknown.
+                    print("        Mount: Unknown") # Display the type of this camera as unknown.
             if (config["general"]["alpr_alerts"]["information_displayed"]["description"] == True): # Only display the description of the camera if it is enabled in the configuration.
                 if (nearest_alpr_camera["description"] != ""):
                     print("        Description: " + str(nearest_alpr_camera["description"])) # Display the description of this camera.

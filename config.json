@@ -8,7 +8,7 @@
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": false,
+                "enabled": true,
                 "data": {
                     "longitude": 40.0,
                     "latitude": -81.0,
@@ -128,7 +128,7 @@
                 "relative_facing": true,
                 "brand": false,
                 "operator": false,
-                "type": false,
+                "mount": false,
                 "description": true
             }
         },

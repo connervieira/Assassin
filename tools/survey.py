@@ -243,11 +243,11 @@ while True:
                 entry_data = {} # Create a placeholder dictionary for all of the elements for the new entry.
 
                 if (gps_enabled == True): # Check to see if GPS features are enabled.
-                    entry_data["latitude"] = str(current_location[0]) # Record the current GPS latitude.
-                    entry_data["longitude"] = str(current_location[1]) # Record the current GPS longitude.
+                    entry_data["lat"] = str(current_location[0]) # Record the current GPS latitude.
+                    entry_data["lon"] = str(current_location[1]) # Record the current GPS longitude.
                 else: # If GPS features are disabled, then manually prompt the user for the current position.
-                    entry_data["latitude"] = float(input("latitude (float): ")) # Prompt the user to enter a value for the current latitude.
-                    entry_data["longitude"] = float(input("longitude (float): ")) # Prompt the user to enter a value for the current longitude.
+                    entry_data["lat"] = float(input("lat (float): ")) # Prompt the user to enter a value for the current latitude.
+                    entry_data["lon"] = float(input("lon (float): ")) # Prompt the user to enter a value for the current longitude.
 
                 element_iteration_counter = 0 # Set the element iteration counter to 0 so it can be incremented by 1 each time an element is iterated through./
                 for element in database_data["elements"]: # Iterate through each entry element specified in the database.
