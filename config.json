@@ -8,13 +8,13 @@
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": true,
+                "enabled": false,
                 "data": {
-                    "longitude": 41.0613,
-                    "latitude": -80.0398,
-                    "speed": 25,
+                    "longitude": 40.0,
+                    "latitude": -81.0,
+                    "speed": 20,
                     "altitude": 200,
-                    "heading": 0,
+                    "heading": 45,
                     "satellites": 6
                 }
             },
@@ -200,8 +200,8 @@
                 "direction": true 
             },
             "satellites": true,
-            "planes": false,
-            "bluetooth": false,
+            "planes": true,
+            "bluetooth": true,
             "attention": true
         },
         "shape_alerts": false,
@@ -301,8 +301,8 @@
     },
     "external": {
         "local": {
-            "enabled": true,
-            "interface_directory": "/home/cvieira/Downloads/assassin"
+            "enabled": false,
+            "interface_directory": ""
         }
     }
 }

@@ -124,7 +124,7 @@ This update adds the ability to interface with external services to enable new f
 
 ### Stability Update
 
-*Release date to be determined*
+April 10th, 2023
 
 - Improved aircraft alert processing.
     - The ADS-B intake process is now automatic, and is managed by Assassin.
@@ -153,7 +153,17 @@ This update adds the ability to interface with external services to enable new f
     - ALPR cameras now load based on the current location.
         - The loaded radius can be set in the configuration.
     - The initial GPS location lock is now acquired separately from the loading process, then passed to the loading functions.
+- Added several ALPR cameras.
 - Re-organized the GPS demo-mode configuration.
 - Fixed an issue where errors could sometimes occur when the local interface directory was disabled.
 - Added attention monitoring timer display option.
 - Moved GPS functions to a dedicated file for sake of organization.
+
+
+## Version 4.0
+
+### Name Pending
+
+*Release date to be determined*
+
+- Added several ALPR cameras.
