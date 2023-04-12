@@ -7,16 +7,19 @@
 
 
 
-# Copyright (C) 2022 V0LT - Conner Vieira 
+# Copyright (C) 2023 V0LT - Conner Vieira 
 
-# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by# the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-# You should have received a copy of the GNU General Public License along with this program (LICENSE.md)
+# You should have received a copy of the GNU Affero General Public License along with this program (LICENSE)
 # If not, see https://www.gnu.org/licenses/ to read the license agreement.
 
 
+
+
+types_to_include = ["alpr", "monitor"] # This controls what types of cameras will be included in the converted database.
 
 
 
@@ -58,12 +61,12 @@ if (output_database["description"] == ""): # If the user leaves the database des
 output_database["author"] = "OpenStreetMap Contributors"
 output_database["created"] = str(round(time.time()))
 output_database["modified"] = str(round(time.time()))
-output_database["elements"] = {'brand': 'str', 'model': 'str', 'road': 'str', 'description': 'str', 'facing': 'int', 'operator': 'str', 'mount': 'str'}
+output_database["elements"] = {'brand': 'str', 'model': 'str', 'street': 'str', 'description': 'str', 'facing': 'int', 'operator': 'str', 'wavelength': 'str', 'mount': 'str', 'type': 'str'}
 output_database["entries"] = []
 
 for entry in input_database["elements"]:
+    print("run")
     new_entry_data = {} # Set the new entry data to a placeholder.
-
     new_entry_data["lat"] = entry["lat"]
     new_entry_data["lon"] = entry["lon"]
 
@@ -72,32 +75,67 @@ for entry in input_database["elements"]:
     else:
         new_entry_data["brand"] = ""
 
-    if "name" in entry["tags"].keys():
-        new_entry_data["model"] = str(entry["tags"]["name"])
+    if "model" in entry["tags"].keys():
+        new_entry_data["model"] = str(entry["tags"]["model"])
     else:
         new_entry_data["model"] = ""
 
     if "addr:street" in entry["tags"].keys():
-        new_entry_data["road"] = str(entry["tags"]["addr:street"])
+        new_entry_data["street"] = str(entry["tags"]["addr:street"])
     else:
-        new_entry_data["road"] = ""
+        new_entry_data["street"] = ""
 
     if "description" in entry["tags"].keys():
         new_entry_data["description"] = str(entry["tags"]["description"])
     else:
         new_entry_data["description"] = ""
 
-    if "direction" in entry["tags"].keys():
-        new_entry_data["facing"] = int(entry["tags"]["direction"])
-    elif "camera:direction" in entry["tags"].keys():
-        new_entry_data["facing"] = int(entry["tags"]["camera:direction"])
+    if "camera:direction" in entry["tags"].keys():
+        try:
+            new_entry_data["facing"] = int(entry["tags"]["camera:direction"])
+        except:
+            print("skipping")
+            continue # Skip this entry, since direction information is required.
+    elif "direction" in entry["tags"].keys():
+        try:
+            new_entry_data["facing"] = int(entry["tags"]["direction"])
+        except:
+            print("skipping")
+            continue # Skip this entry, since direction information is required.
     else:
-        new_entry_data["facing"] = ""
+        continue # Skip this entry, since direction information is required.
 
     if "operator" in entry["tags"].keys():
         new_entry_data["operator"] = str(entry["tags"]["operator"])
     else:
         new_entry_data["operator"] = ""
+
+    if "mount" in entry["tags"].keys():
+        new_entry_data["mount"] = str(entry["tags"]["mount"])
+    else:
+        new_entry_data["mount"] = ""
+
+    if "surveillance:type" in entry["tags"].keys():
+        if (str(entry["tags"]["surveillance:type"]).lower() == "alpr" or str(entry["tags"]["surveillance:type"]).lower() == "anpr"):
+            if ("alpr" in types_to_include):
+                new_entry_data["type"] = "alpr"
+            else:
+                continue # Skip this camera.
+        elif ("camera:mount" in entry["tags"].keys() and str(entry["tags"]["camera:mount"]) == "traffic_signals"):
+            if ("monitor" in types_to_include):
+                new_entry_data["type"] = "monitor"
+            else:
+                continue # Skip this camera.
+        else:
+            if ("misc" in types_to_include):
+                new_entry_data["type"] = "misc"
+            else:
+                continue # Skip this camera.
+    else:
+        if ("misc" in types_to_include):
+            new_entry_data["type"] = "misc"
+        else:
+            continue # Skip this camera.
 
     output_database["entries"].append(new_entry_data) # Add the new entry to the rest of the database.
 

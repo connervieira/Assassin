@@ -1,12 +1,12 @@
 # Assassin
 
-# Copyright (C) 2022 V0LT - Conner Vieira 
+# Copyright (C) 2023 V0LT - Conner Vieira 
 
-# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by# the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-# You should have received a copy of the GNU General Public License along with this program (LICENSE.md)
+# You should have received a copy of the GNU Affero General Public License along with this program (LICENSE)
 # If not, see https://www.gnu.org/licenses/ to read the license agreement.
 
 
@@ -27,8 +27,8 @@ class style:
     blue = '\033[94m'
     cyan = '\033[96m'
     pink = '\033[95m'
-    purple = '\033[1;35m'
-    gray = '\033[1;37m'
+    purple = '\033[35m'
+    gray = '\033[37m'
     brown = '\033[0;33m'
     black = '\033[0;30m'
 
@@ -45,7 +45,7 @@ class style:
 import time # Required to add delays and handle dates/times
 
 # Define the function to print debugging information when the configuration specifies to do so.
-debugging_time_record = time.time()
+debugging_time_record = time.time() # This value holds the time that the previous debug message was displayed.
 def debug_message(message):
     if (config["general"]["debugging_output"] == True): # Only print the message if the debugging output configuration value is set to true.
         global debugging_time_record
@@ -60,6 +60,7 @@ import os # Required to interact with certain operating system functions
 import json # Required to process JSON data
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
+
 
 
 def load_config():
@@ -100,6 +101,17 @@ import numpy # Required to run more complex math calculations
 debug_message("Importing `csv` library")
 import csv # Required to process CSV information.
 
+if (config["audio"]["tts"]["enabled"] == True): # Only import the TTS libraries of text to speech functionality is enabled.
+    debug_message("Importing `pyttxs3` library")
+    import pyttsx3 # Import the text-to-speech library.
+    tts = pyttsx3.init() # Initialize the text-to-speech engine.
+    tts.setProperty('rate', config["audio"]["tts"]["speed"]) # Set the text-to-speech speed.
+
+if (config["audio"]["provider"] == "playsound"): # Check to see if the configured audio provider is playsound.
+    debug_message("Importing `playsound` library")
+    from playsound import playsound # Import the playsound library.
+
+
 if (config["display"]["status_lighting"]["enabled"] == True): # Only import the libraries required by the status lighting system if the status lighting is enabled. These two libraries have loading times much higher than other libraries, so this step can improve loading times.
     debug_message("Importing `requests` library")
     import requests # Required to make network requests
@@ -107,13 +119,85 @@ if (config["display"]["status_lighting"]["enabled"] == True): # Only import the 
     import validators # Required to validate URLs
 
 
-gps_enabled = config["general"]["gps_enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
+gps_enabled = config["general"]["gps"]["enabled"] # This setting determines whether or not Assassin's GPS features are enabled.
 
-if (gps_enabled == True): # Only import the GPS libraries of the GPS configuration is enabled.
-    debug_message("Importing `gps` library")
-    from gps import * # Required to access GPS information.
-    debug_message("Importing `gpsd` library")
-    import gpsd # Required to access GPS information.
+
+# Define the function that will be used to clear the screen.
+debug_message("Creating `clear` function")
+def clear():
+    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
+        if os.name == "nt": # Use 'cls' command if host is Windows
+            os.system ("cls")
+        else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
+            os.system ("clear")
+
+
+
+debug_message("Creating `is_json` function")
+def is_json(string):
+    try:
+        json_object = json.loads(string) # Try to load string as JSON information.
+    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
+        return False # Return 'false' to indicate that the string is not JSON.
+
+    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
+
+
+
+
+# Define the function that will be used to save files for exported data.
+debug_message("Creating `save_to_file` function")
+def save_to_file(file_name, contents, silence=True):
+    debug_message("Saving file: " + str(file_name))
+    file = None
+    success = False
+    try:
+        file = open(file_name, 'w')
+        file.write(contents)
+        success = True   
+        if (silence == False):
+            print("Successfully saved at " + file_name + ".")
+            debug_message("Saved file")
+    except IOError as e:
+        success = False
+        if (silence == False):
+            print(e)
+            debug_message("Failed to save file")
+    finally:
+        try:
+            if file:
+                file.close()
+        except:
+            success = False
+    return success
+
+
+
+# Define the fuction that will be used to add to the end of a file.
+debug_message("Creating `add_to_file` function")
+def add_to_file(file_name, contents, silence=True):
+    debug_message("Adding to file: " + str(file_name))
+    file = None
+    success = False
+    try:
+        file = open(file_name, 'a')
+        file.write(contents)
+        success = True
+        if (silence == False):
+            print("Successfully saved at " + file_name + ".")
+            debug_message("File saved")
+    except IOError as e:
+        success = False
+        if (silence == False):
+            print(e)
+            debug_message("Failed to save file")
+    finally:
+        try:
+            if file:
+                file.close()
+        except:
+            success = False
+    return success
 
 
 
@@ -121,8 +205,24 @@ if (gps_enabled == True): # Only import the GPS libraries of the GPS configurati
 
 
 debug_message("Creating `display_notice` function")
+if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+    error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
+    if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
+        save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+
+    error_file = open(error_file_location, "r") # Open the error log file for reading.
+    error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
+    error_file.close() # Close the error log file.
+
+    if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
+        error_log = json.loads(error_file_contents) # Read and load the error log from the file.
+    else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
+        error_log = json.loads("{}") # Load a blank placeholder dictionary.
+else: # Interfacing with local services is disabled.
+    error_log = {} # Set the error log to a blank placeholder.
+
 def display_notice(message, level=1):
-    level = int(level) # Convert the message level to an integer.
+    level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
 
     if (level == 1): # The level is set to 1, indicating a standard notice.
@@ -140,6 +240,9 @@ def display_notice(message, level=1):
             time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 3): # The level is set to 3, indicating an error.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
+            save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
         if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -184,72 +287,114 @@ def process_gpx(gpx_file):
 
 
 
-# Define the function that will be used to clear the screen.
-debug_message("Creating `clear` function")
-def clear():
-    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
-        if os.name == "nt": # Use 'cls' command if host is Windows
-            os.system ("cls")
-        else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
-            os.system ("clear")
+# This is a simple function used to display large ASCII shapes.
+debug_message("Creating `display_shape` function")
+def display_shape(shape):
+    if (config["display"]["shape_alerts"] == True): # Check to see if shape alerts are enabled in the configuration.
+        if (shape == "square"):
+            print(style.bold)
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print(style.end)
 
+        elif (shape == "circle"):
+            print(style.bold)
+            print("        ######")
+            print("     ############")
+            print("   ################")
+            print("  ##################")
+            print(" ####################")
+            print("######################")
+            print("######################")
+            print("######################")
+            print(" ####################")
+            print("  ##################")
+            print("   ################")
+            print("     ############")
+            print("        ######")
+            print(style.end)
 
+        elif (shape == "triangle"):
+            print(style.bold)
+            print("           #")
+            print("          ###")
+            print("         #####")
+            print("        #######")
+            print("       #########")
+            print("      ###########")
+            print("     #############")
+            print("    ###############")
+            print("   #################")
+            print("  ###################")
+            print(" #####################")
+            print("#######################")
+            print(style.end)
 
-# Define the function that will be used to save files for exported data.
-debug_message("Creating `save_to_file` function")
-def save_to_file(file_name, contents, silence = False):
-    debug_message("Saving file: " + str(file_name))
-    fh = None
-    success = False
-    try:
-        fh = open(file_name, 'w')
-        fh.write(contents)
-        success = True   
-        if (silence == False):
-            print("Successfully saved at " + file_name + ".")
-            debug_message("Saved file")
-    except IOError as e:
-        success = False
-        if (silence == False):
-            print(e)
-            display_notice("Failed to save!", 2)
-            debug_message("Failed to save file")
-    finally:
-        try:
-            if fh:
-                fh.close()
-        except:
-            success = False
-    return success
+        elif (shape == "diamond"):
+            print(style.bold)
+            print("           #")
+            print("          ###")
+            print("         #####")
+            print("        #######")
+            print("       #########")
+            print("      ###########")
+            print("     #############")
+            print("      ###########")
+            print("       #########")
+            print("        #######")
+            print("         #####")
+            print("          ###")
+            print("           #")
+            print(style.end)
 
+        elif (shape == "cross"):
+            print(style.bold)
+            print("########              ########")
+            print("  ########          ########")
+            print("    ########      ########")
+            print("      ########  ########")
+            print("        ##############")
+            print("          ##########")
+            print("        ##############")
+            print("      ########  ########")
+            print("    ########      ########")
+            print("  ########          ########")
+            print("########              ########")
+            print(style.end)
 
+        elif (shape == "horizontal"):
+            print(style.bold)
+            print("############################")
+            print("############################")
+            print("############################")
+            print("############################")
+            print(style.end)
 
-# Define the fuction that will be used to add to the end of a file.
-debug_message("Creating `add_to_file` function")
-def add_to_file(file_name, contents, silence=False):
-    debug_message("Adding to file: " + str(file_name))
-    fh = None
-    success = False
-    try:
-        fh = open(file_name, 'a')
-        fh.write(contents)
-        success = True
-        if (silence == False):
-            print("Successfully saved at " + file_name + ".")
-            debug_message("File saved")
-    except IOError as e:
-        success = False
-        if (silence == False):
-            print(e)
-            display_warning("Failed to save!", 2)
-            debug_message("Failed to save file")
-    finally:
-        try:
-            if fh:
-                fh.close()
-        except:
-            success = False
-    return success
+        elif (shape == "vertical"):
+            print(style.bold)
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print("           ######")
+            print(style.end)
 
 
 
@@ -274,75 +419,50 @@ def countdown(timer):
 
 
 
-# Define the function that will be used to get the current GPS coordinates.
-debug_message("Creating `get_gps_location` function")
-def get_gps_location(): # Placeholder that should be updated at a later date.
-    debug_message("Getting GPS location")
-    if (gps_enabled == True): # Check to see if GPS is enabled.
-        if (config["general"]["gps_demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
-            debug_message("Returning demo GPS information")
-            return float(config["general"]["gps_demo_mode"]["longitude"]), float(config["general"]["gps_demo_mode"]["latitude"]), float(config["general"]["gps_demo_mode"]["speed"]), float(config["general"]["gps_demo_mode"]["altitude"]), float(config["general"]["gps_demo_mode"]["heading"]), int(config["general"]["gps_demo_mode"]["satellites"]) # Return the sample GPS information defined in the configuration.
-        else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
-            try: # Don't terminate the entire script if the GPS location fails to be aquired.
-                debug_message("Connecting to GPSD")
-                gpsd.connect() # Connect to the GPS daemon.
-                debug_message("Fetching GPS information")
-                gps_data_packet = gpsd.get_current() # Get the current information.
-                debug_message("Received GPS information")
-                return gps_data_packet.position()[0], gps_data_packet.position()[1], gps_data_packet.speed(), gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats # Return GPS information.
-            except: # If the current location can't be established, then return placeholder location data.
-                return 0.0000, -0.0000, 0.0, 0.0, 0.0, 0 # Return a default placeholder location.
-                debug_message("GPS fetch failed")
-    else: # If GPS is disabled, then this function should never be called, but return a placeholder position regardless.
-        return 0.0000, 0.0000, 0.0, 0.0, 0.0, 0 # Return a default placeholder location.
-        debug_message("GPS is disabled")
-
-
-
-
 # Define a simple function to calculate the approximate distance between two points in miles.
 debug_message("Creating `get_distance` function")
 def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
+    try:
+        # Convert the coordinates received.
+        lat1 = float(lat1)
+        lon1 = float(lon1)
+        lat2 = float(lat2)
+        lon2 = float(lon2)
 
-    # Convert the coordinates received.
-    lat1 = float(lat1)
-    lon1 = float(lon1)
-    lat2 = float(lat2)
-    lon2 = float(lon2)
+        # Verify the coordinates received, if efficient mode is disabled.
+        if (efficient_mode == False):
+            if (lat1 > 180 or lat1 < -180):
+                display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
+                lat1 = 0 # Default to a safe value.
+            if (lon1 > 90 or lon1 < -90):
+                display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
+                lon1 = 0 # Default to a safe value.
+            if (lat2 > 180 or lat2 < -180):
+                display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
+                lat2 = 0 # Default to a safe value.
+            if (lon2 > 90 or lon2 < -90):
+                display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
+                lon2 = 0 # Default to a safe value.
 
-    # Verify the coordinates received, if efficient mode is disabled.
-    if (efficient_mode == False):
-        if (lat1 > 180 or lat1 < -180):
-            display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
-            lat1 = 0 # Default to a safe value.
-        if (lon1 > 90 or lon1 < -90):
-            display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
-            lon1 = 0 # Default to a safe value.
-        if (lat2 > 180 or lat2 < -180):
-            display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
-            lat2 = 0 # Default to a safe value.
-        if (lon2 > 90 or lon2 < -90):
-            display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
-            lon2 = 0 # Default to a safe value.
+        if (lon1 == lon2 and lat1 == lat2): # Check to see if the coordinates are the same.
+            distance = 0 # The points are the same, so they are 0 miles apart.
+        else: # The points are different, so calculate the distance between them
+            # Convert the coordinates into radians.
+            lat1 = math.radians(lat1)
+            lon1 = math.radians(lon1)
+            lat2 = math.radians(lat2)
+            lon2 = math.radians(lon2)
 
-    if (lon1 == lon2 and lat1 == lat2): # Check to see if the coordinates are the same.
-        distance = 0 # The points are the same, so they are 0 miles apart.
+            # Calculate the distance.
+            distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
 
-    else: # The points are different, so calculate the distance between them
-        # Convert the coordinates into radians.
-        lat1 = math.radians(lat1)
-        lon1 = math.radians(lon1)
-        lat2 = math.radians(lat2)
-        lon2 = math.radians(lon2)
+            # Convert the distance from kilometers to miles.
+            distance = distance * 0.6213712
 
-        # Calculate the distance.
-        distance = 6371.01 * math.acos(math.sin(lat1)*math.sin(lat2) + math.cos(lat1)*math.cos(lat2)*math.cos(lon1 - lon2))
-
-        # Convert the distance from kilometers to miles.
-        distance = distance * 0.6213712
-
-    # Return the calculated distance.
-    return distance
+        # Return the calculated distance.
+        return distance
+    except:
+        return 0.0
 
 
 
@@ -368,34 +488,6 @@ def load_traffic_cameras(current_lat, current_lon, database_file, radius):
         loaded_database_information = [] # Return a blank database if the file specified doesn't exist.
 
     return loaded_database_information # Return the newly edited database information.
-
-
-
-
-# Define the function that will be used to get nearby speed, red light, and traffic cameras from a loaded database.
-debug_message("Creating `nearby_traffic_cameras` function")
-def nearby_traffic_cameras(current_lat, current_lon, database_information, radius=1.0): # This function is used to get a list of all traffic enforcement cameras within a certain range of a given location.
-    nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras = [], [], [] # Create empty placeholder lists for each camera type.
-
-    if (len(database_information) > 0): # Check to see if the supplied database information has data in it.
-        camera_id = 0 # This will be incremented up by 1 for each camera iterated through in the database.
-        for camera in database_information: # Iterate through each camera in the loaded database.
-            camera_id = camera_id + 1
-            camera["id"] = camera_id
-            current_distance = get_distance(current_lat, current_lon, camera['lat'], camera['lon'])
-            if (current_distance < float(radius)): # Only show the camera if it's within a certain radius of the current location.
-                camera["dst"] = current_distance # Save the current distance from this camera to it's data before adding it to the list of nearby speed cameras.
-                if (camera["flg"] == 0 or camera["flg"] == 2 or camera["flg"] == 3): # Check to see if this particular camera is speed related.
-                    nearby_speed_cameras.append(camera) # Add this camera to the "nearby speed camera" list.
-                elif (camera["flg"] == 1): # Check to see if this particular camera is red-light related.
-                    nearby_redlight_cameras.append(camera) # Add this camera to the "nearby red light camera" list.
-                else:
-                    nearby_misc_cameras.append(camera) # Add this camera to the "nearby general traffic camera" list.
-
-    else: # The supplied database information was empty.
-        pass
-
-    return nearby_speed_cameras, nearby_redlight_cameras, nearby_misc_cameras # Return the list of nearby cameras for all types.
 
 
 
@@ -440,6 +532,38 @@ def calculate_bearing (lat1, lon1, lat2, lon2):
 
 
 
+
+# Define the function that gets the difference between two bearings.
+debug_message("Creating `bearing_difference` function")
+def bearing_difference(bearing1, bearing2):
+    # Convert the bearings received.
+    bearing1 = float(bearing1)
+    bearing2 = float(bearing2)
+
+    # Make sure both of the bearings are positive.
+    while bearing1 < 0:
+        bearing1 = bearing1 + 360
+    while bearing2 < 0:
+        bearing2 = bearing2 + 360
+
+    # Make sure both of the bearings are less than 360 degrees.
+    while bearing1 > 0:
+        bearing1 = bearing1 - 360
+    while bearing2 > 0:
+        bearing2 = bearing2 - 360
+
+
+    method1 = abs(bearing1 - bearing2)
+    method2 = abs(method1 - 360)
+
+    if (method1 < method2):
+        return method1
+    elif (method2 <= method1):
+        return method2
+
+
+
+
 debug_message("Creating `nearby_database_poi` function")
 def nearby_database_poi(current_location, database_information, radius=1.0): # This function is used to get a list of all points of interest from a particular database within a certain range of a given location.
     current_lat = current_location[0]
@@ -453,8 +577,8 @@ def nearby_database_poi(current_location, database_information, radius=1.0): # T
         if (entry["bearing"] < 0): # If the bearing to the POI is negative, then convert it to a positive bearing.
             entry["bearing"] = 360 + entry["bearing"] # Convert the bearing to a positive number.
 
-        if (entry["direction"] != ""): # Check to see if this POI has direction information.
-            entry["relativefacing"] = entry["direction"] - current_location[4] # Calculate the direction of this POI relative to the current direction of motion.
+        if (entry["facing"] != ""): # Check to see if this POI has direction information.
+            entry["relativefacing"] = entry["facing"] - current_location[4] # Calculate the direction of this POI relative to the current direction of motion.
             if (entry["relativefacing"] < 0): # If the relative facing direction of the POI is negative, then convert it to a positive direction.
                 entry["relativefacing"] = 360 + entry["relativefacing"] # Convert the relative facing direction to a positive value.
 
@@ -566,22 +690,136 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
     while heading > 360: # Check to see if the heading exceeds 360 degrees
         heading = heading - 360 # Reduce the heading by 360 degrees until it falls under the 360 degree threshold.
 
-    direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
-    if (direction == 0 or direction == 8):
-        return "↑"
-    elif (direction == 1):
-        return "⬈"
-    elif (direction == 2):
-        return "→"
-    elif (direction == 3):
-        return "⬊"
-    elif (direction == 4):
-        return "↓"
-    elif (direction == 5):
-        return "⬋"
-    elif (direction == 6):
-        return "←"
-    elif (direction == 7):
-        return "⬉"
-    else: # This case should never occur.
-        return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+    if (config["display"]["diagonal_arrows"] == True): # Check to see if diagonal arrows are enabled in the configuration.
+        direction = round(heading / 45) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
+        if (direction == 0 or direction == 8):
+            return "↑"
+        elif (direction == 1):
+            return "⬈"
+        elif (direction == 2):
+            return "→"
+        elif (direction == 3):
+            return "⬊"
+        elif (direction == 4):
+            return "↓"
+        elif (direction == 5):
+            return "⬋"
+        elif (direction == 6):
+            return "←"
+        elif (direction == 7):
+            return "⬉"
+        else: # This case should never occur.
+            return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+
+    else: # Diagonal arrows are disabled in the configuration, so round to the nearest 90 degrees instead.
+        direction = round(heading / 90) # Divide the current heading in degrees into 8 segments, each representing a cardinal direction or sub-cardinal direction.
+        if (direction == 0 or direction == 4):
+            return "↑"
+        elif (direction == 1):
+            return "→"
+        elif (direction == 2):
+            return "↓"
+        elif (direction == 3):
+            return "←"
+        else: # This case should never occur.
+            return "ERROR" # Return an error indicating that the information supplied to the function was invalid.
+
+
+
+
+debug_message("Creating `update_status_lighting` function")
+def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
+    if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+        debug_message("Updating status lighting")
+        status_lighting_update_url = str(config["display"]["status_lighting"]["status_lighting_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+        if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
+            debug_message("Sending status lighting network request")
+            try:
+                response = requests.get(status_lighting_update_url)
+                debug_message("Updated status lighting")
+            except:
+                debug_message("Failed to update status lighting")
+                display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
+        else:
+            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+
+
+
+
+
+
+# This function is used to play a given sound as defined in the configuration.
+debug_message("Creating `play_sound` function")
+def play_sound(sound_id):
+    if (str(sound_id) in config["audio"]["sounds"]): # Check to see that a sound with the specified sound ID exists in the configuration.
+        if (int(config["audio"]["sounds"][str(sound_id)]["repeat"]) > 0): # Check to see if this sound effect is enabled.
+            if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
+                debug_message("Playing sound " + str(sound_id))
+                for i in range(0, int(config["audio"]["sounds"][str(sound_id)]["repeat"])): # Repeat the sound several times, if the configuration says to do so.
+                    if (config["audio"]["provider"] == "mpg321"): # Check to see if the configured audio provider is MPG321.
+                        os.system("mpg321 " + config["audio"]["sounds"][str(sound_id)]["path"] + " > /dev/null 2>&1 &") # Play the sound file associated with this sound ID in the configuration.
+                        time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
+                    elif (config["audio"]["provider"] == "playsound"): # Check to see if the configured audio provider is playsound.
+                        playsound(config["audio"]["sounds"][str(sound_id)]["path"], False) # Play the sound file associated with this sound ID in the configuration.
+                        time.sleep(float(config["audio"]["sounds"][str(sound_id)]["delay"])) # Wait before playing the sound again.
+                    else:
+                        display_notice("The audio provider is configured incorrectly.", 2)
+            elif (str(config["audio"]["sounds"][str(sound_id)]["path"]) == ""): # The file path associated with this sound ID is left blank, and therefore the sound can't be played.
+                display_notice("The sound file path associated with sound ID (" + str(sound_id) + ") is blank.", 2)
+            elif (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == False): # The file path associated with this sound ID does not exist, and therefore the sound can't be played.
+                display_notice("The sound file path associated with sound ID (" + str(sound_id) + ") does not exist.", 2)
+    else: # No sound with this ID exists in the configuration database, and therefore the sound can't be played.
+        display_notice("No sound with the ID (" + str(sound_id) + ") exists in the configuration.", 2)
+
+
+
+
+
+
+
+# This function is used to convert a text sample into audible speech and play it.
+debug_message("Creating `speak` function")
+def speak(full_text, brief_text):
+    if (config["audio"]["tts"]["enabled"] == True): # Only play text-to-speech if it is enabled in the configuration.
+        debug_message("Playing text-to-speech")
+        if (config["audio"]["tts"]["brief"] == True): # Check to see if brief mode is enabled in the configuration.
+            tts.say(brief_text)
+            tts.runAndWait()
+        else:
+            tts.say(full_text)
+            tts.runAndWait()
+
+
+
+# This function converts a human-readable UTC timestamp into a Unix epoch timestamp.
+debug_message("Creating `utc_datetime` function")
+def utc_datetime(timestamp):
+    timestamp = float(timestamp)
+    return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+
+# This function takes the location history and exports it into a GPX file.
+debug_message("Creating `save_gpx` function")
+def save_gpx(location_history, file_path):
+    if (type(location_history) == list): # Check to make sure the location_history provided is a list.
+        if (os.path.isdir(config["general"]["telemetry"]["directory"]) == True): # Check to make sure the save directory specified in the configuration exists and is actually a directory.
+            file_contents = '<?xml version="1.0" encoding="UTF-8" ?>\n<gpx version="1.0" creator="V0LT Assassin">\n    <time>' + utc_datetime(location_history[0]["time"]) + '</time>\n    <trk>\n        <trkseg>\n' # Set-up the start of the file.
+
+            for point in location_history: # Iterate through each point in the location history .
+                file_contents = file_contents + '            ' # Add indents to the beginning of each point line to make the file human-readable.
+                file_contents = file_contents + '<trkpt lat="' + str(point["lat"]) + '" lon="' + str(point["lon"]) + '">' # Add the latitude and longitude to this point.
+                file_contents = file_contents + '<time>' + str(utc_datetime(point["time"])) + '</time>' # Add the time to this point.
+                file_contents = file_contents + '<ele>' + str(point["alt"]) + '</ele>' # Add the elevation to this point.
+                file_contents = file_contents + '<sat>' + str(point["sat"]) + '</sat>' # Add the number of satellites to this point.
+                file_contents = file_contents + '<speed>' + str(point["spd"]) + '</speed>' # Add the speed to this point.
+                file_contents = file_contents + '<src>' + str(point["src"]) + '</src>' # Add the location source to this point.
+                file_contents = file_contents + '</trkpt>\n' # Close this point.
+
+            file_contents = file_contents + "        </trkseg>\n    </trk>\n</gpx>" # Set-up the end of the file.
+
+            file_name = config["general"]["telemetry"]["file"].replace("{T}", str(round(location_history[0]["time"]))) # Set up the file name that the telemetry information will be saved to.
+            file_path = config["general"]["telemetry"]["directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
+            save_to_file(file_path, file_contents, True) # Save the telemetry data to a file.
+
+    else:
+        display_notice("The location history supplied to save_gpx() isn't a valid list. This is most likely a bug. Telemetry logging could not be recorded.", 2)
