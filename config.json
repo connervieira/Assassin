@@ -127,6 +127,7 @@
                 "absolute_facing": false,
                 "relative_facing": true,
                 "brand": false,
+                "model": false,
                 "operator": false,
                 "mount": false,
                 "description": true

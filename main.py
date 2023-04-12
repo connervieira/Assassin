@@ -524,7 +524,10 @@ while True: # Run forever in a loop until terminated.
             if (config["general"]["alpr_alerts"]["information_displayed"]["distance"] == True): # Only display the distance to the camera if it is enabled in the configuration.
                 print("        Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
-                print("        Street: " + str(nearest_alpr_camera["road"])) # Display the road that this POI is associated with.
+                if (nearest_alpr_camera["street"] != ""):
+                    print("        Street: " + str(nearest_alpr_camera["street"])) # Display the street that this POI is associated with.
+                else:
+                    print("        Street: Unknown")
             if (config["general"]["alpr_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing to the camera if it is enabled in the configuration.
                 print("        Bearing: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
             if (config["general"]["alpr_alerts"]["information_displayed"]["absolute_facing"] == True): # Only display the absolute facing angle of the camera if it is enabled in the configuration.
@@ -538,6 +541,11 @@ while True: # Run forever in a loop until terminated.
                     print("        Brand: " + str(nearest_alpr_camera["brand"])) # Display the brand of this camera.
                 else:
                     print("        Brand: Unknown") # Display the brand of this camera as unknown.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["model"] == True): # Only display the model of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["model"] != ""):
+                    print("        Model: " + str(nearest_alpr_camera["model"])) # Display the model of this camera.
+                else:
+                    print("        Model: Unknown") # Display the model of this camera as unknown.
             if (config["general"]["alpr_alerts"]["information_displayed"]["operator"] == True): # Only display the operator of the camera if it is enabled in the configuration.
                 if (nearest_alpr_camera["operator"] != ""):
                     print("        Operator: " + str(nearest_alpr_camera["operator"])) # Display the brand of this camera.
