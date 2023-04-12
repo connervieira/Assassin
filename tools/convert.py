@@ -65,7 +65,6 @@ output_database["elements"] = {'brand': 'str', 'model': 'str', 'street': 'str', 
 output_database["entries"] = []
 
 for entry in input_database["elements"]:
-    print("run")
     new_entry_data = {} # Set the new entry data to a placeholder.
     new_entry_data["lat"] = entry["lat"]
     new_entry_data["lon"] = entry["lon"]
@@ -94,13 +93,11 @@ for entry in input_database["elements"]:
         try:
             new_entry_data["facing"] = int(entry["tags"]["camera:direction"])
         except:
-            print("skipping")
             continue # Skip this entry, since direction information is required.
     elif "direction" in entry["tags"].keys():
         try:
             new_entry_data["facing"] = int(entry["tags"]["direction"])
         except:
-            print("skipping")
             continue # Skip this entry, since direction information is required.
     else:
         continue # Skip this entry, since direction information is required.
