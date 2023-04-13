@@ -19,7 +19,12 @@
 
 
 
-types_to_include = ["alpr", "monitor"] # This controls what types of cameras will be included in the converted database.
+types_to_include = ["alpr", "monitor"] # This is a hard-coded configuration value that controls what types of cameras will be included in the converted database.
+# "alpr" refers to cameras that are dedicated to license plate recognition.
+# "monitor" refers to cameras that are primarily designed to monitor traffic flow, typically to trigger traffic lights. These cameras may or may not be capable of ALPR.
+# "surveillance" refers to cameras that simply record traffic for security and safety purposes. These cameras are often mounted high above the roadway, and primarily capture weather and general traffic movement. These cameras may or may not be capable of ALPR.
+# "misc" refers to cameras that are not otherwise identified.
+
 
 
 
@@ -113,23 +118,28 @@ for entry in input_database["elements"]:
         new_entry_data["mount"] = ""
 
     if "surveillance:type" in entry["tags"].keys():
-        if (str(entry["tags"]["surveillance:type"]).lower() == "alpr" or str(entry["tags"]["surveillance:type"]).lower() == "anpr"):
-            if ("alpr" in types_to_include):
+        if (str(entry["tags"]["surveillance:type"]).lower() == "alpr" or str(entry["tags"]["surveillance:type"]).lower() == "anpr"): # Check if this camera is tagged as a license plate recognition camera.
+            if ("alpr" in types_to_include): # Check to see if this camera type is set to be included.
                 new_entry_data["type"] = "alpr"
             else:
                 continue # Skip this camera.
-        elif ("camera:mount" in entry["tags"].keys() and str(entry["tags"]["camera:mount"]) == "traffic_signals"):
-            if ("monitor" in types_to_include):
+        elif ("camera:mount" in entry["tags"].keys() and str(entry["tags"]["camera:mount"]) == "traffic_signals"): # Check if this camera is mounted on a traffic light.
+            if ("monitor" in types_to_include): # Check to see if this camera type is set to be included.
                 new_entry_data["type"] = "monitor"
             else:
                 continue # Skip this camera.
+        elif ("camera:type" in entry["tags"].keys() and str(entry["tags"]["camera:type"]) == "dome"): # Check if this camera is a dome camera.
+            if ("surveillance" in types_to_include): # Check to see if this camera type is set to be included.
+                new_entry_data["type"] = "surveillance"
+            else:
+                continue # Skip this camera.
         else:
-            if ("misc" in types_to_include):
+            if ("misc" in types_to_include): # Check to see if this camera type is set to be included.
                 new_entry_data["type"] = "misc"
             else:
                 continue # Skip this camera.
     else:
-        if ("misc" in types_to_include):
+        if ("misc" in types_to_include): # Check to see if this camera type is set to be included.
             new_entry_data["type"] = "misc"
         else:
             continue # Skip this camera.
