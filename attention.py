@@ -14,9 +14,11 @@
 import json
 import time
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 
 # Locate and load the configuration file.

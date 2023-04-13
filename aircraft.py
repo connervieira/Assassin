@@ -18,9 +18,11 @@ import time
 import datetime
 
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 get_distance = utils.get_distance
 calculate_bearing = utils.calculate_bearing

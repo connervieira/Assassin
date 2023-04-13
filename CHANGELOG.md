@@ -166,3 +166,6 @@ April 10th, 2023
 
 - Refined the POI database format.
     - The ALPR camera database has been updated to reflect these changes, and includes additional refinements as well.
+- Refined the configuration loading process.
+    - Functions related to configuration loading and validation have been moved to a dedicated script, titled `config,py`
+    - The configuration is now validated at startup based on an outline template.

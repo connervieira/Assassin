@@ -19,9 +19,11 @@ import datetime # Required to interpret human-readable dates and times.
 import signal # Required to manage sub-proceses.
 import subprocess # Required to manage sub-proceses.
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 add_to_file = utils.add_to_file
 save_to_file = utils.save_to_file

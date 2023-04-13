@@ -59,25 +59,21 @@ def debug_message(message):
 import os # Required to interact with certain operating system functions
 import json # Required to process JSON data
 
+def is_json(string):
+    try:
+        json_object = json.loads(string) # Try to load string as JSON information.
+    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
+        return False # Return 'false' to indicate that the string is not JSON.
+
+    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
+
+
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
+import config
+load_config = config.load_config
 
-
-def load_config():
-    # Locate and load the configuration file.
-    if (os.path.exists(str(assassin_root_directory + "/config.json")) == True): # Check to see if the configuration file exists in the default location.
-        config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
-    elif (os.path.exists(str(assassin_root_directory + "/../config.json")) == True): # Check to see if the configuration file exists in the parent directory. This may occur if this script is being used in a subfolder of Assassin.
-        config = json.load(open(assassin_root_directory + "/../config.json")) # Load the configuration database from the parent directory.
-    else: # The configuration file couldn't be located. Assassin can't continue to load.
-        config = {} # Set the configuration to a blank placeholder dictionary.
-        print("Configuration couldn't be located.")
-        exit()
-
-    return config # Return the loaded configuration information.
-
-
-config = load_config() # Execute the configuration loading.
+config = load_config() # Load the configuration.
 
 
 
@@ -132,15 +128,6 @@ def clear():
             os.system ("clear")
 
 
-
-debug_message("Creating `is_json` function")
-def is_json(string):
-    try:
-        json_object = json.loads(string) # Try to load string as JSON information.
-    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
-        return False # Return 'false' to indicate that the string is not JSON.
-
-    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
 
 
 

@@ -100,19 +100,7 @@ This is the full installation process for Assassin and all of its dependencies. 
 
 ## Configuration
 
-After installing Assassin, you should do some quick configuration in order to get the most out of it.
-
-1. Open the Assassin configuration
-    - Open the `config.json` file in the Assassin root directory using your text editor of choice.
-2. Make configuration changes
-    - All configuration values are explained extensively in the [CONFIGURATION.md](CONFIGURATION.md) document.
-    - Make changes to any of the configuration values to better fit your usage context.
-    - This step is very open-ended. Depending on your situation, you may leave the configuration almost untouched, while other situations might involve intensive changes.
-3. Depending on the platform, Assassin might not be able to locate the `config.json` file. If you encounter issues during the steps described in the "Usage" section, you may need to manually set Assassin's directory. Under normal circumstances, this shouldn't be necessary.
-    - At the top of the `main.py`, `utils.py`, and other scripts, you should see a variable titled `assassin_root_directory`. By default, a Python function is used to find the current directory of the script.
-    - If you receive errors related to missing configuration files when trying to run Assassin, try setting this variable to a static file path.
-    - Example:
-        - `assassin_root_directory = "/home/user/Assassin/"`
+After installing Assassin, you should do some quick configuration in order to get the most out of it. The configuration file can be found at the root of the instance directory, and is named `config.json`. All configuration values are described extensively in the [CONFIGURATION.md](CONFIGURATION.md) document
 
 
 ## Hardware

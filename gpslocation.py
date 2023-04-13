@@ -17,9 +17,11 @@ import json # Required to process JSON data
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 display_notice = utils.display_notice
 get_distance = utils.get_distance
@@ -33,7 +35,6 @@ debug_message("Importing `math` library")
 import math # Required to run more complex math calculations
 debug_message("Importing `numpy` library")
 import numpy # Required to run more complex math calculations
-
 
 
 

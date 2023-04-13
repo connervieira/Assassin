@@ -18,7 +18,11 @@ print("Loading Assassin...")
 
 import utils # Import the utils.py scripts.
 debug_message = utils.debug_message # Load the function to print debugging information when the configuration says to do so.
-load_config = utils.load_config # Load the function used to load the configuration.
+
+import config
+load_config = config.load_config
+validate_config = config.validate_config
+
 
 
 debug_message("Starting loading")
@@ -72,15 +76,25 @@ get_gps_location = gpslocation.get_gps_location # Load the function to get the c
 process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to detect GPS problems.
 
 
-debug_message("Acquiring initial location")
-initial_location = [0, 0] # Set the "current location" to a placeholder.
-previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
-while (initial_location[0] == 0 and initial_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
-    if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
-        time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
+if (config["general"]["gps"]["enabled"] == True): # Check to see if GPS is enabled before getting the initial location.
+    debug_message("Acquiring initial location")
+    initial_location = [0, 0] # Set the "current location" to a placeholder.
+    previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
+    while (initial_location[0] == 0 and initial_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
+        if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
+            time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
 
-    previous_gps_attempt = True
-    initial_location = get_gps_location() # Attempt to get the current GPS location.
+        previous_gps_attempt = True
+        initial_location = get_gps_location() # Attempt to get the current GPS location.
+
+
+
+debug_message("Validating configuration values")
+invalid_configuration_values = validate_config(config) # Validation the configuration, and display any potential problems.
+for entry in invalid_configuration_values: # Iterate through each invalid configuration value in the list.
+    display_notice("Invalid configuration value: " + entry, 2) # Print each invalid configuration value as a warning.
+del invalid_configuration_values # Delete the variable holding the list of invalid configuration_values.
+debug_message("Validated configuration values")
 
 
 

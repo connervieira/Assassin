@@ -287,9 +287,9 @@ This section of configuration values effect Assassin's audio functionality.
     - Each sound has a `path`, `repeat`, and `delay` defined.
         - The `path` defines the file path of the sound file.
             - This file path can be relative to the Assassin directory, or an absolute path.
-        - The `repeat` setting defines how many times the sound file is played each time the sound is triggered.
+        - The `repeat` is an integer that defines how many times the sound file is played each time the sound is triggered.
             - When `repeat` is set to zero for a particular sound, that sould will be disabled.
-        - The `delay` setting defines how long code execution will be paused to allow the sound effect time to play.
+        - The `delay` is a decimal number that defines how long code execution will be paused to allow the sound effect time to play.
             - It's important to note that this delay does not include the time spent playing the audio file. Therefore, a 0.5 second audio file with a 1 second delay will only leave 0.5 seconds of delay after the sound has finished playing.
 
 ## External Service Configuration

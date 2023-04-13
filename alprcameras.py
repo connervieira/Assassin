@@ -16,9 +16,11 @@ import os # Required to use certain operating system functions.
 import json # Required to process JSON data.
 import time # Required to handle time information and execute delays.
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 nearby_database_poi = utils.nearby_database_poi
 display_notice = utils.display_notice

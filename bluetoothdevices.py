@@ -18,9 +18,11 @@ import time # Required to handle time information and execute delays.
 import bluetooth # Required to interface with Bluetooth adapters.
 import threading # Required to manage background threads.
 
+import config
+load_config = config.load_config
+
 import utils
 style = utils.style
-load_config = utils.load_config
 debug_message = utils.debug_message
 display_notice = utils.display_notice
 save_to_file = utils.save_to_file
