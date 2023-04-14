@@ -7,31 +7,25 @@ This document describes the configuration values found `config.json`.
 
 This section of configuration values will effect Assassin's general operation.
 
-- `active_config_refresh`
-    - This setting determines whether or not Assassin will refresh the configuration file every cycle.
+- `active_config_refresh` is a boolean that determines whether or not Assassin will refresh the configuration file every cycle.
     - Activating this setting can easily cause fatal errors, so it should only be used for testing.
     - This setting is not be honored by some of Assassin's libraries.
-- `debugging_output`
-    - This determines whether Assassin will operate in a verbose mode, where it prints out frequent status messages with timestamps. This is useful for debugging and for finding sources of delay.
+- `debugging_output` is a boolean that determines whether Assassin will operate in a verbose mode, where it prints out frequent status messages with timestamps. This is useful for debugging and for finding sources of delay.
     - If you enable this, considering enabling the `disable_console_clearing` to prevent debugging messages from being cleared.
-- `disable_console_clearing`
-    - This setting can be used to prevent Assassin from clearing the screen.
+- `disable_console_clearing` is a boolean that prevents the screen from being cleared.
     - Under normal circumstances, this should not be used because it will make Assassin's output extremely chaotic and unpredictable. However, there may be some situations in which it may be useful to disable output clearing.
-- `tts`
-    - TTS, or text-to-speech, allows Assassin to read out information verbally.
+- `tts` contains settings regarding text-to-speech, which allows Assassin to read out information verbally.
     - This section has the following sub-values for configuration.
         - `enabled` determines whether text to speech is enabled.
         - `brief` determines whether Assassin will use brief read-outs in place of the full length ones.
             - Enabling this will reduce the amount of information in text-to-speed read-outs, but will dramatically shorten the time it takes to deliver them.
         - `speed` determines the speed at which text-to-speech will be spoken.
-- `gps`
-    - This setting configures Assassin's GPS behavior.
+- `gps` contains settings that configure Assassin's GPS behavior.
     - This setting has the following sub-values for configuration:
-        - `enabled`
-            - This setting is used to globally enable and disable GPS functionality throughout Assassin.
+        - `enabled` is a boolean that globally enables or disables GPS functionality throughout Assassin.
             - It should be noted that the vast majority of Assassin's functionality depends on GPS. With it disabled, many important features will not function.
-        - `provider`
-            - This setting determines which GPS location provider Assassin will attempt to use.
+            - Disabling this configuration value may cause unexpected errors.
+        - `provider` is a string that determines which GPS location provider Assassin will attempt to use.
             - Below are the options this value can be set to.
                 - `gpsd`
                     - GPSD is suitable for nearly all devices, and is the default.
@@ -39,9 +33,8 @@ This section of configuration values will effect Assassin's general operation.
                     - Termux uses the `termux-api` package to make it possible to run Assassin on Android.
                 - `locateme`
                     - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
-        - `demo_mode`
-            - This setting is used to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
-            - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this fake information whenever it would otherwise poll the GPS for information.
+        - `demo_mode` isused to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
+            - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this placeholder information whenever it would otherwise poll the GPS for information.
         - `alerts` contains settings that control the behavior of various GPS alerts.
             - `enabled` is a boolean that enables and disables all GPS alerts.
             - `look_back` is an integer that determines the how many cycles Assassin will look back through the GPS history when analyzing GPS trends.

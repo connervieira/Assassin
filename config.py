@@ -53,35 +53,35 @@ def check_value(value, template):
         if (value not in template): # Check to see if the configuration value is in the list of acceptable values.
             return False
     elif (type(template) == str):
-        if (template == "str"):
+        if (template == "str"): # 'str' means this value needs to be a string.
             if (type(value) != str):
                 return False
-        elif (template == "bool"):
+        elif (template == "bool"): # 'bool' means this value needs to be true or false.
             if (type(value) != bool):
                 return False
-        elif (template == "float"):
+        elif (template == "float"): # 'float' means this value needs to be a number.
             if (type(value) != float and type(value) != int):
                 return False
-        elif (template == "+float"):
+        elif (template == "+float"): # '+float' means this value needs to be a number greater than or equal to 0.
             if (type(value) != float and type(value) != int):
                 return False
             elif (value < 0.0):
                 return False
-        elif (template == "int"):
+        elif (template == "int"): # 'int' means this value needs to be a whole number.
             if (type(value) != int):
                 return False
-        elif (template == "+int"):
+        elif (template == "+int"): # '+int' means this value needs to be a whole number greater than or equal to 0.
             if (type(value) != int):
                 return False
             elif (value < 0.0):
                 return False
-        elif (template == "list"):
+        elif (template == "list"): # 'list' means this value needs to be a list.
             if (type(value) != list):
                 return False
-        elif (template == "dir"):
+        elif (template == "dir"): # 'dir' means this value needs to point to a directory that exists.
             if (os.path.isdir(value) == False):
                 return False
-        elif (template == "file"):
+        elif (template == "file"): # 'file' means this value needs to point to a file that exists.
             if (os.path.isfile(value) == False):
                 return False
         else:

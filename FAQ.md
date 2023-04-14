@@ -2,9 +2,10 @@
 
 This document contains some of the most frequently asked questions concerning Assassin
 
+
 **What exactly is Assassin?**
 
-Assassin is a utility designed to be installed in a vehicle that provides detection and defense of several different types of threats. Think of it as a defense system for driving in the technological world.
+Assassin is a utility designed to be installed in a vehicle that provides detection and defense of several different types of threats. Think of it as a digital defense system for driving in the technological world.
 
 
 **How do I install Assassin?**
