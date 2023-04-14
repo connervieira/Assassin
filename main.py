@@ -492,6 +492,8 @@ while True: # Run forever in a loop until terminated.
             if ("frozen" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
                 if (gps_alerts["frozen"]["active"] == True):
                     print("    GPS Frozen")
+            if ("diagnostic" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
+                print("    GPS Diagnostics: (" + str(gps_alerts["diagnostic"]["lat"]) + ", " + str(gps_alerts["diagnostic"]["lon"]) + ") " + str(gps_alerts["diagnostic"]["spd"]) + " m/s facing " + str(gps_alerts["diagnostic"]["hdg"]) + "° at " + str(gps_alerts["diagnostic"]["alt"]) + "m with " + str(gps_alerts["diagnostic"]["sat"]) + " sat")
             print(style.end)
 
             play_sound("gps") # Play the alert sound associated with GPS alerts, if one is configured to run.

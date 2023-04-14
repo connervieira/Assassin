@@ -71,6 +71,9 @@ This section of configuration values will effect Assassin's general operation.
                     - Setting this to a value of 0 will always trigger alerts, even when GPS data is successfully returned.
                     - Setting this value to 1 will trigger an alert the moment two instances of identical GPS data are returned sequentially.
                     - Setting this value to values higher than 1 will wait to trigger alerts until identitical data is returned multiple times sequentially.
+            - `diagnostic` contains settings that control if and how Assassin issues diagnostic alerts.
+                - `enabled` is a boolean that determines whether or not Assassin will issue a persistent alert that contains GPS diagnostic information.
+                    - This feature might be useful if you want to issue basic dashboard information to an external program.
 - `attention_monitoring` contains settings related to driver attention alerts.
     - `enabled` determines whether attention monitoring is active or not.
     - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.

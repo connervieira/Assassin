@@ -163,6 +163,11 @@ def process_gps_alerts(location_history):
                         gps_alerts["frozen"] = {}
                         gps_alerts["frozen"]["active"] = True
 
+
+                # Process frozen data alerts.
+                if (config["general"]["gps"]["alerts"]["diagnostic"]["enabled"] == True): # Only issue diagnostic alerts if they are enabled in the configuration.
+                    gps_alerts["diagnostic"] = location_history[-1]
+
         debug_message("Processed GPS alerts")
 
     return gps_alerts
