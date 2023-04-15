@@ -133,7 +133,8 @@
                 "model": false,
                 "operator": false,
                 "mount": false,
-                "description": true
+                "description": true,
+                "type": true
             }
         },
         "bluetooth_monitoring": {
