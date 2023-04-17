@@ -568,10 +568,15 @@ while True: # Run forever in a loop until terminated.
                 else:
                     print("        Operator: Unknown") # Display the operator of this camera as unknown.
             if (config["general"]["alpr_alerts"]["information_displayed"]["type"] == True): # Only display the type of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["mount"] != ""):
-                    print("        Mount: " + str(nearest_alpr_camera["mount"])) # Display the mount type of this camera.
+                if (nearest_alpr_camera["type"] != ""):
+                    print("        Type: " + str(nearest_alpr_camera["type"])) # Display the type of this camera.
                 else:
-                    print("        Mount: Unknown") # Display the type of this camera as unknown.
+                    print("        Type: Unknown") # Display the type of this camera as unknown.
+            if (config["general"]["alpr_alerts"]["information_displayed"]["mount"] == True): # Only display the mount of the camera if it is enabled in the configuration.
+                if (nearest_alpr_camera["mount"] != ""):
+                    print("        Mount: " + str(nearest_alpr_camera["mount"])) # Display the mount of this camera.
+                else:
+                    print("        Mount: Unknown") # Display the mountof this camera as unknown.
             if (config["general"]["alpr_alerts"]["information_displayed"]["description"] == True): # Only display the description of the camera if it is enabled in the configuration.
                 if (nearest_alpr_camera["description"] != ""):
                     print("        Description: " + str(nearest_alpr_camera["description"])) # Display the description of this camera.

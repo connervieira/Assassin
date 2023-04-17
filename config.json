@@ -132,6 +132,7 @@
                 "brand": false,
                 "model": false,
                 "operator": false,
+                "type": false,
                 "mount": false,
                 "description": true,
                 "type": true
