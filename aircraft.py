@@ -58,14 +58,14 @@ def receive_messages():
         received_data = received_data.replace("\\n", "")
         if (len(received_data) > 3):
             if (received_data[0:3] == "MSG"):
-                add_to_file(config["general"]["adsb_alerts"]["adsb_message_file"], received_data)
+                add_to_file(config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"], received_data)
 
 
 
 def start_adsb_monitoring():
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Starting ADS-B monitoring")
-        if (config["general"]["adsb_alerts"]["adsb_message_file"] != ""): # Check to see if an ADS-B message file has been set.
+        if (config["general"]["adsb_alerts"]["adsb_message_filename"] != ""): # Check to see if an ADS-B message file has been set.
             start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
 
             debug_message("Starting ADS-B receiver")
@@ -75,7 +75,7 @@ def start_adsb_monitoring():
             adsb_message_receive_thread = threading.Thread(target=receive_messages, name="ADSBMessageStream")
             adsb_message_receive_thread.start()
         else:
-            display_notice("ADS-B alerts are enabled, but no message file was set. ADS-B monitoring could not be started", 3)
+            display_notice("ADS-B alerts are enabled, but no message file name was set. ADS-B monitoring could not be started", 3)
 
 
 
@@ -193,7 +193,7 @@ def fetch_aircraft_data(file):
 def adsb_alert_processing(current_location):
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Processing ADS-B alerts")
-        aircraft_data = fetch_aircraft_data(config["general"]["adsb_alerts"]["adsb_message_file"]) # Fetch the most recent aircraft data.
+        aircraft_data = fetch_aircraft_data(config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"]) # Fetch the most recent aircraft data.
 
         aircraft_threats = [] # Set the list of active aircraft threats to an empty placeholder database.
 

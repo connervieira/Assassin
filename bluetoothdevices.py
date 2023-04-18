@@ -38,8 +38,8 @@ def load_bluetooth_log_file():
     # Load the Bluetooth device log file, if applicable.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
         debug_message("Loading Bluetooth log file")
-        if (os.path.exists(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])):
-            detected_bluetooth_devices = json.load(open(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])) # Load the data from the Bluetooth device log file.
+        if (os.path.exists(config["general"]["working_directory"] + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])):
+            detected_bluetooth_devices = json.load(open(config["general"]["working_directory"]  + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"])) # Load the data from the Bluetooth device log file.
         else:
             detected_bluetooth_devices = {} # Set the Bluetooth device log to a blank placeholder list.
 
@@ -105,7 +105,7 @@ def bluetooth_alert_processing(current_location, detected_bluetooth_devices):
                 }
 
             if (config["general"]["bluetooth_monitoring"]["log_devices"]["enabled"] == True): # Check to see if Bluetooth device logging is enabled.
-                save_to_file(assassin_root_directory + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], json.dumps(detected_bluetooth_devices), True) # Save the Bluetooth device history to disk.
+                save_to_file(config["general"]["working_directory"]  + "/" + config["general"]["bluetooth_monitoring"]["log_devices"]["filename"], json.dumps(detected_bluetooth_devices), True) # Save the Bluetooth device history to disk.
 
 
 

@@ -7,6 +7,7 @@ This document describes the configuration values found `config.json`.
 
 This section of configuration values will effect Assassin's general operation.
 
+- `working_directory` is a path to the directory where Assassin will store files as it runs.
 - `active_config_refresh` is a boolean that determines whether or not Assassin will refresh the configuration file every cycle.
     - Activating this setting can easily cause fatal errors, so it should only be used for testing.
     - This setting is not be honored by some of Assassin's libraries.
@@ -183,7 +184,7 @@ This section of configuration values will effect Assassin's general operation.
     - ADS-B functionality is dependent on GPS, and requires that `gps_enabled` be set to `true`. If GPS functionality is disabled, ADS-B alerts will be disabled regardless of whether they are enabled in the configuration.
     - This setting has the following sub-values for configuration:
         - The `enabled` value enables and disables the entire ADS-B system.
-        - The `adsb_message_file` is the filepath to the CSV ADS-B data that Assassin will use. This file should usually be data streamed live from Dump1090 on port 30003.
+        - The `adsb_message_filename` is the file name of the file that Assassin will stream ADS-B messages to.
             - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
         - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while the car is on residential roads.
         - The `minimum_aircraft_speed` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to prevent alerts from sounding while an aircraft isn't at cruising speed.

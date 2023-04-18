@@ -1,5 +1,6 @@
 {
     "general": {
+        "working_directory": "",
         "active_config_refresh": false,
         "refresh_delay": 0.5,
         "debugging_output": true,
@@ -49,7 +50,6 @@
         },
         "telemetry": {
             "enabled": false,
-            "directory": "./",
             "file": "AssassinTelemetry{T}.gpx",
             "information": {
                 "altitude": true,
@@ -95,10 +95,10 @@
         "drone_alerts": {
             "enabled": false,
             "database": "./assets/databases/drones.json",
-            "save_detected_hazards": true,
+            "save_detected_hazards": false,
             "save_detected_devices": false,
-            "monitoring_device": "wlp40s0",
-            "monitoring_mode": "manual",
+            "monitoring_device": "wlx00c0cab05d69",
+            "monitoring_mode": "automatic",
             "hazard_latch_time": 10,
             "information_displayed": {
                 "threat_type": true,
@@ -165,7 +165,7 @@
         },
         "adsb_alerts": {
             "enabled": false,
-            "adsb_message_file": "",
+            "adsb_message_filename": "adsb.csv",
             "minimum_vehicle_speed": 0,
             "minimum_aircraft_speed": 10,
             "maximum_aircraft_speed": 200,

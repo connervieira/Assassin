@@ -169,7 +169,11 @@ April 10th, 2023
 - Refined the configuration loading process.
     - Functions related to configuration loading and validation have been moved to a dedicated script, titled `config,py`
     - The configuration is now validated at startup based on an outline template.
+- Added support for GPS diagnostic alerts, which simply issue an alert containing the most recent GPS information.
+- Created a dedicated working directory configuration value.
+    - Removed the telemetry directory configuration value.
+    - Renamed the `general > adsb_alerts > adsb_message_file` configuration value to `adsb_message_filename`, which is only a file name that is saved to the dedicated working directory.
 - Refined drone detection.
     - Improved the stability of the drone information parsing process.
     - Fixed a problem where drone detection would crash when drone threat history logging was disabled.
-    - Moved the drone detection working directory to a new general working directory.
+    - Moved the drone detection working directory to the  new general working directory.

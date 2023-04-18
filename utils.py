@@ -787,7 +787,7 @@ def utc_datetime(timestamp):
 
 # This function takes the location history and exports it into a GPX file.
 debug_message("Creating `save_gpx` function")
-def save_gpx(location_history, file_path):
+def save_gpx(location_history):
     if (type(location_history) == list): # Check to make sure the location_history provided is a list.
         if (os.path.isdir(config["general"]["telemetry"]["directory"]) == True): # Check to make sure the save directory specified in the configuration exists and is actually a directory.
             debug_message("Generating GPX location track")
@@ -807,7 +807,7 @@ def save_gpx(location_history, file_path):
             file_contents = file_contents + "        </trkseg>\n    </trk>\n</gpx>" # Set-up the end of the file.
 
             file_name = config["general"]["telemetry"]["file"].replace("{T}", str(round(location_history[0]["time"]))) # Set up the file name that the telemetry information will be saved to.
-            file_path = config["general"]["telemetry"]["directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
+            file_path = config["general"]["working_directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
 
             save_to_file(file_path, file_contents, True) # Save the telemetry data to a file.
 

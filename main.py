@@ -774,7 +774,7 @@ while True: # Run forever in a loop until terminated.
     # Record telemetry data according to the configuration.
     if (config["general"]["telemetry"]["enabled"] == True): # Check to see if Assassin is configured to record telemetry data.
         debug_message("Recording telemetry data")
-        save_gpx(location_history, config["general"]["telemetry"]["directory"]) # Save the location history to a GPX file.
+        save_gpx(location_history) # Save the location history to a GPX file.
 
 
 
