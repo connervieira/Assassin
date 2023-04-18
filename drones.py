@@ -56,6 +56,8 @@ def load_drone_alerts():
                 drone_threat_history = json.load(drone_threat_history_file) # Load the drone threat history from the file.
             else:
                 drone_threat_history = [] # Set the drone threat history to a blank placeholder list.
+        else:
+            drone_threat_history = [] # Set the drone threat history to a blank placeholder list.
 
         # Load the detected devices history file, if applicable.
         if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
@@ -69,13 +71,14 @@ def load_drone_alerts():
 
 
         # Run Airodump based on the Assassin configuration.
-        airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data --output-format csv --write-interval 1 --background 1" # Set up the command to start airodump.
+        airodump_command = "sudo airodump-ng " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " -w " + config["general"]["working_directory"] + "/airodump_data --output-format csv --write-interval 1 --background 1" # Set up the command to start airodump.
         if (config["general"]["drone_alerts"]["monitoring_mode"] == "automatic"):
             debug_message("Starting Airodump-NG")
+            os.popen("sudo killall airodum-ng") # Kill an existing airodump-ng processes.
             os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;") # Disable the configured network device.
             os.popen("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;") # Switch the configured network device to monitor mode.
             os.popen("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;") # Enable the configured network device.
-            os.popen("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
+            os.popen("rm -f " + config["general"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
             airodump_process = subprocess.Popen(airodump_command.split()) # Execute the command to start airodump.
             time.sleep(3) # Wait to give `airodump-ng` time to start.
         elif (config["general"]["drone_alerts"]["monitoring_mode"] == "manual"):
@@ -85,7 +88,7 @@ def load_drone_alerts():
             print("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " down;")
             print("sudo iwconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " mode monitor;")
             print("sudo ifconfig " + str(config["general"]["drone_alerts"]["monitoring_device"]) + " up;")
-            print("rm -f " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
+            print("rm -f " + config["general"]["working_directory"] + "/airodump_data*.csv") # Delete any previous airodump data.
             print(airodump_command + style.end)
             input("Press enter to continue once the command is running.")
 
@@ -104,7 +107,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
     if (config["general"]["drone_alerts"]["enabled"] == True): # Check to see if drone alerts are enabled.
         debug_message("Processing drone alerts")
 
-        grab_output_command = "cat " + config["general"]["drone_alerts"]["working_directory"] + "/airodump_data*.csv" # Set up the command to grab the contents of airodump's CSV output file.
+        grab_output_command = "cat " + config["general"]["working_directory"] + "/airodump_data*.csv" # Set up the command to grab the contents of airodump's CSV output file.
         command_output = str(os.popen(grab_output_command).read()) # Execute the output file grab command.
 
         line_split_output = command_output.split("\n") # Split the raw command output into a list, line by line.
@@ -128,6 +131,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
             if (len(device) <= 3): # Check to see if this entry is shorter than expected.
                 detected_devices.remove(device) # Remove this entry from the list.
 
+
         for device_key, device in enumerate(detected_devices): # Iterate through each entry in the list of devices.
             for entry_key, entry in enumerate(device): # Iterate through each data entry for this device.
                 detected_devices[device_key][entry_key] = entry.strip() # Remove leading whitespace before any data in this entry.
@@ -138,7 +142,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
         for device in detected_devices: # Iterate through each device detected in the previous step.
             device_information = {} # Create a blank placeholder that will be used to store this device's information.
 
-            if (len(device) == 15): # This hazard is an access point.
+            if (len(device) == 15 and device[0] != "BSSID"): # This hazard is an access point.
                 device_information["mac"] = device[0] # Add the device's MAC address to the device information.
                 device_information["name"] = device[13] # Add the device's name to the device information.
                 device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
@@ -150,7 +154,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
                 device_information["threat"] = False # Add the device's threat status to the device information.
                 device_information["company"] = "" # Add a placeholder for this device's associated company. This will be updated if the device is found to be a threat.
                 device_information["threattype"] = "" # Add a placeholder for this device's threat type. This will be updated if the device is found to be a threat.
-            elif (len(device) == 7): # This hazard is a device.
+            elif (len(device) == 7 and device[0] != "Station MAC"): # This hazard is a device.
                 device_information["mac"] = device[0] # Add the device's MAC address to the device information.
                 device_information["name"] = device[6] # Add the device's name to the device information.
                 device_information["lastseen"] = device[2] # Add the device's last-seen timestamp to the device information.
@@ -184,7 +188,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
         debug_message("Detected " + str(len(active_radio_devices)) + " wireless devices")
 
         if (config["general"]["drone_alerts"]["save_detected_devices"] == True): # Check to see if device recording is enabled.
-            save_to_file(assassin_root_directory + "/" + "/radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
+            save_to_file(assassin_root_directory + "/" + "radio_device_history.json", json.dumps(radio_device_history), True) # Save the radio device history to the log file.
 
 
         for company in drone_threat_database: # Iterate through each manufacturer in the threat database.

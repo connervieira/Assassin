@@ -169,3 +169,7 @@ April 10th, 2023
 - Refined the configuration loading process.
     - Functions related to configuration loading and validation have been moved to a dedicated script, titled `config,py`
     - The configuration is now validated at startup based on an outline template.
+- Refined drone detection.
+    - Improved the stability of the drone information parsing process.
+    - Fixed a problem where drone detection would crash when drone threat history logging was disabled.
+    - Moved the drone detection working directory to a new general working directory.
