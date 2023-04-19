@@ -158,6 +158,14 @@ April 10th, 2023
 - Moved GPS functions to a dedicated file for sake of organization.
 
 
+## Version 3.1
+
+April 19th, 2023
+
+- Fixed a bug that would cause a hard crash when drone threat logging was disabled.
+- Improved the stability of the drone data parsing process.
+
+
 ## Version 4.0
 
 ### Name Pending
@@ -172,8 +180,5 @@ April 10th, 2023
 - Added support for GPS diagnostic alerts, which simply issue an alert containing the most recent GPS information.
 - Created a dedicated working directory configuration value.
     - Removed the telemetry directory configuration value.
-    - Renamed the `general > adsb_alerts > adsb_message_file` configuration value to `adsb_message_filename`, which is only a file name that is saved to the dedicated working directory.
-- Refined drone detection.
-    - Improved the stability of the drone information parsing process.
-    - Fixed a problem where drone detection would crash when drone threat history logging was disabled.
-    - Moved the drone detection working directory to the  new general working directory.
+    - Renamed the `general > adsb_alerts > adsb_message_file` configuration value to `adsb_message_filename`, which is now only a file name that is saved to the dedicated working directory.
+- Moved the drone detection working directory to the new general working directory.
