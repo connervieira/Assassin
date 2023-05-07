@@ -41,6 +41,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Improve drone detection process.
     - [X] Improve Bluetooth scanning process.
     - [X] Refine GPS alert processing.
+- Version 4.0
+    - [ ] Add Predator integration.
 
 
 ### Hypothetical
