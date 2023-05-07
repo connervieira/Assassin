@@ -105,7 +105,14 @@ This section of configuration values will effect Assassin's general operation.
             - `visibility` is the current visibility, measured in meters.
                 - This value maxes out at 10,000 meters, and will never go above it.
             - `temperature` is the current temperature, measured in celcius.
-            - `preciptiation` is the current chance of preciptiation.
+            - `precipitation` is the current chance of preciptiation.
+- `predator_integration`
+    - Predator integration allows Assassin to show alerts detected by [Predator](https://v0lttech.com/predator.php).
+    - This setting has the following sub-values for configuration:
+        - `enabled` is a boolean that determines if Predator integration alerts are active.
+        - `plate_log_file` is an absolute file path to the plate log file used by Predator.
+            - It should be noted that this is not the plate file from the interface directory, but rather the complete log file defined in the Predator configuration under `realtime>`saving>license_plates`
+        - `latch_time` is a floating point value that determines how many seconds Assassin will look back in the plate history for active alerts.
 - `traffic_camera_alerts`
     - Traffic camera alerts are triggered by proximity to enforcement cameras, like speed cameras, red light cameras, and lane monitoring cameras.
     - This setting has the following sub-values for configuration:

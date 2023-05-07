@@ -175,6 +175,14 @@ if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load a
     get_current_attention_time = attention.get_current_attention_time
     attention_alerts = {}
 
+# Load Predator integration.
+if (config["general"]["predator_integration"]["enabled"] == True): # Only load Predator integration if Predator integration is enabled in the configuration.
+    import predator
+    start_predator = predator.start_predator
+    process_predator_alerts = predator.process_predator_alerts
+
+    start_predator()
+
 
 
 
@@ -227,6 +235,7 @@ alert_count["bluetooth"] = [0, 0]
 alert_count["weather"] = [0, 0]
 alert_count["gps"] = [0, 0]
 alert_count["attention"] = [0, 0]
+alert_count["predator"] = [0, 0]
 
 location_history = []
 
@@ -314,6 +323,11 @@ while True: # Run forever in a loop until terminated.
         attention_alerts = process_attention_alerts(float(current_speed))
     else:
         attention_alerts = {}
+
+    if (config["general"]["predator_integration"]["enabled"] == True): # Only load Predator integration if Predator integration is enabled in the configuration.
+        predator_alerts = process_predator_alerts()
+    else:
+        predator_alerts = {}
         
 
 
@@ -342,6 +356,7 @@ while True: # Run forever in a loop until terminated.
     all_alerts[current_time]["weather"] = weather_alerts
     all_alerts[current_time]["gps"] = gps_alerts
     all_alerts[current_time]["attention"] = attention_alerts
+    all_alerts[current_time]["predator"] = predator_alerts
 
 
     if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
@@ -357,6 +372,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
     alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
     alert_count["attention"] = [len(attention_alerts)] + alert_count["attention"]
+    alert_count["predator"] = [len(predator_alerts)] + alert_count["predator"]
 
 
     # Only keep alert counts from the past 100 cycles.
@@ -368,6 +384,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["weather"] = alert_count["weather"][:100]
     alert_count["gps"] = alert_count["gps"][:100]
     alert_count["attention"] = alert_count["attention"][:100]
+    alert_count["predator"] = alert_count["predator"][:100]
 
 
 
@@ -763,6 +780,20 @@ while True: # Run forever in a loop until terminated.
             # Display visibility alerts.
             if ("time" in attention_alerts): # Check to see if there is a time-related attention alert.
                 print("    Attentive Time: " + str(math.floor(round(attention_alerts["time"]["time"])/60)) + " min " + str(round(attention_alerts["time"]["time"]) % 60) + " sec") # Display the time-related attention alert.
+
+            print(style.end)
+
+
+
+    # Display Predator integration alerts.
+    if (config["general"]["predator_integration"]["enabled"] == True): # Check to make sure Predator integration is enabled before displaying Predator alerts.
+        debug_message("Displaying Predator alerts")
+        if (len(predator_alerts) > 0): # Check to see if there are any active Predator alerts.
+            print(style.yellow + "Predator: " + str(len(predator_alerts))) # Display the attention monitoring alerts title.
+            for plate in predator_alerts:
+                print("    Plate: " + str(plate))
+                for alert in predator_alerts[plate]:
+                    print("        Trigger: " + str(alert))
 
             print(style.end)
 

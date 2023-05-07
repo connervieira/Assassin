@@ -45,6 +45,15 @@ Assassin uses 'alerts' to inform the user of important information. Below is a l
 - Bluetooth alerts
     - Bluetooth alerts are triggered when a Bluetooth device has been detected following for a certain distance.
     - This alert can be useful to detect Bluetooth trackers, or even to detect the precense of known bad devices using a blacklist.
+- GPS alerts
+    - GPS alerts are triggered when potential GPS problems are encountered.
+    - Alerts can be configured to trigger under the following situations:
+        - The apparent GPS location moves at an unrealistically high speed.
+        - The GPS freezes, and repeatedly returns identical data.
+        - The GPS stops returning data.
+- Predator license plate recognition alerts
+    - These alerts simply re-interpret license plate alerts issued by V0LT Predator in the context of Assassin.
+    - This feature is dependent on Predator running along-side Assassin.
 
 ### Colors
 

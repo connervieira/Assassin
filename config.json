@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.5,
         "debugging_output": true,
@@ -72,6 +72,11 @@
                     "above": 50
                 }
             }
+        },
+        "predator_integration": {
+            "enabled": true,
+            "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
+            "latch_time": 10000000000.0
         },
         "traffic_camera_alerts": {
             "loaded_radius": 0,
@@ -307,8 +312,8 @@
     },
     "external": {
         "local": {
-            "enabled": false,
-            "interface_directory": ""
+            "enabled": true,
+            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
         }
     }
 }
