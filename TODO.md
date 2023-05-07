@@ -44,8 +44,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
 - Version 4.0
     - [ ] Add Predator integration.
         - [X] Add alert handling.
+        - [X] Add configuration validation for new configuration values.
         - [ ] Add Predator start/stop capability.
-        - [ ] Add configuration validiation for new configuration values.
 
 
 ### Hypothetical
