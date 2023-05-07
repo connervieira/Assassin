@@ -248,7 +248,7 @@ while True: # Run forever in a loop until terminated.
     # Get the current location.
     if (config["general"]["gps"]["enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
         current_location = get_gps_location() # Get the current location.
-        current_speed = round(convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"])*10**int(config["display"]["displays"]["speed"]["decimal_places"]))/(10**int(config["display"]["displays"]["speed"]["decimal_places"])) # Convert the speed data from the GPS into the units specified by the configuration.
+        current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
     else: # GPS functionality is disabled.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
 
