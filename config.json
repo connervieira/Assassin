@@ -2,7 +2,7 @@
     "general": {
         "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
-        "refresh_delay": 0.5,
+        "refresh_delay": 1,
         "debugging_output": true,
         "disable_console_clearing": true,
         "gps": {
@@ -11,8 +11,8 @@
             "demo_mode": {
                 "enabled": true,
                 "data": {
-                    "longitude": 40.0,
-                    "latitude": -81.0,
+                    "longitude": 40,
+                    "latitude": -81,
                     "speed": 20,
                     "altitude": 200,
                     "heading": 45,
@@ -45,7 +45,7 @@
             "reset_time": 2,
             "reset_speed": 3,
             "triggers": {
-                "time": 180.0 
+                "time": 180
             }
         },
         "telemetry": {
@@ -76,7 +76,7 @@
         "predator_integration": {
             "enabled": true,
             "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
-            "latch_time": 10000000000.0
+            "latch_time": 600
         },
         "traffic_camera_alerts": {
             "loaded_radius": 0,
@@ -137,10 +137,9 @@
                 "brand": false,
                 "model": false,
                 "operator": false,
-                "type": false,
+                "type": true,
                 "mount": false,
-                "description": true,
-                "type": true
+                "description": true
             }
         },
         "bluetooth_monitoring": {
@@ -155,11 +154,13 @@
             "whitelist": {
                 "enabled": true,
                 "devices": {
+                    "Sample": "FF:FF:FF:FF:FF:FF"
                 }
             },
             "blacklist": {
                 "enabled": true,
                 "devices": {
+                    "Sample": "FF:FF:FF:FF:FF:FF"
                 }
             },
             "information_displayed": {
@@ -208,7 +209,7 @@
             "altitude": true,
             "heading": {
                 "degrees": true,
-                "direction": true 
+                "direction": true
             },
             "satellites": true,
             "planes": true,
@@ -233,15 +234,15 @@
         "notices": {
             "1": {
                 "wait_for_input": false,
-                "delay": 2.0
+                "delay": 2
             },
             "2": {
                 "wait_for_input": false,
-                "delay": 2.0
+                "delay": 2
             },
             "3": {
                 "wait_for_input": true,
-                "delay": 10.0
+                "delay": 10
             }
         }
     },
@@ -287,7 +288,7 @@
                 "path": "./assets/sounds/alpr.mp3",
                 "repeat": 0,
                 "delay": 0.5
-             },
+            },
             "drone": {
                 "path": "./assets/sounds/drone.mp3",
                 "repeat": 0,
@@ -308,7 +309,7 @@
                 "repeat": 0,
                 "delay": 0.5
             }
-        } 
+        }
     },
     "external": {
         "local": {
