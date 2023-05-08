@@ -131,54 +131,55 @@ def fetch_aircraft_data(file):
         debug_message("Collecting aircraft data")
         aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
         for entry in raw_output: # Iterate through each entry in the CSV list data.
-            if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
-                individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
-            else:
-                individual_data = {"latitude":"0", "longitude":"0", "altitude":"0", "speed":"0", "heading":0, "climb":"0", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
+            if (len(entry) >= 16): # Only process this entry if it has valid message information.
+                if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
+                    individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
+                else:
+                    individual_data = {"latitude":"0", "longitude":"0", "altitude":"0", "speed":"0", "heading":0, "climb":"0", "callsign":"", "time":""} # Set the data for this aircraft to a fresh placeholder.
 
-            if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
-                individual_data["id"] = entry[4] # Get the aircraft's identification.
-            if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
-                try:
-                    individual_data["latitude"] = float(entry[14])
-                except:
-                    individual_data["latitude"] = 0.0
-            if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
-                try:
-                    individual_data["longitude"] = float(entry[15])
-                except:
-                    individual_data["longitude"] = 0.0
-            if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
-                try:
-                    individual_data["altitude"] = float(entry[11])
-                except:
-                    individual_data["altitude"] = 0.0
-            if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
-                try:
-                    individual_data["speed"] = float(entry[12])
-                except:
-                    individual_data["speed"] = 0.0
-            if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
-                try:
-                    individual_data["heading"] = int(entry[13]) # Get the aircraft's compass heading.
-                except:
-                    individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading.
-            if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
-                try:
-                    individual_data["climb"] = float(entry[16]) # Get the aircraft's vertical climb rate.
-                except:
-                    individual_data["climb"] = 0.0
-            if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
-                individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
-            if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
-                try:
-                    individual_data["time"] = round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Convert the human readable timestamp into a Unix timestamp.
-                except:
-                    individual_data["time"] = 0
-            else:
-                display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
+                if (entry[4] != ""): # Only fetch the identification if the message data for it isn't blank.
+                    individual_data["id"] = entry[4] # Get the aircraft's identification.
+                if (entry[14] != ""): # Only update the latitude information if the message data for it isn't blank.
+                    try:
+                        individual_data["latitude"] = float(entry[14])
+                    except:
+                        individual_data["latitude"] = 0.0
+                if (entry[15] != ""): # Only update the longitude information if the message data for it isn't blank.
+                    try:
+                        individual_data["longitude"] = float(entry[15])
+                    except:
+                        individual_data["longitude"] = 0.0
+                if (entry[11] != ""): # Only update the altitude information if the message data for it isn't blank.
+                    try:
+                        individual_data["altitude"] = float(entry[11])
+                    except:
+                        individual_data["altitude"] = 0.0
+                if (entry[12] != ""): # Only update the speed information if the message data for it isn't blank.
+                    try:
+                        individual_data["speed"] = float(entry[12])
+                    except:
+                        individual_data["speed"] = 0.0
+                if (entry[13] != ""): # Only update the heading information if the message data for it isn't blank.
+                    try:
+                        individual_data["heading"] = int(entry[13]) # Get the aircraft's compass heading.
+                    except:
+                        individual_data["heading"] = 0 # Use a placeholder for the aircraft's heading.
+                if (entry[16] != ""): # Only update the climb rate information if the message data for it isn't blank.
+                    try:
+                        individual_data["climb"] = float(entry[16]) # Get the aircraft's vertical climb rate.
+                    except:
+                        individual_data["climb"] = 0.0
+                if (entry[10] != ""): # Only update the callsign information if the message data for it isn't blank.
+                    individual_data["callsign"] = entry[10].strip() # Get the aircraft's callsign, removing any trailing or leading spaces.
+                if (entry[6] != "" and entry[7] != ""): # Ensure the message date and time are set.
+                    try:
+                        individual_data["time"] = round(time.mktime(datetime.datetime.strptime(entry[6] + " " + entry[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Convert the human readable timestamp into a Unix timestamp.
+                    except:
+                        individual_data["time"] = 0
+                else:
+                    display_notice("An ADS-B message didn't have an associated date and time. This should never happen.", 3)
 
-            aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
+                aircraft_data[entry[4]] = individual_data # Add the updated aircraft information back to the main database.
             
         return aircraft_data # Return the processed aircraft data.
 
