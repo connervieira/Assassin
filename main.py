@@ -705,7 +705,7 @@ while True: # Run forever in a loop until terminated.
     # Display ADS-B aircraft alerts
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Displaying ADS-B alerts")
-        if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is travelling above the minimum alert speed.
+        if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is traveling above the minimum alert speed.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 

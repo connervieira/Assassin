@@ -193,24 +193,29 @@ This section of configuration values will effect Assassin's general operation.
         - The `enabled` value enables and disables the entire ADS-B system.
         - The `adsb_message_filename` is the file name of the file that Assassin will stream ADS-B messages to.
             - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
-        - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in meters per second. This is useful to prevent alerts from sounding while the car is on residential roads.
-        - The `minimum_aircraft_speed` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at, measured in knots. This is useful to prevent alerts from sounding while an aircraft isn't at cruising speed.
-        - The `maximum_aircraft_speed` setting defines the maximum aircraft speed that ADS-B alerts will be triggered at, measured in knots. This is useful to prevent alerts from sounding for aircraft that move faster than a certain model of aircraft.
-        - The `minimum_aircraft_altitude` setting defines the minimum aircraft altitude that ADS-B alerts will be triggered at, measured in feet.
-        - The `maximum_aircraft_altitude` setting defines the maximum aircraft altitude that ADS-B alerts will be triggered at, measured in feet.
-        - The `distance_threshold` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
-        - The `base_altitude_threshold` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
-            - Below the base altitude threshold, the distance threshold will be proportionally decreased, and above the base altitude threshold, the distance threshold will be proportionally increased.
-            - The `base_altitude_threshold` should roughly be the altitude that you expect hazardous planes to be at. Any planes above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower planes pose less of a threat, so the alert distance decreases.
-        - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
-            - If certain information is missing from a message, Assassin will look back through old messages within this time-frame to find it. As such, increasing this configuration value will trade information recency for resiliency and fault tolerance.
         - The `threat_threshold` determines how likely a plane is to be a threat before Assassin displays it as an alert. A plane has to match all of the criteria at its threshold level, and all levels below it.
             - A threshold of `0` includes all aircraft detected.
-            - A threshold of `1` includes all aircraft within the alert radius.
+            - A threshold of `1` includes all aircraft within the alert distance threshold.
                 - This is a good threshold to use if you want to be certain you don't miss any legitimate alerts.
             - A threshold of `2` includes aircraft within the alert altitude range.
             - A threshold of `3` includes aircraft within the alert speed range.
                 - This is a good threshold to use if you want to eliminate as many false alerts as positive.
+        - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in meters per second. This is useful to prevent alerts from sounding while the car is on residential roads.
+        - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
+            - If certain information is missing from a message, Assassin will look back through old messages within this time-frame to find it. As such, increasing this configuration value will trade information recency for resiliency and fault tolerance.
+            - If you find that enabling ADS-B alerts causes Assassin to dramatically slow down after a few moments of running, decreasing this value should significantly decrease processing time.
+        - `criteria` contains the alert criteria for aircraft.
+            - `speed` contains the speed range that aircraft hazards are expected to moving, measured in knots.
+                - The `minimum` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that aren't at cruising speed.
+                - The `maximum` setting defines the maximum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that are moving faster than specific models of aircraft are capable of.
+            - `altitude` contains the altitude range that aircraft hazards are expected to at, measured in feet.
+                - The `minimum` setting defines the minimum aircraft altitude that ADS-B alerts will be triggered at.
+                - The `maximum` setting defines the maximum aircraft altitude that ADS-B alerts will be triggered at.
+            - `distance` contains criteria regarding the distance between the aircraft and the vehicle.
+                - The `base_distance` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
+                - The `base_altitude` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
+                    - Below the base altitude, the alert radius will be proportionally decreased, and above the base altitude, the alert radius will be proportionally increased.
+                    - This value should be roughly be the altitude that you expect aircraft threats to be at. Any aircraft above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower aircraft have a lower vision radius, so the alert distance decreases.
         - `information_displayed` determines what information is displayed in alerts.
             - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 

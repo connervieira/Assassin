@@ -75,7 +75,7 @@
 		},
       	"predator_integration": {
           	"enabled": "bool",
-         	"plate_log_file": "file",
+         	"plate_log_file": "str",
           	"latch_time": "+float"
         },
 		"traffic_camera_alerts": {
@@ -165,15 +165,23 @@
 		"adsb_alerts": {
 			"enabled": "bool",
 			"adsb_message_filename": "str",
-			"minimum_vehicle_speed": "+float",
-			"minimum_aircraft_speed": "+float",
-			"maximum_aircraft_speed": "+float",
-			"minimum_aircraft_altitude": "+float",
-			"maximum_aircraft_altitude": "+float",
-			"distance_threshold": "+float",
-			"base_altitude_threshold": "+float",
-			"message_time_to_live": "+float",
 			"threat_threshold": [0, 1, 2, 3],
+            "minimum_vehicle_speed": "+float",
+			"message_time_to_live": "+float",
+            "criteria": {
+                "speed": {
+                    "minimum": "+float",
+                    "maximum": "+float"
+                },
+                "altitude": {
+                    "minimum": "+float",
+                    "maximum": "+float"
+                },
+                "distance": {
+                    "base_distance": "+float",
+                    "base_altitude": "+float"
+                }
+            },
 			"information_displayed": {
 				"location": "bool",
 				"distance": "bool",

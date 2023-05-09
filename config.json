@@ -1,15 +1,15 @@
 {
     "general": {
-        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
+        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
-        "refresh_delay": 1,
+        "refresh_delay": 0.4,
         "debugging_output": true,
         "disable_console_clearing": true,
         "gps": {
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": true,
+                "enabled": false,
                 "data": {
                     "longitude": 40,
                     "latitude": -81,
@@ -74,7 +74,7 @@
             }
         },
         "predator_integration": {
-            "enabled": true,
+            "enabled": false,
             "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
             "latch_time": 600
         },
@@ -172,15 +172,23 @@
         "adsb_alerts": {
             "enabled": false,
             "adsb_message_filename": "adsb.csv",
-            "minimum_vehicle_speed": 0,
-            "minimum_aircraft_speed": 10,
-            "maximum_aircraft_speed": 200,
-            "minimum_aircraft_altitude": 500,
-            "maximum_aircraft_altitude": 8000,
-            "distance_threshold": 5,
-            "base_altitude_threshold": 3000,
-            "message_time_to_live": 60,
             "threat_threshold": 1,
+            "minimum_vehicle_speed": 0,
+            "message_time_to_live": 20,
+            "criteria": {
+                "speed": {
+                    "minimum": 10,
+                    "maximum": 200
+                },
+                "altitude": {
+                    "minimum": 200,
+                    "maximum": 8000
+                },
+                "distance": {
+                    "base_distance": 3,
+                    "base_altitude": 3000
+                }
+            },
             "information_displayed": {
                 "location": true,
                 "distance": true,
@@ -314,7 +322,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
         }
     }
 }

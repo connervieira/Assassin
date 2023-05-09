@@ -222,15 +222,15 @@ def adsb_alert_processing(current_location):
                     relative_direction = 360 + relative_direction
                 aircraft_data[key]["direction"] = relative_direction # Add the direction to the aircraft to its data.
 
-                precise_alert_threshold = (int(aircraft_location[2]) / config["general"]["adsb_alerts"]["base_altitude_threshold"]) * config["general"]["adsb_alerts"]["distance_threshold"] # Calculate the precise alerting distance based on the aircraft altitude, base altitude threshold, and alert distance configured by the user. Higher altitude will cause planes to alert from farther away.
+                adjusted_alert_threshold = (int(aircraft_location[2]) / config["general"]["adsb_alerts"]["criteria"]["distance"]["base_altitude"]) * config["general"]["adsb_alerts"]["criteria"]["distance"]["base_distance"] # Calculate the precise alerting distance based on the aircraft altitude, base altitude threshold, and alert distance configured by the user. Higher altitude will cause planes to alert from farther away.
 
 
                 aircraft_data[key]["threatlevel"] = 0
-                if (aircraft_distance < precise_alert_threshold): # Check to see if the aircraft is within the alert distance range.
+                if (aircraft_distance < adjusted_alert_threshold): # Check to see if the aircraft is within the alert distance range.
                     aircraft_data[key]["threatlevel"] = 1
-                    if (int(aircraft_data[key]["altitude"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_altitude"]) and int(aircraft_data[key]["altitude"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_altitude"])): # Check to see if the aircraft is at the altitude range specified in the configuration.
+                    if (int(aircraft_data[key]["altitude"]) <= int(config["general"]["adsb_alerts"]["criteria"]["altitude"]["maximum"]) and int(aircraft_data[key]["altitude"]) >= int(config["general"]["adsb_alerts"]["criteria"]["altitude"]["minimum"])): # Check to see if the aircraft is at the altitude range specified in the configuration.
                         aircraft_data[key]["threatlevel"] = 2
-                        if (int(aircraft_data[key]["speed"]) >= int(config["general"]["adsb_alerts"]["minimum_aircraft_speed"]) and int(aircraft_data[key]["speed"]) <= int(config["general"]["adsb_alerts"]["maximum_aircraft_speed"])): # Check to see if the aircraft is within the alert speed range specified in the configuration.
+                        if (int(aircraft_data[key]["speed"]) >= int(config["general"]["adsb_alerts"]["criteria"]["speed"]["minimum"]) and int(aircraft_data[key]["speed"]) <= int(config["general"]["adsb_alerts"]["criteria"]["speed"]["maximum"])): # Check to see if the aircraft is within the alert speed range specified in the configuration.
                             aircraft_data[key]["threatlevel"] = 3
 
                 if (aircraft_data[key]["threatlevel"] >= config["general"]["adsb_alerts"]["threat_threshold"]): # Check to see if this aircraft's threat level exceeds the threshold set in the configuration.
@@ -244,7 +244,7 @@ def adsb_alert_processing(current_location):
             debug_message("Sorting ADS-B threats")
             sorted_aircraft_threats = [] # Set the sorted aircraft threats to a blank placeholder so each entry can be added one by one in the next steps.
             for i in range(0, len(aircraft_threats)): # Run once for every entry in the aircraft threat list.
-                current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance.
+                current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance, such that any aircraft detected will be closer.
                 for element in aircraft_threats:
                     if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
                         current_closest = element # Set this aircraft to the current closest known aircraft.
