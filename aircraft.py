@@ -131,7 +131,7 @@ def fetch_aircraft_data(file):
         debug_message("Collecting aircraft data")
         aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
         for entry in raw_output: # Iterate through each entry in the CSV list data.
-            if (len(entry) >= 16): # Only process this entry if it has valid message information.
+            if (len(entry) >= 17): # Only process this entry if it has valid message information.
                 if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
                     individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.
                 else:
