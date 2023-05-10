@@ -200,7 +200,7 @@ This section of configuration values will effect Assassin's general operation.
             - A threshold of `2` includes aircraft within the alert altitude range.
             - A threshold of `3` includes aircraft within the alert speed range.
                 - This is a good threshold to use if you want to eliminate as many false alerts as positive.
-        - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in meters per second. This is useful to prevent alerts from sounding while the car is on residential roads.
+        - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in the units specified by the `display>displays>speed>unit` configuration value. This is useful to prevent alerts from sounding while the car is on residential roads.
         - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
             - If certain information is missing from a message, Assassin will look back through old messages within this time-frame to find it. As such, increasing this configuration value will trade information recency for resiliency and fault tolerance.
             - If you find that enabling ADS-B alerts causes Assassin to dramatically slow down after a few moments of running, decreasing this value should significantly decrease processing time.

@@ -114,7 +114,6 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
 if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only load the ADS-B system if ADS-B alerts are enabled.
     debug_message("Initializing aircraft alert system")
     import aircraft
-    fetch_aircraft_data = aircraft.fetch_aircraft_data # Load the function used to fetch aircraft data from a Dump1090 CSV file.
     start_adsb_monitoring = aircraft.start_adsb_monitoring
     adsb_alert_processing = aircraft.adsb_alert_processing
 
@@ -304,7 +303,7 @@ while True: # Run forever in a loop until terminated.
 
     # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
-        aircraft_threats, aircraft_data = adsb_alert_processing(current_location)
+        aircraft_threats, aircraft_data = adsb_alert_processing(current_location, current_speed)
     else:
         aircraft_threats, aircraft_data = [], {}
 
@@ -705,7 +704,7 @@ while True: # Run forever in a loop until terminated.
     # Display ADS-B aircraft alerts
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Displaying ADS-B alerts")
-        if (len(aircraft_threats) > 0 and current_location[2] >= config["general"]["adsb_alerts"]["minimum_vehicle_speed"]): # Check to see if any threats were detected this cycle, and if the GPS speed indicates that the vehicle is traveling above the minimum alert speed.
+        if (len(aircraft_threats) > 0): # Check to see if any threats were detected this cycle.
             if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
                 update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 
