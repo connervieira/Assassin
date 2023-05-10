@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
+        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -75,7 +75,7 @@
         },
         "predator_integration": {
             "enabled": false,
-            "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
+            "plate_log_file": "/home/alpr/Software/Support/Predator/Working/plate_history.json",
             "latch_time": 600
         },
         "traffic_camera_alerts": {
@@ -172,9 +172,9 @@
         "adsb_alerts": {
             "enabled": true,
             "adsb_message_filename": "adsb.csv",
-            "threat_threshold": 0,
+            "threat_threshold": 3,
             "minimum_vehicle_speed": 0,
-            "message_time_to_live": 20000000000000,
+            "message_time_to_live": 20,
             "criteria": {
                 "speed": {
                     "minimum": 10,
@@ -182,10 +182,10 @@
                 },
                 "altitude": {
                     "minimum": 200,
-                    "maximum": 9000
+                    "maximum": 8000
                 },
                 "distance": {
-                    "base_distance": 20,
+                    "base_distance": 3,
                     "base_altitude": 5000
                 }
             },
@@ -204,7 +204,7 @@
         }
     },
     "display": {
-        "silence_console_displays": true,
+        "silence_console_displays": false,
         "displays": {
             "time": true,
             "date": true,
@@ -323,7 +323,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
         }
     }
 }
