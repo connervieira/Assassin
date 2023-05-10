@@ -11,7 +11,6 @@
 
 
 
-
 import csv
 import os
 import time
@@ -40,6 +39,24 @@ config = load_config()
 
 
 
+def sort_aircraft_by_distance(aircraft):
+    if (len(aircraft) > 1): # Only sort the aircraft threats list if there is more than 1 entry in it.
+        sorted_aircraft_threats = [] # Set the sorted aircraft threats to a blank placeholder so each entry can be added one by one in the next steps.
+        for i in range(0, len(aircraft)): # Run once for every entry in the aircraft threat list.
+            current_closest = {"distance": 100000000000, "threatlevel": 0} # Set the current closest aircraft to placeholder data with an extremely far distance, such that any aircraft detected will be closer.
+            for element in aircraft:
+                if (element["threatlevel"] >= current_closest["threatlevel"]): # Check to see if the threat level of this aircraft is greater than or equal to the current closest aircraft.
+                    if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
+                        current_closest = element # Set this aircraft to the current closest known aircraft.
+
+            sorted_aircraft_threats.append(current_closest) # Add the closest aircraft from this cycle to the list.
+            aircraft.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+        aircraft = sorted_aircraft_threats # After the sorting has been finished, set the original aircraft threats list to the sorted version of it's original contents.
+
+    return aircraft
+
+
+
 def receive_messages():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(("localhost", 30003))
@@ -65,6 +82,7 @@ def receive_messages():
 def start_adsb_monitoring():
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Starting ADS-B monitoring")
+        save_to_file(config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"], "") # Clear the ADS-B message file.
         if (config["general"]["adsb_alerts"]["adsb_message_filename"] != ""): # Check to see if an ADS-B message file has been set.
             start_command = ["sudo", "dump1090-mutability", "--net", "--quiet"] # This command is responsible for starting Dump1090.
 
@@ -242,20 +260,40 @@ def adsb_alert_processing(current_location, current_speed):
 
 
             # Sort the ADS-B aircraft alert database.
-            if (len(aircraft_threats) > 1): # Only sort the aircraft threats list if there is more than 1 entry in it.
+            if (len(aircraft_threats) > 1): # Only sort the alerts if there is more than 1 aircraft threat detected.
                 debug_message("Sorting ADS-B threats")
-                sorted_aircraft_threats = [] # Set the sorted aircraft threats to a blank placeholder so each entry can be added one by one in the next steps.
-                for i in range(0, len(aircraft_threats)): # Run once for every entry in the aircraft threat list.
-                    current_closest = {"distance": 100000000000} # Set the current closest aircraft to placeholder data with an extremely far distance, such that any aircraft detected will be closer.
-                    for element in aircraft_threats:
-                        if (element["distance"] < current_closest["distance"]): # Check to see if the distance to this aircraft is shorter than the current known closest aircraft.
-                            current_closest = element # Set this aircraft to the current closest known aircraft.
 
-                    sorted_aircraft_threats.append(current_closest) # Add the closest aircraft from this cycle to the list.
-                    aircraft_threats.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
+                level0_threats = []
+                level1_threats = []
+                level2_threats = []
+                level3_threats = []
 
-                aircraft_threats = sorted_aircraft_threats # After the sorting has been finished, set the original aircraft threats list to the sorted version of it's original contents.
+                for element in aircraft_threats:
+                    if (element["threatlevel"] == 0):
+                        level0_threats.append(element)
+                    elif (element["threatlevel"] == 1):
+                        level1_threats.append(element)
+                    elif (element["threatlevel"] == 2):
+                        level2_threats.append(element)
+                    elif (element["threatlevel"] == 3):
+                        level3_threats.append(element)
 
+                sorted_level0_threats = sort_aircraft_by_distance(level0_threats)
+                sorted_level1_threats = sort_aircraft_by_distance(level1_threats)
+                sorted_level2_threats = sort_aircraft_by_distance(level2_threats)
+                sorted_level3_threats = sort_aircraft_by_distance(level3_threats)
+
+                sorted_aircraft_threats = []
+                for element in sorted_level3_threats:
+                    sorted_aircraft_threats.append(element)
+                for element in sorted_level2_threats:
+                    sorted_aircraft_threats.append(element)
+                for element in sorted_level1_threats:
+                    sorted_aircraft_threats.append(element)
+                for element in sorted_level0_threats:
+                    sorted_aircraft_threats.append(element)
+
+                aircraft_threats = sorted_aircraft_threats
             
 
         debug_message("Processed ADS-B alerts")

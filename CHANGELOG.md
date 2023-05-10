@@ -186,5 +186,7 @@ April 19th, 2023
     - Updated the way the minimum vehicle speed configuration value is handled.
         - This value is now considered during alert processing, instead of when alerts are displayed. This improves efficiency, and means the minimum vehicle speed will be respected by external programs.
     - Re-organized the ADS-B alert configuration for sake of clarity.
+    - The ADS-B message file is now cleared on start-up to prevent Assassin from needing to parse the entire file to remove old entries individually.
     - Fixed an issue that could cause Assassin to crash when parsing aircraft messages.
         - When an invalid ADS-B message was encountered, a fatal error would occur.
+    - Aircraft threats are now sorted by highest to lowest threat level, then closest to furthest distance.

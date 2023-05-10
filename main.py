@@ -725,9 +725,15 @@ while True: # Run forever in a loop until terminated.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["altitude"] == True): # Only display the altitude if it is enabled in the configuration.
                         print("        Altitude: " + str(threat["altitude"]) + " feet") # Show the altitude of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["absolute_heading"] == True): # Only display the absolute heading if it is enabled in the configuration.
-                        print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
+                        if (threat["absoluteheading"] == "?"): # Check to see if this aircraft has an unknown absolute heading.
+                            print("        Absolute Heading: ?") # Show the absolute heading of this aircraft.
+                        else:
+                            print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["relative_heading"] == True): # Only display the relative heading if it is enabled in the configuration.
-                        print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]) + " (" + str(threat["relativeheading"]) + "°)") # Show the direction of this aircraft relative to the current direction of movement.
+                        if (threat["relativeheading"] == "?"): # Check to see if this aircraft has an unknown relative heading.
+                            print("        Relative Heading: ?") # Show the direction of this aircraft relative to the current direction of movement.
+                        else:
+                            print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]), " (", str(threat["relativeheading"]), "°)") # Show the direction of this aircraft relative to the current direction of movement.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["time"] == True): # Only display the message age if it is enabled in the configuration.
                         print("        Time: " + str(round((time.time() - float(threat["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["callsign"] == True): # Only display the callsign if it is enabled in the configuration.
