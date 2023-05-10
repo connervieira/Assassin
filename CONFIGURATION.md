@@ -224,9 +224,9 @@ This section of configuration values will effect Assassin's general operation.
 
 This section of configuration values effect Assassin's visual displays.
 
-- `displays`
-    - This configuration value allows the user to turn on and off each information display individually.
-    - This allows the user to control what information they can see while driving.
+- `silence_console_displays` is a boolean value that determines whether all alerts and information displays will be disabled in the console output.
+    - This might be useful if you use an external interface for Assassin, and only want diagnositc, debug, error, and warning messages to be displayed.
+- `displays` contains values that allow the user to turn on and off each information display individually.
     - `time` can be toggled on and off.
     - `date` can be toggled on and off.
     - `speed` has several configuration values.

@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -9,10 +9,10 @@
             "enabled": true,
             "provider": "gpsd",
             "demo_mode": {
-                "enabled": false,
+                "enabled": true,
                 "data": {
-                    "longitude": 40,
-                    "latitude": -81,
+                    "longitude": 41.45174,
+                    "latitude": -81.42977,
                     "speed": 20,
                     "altitude": 200,
                     "heading": 45,
@@ -170,11 +170,11 @@
             }
         },
         "adsb_alerts": {
-            "enabled": false,
+            "enabled": true,
             "adsb_message_filename": "adsb.csv",
-            "threat_threshold": 1,
+            "threat_threshold": 0,
             "minimum_vehicle_speed": 0,
-            "message_time_to_live": 20,
+            "message_time_to_live": 20000000000000,
             "criteria": {
                 "speed": {
                     "minimum": 10,
@@ -182,11 +182,11 @@
                 },
                 "altitude": {
                     "minimum": 200,
-                    "maximum": 8000
+                    "maximum": 9000
                 },
                 "distance": {
-                    "base_distance": 3,
-                    "base_altitude": 3000
+                    "base_distance": 20,
+                    "base_altitude": 5000
                 }
             },
             "information_displayed": {
@@ -204,6 +204,7 @@
         }
     },
     "display": {
+        "silence_console_displays": true,
         "displays": {
             "time": true,
             "date": true,
@@ -322,7 +323,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
         }
     }
 }
