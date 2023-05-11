@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Workin/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -246,15 +246,15 @@
         "notices": {
             "1": {
                 "wait_for_input": false,
-                "delay": 0 
+                "delay": 0
             },
             "2": {
                 "wait_for_input": false,
-                "delay": 2
+                "delay": 2 
             },
             "3": {
-                "wait_for_input": false,
-                "delay": 4
+                "wait_for_input": true,
+                "delay": 5
             }
         }
     },

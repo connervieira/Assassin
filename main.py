@@ -23,7 +23,11 @@ import config
 load_config = config.load_config
 validate_config = config.validate_config
 
-
+import sys
+if ("--headless" in sys.argv):
+    headless_mode = True
+else:
+    headless_mode = False
 
 debug_message("Starting loading")
 
@@ -57,7 +61,6 @@ process_gpx = utils.process_gpx # Load the GPX processing function from the util
 save_to_file = utils.save_to_file # Load the file saving function from the utils script.
 add_to_file = utils.add_to_file # Load the file appending function from the utils script.
 display_shape = utils.display_shape # Load the shape displaying function from the utils script.
-countdown = utils.countdown # Load the timer countdown function from the utils script.
 calculate_bearing = utils.calculate_bearing # Load the function used to calculate the bearing between two coordinate pairs.
 nearby_database_poi = utils.nearby_database_poi # Load the function used to check for general nearby points of interest.
 convert_speed = utils.convert_speed # Load the function used to convert speeds from meters per second to other units.
@@ -211,7 +214,8 @@ if (config["display"]["custom_startup_message"] != ""): # Only display the line 
     print(config["display"]["custom_startup_message"]) # Show the user's custom defined start-up message.
 
 
-time.sleep(1) # Wait briefly to allow the start-up logo to remain on-screen for a moment.
+if (headless_mode == False):
+    time.sleep(1) # Wait briefly to allow the start-up logo to remain on-screen for a moment.
 
 
 

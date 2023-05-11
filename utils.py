@@ -76,6 +76,11 @@ load_config = config.load_config
 config = load_config() # Load the configuration.
 
 
+import sys
+if ("--headless" in sys.argv):
+    headless_mode = True
+else:
+    headless_mode = False
 
 
 debug_message("Loading utils.py libraries")
@@ -121,7 +126,8 @@ gps_enabled = config["general"]["gps"]["enabled"] # This setting determines whet
 # Define the function that will be used to clear the screen.
 debug_message("Creating `clear` function")
 def clear():
-    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
+    global headless_mode
+    if (config["general"]["disable_console_clearing"] == False and headless_mode == False): # Only run the clearing function if the configuration value to disable clearing is set to false.
         if os.name == "nt": # Use 'cls' command if host is Windows
             os.system ("cls")
         else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
@@ -210,6 +216,7 @@ else: # Interfacing with local services is disabled.
     status_log = {} # Set the error log to a blank placeholder.
 
 def display_notice(message, level=1):
+    global headless_mode
     level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
 
@@ -217,7 +224,7 @@ def display_notice(message, level=1):
         if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
             status_log[time.time()] = [1, message] # Add this warning message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
-        if (config["display"]["display_status_messages"] == True): # Check to see if the configuration indicates that status messages should be displayed.
+        if (config["display"]["display_status_messages"] == True and headless_mode == False): # Check to see if the configuration indicates that status messages should be displayed.
             print(message)
             if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
                 input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -229,20 +236,22 @@ def display_notice(message, level=1):
             status_log[time.time()] = [2, message] # Add this warning message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.yellow + "Warning: " + message + style.end)
-        if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
+        if (headless_mode == False):
+            if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 3): # The level is set to 3, indicating an error.
         if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
             status_log[time.time()] = [3, message] # Add this error message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
-        if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
+        if (headless_mode == False):
+            if (config["display"]["notices"]["3"]["wait_for_input"] == True and headless_mode == False): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
 
 
 
@@ -392,22 +401,6 @@ def display_shape(shape):
             print(style.end)
 
 
-
-
-
-
-# Define a function for running a countdown timer.
-debug_message("Creating `countdown` function")
-def countdown(timer):
-    timer = int(timer) # Make sure the timer is an integer number.
-
-    if (timer > 0): # Make sure the timer is greater than 0 seconds.
-        debug_message("Starting " + str(timer) + " second timer")
-        for iteration in range(1, timer + 1): # Loop however many times specified by the `timer` variable.
-            print(str(timer - iteration + 1)) # Display the current countdown number for this iteration, but subtracting the current iteration count from the total timer length.
-            time.sleep(1) # Wait for 1 second.
-    else:
-        display_notice("The timer was less than 0 seconds, so it was skipped.", 2)
 
 
 
