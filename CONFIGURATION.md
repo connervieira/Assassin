@@ -90,22 +90,18 @@ This section of configuration values will effect Assassin's general operation.
         - `speed` is the current GPS speed in meters-per-second.
             - It should be noted that the speed can easily be determined from location information and timestamps, regardless of whether it directly is embedded in the file.
         - `source` is the location back-end Assassin used to get the location.
-- `refresh_delay`
-    - This setting determines the amount of time, in seconds, the Assassin will wait at the beginning of each cycle before continuing.
+- `refresh_delay` is a floating point value that determines the amount of time, in seconds, that Assassin will wait at the beginning of each processing cycle before continuing.
     - It's important to note that this setting doesn't guarantee Assassin will refresh exactly at the interval specified. This delay is added in addition to the natural delay created by processing alerts and handling data.
-- `weather_alerts`
-    - Weather alerts are triggered when certain weather metrics match given criteria.
-    - This feature is internet dependent.
-    - This setting has the following sub-values for configuration:
-        - `enabled` is a boolean that determines if weather alerts are active.
-        - `api_key` is an [OpenWeatherMap](https://openweathermap.org) API key to retrieve weather information.
-        - `refresh_interval` is an integer that determines how often Assassin will fetch new weather data.
-            - This should be a number low enough that you receive regular updates, but not so low that you burn through allocated API requests too quickly.
-        - `criteria` contains a dictionary of weather metrics, and the criteria under which an alert should be shown.
-            - `visibility` is the current visibility, measured in meters.
-                - This value maxes out at 10,000 meters, and will never go above it.
-            - `temperature` is the current temperature, measured in celcius.
-            - `precipitation` is the current chance of preciptiation.
+- `weather_alerts` contains settings related to Assassin's weather alert capabilities.
+    - `enabled` is a boolean that determines if weather alerts are active.
+    - `api_key` is an [OpenWeatherMap](https://openweathermap.org) API key to retrieve weather information.
+    - `refresh_interval` is an integer that determines how often Assassin will fetch new weather data.
+        - This should be a number low enough that you receive regular updates, but not so low that you burn through allocated API requests too quickly.
+    - `criteria` contains a dictionary of weather metrics, and the criteria under which an alert should be shown.
+        - `visibility` is the current visibility, measured in meters.
+            - This value maxes out at 10,000 meters, and will never go above it.
+        - `temperature` is the current temperature, measured in celcius.
+        - `precipitation` is the current chance of preciptiation.
 - `predator_integration` contains settings related to Predator integration, which allows Assassin to show alerts detected by [Predator](https://v0lttech.com/predator.php).
     - `enabled` is a boolean that determines if Predator integration alerts are active.
     - `plate_log_file` is an absolute file path to the plate log file used by Predator.
@@ -130,23 +126,21 @@ This section of configuration values will effect Assassin's general operation.
         - `misc` enables and disables all other camera types, including unknown cameras.
     - `information_displayed` determines what information is displayed in alerts.
         - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
-- `drone_alerts`
-    - Drone alerts are Assassin's system for detector drone aircraft, speed cameras, and other autonomous wireless threats.
-    - This setting has the following sub-values for configuration:
-        - `enabled` toggles the entire drone detection system on and off.
-        - `save_detected_hazards` determines whether or not Assassin will save the radio devices it deems to be hazards to a local file for later analysis.
-        - `save_detected_devices` determines whether or not Assassin will save the all radio devices it detects to a local file for later analysis.
-            - Be warned that this file can become extremely large in just a few minutes, especially if you happen to be in an area with a lot of radio traffic.
-        - `monitoring_device` determines the wireless device that Assassin will attempt to use to run wireless network analysis.
-            - To list the network devices available on your system, use the `iwconfig` command. Note that this lists all network interfaces, not just wireless ones.
-        - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it.
-            - Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
-            - This setting can only be set to `manual` or `automatic`
-        - `hazard_latch_time` is how long (in seconds) Assassin will latch onto alerts after they are no longer detected before dismissing them.
-        - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to.
-            - This is useful if you only want to alert to certain types of autonomous threats without needing to completely remove them from the database.
-        - `information_displayed` determines what information is displayed in alerts.
-            - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `drone_alerts` contains settings related to Assassin's unmanned device alert behavior.
+    - `enabled` toggles the entire drone detection system on and off.
+    - `save_detected_hazards` determines whether or not Assassin will save the radio devices it deems to be hazards to a local file for later analysis.
+    - `save_detected_devices` determines whether or not Assassin will save the all radio devices it detects to a local file for later analysis.
+        - Be warned that this file can become extremely large in just a few minutes, especially if you happen to be in an area with a lot of radio traffic.
+    - `monitoring_device` determines the wireless device that Assassin will attempt to use to run wireless network analysis.
+        - To list the network devices available on your system, use the `iwconfig` command. Note that this lists all network interfaces, not just wireless ones.
+    - `monitoring_mode` determines whether Assassin will attempt to automatically setup wireless monitoring, or prompt the user to manually start it.
+        - Due to permissions, it's extremely common for automatic starting to fail, so manual is recommended for most situations.
+        - This setting can only be set to `manual` or `automatic`
+    - `hazard_latch_time` is how long (in seconds) Assassin will latch onto alerts after they are no longer detected before dismissing them.
+    - `alert_types` determines what types of devices in the drone alert database that Assassin will alert to.
+        - This is useful if you only want to alert to certain types of autonomous threats without needing to completely remove them from the database.
+    - `information_displayed` determines what information is displayed in alerts.
+        - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `alpr_alerts` contains settings related to automatic license plate recogntion camera alerts.
     - `enabled` is a boolean that determines whether or not ALPR camera alerts are enabled.
     - `alert_range` is the alert distance, in miles.
@@ -165,58 +159,52 @@ This section of configuration values will effect Assassin's general operation.
         - Values higher than 180 will effectively disable this filter.
     - `information_displayed` determines what information is displayed in alerts.
         - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
-- `bluetooth_monitoring`
-    - Bluetooth monitoring allows Assassin to detect nearby Bluetooth devices, and monitor when a particular device has been following for a suspiciously long distance.
-        - This function's "following" detection depends on GPS, and requires that `gps_enabled` be set to `true`. If GPS functionality is disabled, then this feature will only alert to devices in the `blacklist`, as described below.
-    - This setting has the following sub-values for configuration:
-        - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
-        - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
-            - Longer times will detect more devices, but will also cause Assassin to take longer to detect new devices.
-        - `latch_time` is a decimal number that determines how long an alert will remain active after it is no longer detected, measured in seconds.
-        - `minimum_following_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
-        - `log_devices` determines whether Assassin will log all of the Bluetooth devices it detects, and has the following sub-values:
-            - `enabled` determines whether device logging is active.
-            - `filename` determines the name of the file that Assassin will write logged devices to.
-        - `whitelist` allows the user to whitelist devices that are supposed to be following, like their car's stereo or their cell phone.
-            - The `enabled` value enables or disables the whitelist.
-            - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
-        - `blacklist` allows the user to specify devices that Assassin should immediately alert to, regardless of whether they've been following. This feature works independently of GPS, but will still use GPS information if it is available.
-            - The `enabled` value enables or disables the blacklist.
-            - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
-        - `information_displayed` determines what information is displayed in alerts.
-            - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
-- `adsb_alerts`
-    - ADS-B alerts allow Assassin to monitor and analyze aircraft in surrounding areas as a way to detect potential threats.
-    - ADS-B functionality is dependent on GPS, and requires that `gps_enabled` be set to `true`. If GPS functionality is disabled, ADS-B alerts will be disabled regardless of whether they are enabled in the configuration.
-    - This setting has the following sub-values for configuration:
-        - The `enabled` value enables and disables the entire ADS-B system.
-        - The `adsb_message_filename` is the file name of the file that Assassin will stream ADS-B messages to.
-            - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
-        - The `threat_threshold` determines how likely a plane is to be a threat before Assassin displays it as an alert. A plane has to match all of the criteria at its threshold level, and all levels below it.
-            - A threshold of `0` includes all aircraft detected.
-            - A threshold of `1` includes all aircraft within the alert distance threshold.
-                - This is a good threshold to use if you want to be certain you don't miss any legitimate alerts.
-            - A threshold of `2` includes aircraft within the alert altitude range.
-            - A threshold of `3` includes aircraft within the alert speed range.
-                - This is a good threshold to use if you want to eliminate as many false alerts as positive.
-        - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in the units specified by the `display>displays>speed>unit` configuration value. This is useful to prevent alerts from sounding while the car is on residential roads.
-        - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
-            - If certain information is missing from a message, Assassin will look back through old messages within this time-frame to find it. As such, increasing this configuration value will trade information recency for resiliency and fault tolerance.
-            - If you find that enabling ADS-B alerts causes Assassin to dramatically slow down after a few moments of running, decreasing this value should significantly decrease processing time.
-        - `criteria` contains the alert criteria for aircraft.
-            - `speed` contains the speed range that aircraft hazards are expected to moving, measured in knots.
-                - The `minimum` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that aren't at cruising speed.
-                - The `maximum` setting defines the maximum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that are moving faster than specific models of aircraft are capable of.
-            - `altitude` contains the altitude range that aircraft hazards are expected to at, measured in feet.
-                - The `minimum` setting defines the minimum aircraft altitude that ADS-B alerts will be triggered at.
-                - The `maximum` setting defines the maximum aircraft altitude that ADS-B alerts will be triggered at.
-            - `distance` contains criteria regarding the distance between the aircraft and the vehicle.
-                - The `base_distance` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
-                - The `base_altitude` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
-                    - Below the base altitude, the alert radius will be proportionally decreased, and above the base altitude, the alert radius will be proportionally increased.
-                    - This value should be roughly be the altitude that you expect aircraft threats to be at. Any aircraft above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower aircraft have a lower vision radius, so the alert distance decreases.
-        - `information_displayed` determines what information is displayed in alerts.
-            - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `bluetooth_monitoring` contains settings related to Assassin's Bluetooth device alert behavior.
+    - `enabled` determines whether the Bluetooth monitoring system is enabled or disabled.
+    - `scan_time` determines how long (in seconds) that Assassin will scan for Bluetooth devices each cycle.
+        - Longer times will detect more devices, but will also cause Assassin to take longer to detect new devices.
+    - `latch_time` is a decimal number that determines how long an alert will remain active after it is no longer detected, measured in seconds.
+    - `minimum_following_distance` the minimum distance (in miles) that a device has to follow Assassin before an alert will be displayed.
+    - `log_devices` determines whether Assassin will log all of the Bluetooth devices it detects, and has the following sub-values:
+        - `enabled` determines whether device logging is active.
+        - `filename` determines the name of the file that Assassin will write logged devices to.
+    - `whitelist` allows the user to whitelist devices that are supposed to be following, like their car's stereo or their cell phone.
+        - The `enabled` value enables or disables the whitelist.
+        - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
+    - `blacklist` allows the user to specify devices that Assassin should immediately alert to, regardless of whether they've been following. This feature works independently of GPS, but will still use GPS information if it is available.
+        - The `enabled` value enables or disables the blacklist.
+        - The `devices` contains dictionary entries where the device's MAC address is the key, and a human readable name is the value.
+    - `information_displayed` determines what information is displayed in alerts.
+        - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `adsb_alerts` contains settings related to Assassin's aircraft threat alerting behavior.
+    - The `enabled` value enables and disables the entire ADS-B system.
+    - The `adsb_message_filename` is the file name of the file that Assassin will stream ADS-B messages to.
+        - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
+    - The `threat_threshold` determines how likely a plane is to be a threat before Assassin displays it as an alert. A plane has to match all of the criteria at its threshold level, and all levels below it.
+        - A threshold of `0` includes all aircraft detected.
+        - A threshold of `1` includes all aircraft within the alert distance threshold.
+            - This is a good threshold to use if you want to be certain you don't miss any legitimate alerts.
+        - A threshold of `2` includes aircraft within the alert altitude range.
+        - A threshold of `3` includes aircraft within the alert speed range.
+            - This is a good threshold to use if you want to eliminate as many false alerts as positive.
+    - The `minimum_vehicle_speed` setting defines the minimum GPS speed that ADS-B alerts will be triggered at, measured in the units specified by the `display>displays>speed>unit` configuration value. This is useful to prevent alerts from sounding while the car is on residential roads.
+    - The `message_time_to_live` configuration value determines how long (in seconds) received in ADS-B messages will be considered before discarding their information. This prevents planes that haven't been detected for an extended period from clogging up the alert procesing with outdated information.
+        - If certain information is missing from a message, Assassin will look back through old messages within this time-frame to find it. As such, increasing this configuration value will trade information recency for resiliency and fault tolerance.
+        - If you find that enabling ADS-B alerts causes Assassin to dramatically slow down after a few moments of running, decreasing this value should significantly decrease processing time.
+    - `criteria` contains the alert criteria for aircraft.
+        - `speed` contains the speed range that aircraft hazards are expected to moving, measured in knots.
+            - The `minimum` setting defines the minimum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that aren't at cruising speed.
+            - The `maximum` setting defines the maximum aircraft speed that ADS-B alerts will be triggered at. This is useful to filter alerts from aircraft that are moving faster than specific models of aircraft are capable of.
+        - `altitude` contains the altitude range that aircraft hazards are expected to at, measured in feet.
+            - The `minimum` setting defines the minimum aircraft altitude that ADS-B alerts will be triggered at.
+            - The `maximum` setting defines the maximum aircraft altitude that ADS-B alerts will be triggered at.
+        - `distance` contains criteria regarding the distance between the aircraft and the vehicle.
+            - The `base_distance` setting defines the base distance (in miles) that ADS-B aircraft alerts will be played at. This distance will be adjusted based on the altitude of the plane in question.
+            - The `base_altitude` setting defines the altitude at which the alert distance threshold will be the same as the distance defined by the `distance_threshold` configuration value.
+                - Below the base altitude, the alert radius will be proportionally decreased, and above the base altitude, the alert radius will be proportionally increased.
+                - This value should be roughly be the altitude that you expect aircraft threats to be at. Any aircraft above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower aircraft have a lower vision radius, so the alert distance decreases.
+    - `information_displayed` determines what information is displayed in alerts.
+        - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 
 
 ## Display Configuration
