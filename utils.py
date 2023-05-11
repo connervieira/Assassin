@@ -193,33 +193,40 @@ def add_to_file(file_name, contents, silence=True):
 
 debug_message("Creating `display_notice` function")
 if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
-    error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
-    if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
-        save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+    status_file_location = config["external"]["local"]["interface_directory"] + "/status.json"
+    if (os.path.exists(status_file_location) == False): # If the error log file doesn't exist, create it.
+        save_to_file(status_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
 
-    error_file = open(error_file_location, "r") # Open the error log file for reading.
+    error_file = open(status_file_location, "r") # Open the error log file for reading.
     error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
     error_file.close() # Close the error log file.
 
     if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
-        error_log = json.loads(error_file_contents) # Read and load the error log from the file.
+        status_log = json.loads(error_file_contents) # Read and load the error log from the file.
     else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
-        error_log = json.loads("{}") # Load a blank placeholder dictionary.
+        status_log = json.loads("{}") # Load a blank placeholder dictionary.
 else: # Interfacing with local services is disabled.
-    error_log = {} # Set the error log to a blank placeholder.
+    status_log = {} # Set the error log to a blank placeholder.
 
 def display_notice(message, level=1):
     level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
 
     if (level == 1): # The level is set to 1, indicating a standard notice.
-        print(message)
-        if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["1"]["delay"])) # Wait for the delay specified in the configuration.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            status_log[time.time()] = [1, message] # Add this warning message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
+        if (config["display"]["display_status_messages"] == True): # Check to see if the configuration indicates that status messages should be displayed.
+            print(message)
+            if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["1"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 2): # The level is set to 2, indicating a warning.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            status_log[time.time()] = [2, message] # Add this warning message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.yellow + "Warning: " + message + style.end)
         if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
             input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -228,8 +235,8 @@ def display_notice(message, level=1):
 
     elif (level == 3): # The level is set to 3, indicating an error.
         if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
-            error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
-            save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
+            status_log[time.time()] = [3, message] # Add this error message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
         if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
             input("Press enter to continue...") # Wait for the user to press enter before continuning.

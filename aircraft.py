@@ -58,24 +58,27 @@ def sort_aircraft_by_distance(aircraft):
 
 
 def receive_messages():
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(("localhost", 30003))
-    client.send(b"GET / HTTP/1.1\r\n\r\n")
+    try:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect(("localhost", 30003))
+        client.send(b"GET / HTTP/1.1\r\n\r\n")
 
-    while True:
-        received_data = client.recv(1024)
-        if (len(received_data) == 0): # Check to see if the connection has been closed.
-            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(("localhost", 30003))
-            client.send(b"GET / HTTP/1.1\r\n\r\n")
-        
-        received_data = received_data.decode("utf-8")
-        received_data = received_data.replace("\\r", "")
-        received_data = received_data.replace("\r", "")
-        received_data = received_data.replace("\\n", "")
-        if (len(received_data) > 3):
-            if (received_data[0:3] == "MSG"):
-                add_to_file(config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"], received_data)
+        while True:
+            received_data = client.recv(1024)
+            if (len(received_data) == 0): # Check to see if the connection has been closed.
+                client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client.connect(("localhost", 30003))
+                client.send(b"GET / HTTP/1.1\r\n\r\n")
+            
+            received_data = received_data.decode("utf-8")
+            received_data = received_data.replace("\\r", "")
+            received_data = received_data.replace("\r", "")
+            received_data = received_data.replace("\\n", "")
+            if (len(received_data) > 3):
+                if (received_data[0:3] == "MSG"):
+                    add_to_file(config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"], received_data)
+    except:
+        display_notice("ADS-B alerts are enabled, but the ADS-B message stream could not be opened.", 3)
 
 
 
@@ -93,7 +96,7 @@ def start_adsb_monitoring():
             adsb_message_receive_thread = threading.Thread(target=receive_messages, name="ADSBMessageStream")
             adsb_message_receive_thread.start()
         else:
-            display_notice("ADS-B alerts are enabled, but no message file name was set. ADS-B monitoring could not be started", 3)
+            display_notice("ADS-B alerts are enabled, but no message file name was set. ADS-B monitoring could not be started.", 3)
 
 
 
@@ -202,7 +205,7 @@ def fetch_aircraft_data(file):
         return aircraft_data # Return the processed aircraft data.
 
     else: # The file supplied to load ADS-B messages from does not exist.
-        display_notice("The ADS-B message file specified in the configuration does not exist. ADS-B messages can't be loaded.", 2)
+        display_notice("The ADS-B message stream file specified in the configuration does not exist. ADS-B messages can't be loaded.", 3)
         return {} # Return blank aircraft data.
 
 

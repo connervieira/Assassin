@@ -190,3 +190,4 @@ April 19th, 2023
     - Fixed an issue that could cause Assassin to crash when parsing aircraft messages.
         - When an invalid ADS-B message was encountered, a fatal error would occur.
     - Aircraft threats are now sorted by highest to lowest threat level, then closest to furthest distance.
+- Assassin can now be configured to display "status messages", which fall between the normal output and the debugging output, in terms of verbosity.

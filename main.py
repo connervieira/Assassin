@@ -76,6 +76,7 @@ get_gps_location = gpslocation.get_gps_location # Load the function to get the c
 process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to detect GPS problems.
 
 
+display_notice("Acquiring initial GPS location", 1)
 if (config["general"]["gps"]["enabled"] == True): # Check to see if GPS is enabled before getting the initial location.
     debug_message("Acquiring initial location")
     initial_location = [0, 0] # Set the "current location" to a placeholder.
@@ -100,6 +101,7 @@ debug_message("Validated configuration values")
 
 # Load functionality plugins
 
+display_notice("Loading alert plugins", 1)
 # Load the traffic camera alert system
 if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only load traffic enforcement camera information if traffic camera alerts are enabled.
     debug_message("Initializing traffic camera alert system")
@@ -190,6 +192,7 @@ if (config["general"]["predator_integration"]["enabled"] == True): # Only load P
 
 # Display the startup intro header.
 clear() # Clear the screen.
+display_notice("Loading complete", 1)
 debug_message("Completed loading")
 if (config["display"]["ascii_art_header"] == True): # Check to see whether the user has configured there to be a large ASCII art header, or a standard text header.
     print(style.red + style.bold)
@@ -421,8 +424,12 @@ while True: # Run forever in a loop until terminated.
             speak("New GPS alert", "GPS")
 
         # Process attention text to speech alerts.
-        if (alert_count["gps"][0] > alert_count["gps"][1]):
+        if (alert_count["attention"][0] > alert_count["attention"][1]):
             speak("Attention threshold reached", "Attention")
+
+        # Process Predator text to speech alerts.
+        if (alert_count["predator"][0] > alert_count["predator"][1]):
+            speak("Predator license plate hit", "Predator")
 
         debug_message("Completed Text-to-speech processing")
 

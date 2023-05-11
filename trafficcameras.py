@@ -44,9 +44,9 @@ def load_traffic_camera_database(current_location):
         else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
             loaded_traffic_camera_database = [] # Load a blank list of traffic cameras.
             if (str(config["general"]["traffic_camera_alerts"]["database"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
-                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 2)
+                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 3)
             elif (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == False): # The traffic camera alert database specified in the configuration does not exist.
-                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["database"]) + ") does not exist.", 2)
+                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["database"]) + ") does not exist.", 3)
             else:
                 display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
         debug_message("Loaded traffic enforcement camera database")
@@ -84,7 +84,7 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
                     nearby_cameras.append(camera) # Add this camera to the nearby camera list.
 
     else: # The supplied database information was empty.
-        pass
+        display_notice("The configured traffic enforcement camera database is empty. Traffic enforcement camera alerts are effectively disabled.", 3)
 
     return nearby_cameras # Return the list of nearby cameras.
 

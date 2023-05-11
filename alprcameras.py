@@ -42,13 +42,13 @@ def load_alpr_camera_database(current_location):
         if (str(config["general"]["alpr_alerts"]["database"]) != "" and os.path.exists(str(config["general"]["alpr_alerts"]["database"]))): # Check to see if the ALPR camera database exists.
             complete_camera_database = json.load(open(str(config["general"]["alpr_alerts"]["database"]))) # Load the ALPR database.
         else:
-            complete_camera_database = {}  # Load a blank database of ALPR cameras, since the actual database couldn't be loaded.
+            complete_camera_database = {"entries": {}}  # Load a blank database of ALPR cameras, since the actual database couldn't be loaded.
             if (str(config["general"]["alpr_alerts"]["database"]) == ""): # The ALPR alert database specified in the configuration is blank.
-                display_notice("ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified.", 2)
+                display_notice("ALPR camera alerts are enabled in the configuration, but no ALPR alert database was specified.", 3)
             elif (os.path.exists(str(config["general"]["alpr_alerts"]["database"])) == False): # The ALPR alert database specified in the configuration does not exist.
-                display_notice("ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alpr_alerts"]["database"]) + ") does not exist.", 2)
+                display_notice("ALPR camera alerts are enabled in the configuration, but the ALPR database specified (" + str(config["general"]["alpr_alerts"]["database"]) + ") does not exist.", 3)
             else:
-                display_notice("An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 2)
+                display_notice("An unexpected error occurred while processing the ALPR camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
 
 
         loaded_camera_database = complete_camera_database.copy() # Set the database of cameras in range to the complete database as a placeholder.

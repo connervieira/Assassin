@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -170,7 +170,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_filename": "adsb.csv",
             "threat_threshold": 3,
             "minimum_vehicle_speed": 0,
@@ -204,7 +204,7 @@
         }
     },
     "display": {
-        "silence_console_displays": false,
+        "silence_console_displays": true,
         "displays": {
             "time": true,
             "date": true,
@@ -225,6 +225,7 @@
             "bluetooth": true,
             "attention": true
         },
+        "display_status_messages": false,
         "shape_alerts": false,
         "ascii_art_header": true,
         "custom_startup_message": "",
@@ -243,15 +244,15 @@
         "notices": {
             "1": {
                 "wait_for_input": false,
-                "delay": 2
+                "delay": 0 
             },
             "2": {
                 "wait_for_input": false,
                 "delay": 2
             },
             "3": {
-                "wait_for_input": true,
-                "delay": 10
+                "wait_for_input": false,
+                "delay": 4
             }
         }
     },
@@ -323,7 +324,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
         }
     }
 }
