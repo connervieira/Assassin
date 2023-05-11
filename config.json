@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/cvieira/Software/Support/Assassin/Workin/",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
