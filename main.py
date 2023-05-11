@@ -109,7 +109,8 @@ if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["ge
     load_traffic_camera_database = trafficcameras.load_traffic_camera_database
     traffic_camera_alert_processing = trafficcameras.traffic_camera_alert_processing
 
-    loaded_traffic_camera_database = load_traffic_camera_database(initial_location)
+    if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
+        loaded_traffic_camera_database = load_traffic_camera_database(initial_location)
 
 
 # Load the ADS-B aircraft alert system.
@@ -135,7 +136,7 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
 
 
 # Load the ALPR camera alert system.
-if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
+if (config["general"]["alpr_alerts"]["enabled"] == True): # Only load ALPR camera information if ALPR alerts are enabled.
     debug_message("Initializing ALPR camera system")
     import alprcameras
     load_alpr_camera_database = alprcameras.load_alpr_camera_database
@@ -275,7 +276,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Run traffic enforcement camera alert processing.
-    if (config["general"]["traffic_camera_alerts"]["alert_range"] > 0 and config["general"]["gps"]["enabled"] == True): # Only run traffic enforcement camera alert processing if traffic camera alerts are enabled.
+    if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
         nearest_enforcement_camera, nearby_cameras_all = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
     else:
         nearest_enforcement_camera, nearby_cameras_all = {}, []
@@ -614,7 +615,7 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display traffic camera alerts.
-        if (config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
+        if (config["general"]["traffic_camera_alerts"]["enabled"] == True and "nearest_enforcement_camera" in locals()): # Check to see if the speed camera display is enabled in the configuration.
             debug_message("Displaying traffic enforcement camera alerts")
             # Display the nearest traffic camera, if applicable.
             if (nearest_enforcement_camera["dst"] < float(config["general"]["traffic_camera_alerts"]["alert_range"])): # Only display the nearest camera if it's within the maximum range specified in the configuration.

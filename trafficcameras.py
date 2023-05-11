@@ -36,23 +36,30 @@ config = load_config() # Load and load the configuration file.
 
 
 def load_traffic_camera_database(current_location):
-    if (float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
-        debug_message("Loading traffic enforcement camera database")
+    if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
+        if (float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
+            debug_message("Loading traffic enforcement camera database")
 
-        if (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
-            loaded_traffic_camera_database = load_traffic_cameras(current_location[0], current_location[1], config["general"]["traffic_camera_alerts"]["database"], float(config["general"]["traffic_camera_alerts"]["loaded_radius"])) # Load all traffic cameras within the configured loading radius.
-        else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
-            loaded_traffic_camera_database = [] # Load a blank list of traffic cameras.
-            if (str(config["general"]["traffic_camera_alerts"]["database"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
-                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 3)
-            elif (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == False): # The traffic camera alert database specified in the configuration does not exist.
-                display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["database"]) + ") does not exist.", 3)
-            else:
-                display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
-        debug_message("Loaded traffic enforcement camera database")
-        return loaded_traffic_camera_database
+            if (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
+                loaded_traffic_camera_database = load_traffic_cameras(current_location[0], current_location[1], config["general"]["traffic_camera_alerts"]["database"], float(config["general"]["traffic_camera_alerts"]["loaded_radius"])) # Load all traffic cameras within the configured loading radius.
+            else: # Traffic enforcement camera alerts are enabled, but the traffic enforcement camera database doesn't exist, so print a warning message.
+                loaded_traffic_camera_database = [] # Load a blank list of traffic cameras.
+                if (str(config["general"]["traffic_camera_alerts"]["database"]) == ""): # The traffic enforcement camera alert database specified in the configuration is blank.
+                    display_notice("Traffic enforcement camera alerts are enabled in the configuration, but no traffic camera database was specified.", 3)
+                elif (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == False): # The traffic camera alert database specified in the configuration does not exist.
+                    display_notice("Traffic enforcement camera alerts are enabled in the configuration, but the traffic camera database specified (" + str(config["general"]["traffic_camera_alerts"]["database"]) + ") does not exist.", 3)
+                else:
+                    display_notice("An unexpected error occurred while processing the traffic enforcement camera database. This error should never occur, so you should contact the developers to help resolve the issue.", 3)
 
-    else: # Traffic camera alerts are disabled.
+            if (len(loaded_traffic_camera_database) == 0):
+                display_notice("No traffic cameras were loaded. Traffic camera alerts are effectively disabled.", 2)
+            debug_message("Loaded " + str(len(loaded_traffic_camera_database)) + " entries from traffic enforcement camera database")
+            return loaded_traffic_camera_database
+
+        else: # Traffic camera alerts are disabled.
+            display_notice("Traffic enforcement camera alerts are enabled, but another configuration value caused it to be disabled.", 2)
+            return [] # Return a blank placeholder list in place of the loaded traffic camera database.
+    else:
         return [] # Return a blank placeholder list in place of the loaded traffic camera database.
 
 
@@ -84,7 +91,7 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
                     nearby_cameras.append(camera) # Add this camera to the nearby camera list.
 
     else: # The supplied database information was empty.
-        display_notice("The configured traffic enforcement camera database is empty. Traffic enforcement camera alerts are effectively disabled.", 3)
+        pass
 
     return nearby_cameras # Return the list of nearby cameras.
 
@@ -93,7 +100,7 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
 
 
 def traffic_camera_alert_processing(current_location, loaded_traffic_camera_database):
-    if (config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
+    if (config["general"]["traffic_camera_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
         debug_message("Processing traffic enforcement camera alerts")
         # Create placeholders for each camera type so we can add the closet camera for each category in the next step .
         nearest_camera = {"dst": 10000000.0}

@@ -106,32 +106,30 @@ This section of configuration values will effect Assassin's general operation.
                 - This value maxes out at 10,000 meters, and will never go above it.
             - `temperature` is the current temperature, measured in celcius.
             - `precipitation` is the current chance of preciptiation.
-- `predator_integration`
-    - Predator integration allows Assassin to show alerts detected by [Predator](https://v0lttech.com/predator.php).
-    - This setting has the following sub-values for configuration:
-        - `enabled` is a boolean that determines if Predator integration alerts are active.
-        - `plate_log_file` is an absolute file path to the plate log file used by Predator.
-            - It should be noted that this is not the plate file from the interface directory, but rather the complete log file defined in the Predator configuration under `realtime>`saving>license_plates`
-        - `latch_time` is a floating point value that determines how many seconds Assassin will look back in the plate history for active alerts.
-- `traffic_camera_alerts`
-    - Traffic camera alerts are triggered by proximity to enforcement cameras, like speed cameras, red light cameras, and lane monitoring cameras.
-    - This setting has the following sub-values for configuration:
-        - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load traffic enforcement cameras during start-up.
-            - The higher this value is, the longer Assassin will take the process traffic camera alerts each cycle.
-            - The lower this value is, the smaller the loaded radius around the initial starting position will be.
-                - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
-        - `database` is the file-path to an ExCam database containing traffic camera locations and information.
-        - `alert_range` is the distance in miles away from a traffic camera that Assassin will trigger an alert.
-        - `speed_check` determines whether or not Assassin will considering the speed limit associated with a traffic camera.
-            - When the current speed exceeds the speed limit, a higher priority alert is trigged.
-            - When the current speed is lower than the speed limit, Assassin alerts with normal priority.
-            - When no speed limit data is available, Assassin will skip the speed check and alert normally regardless of the current speed.
-        - `enabled_types` controls which types of enforcement cameras Assassin will alert to.
-            - `speed` enables and disables speed camera alerts.
-            - `redlight` enables and disables red light camera alerts.
-            - `misc` enables and disables all other camera types, including unknown cameras.
-        - `information_displayed` determines what information is displayed in alerts.
-            - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `predator_integration` contains settings related to Predator integration, which allows Assassin to show alerts detected by [Predator](https://v0lttech.com/predator.php).
+    - `enabled` is a boolean that determines if Predator integration alerts are active.
+    - `plate_log_file` is an absolute file path to the plate log file used by Predator.
+        - It should be noted that this is not the plate file from the interface directory, but rather the complete log file defined in the Predator configuration under `realtime>`saving>license_plates`
+    - `latch_time` is a floating point value that determines how many seconds Assassin will look back in the plate history for active alerts.
+- `traffic_camera_alerts` contains settings related to traffic enforcement camera alerts.
+    - `enabled` is a boolean value that determines whether or not traffic camera alerts are enabled or disabled.
+    - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load traffic enforcement cameras during start-up.
+        - The higher this value is, the longer Assassin will take the process traffic camera alerts each cycle.
+        - The lower this value is, the smaller the loaded radius around the initial starting position will be.
+            - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
+        - Setting this to '0' will disable traffic enforcement camera alerts.
+    - `database` is the file-path to an ExCam database containing traffic camera locations and information.
+    - `alert_range` is the distance in miles away from a traffic camera that Assassin will trigger an alert.
+    - `speed_check` determines whether or not Assassin will considering the speed limit associated with a traffic camera.
+        - When the current speed exceeds the speed limit, a higher priority alert is trigged.
+        - When the current speed is lower than the speed limit, Assassin alerts with normal priority.
+        - When no speed limit data is available, Assassin will skip the speed check and alert normally regardless of the current speed.
+    - `enabled_types` controls which types of enforcement cameras Assassin will alert to.
+        - `speed` enables and disables speed camera alerts.
+        - `redlight` enables and disables red light camera alerts.
+        - `misc` enables and disables all other camera types, including unknown cameras.
+    - `information_displayed` determines what information is displayed in alerts.
+        - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `drone_alerts`
     - Drone alerts are Assassin's system for detector drone aircraft, speed cameras, and other autonomous wireless threats.
     - This setting has the following sub-values for configuration:
@@ -149,23 +147,24 @@ This section of configuration values will effect Assassin's general operation.
             - This is useful if you only want to alert to certain types of autonomous threats without needing to completely remove them from the database.
         - `information_displayed` determines what information is displayed in alerts.
             - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
-- `alpr_alerts`
-    - ALPR alerts are triggered by proximity to automated license plate reader cameras.
-    - This setting has the following sub-values for configuration:
-        - `alert_range` is the alert distance, in miles.
-        - `database` is the file-path to the ALPR database containing ALPR camera locations and information.
-        - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load ALPR cameras during start-up.
-            - The higher this value is, the longer Assassin will take the process ALPR camera alerts each cycle.
-            - The lower this value is, the smaller the loaded radius around the initial starting position will be.
-                - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
-        - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
-            - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
-            - Values higher than 180 will effectively disable this filter.
-        - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
-            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
-            - Values higher than 180 will effectively disable this filter.
-        - `information_displayed` determines what information is displayed in alerts.
-            - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `alpr_alerts` contains settings related to automatic license plate recogntion camera alerts.
+    - `enabled` is a boolean that determines whether or not ALPR camera alerts are enabled.
+    - `alert_range` is the alert distance, in miles.
+        - Setting this to '0' will effectively disable ALPR camera alerts.
+    - `database` is the file-path to the ALPR database containing ALPR camera locations and information.
+    - `loaded_radius` is a decimal number that determines the radius, in miles, around the current location that Assassin will load ALPR cameras during start-up.
+        - The higher this value is, the longer Assassin will take the process ALPR camera alerts each cycle.
+        - The lower this value is, the smaller the loaded radius around the initial starting position will be.
+            - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
+        - Setting this to '0' will disable ALPR camera alerts.
+    - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
+        - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
+        - Values higher than 180 will effectively disable this filter.
+    - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
+        - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
+        - Values higher than 180 will effectively disable this filter.
+    - `information_displayed` determines what information is displayed in alerts.
+        - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `bluetooth_monitoring`
     - Bluetooth monitoring allows Assassin to detect nearby Bluetooth devices, and monitor when a particular device has been following for a suspiciously long distance.
         - This function's "following" detection depends on GPS, and requires that `gps_enabled` be set to `true`. If GPS functionality is disabled, then this feature will only alert to devices in the `blacklist`, as described below.

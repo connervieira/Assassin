@@ -79,6 +79,7 @@
           	"latch_time": "+float"
         },
 		"traffic_camera_alerts": {
+			"enabled": "bool",
 			"loaded_radius": "+float",
 			"database": "file",
 			"alert_range": "+float",
@@ -119,6 +120,7 @@
 			"alert_types": "list"
 		},
 		"alpr_alerts": {
+            "enabled": "bool",
 			"alert_range": "+float",
 			"database": "file",
 			"loaded_radius": "+float",
@@ -197,6 +199,7 @@
 		}
 	},
 	"display": {
+        "silence_console_displays": "bool",
 		"displays": {
 			"time": "bool",
 			"date": "bool",
@@ -217,6 +220,7 @@
 			"bluetooth": "bool",
 			"attention": "bool"
 		},
+        "display_status_messages": "bool",
 		"shape_alerts": "bool",
 		"ascii_art_header": "bool",
 		"custom_startup_message": "str",

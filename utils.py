@@ -135,6 +135,7 @@ def clear():
 # Define the function that will be used to save files for exported data.
 debug_message("Creating `save_to_file` function")
 def save_to_file(file_name, contents, silence=True):
+    file_name = file_name.replace("//","/")
     debug_message("Saving file: " + str(file_name))
     file = None
     success = False

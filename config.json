@@ -79,7 +79,8 @@
             "latch_time": 600
         },
         "traffic_camera_alerts": {
-            "loaded_radius": 0,
+            "enabled": true,
+            "loaded_radius": 500,
             "database": "./assets/databases/enforcement_cameras.excam",
             "alert_range": 1,
             "speed_check": true,
@@ -122,6 +123,7 @@
             ]
         },
         "alpr_alerts": {
+            "enabled": true,
             "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
             "loaded_radius": 500,
