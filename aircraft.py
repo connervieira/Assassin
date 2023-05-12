@@ -82,6 +82,58 @@ def receive_messages():
 
 
 
+
+def prune_messages(adsb_messages, file):
+    messages_pruned_count = 0 # This is a placeholder variable that will be incremented by 1 for each message removed. This is used for debugging purposes.
+    for message in reversed(adsb_messages): # Iterate through each message (line) in the file, in reverse order to prevent list entries from being shuffled around during the pruning process.
+        try:
+            message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
+        except:
+            message_timestamp = 0
+        message_age = time.time() - message_timestamp # Calculate the age of this message.
+        if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
+            adsb_messages.remove(message) # Remove this message from the raw data.
+            messages_pruned_count = messages_pruned_count + 1 # Increment the pruned message counter by 1.
+
+    new_raw_csv_string = "" # This is a placeholder string that will hold the entire contents of the new CSV file.
+    for line in adsb_messages: # Iterate through each line of the pruned CSV data.
+        next_csv_line = "" # This is a placeholder string that holds the contents of the current line of the CSV file.
+        line[0] = "MSG"
+        for entry in line: # Iterate through each field in this line.
+            next_csv_line = next_csv_line + str(entry) + "," # Add each entry to the line.
+        next_csv_line = next_csv_line[:-1] # Remove the last comma in the line.
+        new_raw_csv_string = new_raw_csv_string + next_csv_line # Add a line break at the end of the last line.
+
+    add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file.
+
+
+
+
+# The `message_file_maintainer` prunes the messages from the ADS-B file on a regular basis to reduce the lag spike when ADS-B alerts are processed.
+def message_file_maintainer():
+    file = config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"]
+    while True:
+        if (os.path.exists(str(file)) == True): # Check to see if the filepath supplied exists before attempting to load it.
+            message_file = open(file) # Open the ADS-B message file.
+            file_contents = message_file.readlines() # Read the ADS-B message file line by line.
+            message_file.close() # Close the ADS-B message file.
+            save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
+            raw_adsb_data = [] # Set the raw message output to a blank placeholder list.
+            for line in file_contents: # Iterate through each line in the ADS-B file contents.
+                raw_adsb_data.append(line.split(",")) # Add each line to the complete output.
+            raw_adsb_data = [item for item in raw_adsb_data if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
+
+
+            debug_message("Removing expired messages")
+            prune_messages(raw_adsb_data, file)
+
+        time.sleep(0.2)
+
+
+
+
+
+
 def start_adsb_monitoring():
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if ADS-B alerts are enabled.
         debug_message("Starting ADS-B monitoring")
@@ -95,6 +147,8 @@ def start_adsb_monitoring():
             debug_message("Opening ADS-B message stream")
             adsb_message_receive_thread = threading.Thread(target=receive_messages, name="ADSBMessageStream")
             adsb_message_receive_thread.start()
+            adsb_message_maintainer_thread = threading.Thread(target=message_file_maintainer, name="ADSBMessageMaintainer")
+            adsb_message_maintainer_thread.start()
         else:
             display_notice("ADS-B alerts are enabled, but no message file name was set. ADS-B monitoring could not be started.", 3)
 
@@ -112,46 +166,16 @@ def fetch_aircraft_data(file):
         file_contents = message_file.readlines() # Read the ADS-B message file line by line.
         message_file.close() # Close the ADS-B message file.
         save_to_file(file, "", True) # After loading the file, erase its contents. This allows new messages to be saved while the data processing takes place.
-        raw_output = [] # Set the raw message output to a blank placeholder list.
+        raw_adsb_data = [] # Set the raw message output to a blank placeholder list.
         for line in file_contents: # Iterate through each line in the ADS-B file contents.
-            raw_output.append(line.split(",")) # Add each line to the complete output.
-        raw_output = [item for item in raw_output if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
-
-
-
-        # Iterate through all received messages, and delete any that have exceeded the time-to-live threshold set in the configuration.
-        debug_message("Removing expired messages")
-        messages_pruned_count = 0 # This is a placeholder variable that will be incremented by 1 for each message removed. This is used for debugging purposes.
-        for message in reversed(raw_output): # Iterate through each message (line) in the file, in reverse order to prevent list entries from being shuffled around during the pruning process.
-            try:
-                message_timestamp = round(time.mktime(datetime.datetime.strptime(message[6] + " " + message[7], "%Y/%m/%d %H:%M:%S.%f").timetuple())) # Get the timestamp of this message.
-            except:
-                message_timestamp = 0
-            message_age = time.time() - message_timestamp # Calculate the age of this message.
-            if (message_age > config["general"]["adsb_alerts"]["message_time_to_live"]): # Check to see if this message's age is older than the time-to-live threshold set in the configuration.
-                raw_output.remove(message) # Remove this message from the raw data.
-                messages_pruned_count = messages_pruned_count + 1 # Increment the pruned message counter by 1.
-
-        if (messages_pruned_count > 0): # Check to see if any messages were pruned.
-            debug_message("Pruned " + str(messages_pruned_count) + " messages")
-
-        debug_message("Generating pruned CSV data from " + str(len(raw_output)) + " messages")
-        new_raw_csv_string = "" # This is a placeholder string that will hold the entire contents of the new CSV file.
-        for line in raw_output: # Iterate through each line of the pruned CSV data.
-            next_csv_line = "" # This is a placeholder string that holds the contents of the current line of the CSV file.
-            line[0] = "MSG"
-            for entry in line: # Iterate through each field in this line.
-                next_csv_line = next_csv_line + str(entry) + "," # Add each entry to the line.
-            next_csv_line = next_csv_line[:-1] # Remove the last comma in the line.
-            new_raw_csv_string = new_raw_csv_string + next_csv_line # Add a line break at the end of the last line.
-
-        add_to_file(file, new_raw_csv_string, True) # Save the pruned CSV data back to the original file.
+            raw_adsb_data.append(line.split(",")) # Add each line to the complete output.
+        raw_adsb_data = [item for item in raw_adsb_data if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
 
 
 
         debug_message("Collecting aircraft data")
         aircraft_data = {} # Set the aircraft data as a placeholder dictionary so information can be added to it in later steps.
-        for entry in raw_output: # Iterate through each entry in the CSV list data.
+        for entry in raw_adsb_data: # Iterate through each entry in the CSV list data.
             if (len(entry) >= 17): # Only process this entry if it has valid message information.
                 if (entry[4] in aircraft_data): # Check to see if the aircraft associated with this message already exists in the database.
                     individual_data = aircraft_data[entry[4]] # If so, fetch the existing aircraft data.

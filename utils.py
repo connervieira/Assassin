@@ -485,12 +485,10 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
 debug_message("Creating `load_traffic_cameras` function")
 def load_traffic_cameras(current_lat, current_lon, database_file, radius):
     if (os.path.exists(database_file) == True): # Check to make sure the database specified in the configuration actually exists.
-        debug_message("Opening traffic enforcement camera database")
         with lzma.open(database_file, "rt", encoding="utf-8") as f: # Open the database file.
             database_lines = list(map(json.loads, f)) # Load the camera database
             loaded_database_information = [] # Load an empty placeholder database so we can write data to it later.
             
-            debug_message("Loading traffic enforcement cameras from database")
             for camera in database_lines: # Iterate through each camera in the database.
                 if ("lat" in camera and "lon" in camera): # Only check this camera if it has a latitude and longitude defined in the database.
                     if (get_distance(current_lat, current_lon, camera['lat'], camera['lon']) < float(radius)): # Check to see if this camera is inside the initial loading radius.

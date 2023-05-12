@@ -81,7 +81,7 @@
         },
         "traffic_camera_alerts": {
             "enabled": true,
-            "loaded_radius": 500,
+            "loaded_radius": 100,
             "database": "./assets/databases/enforcement_cameras.excam",
             "alert_range": 1,
             "speed_check": true,
@@ -173,9 +173,9 @@
             }
         },
         "adsb_alerts": {
-            "enabled": false,
+            "enabled": true,
             "adsb_message_filename": "adsb.csv",
-            "threat_threshold": 3,
+            "threat_threshold": 0,
             "minimum_vehicle_speed": 0,
             "message_time_to_live": 20,
             "criteria": {
