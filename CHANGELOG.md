@@ -125,6 +125,8 @@ This update adds the ability to interface with external services to enable new f
 
 April 10th, 2023
 
+This update focuses on improving stability, reliability, and usability.
+
 - Improved aircraft alert processing.
     - The ADS-B intake process is now automatic, and is managed by Assassin.
     - Aircraft with no location data are now filtered from the alert display.
@@ -192,3 +194,4 @@ April 19th, 2023
     - Aircraft threats are now sorted by highest to lowest threat level, then closest to furthest distance.
 - Assassin can now be configured to display "status messages", which fall between the normal output and the debugging output, in terms of verbosity.
 - Added `--headless` command line argument for external interfaces to disable user interaction elements of the console output.
+- File-saving debug messages are now only displayed when the "silence" flag is set to `false`.

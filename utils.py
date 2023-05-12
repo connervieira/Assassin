@@ -142,7 +142,8 @@ def clear():
 debug_message("Creating `save_to_file` function")
 def save_to_file(file_name, contents, silence=True):
     file_name = file_name.replace("//","/")
-    debug_message("Saving file: " + str(file_name))
+    if (silence == False):
+        debug_message("Saving file: " + str(file_name))
     file = None
     success = False
     try:
@@ -170,7 +171,9 @@ def save_to_file(file_name, contents, silence=True):
 # Define the fuction that will be used to add to the end of a file.
 debug_message("Creating `add_to_file` function")
 def add_to_file(file_name, contents, silence=True):
-    debug_message("Adding to file: " + str(file_name))
+    file_name = file_name.replace("//","/")
+    if (silence == False):
+        debug_message("Adding to file: " + str(file_name))
     file = None
     success = False
     try:
