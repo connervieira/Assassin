@@ -8,6 +8,7 @@
         "gps": {
             "enabled": true,
             "provider": "gpsd",
+            "speed_source": "calculated",
             "demo_mode": {
                 "enabled": true,
                 "data": {
@@ -206,7 +207,7 @@
         }
     },
     "display": {
-        "silence_console_displays": true,
+        "silence_console_displays": false,
         "displays": {
             "time": true,
             "date": true,
@@ -250,7 +251,7 @@
             },
             "2": {
                 "wait_for_input": false,
-                "delay": 2 
+                "delay": 2
             },
             "3": {
                 "wait_for_input": true,

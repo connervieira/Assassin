@@ -195,3 +195,4 @@ April 19th, 2023
 - Assassin can now be configured to display "status messages", which fall between the normal output and the debugging output, in terms of verbosity.
 - Added `--headless` command line argument for external interfaces to disable user interaction elements of the console output.
 - File-saving debug messages are now only displayed when the "silence" flag is set to `false`.
+- Added support for "calculated" GPS speed, where the speed is determined based on the most recent two GPS locations, rather than the speed provided by the hardware.
