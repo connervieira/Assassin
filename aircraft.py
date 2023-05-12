@@ -123,11 +123,9 @@ def message_file_maintainer():
                 raw_adsb_data.append(line.split(",")) # Add each line to the complete output.
             raw_adsb_data = [item for item in raw_adsb_data if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
 
-
-            debug_message("Removing expired messages")
             prune_messages(raw_adsb_data, file)
 
-        time.sleep(0.2)
+        time.sleep(config["general"]["adsb_alerts"]["prune_interval"])
 
 
 
