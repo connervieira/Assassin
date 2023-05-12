@@ -324,7 +324,7 @@ while True: # Run forever in a loop until terminated.
 
     # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
-        process_timing("Alerts/Aircraft Monitoring", "start")
+        process_timing("Alerts/Aircraft", "start")
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location, current_speed)
         process_timing("Alerts/Aircraft", "end")
     else:
@@ -416,7 +416,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["predator"] = alert_count["predator"][:10]
 
 
-    process_timing("Alert Organization", "end")
+    process_timing("Organization/Alerts", "end")
 
 
 

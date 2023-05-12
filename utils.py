@@ -273,7 +273,7 @@ def process_timing(identifier, action):
             process_timers[identifier]["total"] = process_timers[identifier]["total"] + (time.time() - process_timers[identifier]["start"])
             process_timers[identifier]["start"] = 0
         else:
-            display_notice("The `processing_timing` function was called setting the end of the timer, but the timer wasn't started. This is likely a bug.", 2)
+            display_notice("The `processing_timing` function was called setting the end of the timer (" + identifier + "), but the timer wasn't started. This is likely a bug.", 2)
     else:
         display_notice("The `processing_timing` function was called with an unknown action. This likely a bug.", 2)
 
