@@ -137,7 +137,6 @@ def clear():
 
 
 
-
 # Define the function that will be used to save files for exported data.
 debug_message("Creating `save_to_file` function")
 def save_to_file(file_name, contents, silence=True):
@@ -199,8 +198,6 @@ def add_to_file(file_name, contents, silence=True):
 
 
 
-
-
 debug_message("Creating `display_notice` function")
 if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
     status_file_location = config["external"]["local"]["interface_directory"] + "/status.json"
@@ -256,6 +253,29 @@ def display_notice(message, level=1):
             else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
                 time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
 
+
+
+
+
+process_timers = {}
+def process_timing(identifier, action):
+    global process_timers
+
+    if (identifier not in process_timers and action != "dump"): # Check to see if the specified identifier doesn't exist in the process_timer dictionary.
+        process_timers[identifier] = {"total": 0, "start": 0} # Initialize the timer for this process.
+
+    if (action == "dump"):
+        return process_timers
+    elif (action == "start"):
+        process_timers[identifier]["start"] = time.time()
+    elif (action == "end"):
+        if (process_timers[identifier]["start"] != 0):
+            process_timers[identifier]["total"] = process_timers[identifier]["total"] + (time.time() - process_timers[identifier]["start"])
+            process_timers[identifier]["start"] = 0
+        else:
+            display_notice("The `processing_timing` function was called setting the end of the timer, but the timer wasn't started. This is likely a bug.", 2)
+    else:
+        display_notice("The `processing_timing` function was called with an unknown action. This likely a bug.", 2)
 
 
 
@@ -720,6 +740,7 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
 
 debug_message("Creating `update_status_lighting` function")
 def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
+    process_timing("Status Lighting", "start")
     if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
         debug_message("Updating status lighting")
         status_lighting_update_url = str(config["display"]["status_lighting"]["status_lighting_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
@@ -733,6 +754,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
                 display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
         else:
             display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+    process_timing("Status Lighting", "end")
 
 
 
@@ -742,6 +764,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
 # This function is used to play a given sound as defined in the configuration.
 debug_message("Creating `play_sound` function")
 def play_sound(sound_id):
+    process_timing("Audio/Sound Effects", "start")
     if (str(sound_id) in config["audio"]["sounds"]): # Check to see that a sound with the specified sound ID exists in the configuration.
         if (int(config["audio"]["sounds"][str(sound_id)]["repeat"]) > 0): # Check to see if this sound effect is enabled.
             if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
@@ -761,6 +784,7 @@ def play_sound(sound_id):
                 display_notice("The sound file path associated with sound ID (" + str(sound_id) + ") does not exist.", 2)
     else: # No sound with this ID exists in the configuration database, and therefore the sound can't be played.
         display_notice("No sound with the ID (" + str(sound_id) + ") exists in the configuration.", 2)
+    process_timing("Audio/Sound Effects", "end")
 
 
 

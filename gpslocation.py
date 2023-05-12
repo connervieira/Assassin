@@ -25,6 +25,7 @@ style = utils.style
 debug_message = utils.debug_message
 display_notice = utils.display_notice
 get_distance = utils.get_distance
+process_timing = utils.process_timing # Load the function used to track how much time is spent doing various actions.
 
 
 # Locate and load the configuration file.
@@ -71,11 +72,12 @@ def calculate_speed(location_history, hardware_speed):
 debug_message("Creating `get_gps_location` function")
 def get_gps_location(location_history=[]):
     debug_message("Getting GPS location")
+    process_timing("GPS Location", "start")
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps"]["demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
             debug_message("Returning demo GPS information")
             speed = calculate_speed(location_history, config["general"]["gps"]["demo_mode"]["data"]["speed"])
-            return float(config["general"]["gps"]["demo_mode"]["data"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["latitude"]), speed, float(config["general"]["gps"]["demo_mode"]["data"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["heading"]), int(config["general"]["gps"]["demo_mode"]["data"]["satellites"]), "V0LT Assassin - GPS demo mode" # Return the sample GPS information defined in the configuration.
+            current_location = [float(config["general"]["gps"]["demo_mode"]["data"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["latitude"]), speed, float(config["general"]["gps"]["demo_mode"]["data"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["heading"]), int(config["general"]["gps"]["demo_mode"]["data"]["satellites"]), "V0LT Assassin - GPS demo mode"] # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             if (config["general"]["gps"]["provider"] == "gpsd"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -85,9 +87,9 @@ def get_gps_location(location_history=[]):
                     gps_data_packet = gpsd.get_current() # Get the current information.
                     debug_message("Received GPSD information")
                     speed = calculate_speed(location_history, gps_data_packet.speed())
-                    return gps_data_packet.position()[0], gps_data_packet.position()[1], speed, gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats, "V0LT Assassin - GPSD Device" # Return GPS information.
+                    current_location = gps_data_packet.position()[0], gps_data_packet.position()[1], speed, gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats, "V0LT Assassin - GPSD Device" # Return GPS information.
                 except: # If the current location can't be established, then return placeholder location data.
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
+                    current_location = [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             elif (config["general"]["gps"]["provider"] == "termux"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -96,9 +98,9 @@ def get_gps_location(location_history=[]):
                     termux_response = json.loads(raw_termux_response) # Load the location information from the Termux response.
                     debug_message("Received termux-location information")
                     speed = calculate_speed(location_history, termux_response["speed"])
-                    return termux_response["latitude"], termux_response["longitude"], speed, termux_response["altitude"], termux_response["bearing"], 0, "V0LT Assassin - Termux-API" # Return the fetched GPS information.
+                    current_location = [termux_response["latitude"], termux_response["longitude"], speed, termux_response["altitude"], termux_response["bearing"], 0, "V0LT Assassin - Termux-API"] # Return the fetched GPS information.
                 except:
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
+                    current_location = [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             elif (config["general"]["gps"]["provider"] == "locateme"):
                 try: # Don't terminate the entire script if the GPS location fails to be aquired.
@@ -108,16 +110,19 @@ def get_gps_location(location_history=[]):
                     locateme_respose.append("V0LT Assassin - MacOS Location Services via LocateMe") # Append the location provider to the information.
                     debug_message("Received LocateMe information")
                     speed = calculate_speed(location_history, locateme_response[2])
-                    return float(locateme_response[0]), float(locateme_response[1]), speed, float(locateme_response[3]), float(locateme_response[4]), 0 # Return the fetched GPS information.
+                    current_location = float(locateme_response[0]), float(locateme_response[1]), speed, float(locateme_response[3]), float(locateme_response[4]), 0 # Return the fetched GPS information.
                 except:
-                    return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
+                    current_location = [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                     debug_message("GPS fetch failed")
             else:
-                return [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
+                current_location = [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
                 debug_message("Invalid location provider")
     else: # If GPS is disabled, then this function should never be called, but return a placeholder position regardless.
-        return [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
+        current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.
         debug_message("GPS is disabled")
+
+    process_timing("GPS Location", "end")
+    return current_location
 
 
 

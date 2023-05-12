@@ -69,7 +69,8 @@ get_cardinal_direction = utils.get_cardinal_direction # Load the function used t
 get_arrow_direction = utils.get_arrow_direction # Load the function used to convert headings from degrees to arrow directions.
 update_status_lighting = utils.update_status_lighting # Load the function used to update the status lighting system.
 play_sound = utils.play_sound # Load the function used to play sounds specified in the configuration based on their IDs.
-display_notice = utils.display_notice  # Load the function used to display notices, warnings, and errors.
+display_notice = utils.display_notice # Load the function used to display notices, warnings, and errors.
+process_timing = utils.process_timing # Load the function used to track how much time is spent doing various actions.
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
 
@@ -274,52 +275,68 @@ while True: # Run forever in a loop until terminated.
 
     # Run GPS alert processing.
     if (config["general"]["gps"]["alerts"]["enabled"] == True and config["general"]["gps"]["enabled"]): # Check to make sure GPS alerts are enabled before processing alerts.
+        process_timing("Alerts/GPS", "start")
         gps_alerts = process_gps_alerts(location_history) # Process GPS alerts.
+        process_timing("Alerts/GPS", "end")
     else: # GPS alert detection is disabled.
         gps_alerts = {} # Return a blank placeholder dictionary in place of the true alerts.
 
 
     # Run traffic enforcement camera alert processing.
     if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
+        process_timing("Alerts/Traffic Enforcement Cameras", "start")
         nearest_enforcement_camera, nearby_cameras_all = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
+        process_timing("Alerts/Traffic Enforcement Cameras", "end")
     else:
         nearest_enforcement_camera, nearby_cameras_all = {}, []
 
 
     # Run ALPR camera alert processing.
-    if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
+    if (config["general"]["alpr_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
+        process_timing("Alerts/License Plate Recognition Cameras", "start")
         nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
+        process_timing("Alerts/License Plate Recognition Cameras", "end")
     else:
         nearest_alpr_camera, nearby_alpr_cameras = {}, []
 
 
     # Run drone alert processing.
     if (config["general"]["drone_alerts"]["enabled"] == True): # Only run drone processing if drone alerts are enabled.
+        process_timing("Alerts/Drones", "start")
         detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards)
+        process_timing("Alerts/Drones", "end")
     else:
         detected_drone_hazards = []
 
 
     # Run Bluetooth alert processing.
     if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
+        process_timing("Alerts/Bluetooth Monitoring", "start")
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
+        process_timing("Alerts/Bluetooth Monitoring", "end")
     elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
+        process_timing("Alerts/Bluetooth Monitoring", "start")
         detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing([0.0000, 0.0000, 0.0, 0.0, 0.0, 0], detected_bluetooth_devices) # Run the Bluetooth alert processing function with dummy GPS data.
+        process_timing("Alerts/Bluetooth Monitoring", "end")
     else:
         detected_bluetooth_devices, bluetooth_threats = {}, {}
 
 
     # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
+        process_timing("Alerts/Aircraft Monitoring", "start")
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location, current_speed)
+        process_timing("Alerts/Aircraft", "end")
     else:
         aircraft_threats, aircraft_data = [], {}
 
 
     # Process weather alerts.
     if (config["general"]["weather_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run weather alert processing if it is enabled in the configuration.
+        process_timing("Alerts/Weather", "start")
         last_weather_data = weather_data
         weather_data = get_weather_data(current_location, last_weather_data)
+        process_timing("Alerts/Weather", "end")
         weather_alerts = weather_alert_processing(weather_data)
     else:
         weather_alerts = {}
@@ -327,12 +344,16 @@ while True: # Run forever in a loop until terminated.
 
     # Process attention alerts.
     if (config["general"]["attention_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run attention monitoring alert processing if it is enabled in the configuration.
+        process_timing("Alerts/Attention", "start")
         attention_alerts = process_attention_alerts(float(current_speed))
+        process_timing("Alerts/Attention", "end")
     else:
         attention_alerts = {}
 
     if (config["general"]["predator_integration"]["enabled"] == True): # Only load Predator integration if Predator integration is enabled in the configuration.
+        process_timing("Alerts/Predator", "start")
         predator_alerts = process_predator_alerts()
+        process_timing("Alerts/Predator", "end")
     else:
         predator_alerts = {}
         
@@ -352,6 +373,7 @@ while True: # Run forever in a loop until terminated.
 
 
     # Collect all alerts.
+    process_timing("Organization/Alerts", "start")
     all_alerts = dict(list(all_alerts.items())[-10:]) # Trim the dictionary of all alerts to the last 10 entries.
     current_time = time.time() # Get the current time.
     all_alerts[current_time] = {}
@@ -382,16 +404,19 @@ while True: # Run forever in a loop until terminated.
     alert_count["predator"] = [len(predator_alerts)] + alert_count["predator"]
 
 
-    # Only keep alert counts from the past 100 cycles.
-    alert_count["drone"] = alert_count["drone"][:100]
-    alert_count["aircraft"] = alert_count["aircraft"][:100]
-    alert_count["traffic_camera"] = alert_count["traffic_camera"][:100]
-    alert_count["alpr"] = alert_count["alpr"][:100]
-    alert_count["bluetooth"] = alert_count["bluetooth"][:100]
-    alert_count["weather"] = alert_count["weather"][:100]
-    alert_count["gps"] = alert_count["gps"][:100]
-    alert_count["attention"] = alert_count["attention"][:100]
-    alert_count["predator"] = alert_count["predator"][:100]
+    # Only keep alert counts from the past 10 cycles.
+    alert_count["drone"] = alert_count["drone"][:10]
+    alert_count["aircraft"] = alert_count["aircraft"][:10]
+    alert_count["traffic_camera"] = alert_count["traffic_camera"][:10]
+    alert_count["alpr"] = alert_count["alpr"][:10]
+    alert_count["bluetooth"] = alert_count["bluetooth"][:10]
+    alert_count["weather"] = alert_count["weather"][:10]
+    alert_count["gps"] = alert_count["gps"][:10]
+    alert_count["attention"] = alert_count["attention"][:10]
+    alert_count["predator"] = alert_count["predator"][:10]
+
+
+    process_timing("Alert Organization", "end")
 
 
 
@@ -399,6 +424,7 @@ while True: # Run forever in a loop until terminated.
     # Alert the user via text-to-speech, as necessary.
     if (config["audio"]["tts"]["enabled"] == True): # Check to make sure text-to-speech is enabled before doing any processing.
         debug_message("Running text-to-speech processing")
+        process_timing("Audio/TTS", "start")
 
         # Process drone text to speech alerts.
         if (alert_count["drone"][0] > alert_count["drone"][1]):
@@ -436,6 +462,7 @@ while True: # Run forever in a loop until terminated.
         if (alert_count["predator"][0] > alert_count["predator"][1]):
             speak("Predator license plate hit", "Predator")
 
+        process_timing("Audio/TTS", "end")
         debug_message("Completed Text-to-speech processing")
 
 
@@ -460,6 +487,7 @@ while True: # Run forever in a loop until terminated.
     # Show all configured basic information displays.
     if (config["display"]["silence_console_displays"] == False):
         debug_message("Displaying basic dashboard")
+        process_timing("Displays", "start")
 
         if (config["display"]["displays"]["speed"]["large_display"] == True and config["general"]["gps"]["enabled"] == True): # Check to see the large speed display is enabled in the configuration.
             current_speed = convert_speed(float(current_location[2]), config["display"]["displays"]["speed"]["unit"]) # Convert the speed data from the GPS into the units specified by the configuration.
@@ -814,6 +842,8 @@ while True: # Run forever in a loop until terminated.
 
                 print(style.end)
 
+        process_timing("Displays", "end")
+
 
 
 
@@ -822,10 +852,14 @@ while True: # Run forever in a loop until terminated.
     # Record telemetry data according to the configuration.
     if (config["general"]["telemetry"]["enabled"] == True): # Check to see if Assassin is configured to record telemetry data.
         debug_message("Recording telemetry data")
+        process_timing("Telemetry Saving", "start")
         save_gpx(location_history) # Save the location history to a GPX file.
+        process_timing("Telemetry Saving", "end")
 
 
 
+    if (config["general"]["debugging_output"] == True): # Check to see if debug output is enabled.
+        print(json.dumps(process_timing("", "dump"), indent=4)) # Print the timers for all processes.
 
     debug_message("Executing refresh delay")
     time.sleep(float(config["general"]["refresh_delay"])) # Wait for a certain amount of time, as specified in the configuration.
