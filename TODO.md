@@ -47,7 +47,6 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add configuration validation for new configuration values.
         - [ ] Add Predator start/stop capability.
     - [X] Add notification when no ADS-B messages are being received.
-    - [ ] Document `speed_source` configuration value.
 
 
 ### Hypothetical

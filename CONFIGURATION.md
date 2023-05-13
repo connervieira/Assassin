@@ -34,6 +34,10 @@ This section of configuration values will effect Assassin's general operation.
                     - Termux uses the `termux-api` package to make it possible to run Assassin on Android.
                 - `locateme`
                     - In the event GPSD isn't suitable, LocateMe for MacOS can be used as location backend.
+        - `speed_source` determines which source Assassin will use for its GPS speed.
+            - Below are the options this value can be set to.
+                - `hardware` uses the speed as returned by the GPS hardware.
+                - `calculated` uses the last two locations in the history to independently calculate the speed.
         - `demo_mode` isused to supply Assassin with fake GPS data for sake of demonstration and testing purposes.
             - To use this feature, simply set `enabled` to `true`, then set each GPS variable to any value you want. Assassin will use this placeholder information whenever it would otherwise poll the GPS for information.
         - `alerts` contains settings that control the behavior of various GPS alerts.
