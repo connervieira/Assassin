@@ -113,6 +113,7 @@ def prune_messages(adsb_messages, file):
 def message_file_maintainer():
     file = config["general"]["working_directory"] + "/" + config["general"]["adsb_alerts"]["adsb_message_filename"]
     while True:
+        cycle_start_time = time.time() # Record the time that this maintenance processing cycle started.
         if (os.path.exists(str(file)) == True): # Check to see if the filepath supplied exists before attempting to load it.
             message_file = open(file) # Open the ADS-B message file.
             file_contents = message_file.readlines() # Read the ADS-B message file line by line.
@@ -124,6 +125,10 @@ def message_file_maintainer():
             raw_adsb_data = [item for item in raw_adsb_data if len(item) > 7] # Filter out any messages that are significantly shorter than expected.
 
             prune_messages(raw_adsb_data, file)
+
+        cycle_end_time = time.time() # Record the time that this maintenance processing cycle finished.
+        if ((cycle_end_time - cycle_start_time) >= 5): # Check to see if this maintenance processing cycle took more than 5 seconds.
+            display_notice("The last ADS-B message pruning cycle took " + str(cycle_end_time - cycle_start_time) + " seconds. Consider lowering prune interval.", 2)
 
         time.sleep(config["general"]["adsb_alerts"]["prune_interval"])
 
