@@ -157,6 +157,9 @@ def start_adsb_monitoring():
 
 
 
+
+
+
 # Define the function used to fetch aircraft data from the Dump1090 ADS-B message output. This function is also responsible for managing the raw message data itself.
 debug_message("Creating `fetch_aircraft_data` function")
 def fetch_aircraft_data(file):

@@ -75,9 +75,10 @@
             }
         },
         "predator_integration": {
-            "enabled": false,
+            "enabled": true,
+            "instance_directory": "/home/cvieira/Software/Programming/Python/Predator/",
             "plate_log_file": "/home/alpr/Software/Support/Predator/Working/plate_history.json",
-            "latch_time": 600
+            "latch_time": 60
         },
         "traffic_camera_alerts": {
             "enabled": true,
@@ -173,7 +174,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_filename": "adsb.csv",
             "threat_threshold": 0,
             "minimum_vehicle_speed": 0,

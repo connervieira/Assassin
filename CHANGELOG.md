@@ -174,6 +174,8 @@ April 19th, 2023
 
 *Release date to be determined*
 
+- Added Predator ALPR integration.
+    - Assassin can now be configured to display alerts from Predator.
 - Refined the POI database format.
     - The ALPR camera database has been updated to reflect these changes, and includes additional refinements as well.
 - Refined the configuration loading process.
