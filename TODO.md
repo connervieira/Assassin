@@ -45,7 +45,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [ ] Add Predator integration.
         - [X] Add alert handling.
         - [X] Add configuration validation for new configuration values.
-        - [ ] Add Predator start/stop capability.
+        - [X] Add Predator start/stop capability.
+        - [ ] Test functionality.
     - [X] Add notification when no ADS-B messages are being received.
 
 
