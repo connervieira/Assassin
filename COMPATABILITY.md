@@ -53,3 +53,5 @@ This document explains which platforms Assassin is compatible with.
             - [] Aircraft detection
         - Features
             - [X] Status lighting
+            - [] Audio alerts
+            - [] Text-to-speech
