@@ -22,10 +22,10 @@ This section contains a quick-start guide if you want to set up Assassin as quic
 1. Install Python3
     - `sudo apt-get install python3 python3-pip`
 2. Install Python packages
-    - `pip3 install numpy playsound pyttsx3`
+    - `pip3 install numpy playsound pyttsx3 validators requests`
 3. Install GPSD
     - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3`
-4. Install Bluetooth tools.
+4. Install Bluetooth tools
     - `sudo apt-get install bluez-tools; pip3 install PyBluez`
 5. Install other dependencies
     - `sudo apt-get install mpg321 aircrack-ng dump1090-mutability`
