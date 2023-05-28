@@ -28,6 +28,7 @@ save_to_file = utils.save_to_file
 add_to_file = utils.add_to_file
 get_distance = utils.get_distance
 calculate_bearing = utils.calculate_bearing
+bearing_difference = utils.bearing_difference
 
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
@@ -37,7 +38,7 @@ config = load_config() # Load and load the configuration file.
 
 def load_traffic_camera_database(current_location):
     if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
-        if (float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
+        if (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) > 0 and config["general"]["gps"]["enabled"] and float(config["general"]["traffic_camera_alerts"]["loaded_radius"]) > 0): # Check to see if traffic camera alerts are enabled, and the GPS is enabled.
             debug_message("Loading traffic enforcement camera database")
 
             if (os.path.exists(str(config["general"]["traffic_camera_alerts"]["database"])) == True): # Check to see that the traffic camera database exists at the path specified in the configuration.
@@ -100,17 +101,26 @@ def nearby_traffic_cameras(current_lat, current_lon, database_information, radiu
 
 
 def traffic_camera_alert_processing(current_location, loaded_traffic_camera_database):
-    if (config["general"]["traffic_camera_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["alert_range"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
+    if (config["general"]["traffic_camera_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
         debug_message("Processing traffic enforcement camera alerts")
         # Create placeholders for each camera type so we can add the closet camera for each category in the next step .
-        nearest_camera = {"dst": 10000000.0}
 
-        nearby_cameras = nearby_traffic_cameras(current_location[0], current_location[1], loaded_traffic_camera_database, float(config["general"]["traffic_camera_alerts"]["alert_range"])) # Get all traffic cameras within the configured radius.
+        nearby_cameras = nearby_traffic_cameras(current_location[0], current_location[1], loaded_traffic_camera_database, float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"])) # Get all traffic cameras within the configured radius.
 
-        for camera in nearby_cameras: # Iterate through all nearby cameras.
-            camera["direction"] = camera["bearing"] - current_location[4] # Calculate the direction to this camera, relative to the current direction of movement.
-            if (camera["dst"] < nearest_camera["dst"]): # Check to see if the distance to this camera is lower than the current closest camera.
-                nearest_camera = camera # Make the current camera the new closest camera.
+
+
+        # Filter camera alerts by speed, bearing, and direction.
+        filtered_cameras = []
+        for camera in nearby_cameras: # Iterate through all cameras within the threshold radius.
+            if (config["general"]["traffic_camera_alerts"]["speed_check"] == False or (camera["spd"] == None or (convert_speed(current_location[2] - (camera["spd"]*0.2777778))) > config["general"]["traffic_camera_alerts"]["triggers"]["speed"])): # Only process this speed camera if the speed limit has been exceeded by the configured offset, or if speed checking is disabled.
+                for affected_direction in camera["dir"]: # Iterate through each direction that each camera affects.
+                    if (bearing_difference(current_location[4], float(affected_direction)) < float(config["general"]["traffic_camera_alerts"]["triggers"]["angle"])): # Check to make sure the camera's facing-direction is inside the threshold.
+                        if (bearing_difference(current_location[4], float(camera["bearing"])) < float(config["general"]["traffic_camera_alerts"]["triggers"]["direction"])): # Check to make sure the bearing to this camera is within the threshold.
+                            camera["direction"] = float(camera["bearing"]) - current_location[4] # Calculate the direction to this camera, relative to the current direction of movement.
+                            filtered_cameras.append(camera) # Add this camera to the filtered list.
+                            break # If this camera is added to the list of filtered cameras, then break out of the "directions" loop to prevent the same camera from being added repeatedly.
+        nearby_cameras = filtered_cameras # Set the original list of nearby cameras to the new filtered list.
+
 
         # Sort the cameras list by distance.
         sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
@@ -124,7 +134,7 @@ def traffic_camera_alert_processing(current_location, loaded_traffic_camera_data
         nearby_cameras = sorted_cameras # Set the original list of cameras to the sorted list.
 
         debug_message("Processed traffic enforcement camera alerts")
-        return nearest_camera, nearby_cameras # Return the nearby cameras.
+        return nearby_cameras # Return the nearby cameras.
 
 
     else: # Traffic enforcement camera alert processing is disabled, so return blank placeholder information to avoid errors.

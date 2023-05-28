@@ -119,11 +119,20 @@ This section of configuration values will effect Assassin's general operation.
             - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
         - Setting this to '0' will disable traffic enforcement camera alerts.
     - `database` is the file-path to an ExCam database containing traffic camera locations and information.
-    - `alert_range` is the distance in miles away from a traffic camera that Assassin will trigger an alert.
-    - `speed_check` determines whether or not Assassin will considering the speed limit associated with a traffic camera.
-        - When the current speed exceeds the speed limit, a higher priority alert is trigged.
-        - When the current speed is lower than the speed limit, Assassin alerts with normal priority.
+    - `speed_check` determines whether or not Assassin will consider the speed limit associated with a traffic camera when determining whether or not to alert to it.
+        - This setting uses the `speed` threshold as defined in the `triggers` section.
         - When no speed limit data is available, Assassin will skip the speed check and alert normally regardless of the current speed.
+    - `triggers` contains the criteria that need to be met for a traffic enforcement camera alert to be triggered.
+        - `distance` is the distance in miles away from a traffic camera that Assassin will trigger an alert.
+        - `speed` is the minimum speed, relative to the camera's speed limit required for Assassin to trigger an alert, measured in the units specified by the `display>displays>speed>unit` configuration value.
+            - For example, if a camera has a speed limit of 25 mph, and this value is set to 5 mph, then Assassin will trigger an alert at 30 mph.
+        - `angle` determines the maximum allowed difference between the current direction of movement, and direction the camera monitors.
+            - This setting can be used to eliminate alerts from cameras that face directions different from the current direction of travel.
+            - Values higher than 180 will effectively disable this filter.
+        - `direction` determines the maximum allowed bearing to the camera, relative to the cirrent direction of movement before the alert is filtered out.
+            - You can think of this value as a way to specify the width of the imaginary cone in front of your car, where cameras outside of the cone are filtered out.
+            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
+            - Values higher than 180 will effectively disable this filter.
     - `enabled_types` controls which types of enforcement cameras Assassin will alert to.
         - `speed` enables and disables speed camera alerts.
         - `redlight` enables and disables red light camera alerts.

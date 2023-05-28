@@ -556,9 +556,9 @@ def bearing_difference(bearing1, bearing2):
         bearing2 = bearing2 + 360
 
     # Make sure both of the bearings are less than 360 degrees.
-    while bearing1 > 0:
+    while bearing1 > 360:
         bearing1 = bearing1 - 360
-    while bearing2 > 0:
+    while bearing2 > 360:
         bearing2 = bearing2 - 360
 
 
@@ -603,7 +603,7 @@ def nearby_database_poi(current_location, database_information, radius=1.0): # T
 
 
 debug_message("Creating `convert_speed` function")
-def convert_speed(speed, unit="mph"): # This function is used to convert speeds from meters per second, to other units.
+def convert_speed(speed, unit=config["display"]["displays"]["speed"]["unit"]): # This function is used to convert speeds from meters per second, to other units.
     unit = unit.lower() # Convert the unit to all lowercase in order to make it easier to work with and remove inconsistencies in configuration setups.
     unit = unit.strip() # Remove any trailing or leading whitespaces in the unit in an attempt to recover from malformatted units.
 

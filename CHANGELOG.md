@@ -200,3 +200,12 @@ April 19th, 2023
 - File-saving debug messages are now only displayed when the "silence" flag is set to `false`.
 - Added support for "calculated" GPS speed, where the speed is determined based on the most recent two GPS locations, rather than the speed provided by the hardware.
 - Added process timing for helping users experienced improve speed.
+- Fixed an issue in the `bearing_difference` function, where bearings were improperly reduced to a value below 360.
+- Refined traffic enforcement camera alerts.
+    - Updated the traffic enforcement camera database.
+    - Re-organized the configuration.
+    - Added filters to reduce unwanted alerts.
+        - Cameras that are not in front of the car (with a customizable angle threshold) can be filtered.
+        - Cameras that are not facing the direction the car is traveling (with a customizable angle threshold) can be filtered.
+        - Cameras for which the speed limit has not been exceeded (with a customizable speed limit offset) can be filtered.
+- The debug message printed when alerts are displayed in the console are now only displayed when there is an alert to display for a given category.

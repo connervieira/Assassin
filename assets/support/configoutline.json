@@ -83,8 +83,13 @@
 			"enabled": "bool",
 			"loaded_radius": "+float",
 			"database": "file",
-			"alert_range": "+float",
 			"speed_check": "bool",
+            "triggers": {
+                "distance": "+float",
+                "speed": "float",
+                "angle": "+float",
+                "direction": "+float"
+            },
 			"enabled_types": {
 				"speed": "bool",
 				"redlight": "bool",
