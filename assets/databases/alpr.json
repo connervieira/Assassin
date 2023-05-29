@@ -3,7 +3,7 @@
     "description": "This database contains ALPR and traffic signal monitor cameras in the United States. This data has been imported from OpenStreetMap, which contains hundreds of cameras added by V0LT and thousands added by other independent contributors.",
     "author": "V0LT",
     "created": "1681265520",
-    "modified": "1683736180",
+    "modified": "1685330198",
     "elements": {
         "brand": "str",
         "model": "str",
@@ -17,6 +17,30 @@
     },
     "entries": [
         {
+            "lat": 12.1446288,
+            "lon": -68.2729708,
+            "brand": "",
+            "model": "",
+            "street": "",
+            "description": "",
+            "facing": 5,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
+            "lat": 12.1445123,
+            "lon": -68.2728545,
+            "brand": "",
+            "model": "",
+            "street": "",
+            "description": "",
+            "facing": 86,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
             "lat": 38.8058847,
             "lon": -76.9733664,
             "brand": "",
@@ -27,6 +51,18 @@
             "operator": "",
             "mount": "",
             "type": "monitor"
+        },
+        {
+            "lat": 12.144421,
+            "lon": -68.2729477,
+            "brand": "",
+            "model": "",
+            "street": "",
+            "description": "",
+            "facing": 180,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
         },
         {
             "lat": 39.1261896,
@@ -800,7 +836,7 @@
             "lat": 41.5007057,
             "lon": -81.4042805,
             "brand": "Flock Safety",
-            "model": "",
+            "model": "Falcon",
             "street": "Chagrin River Road",
             "description": "",
             "facing": 170,
@@ -812,7 +848,7 @@
             "lat": 41.490457,
             "lon": -81.3825563,
             "brand": "Flock Safety",
-            "model": "Flacon Flex",
+            "model": "Falcon",
             "street": "County Line Road",
             "description": "",
             "facing": 165,
@@ -860,7 +896,7 @@
             "lat": 41.4991934,
             "lon": -81.4045903,
             "brand": "Flock Safety",
-            "model": "",
+            "model": "Falcon",
             "street": "Cedar Road",
             "description": "",
             "facing": 270,
@@ -872,7 +908,7 @@
             "lat": 41.4905864,
             "lon": -81.3827475,
             "brand": "Flock Safety",
-            "model": "Flacon Flex",
+            "model": "Falcon",
             "street": "Fairmount Road",
             "description": "",
             "facing": 290,
@@ -884,7 +920,7 @@
             "lat": 41.4907685,
             "lon": -81.3824534,
             "brand": "Flock Safety",
-            "model": "Flacon Flex",
+            "model": "Falcon",
             "street": "County Line Road",
             "description": "",
             "facing": 345,
@@ -1419,6 +1455,18 @@
             "operator": "",
             "mount": "",
             "type": "monitor"
+        },
+        {
+            "lat": 41.4995862,
+            "lon": -81.3909327,
+            "brand": "Flock Safety",
+            "model": "Falcon",
+            "street": "County Line Road",
+            "description": "",
+            "facing": 170,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
         },
         {
             "lat": 39.8572837,
