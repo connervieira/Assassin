@@ -446,16 +446,16 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
 
         # Verify the coordinates received, if efficient mode is disabled.
         if (efficient_mode == False):
-            if (lat1 > 180 or lat1 < -180):
+            if (lat1 >= 180 or lat1 <= -180):
                 display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
                 lat1 = 0 # Default to a safe value.
-            if (lon1 > 90 or lon1 < -90):
+            if (lon1 >= 90 or lon1 <= -90):
                 display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
                 lon1 = 0 # Default to a safe value.
-            if (lat2 > 180 or lat2 < -180):
+            if (lat2 >= 180 or lat2 <= -180):
                 display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
                 lat2 = 0 # Default to a safe value.
-            if (lon2 > 90 or lon2 < -90):
+            if (lon2 >= 90 or lon2 <= -90):
                 display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
                 lon2 = 0 # Default to a safe value.
 
@@ -518,16 +518,16 @@ def calculate_bearing (lat1, lon1, lat2, lon2):
     lon2 = float(lon2)
 
     # Verify the coordinates received.
-    if (lat1 > 180 or lat1 < -180):
+    if (lat1 >= 180 or lat1 <= -180):
         display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
         lat1 = 0 # Default to a safe value.
-    if (lon1 > 90 or lon1 < -90):
+    if (lon1 >= 90 or lon1 <= -90):
         display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
         lon1 = 0 # Default to a safe value.
-    if (lat2 > 180 or lat2 < -180):
+    if (lat2 >= 180 or lat2 <= -180):
         display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
         lat2 = 0 # Default to a safe value.
-    if (lon2 > 90 or lon2 < -90):
+    if (lon2 >= 90 or lon2 <= -90):
         display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
         lon2 = 0 # Default to a safe value.
 
