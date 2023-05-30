@@ -3,7 +3,7 @@
     "description": "This database contains ALPR and traffic signal monitor cameras in the United States. This data has been imported from OpenStreetMap, which contains hundreds of cameras added by V0LT and thousands added by other independent contributors.",
     "author": "V0LT",
     "created": "1681265520",
-    "modified": "1685330198",
+    "modified": "1685464328",
     "elements": {
         "brand": "str",
         "model": "str",
@@ -17,30 +17,6 @@
     },
     "entries": [
         {
-            "lat": 12.1446288,
-            "lon": -68.2729708,
-            "brand": "",
-            "model": "",
-            "street": "",
-            "description": "",
-            "facing": 5,
-            "operator": "",
-            "mount": "",
-            "type": "alpr"
-        },
-        {
-            "lat": 12.1445123,
-            "lon": -68.2728545,
-            "brand": "",
-            "model": "",
-            "street": "",
-            "description": "",
-            "facing": 86,
-            "operator": "",
-            "mount": "",
-            "type": "alpr"
-        },
-        {
             "lat": 38.8058847,
             "lon": -76.9733664,
             "brand": "",
@@ -51,18 +27,6 @@
             "operator": "",
             "mount": "",
             "type": "monitor"
-        },
-        {
-            "lat": 12.144421,
-            "lon": -68.2729477,
-            "brand": "",
-            "model": "",
-            "street": "",
-            "description": "",
-            "facing": 180,
-            "operator": "",
-            "mount": "",
-            "type": "alpr"
         },
         {
             "lat": 39.1261896,
@@ -5124,6 +5088,54 @@
             "street": "Nottingham Road",
             "description": "",
             "facing": 285,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
+            "lat": 41.4084818,
+            "lon": -81.5268336,
+            "brand": "Flock Safety",
+            "model": "Falcon",
+            "street": "Rockside Road",
+            "description": "",
+            "facing": 70,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
+            "lat": 41.4095848,
+            "lon": -81.5377672,
+            "brand": "Flock Safety",
+            "model": "Falcon",
+            "street": "Rockside Road",
+            "description": "",
+            "facing": 245,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
+            "lat": 41.4092311,
+            "lon": -81.5373539,
+            "brand": "Flock Safety",
+            "model": "Falcon",
+            "street": "Center Road",
+            "description": "",
+            "facing": 160,
+            "operator": "",
+            "mount": "",
+            "type": "alpr"
+        },
+        {
+            "lat": 41.4087006,
+            "lon": -81.5277021,
+            "brand": "Flock Safety",
+            "model": "Falcon",
+            "street": "Rockside Road",
+            "description": "",
+            "facing": 250,
             "operator": "",
             "mount": "",
             "type": "alpr"
