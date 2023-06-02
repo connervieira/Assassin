@@ -209,3 +209,6 @@ April 19th, 2023
         - Cameras that are not facing the direction the car is traveling (with a customizable angle threshold) can be filtered.
         - Cameras for which the speed limit has not been exceeded (with a customizable speed limit offset) can be filtered.
 - The debug message printed when alerts are displayed in the console are now only displayed when there is an alert to display for a given category.
+- Improved ALPR alerts.
+    - Moved the false alert filtering configuration values to a dedicated section for sake of organization.
+    - Added alert de-duplication, where cameras that are close to each other can be condensed into a single alert.

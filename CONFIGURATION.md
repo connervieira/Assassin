@@ -164,12 +164,17 @@ This section of configuration values will effect Assassin's general operation.
         - The lower this value is, the smaller the loaded radius around the initial starting position will be.
             - A small loaded radius might pose an issue if you drive extremely far in a single session without restarting Assassin, since you'll reach the end of the loaded area.
         - Setting this to '0' will disable ALPR camera alerts.
-    - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
-        - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
-        - Values higher than 180 will effectively disable this filter.
-    - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
-        - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
-        - Values higher than 180 will effectively disable this filter.
+    - `filters` contains settings that control how Assassin filters out useless or unwanted alerts.
+        - `angle_threshold` determines the maximum allowed difference between the current direction of movement, and the camera's angle before the alert is filtered out.
+            - This setting can be used to eliminate alerts from cameras that aren't at an angle to see the license plate of the car.
+            - Values higher than 180 will effectively disable this filter.
+        - `direction_threshold` determines the maximum allowed bearing to the camera before the alert is filtered out.
+            - This setting can be used to eliminate alerts from cameras that have already been passed, or cameras that are on adjacent roads.
+            - Values higher than 180 will effectively disable this filter.
+        - `duplicate_filtering` contains settings that control how Assassin filters out duplicate ALPR alerts.
+            - `enabled` is a boolean value that sets whether or not de-duplication is enabled.
+            - `distance` is the maximum distance between two cameras, measured in miles, before they are no longer considered to be duplicates.
+            - `angle` is the maximum difference in the direction two cameras are facing, measured in degrees, before they are considered no longer considered to be duplicates.
     - `information_displayed` determines what information is displayed in alerts.
         - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `bluetooth_monitoring` contains settings related to Assassin's Bluetooth device alert behavior.

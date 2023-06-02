@@ -130,8 +130,15 @@
 			"alert_range": "+float",
 			"database": "file",
 			"loaded_radius": "+float",
-			"angle_threshold": "+float",
-			"direction_threshold": "+float",
+            "filters": {
+                "angle_threshold": "+float",
+                "direction_threshold": "+float",
+                "duplicate_filtering": {
+                    "enabled": "bool",
+                    "distance": "+float",
+                    "angle": "+float"
+                }
+            },
 			"information_displayed": {
 				"location": "bool",
 				"distance": "bool",

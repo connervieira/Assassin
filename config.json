@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
+        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -10,18 +10,18 @@
             "provider": "gpsd",
             "speed_source": "hardware",
             "demo_mode": {
-                "enabled": true,
+                "enabled": false,
                 "data": {
-                    "longitude": 41.52697,
-                    "latitude": -81.41865,
+                    "longitude": 41.52015,
+                    "latitude": -81.43883,
                     "speed": 20,
                     "altitude": 200,
-                    "heading": 20,
+                    "heading": 270,
                     "satellites": 6
                 }
             },
             "alerts": {
-                "enabled": false,
+                "enabled": true,
                 "look_back": 10,
                 "overspeed": {
                     "enabled": true,
@@ -44,7 +44,7 @@
         "attention_monitoring": {
             "enabled": true,
             "reset_time": 2,
-            "reset_speed": 3,
+            "reset_speed": 5,
             "triggers": {
                 "time": 180
             }
@@ -76,7 +76,7 @@
         },
         "predator_integration": {
             "enabled": false,
-            "instance_directory": "/home/cvieira/Software/Programming/Python/Predator/",
+            "instance_directory": "/home/alpr/Software/Programming/Python/Predator/",
             "plate_log_file": "/home/alpr/Software/Support/Predator/Working/plate_history.json",
             "latch_time": 60
         },
@@ -84,10 +84,10 @@
             "enabled": true,
             "loaded_radius": 100,
             "database": "./assets/databases/enforcement_cameras_v2.lzma",
-            "speed_check": false,
+            "speed_check": true,
             "triggers": {
                 "distance": 0.5,
-                "speed": 0,
+                "speed": -5,
                 "angle": 60,
                 "direction": 50
             },
@@ -133,9 +133,16 @@
             "enabled": true,
             "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
-            "loaded_radius": 200,
-            "angle_threshold": 60,
-            "direction_threshold": 20,
+            "loaded_radius": 100,
+            "filters": {
+                "angle_threshold": 60,
+                "direction_threshold": 20,
+                "duplicate_filtering": {
+                    "enabled": true,
+                    "distance": 0.009,
+                    "angle": 20
+                }
+            },
             "information_displayed": {
                 "location": true,
                 "distance": true,
@@ -179,9 +186,9 @@
             }
         },
         "adsb_alerts": {
-            "enabled": false,
+            "enabled": true,
             "adsb_message_filename": "adsb.csv",
-            "threat_threshold": 0,
+            "threat_threshold": 3,
             "minimum_vehicle_speed": 0,
             "message_time_to_live": 20,
             "prune_interval": 1,
@@ -286,7 +293,7 @@
             },
             "camera1": {
                 "path": "./assets/sounds/camera1.mp3",
-                "repeat": 0,
+                "repeat": 1,
                 "delay": 1
             },
             "camera2": {
@@ -334,7 +341,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
         }
     }
 }
