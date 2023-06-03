@@ -84,17 +84,19 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
                     if (bearing_difference(current_location[4], float(camera["bearing"])) < float(config["general"]["alpr_alerts"]["filters"]["direction_threshold"])): # Check to make sure the relative facing to this camera is within the threshold.
                         filtered_cameras.append(camera) # Add this camera to the filtered list.
 
-            deduplicated_cameras = filtered_cameras
+            deduplicated_cameras = filtered_cameras.copy()
             if (config["general"]["alpr_alerts"]["filters"]["duplicate_filtering"]["enabled"] == True): # Check to see if duplicate alert filtering is enabled.
-                for base_camera in filtered_cameras:
+                for base_camera in filtered_cameras: # Iterate through each camera in the list of filtered cameras.
                     duplicate_camera = False # For each base camera, reset the duplicate camera flag to false before the search for any duplicate cameras.
-                    for compared_camera in filtered_cameras:
-                        if (get_distance(base_camera["lat"], base_camera["lon"], compared_camera["lat"], compared_camera["lon"]) <= config["general"]["alpr_alerts"]["filters"]["duplicate_filtering"]["distance"]): # Check to see if these two cameras are within the distance threshold of each-other.
-                            if (bearing_difference(base_camera["facing"], base_camera["facing"]) <= config["general"]["alpr_alerts"]["filters"]["duplicate_filtering"]["angle"]): # Check to see if these two cameras are within the distance threshold of each-other.
-                                duplicate_camera = True # Indicate that a duplicate was found for this base camera.
-                                break # Exit the loop, since it doesn't matter if any more cameras are considered duplicates with this one; The camera is already being removed.
+                    for compared_camera in filtered_cameras: # Once again, iterate through each camera in the list of filtered cameras.
+                        if (base_camera != compared_camera): # Check to make sure we aren't comparing a given camera to itself.
+                            if (get_distance(base_camera["lat"], base_camera["lon"], compared_camera["lat"], compared_camera["lon"]) <= config["general"]["alpr_alerts"]["filters"]["duplicate_filtering"]["distance"]): # Check to see if these two cameras are within the distance threshold of each-other.
+                                if (bearing_difference(base_camera["facing"], base_camera["facing"]) <= config["general"]["alpr_alerts"]["filters"]["duplicate_filtering"]["angle"]): # Check to see if these two cameras are within the distance threshold of each-other.
+                                    duplicate_camera = True # Indicate that a duplicate was found for this base camera.
+                                    break # Exit the loop, since it doesn't matter if any more cameras are considered duplicates with this one; The camera is already set to be removed.
                     if (duplicate_camera == True):
                         deduplicated_cameras.remove(base_camera) # Add this camera to the list of de-duplicated cameras, since it is not a duplicate.
+
 
             nearest_alpr_camera = {"distance": 1000000000.0}
             for entry in deduplicated_cameras: # Iterate through all nearby ALPR cameras.
