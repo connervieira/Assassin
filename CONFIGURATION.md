@@ -72,6 +72,19 @@ This section of configuration values will effect Assassin's general operation.
             - `diagnostic` contains settings that control if and how Assassin issues diagnostic alerts.
                 - `enabled` is a boolean that determines whether or not Assassin will issue a persistent alert that contains GPS diagnostic information.
                     - This feature might be useful if you want to issue basic dashboard information to an external program.
+- `obd_integration` contains settings related to vehicle diagnostics integration using an ELM327 OBD-II adapter.
+    - `enabled` is a boolean that determines whether or not the OBD integration system is active.
+    - `device` specifies the path to the ELM327 USB device that Assassin will use to communicate with the car.
+    - `values` contains the diagnostic values Assassin is capable of monitoring.
+        - The following values are currently supported:
+            - `speed` measures the speed of the vehicle, measured in the units specified by the `display > displays > speed > unit` configuration value.
+            - `rpm` measures the revolutions of the engine, per minute.
+            - `fuel_level` measures the current percentage of the fuel tank that is full, measured as a fraction between 0 and 1.
+        - Each value has the following values for configuration:
+            - `enabled` is a boolean value that determines whether or not Assassin will query this value at all.
+            - `thresholds` sets the thresholds at which Assassin will display an alert for this value.
+                - `min` is the minimum value permitted before an alert is returned.
+                - `max` is the maximum value permitted before an alert is returned.
 - `attention_monitoring` contains settings related to driver attention alerts.
     - `enabled` determines whether attention monitoring is active or not.
     - `reset_time` time is the length of time, in minutes, that the vehicle needs to be stationary for Assassin to reset the attention monitoring tracking.
