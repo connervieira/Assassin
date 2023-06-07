@@ -252,6 +252,7 @@ alert_count["alpr"] = [0, 0]
 alert_count["bluetooth"] = [0, 0]
 alert_count["weather"] = [0, 0]
 alert_count["gps"] = [0, 0]
+alert_count["obd"] = [0, 0]
 alert_count["attention"] = [0, 0]
 alert_count["predator"] = [0, 0]
 
@@ -828,11 +829,11 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display OBD alerts.
-        if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to make sure attention monitoring is enabled before displaying attention alerts.
+        if (config["general"]["obd_integration"]["enabled"] == True and len(obd_alerts) > 0): # Check to make sure OBD integration is enabled before displaying OBD alerts.
             debug_message("Displaying OBD integration alerts")
             # TODO
             print(style.yellow + "OBD: " + str(len(obd_alerts))) # Display the OBD integration alerts title.
-            print("    " + obd_alerts)
+            print("    " + str(obd_alerts))
             print(style.end)
 
 

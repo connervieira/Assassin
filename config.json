@@ -58,6 +58,13 @@
                         "min": 700,
                         "max": 7000
                     }
+                },
+                "fuel_level": {
+                    "enabled": true,
+                    "thresholds": {
+                        "min": 0.9,
+                        "max": 1
+                    }
                 }
             }
         },

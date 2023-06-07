@@ -43,7 +43,7 @@
 		},
         "obd_integration": {
             "enabled": "bool",
-            "device": "file",
+            "device": "str",
             "values": {
                 "speed": {
                     "enabled": "bool",
@@ -53,6 +53,13 @@
                     }
                 },
                 "rpm": {
+                    "enabled": "bool",
+                    "thresholds": {
+                        "min": "+float",
+                        "max": "+float"
+                    }
+                },
+                "fuel_level": {
                     "enabled": "bool",
                     "thresholds": {
                         "min": "+float",

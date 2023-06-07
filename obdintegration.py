@@ -44,14 +44,16 @@ def start_obd_monitoring():
 def fetch_obd_alerts(obd_connection):
     debug_message("Processing OBD alerts")
 
-    obd_data = []
+    obd_data = {}
 
     if (obd_connection == None): # Check to see if the OBD connection does not exist.
         display_notice("The OBD connection is invalid. OBD alerts could not be processed.", 2)
     else:
         if (config["general"]["obd_integration"]["values"]["speed"]["enabled"] == True): # Check to see if speed monitoring is enabled.
-            obd_data["speed"] = obd_connection.query(obd.commands.SPEED).value.to(str(config["display"]["displays"]["speed"]["unit"])) # Query the vehicle speed.
+            obd_data["speed"] = obd_connection.query(obd.commands.SPEED).value.to(str(config["display"]["displays"]["speed"]["unit"])).magnitude # Query the vehicle speed.
         if (config["general"]["obd_integration"]["values"]["rpm"]["enabled"] == True):
-            obd_data["rpm"] = obd_connection.query(obd.commands.RPM).value # Query the engine RPM.
+            obd_data["rpm"] = float(obd_connection.query(obd.commands.RPM).value.magnitude) # Query the engine RPM.
+        if (config["general"]["obd_integration"]["values"]["fuel_level"]["enabled"] == True):
+            obd_data["fuel_level"] = float(obd_connection.query(obd.commands.FUEL_LEVEL).value)/100 # Query the gas tank fuel level percentage as a decimal between 1 and 0.
 
     return obd_data
