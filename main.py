@@ -173,6 +173,16 @@ if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather
     last_weather_data = { "requested" : 0 } # Set the last round's weather information to a placeholder.
 
 
+
+# Load the OBD integration system. 
+if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if attention alerts are enabled.
+    debug_message("Initializing OBD integration system")
+    import obdintegration
+    start_obd_monitoring = obdintegration.start_obd_monitoring
+    fetch_obd_alerts = obdintegration.fetch_obd_alerts
+    obd_alerts = {}
+    obd_connection = start_obd_monitoring()
+
 # Load the attention alert system. 
 if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load attention monitoring system if attention alerts are enabled.
     debug_message("Initializing attention monitoring system")
@@ -341,6 +351,13 @@ while True: # Run forever in a loop until terminated.
     else:
         weather_alerts = {}
 
+    # Process attention alerts.
+    if (config["general"]["obd_integration"]["enabled"] == True): # Only run OBD integration alert processing if it is enabled in the configuration.
+        process_timing("Alerts/OBD", "start")
+        obd_alerts = fetch_obd_alerts(obd_connection)
+        process_timing("Alerts/OBD", "end")
+    else:
+        obd_alerts = {}
 
     # Process attention alerts.
     if (config["general"]["attention_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run attention monitoring alert processing if it is enabled in the configuration.
@@ -384,6 +401,7 @@ while True: # Run forever in a loop until terminated.
     all_alerts[current_time]["bluetooth"] = bluetooth_threats
     all_alerts[current_time]["weather"] = weather_alerts
     all_alerts[current_time]["gps"] = gps_alerts
+    all_alerts[current_time]["obd"] = obd_alerts
     all_alerts[current_time]["attention"] = attention_alerts
     all_alerts[current_time]["predator"] = predator_alerts
 
@@ -400,6 +418,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["bluetooth"] = [len(bluetooth_threats)] + alert_count["bluetooth"]
     alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
     alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
+    alert_count["obd"] = [len(obd_alerts)] + alert_count["obd"]
     alert_count["attention"] = [len(attention_alerts)] + alert_count["attention"]
     alert_count["predator"] = [len(predator_alerts)] + alert_count["predator"]
 
@@ -808,12 +827,21 @@ while True: # Run forever in a loop until terminated.
 
 
 
+        # Display OBD alerts.
+        if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to make sure attention monitoring is enabled before displaying attention alerts.
+            debug_message("Displaying OBD integration alerts")
+            # TODO
+            print(style.yellow + "OBD: " + str(len(obd_alerts))) # Display the OBD integration alerts title.
+            print("    " + obd_alerts)
+            print(style.end)
+
+
         # Display attention alerts.
         if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to make sure attention monitoring is enabled before displaying attention alerts.
             debug_message("Displaying attention monitoring alerts")
             print(style.yellow + "Attention Alerts: " + str(len(attention_alerts))) # Display the attention monitoring alerts title.
 
-            # Display visibility alerts.
+            # Display attention alerts.
             if ("time" in attention_alerts): # Check to see if there is a time-related attention alert.
                 print("    Attentive Time: " + str(math.floor(round(attention_alerts["time"]["time"])/60)) + " min " + str(round(attention_alerts["time"]["time"]) % 60) + " sec") # Display the time-related attention alert.
 

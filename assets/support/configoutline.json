@@ -41,6 +41,26 @@
 				}
 			}
 		},
+        "obd_integration": {
+            "enabled": "bool",
+            "device": "file",
+            "values": {
+                "speed": {
+                    "enabled": "bool",
+                    "thresholds": {
+                        "min": "+float",
+                        "max": "+float"
+                    }
+                },
+                "rpm": {
+                    "enabled": "bool",
+                    "thresholds": {
+                        "min": "+float",
+                        "max": "+float"
+                    }
+                }
+            }
+        },
 		"attention_monitoring": {
 			"enabled": "bool",
 			"reset_time": "+float",

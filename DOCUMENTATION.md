@@ -22,7 +22,7 @@ This section contains a quick-start guide if you want to set up Assassin as quic
 1. Install Python3
     - `sudo apt-get install python3 python3-pip`
 2. Install Python packages
-    - `pip3 install numpy playsound pyttsx3 validators requests`
+    - `pip3 install numpy playsound pyttsx3 validators requests obd`
 3. Install GPSD
     - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3`
 4. Install Bluetooth tools
@@ -87,6 +87,9 @@ This is the full installation process for Assassin and all of its dependencies. 
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
+8. Optionally, install OBD-II integration libraries (Recommended).
+    - Python-OBD is a library that allows Assassin to communicate with your car's on-board diagnostics port using an ELM327 adapter.
+    - You can install this package using the following command: `pip3 install obd`
 8. Grant neccesary permissions (Highly Recommended).
     - In order to manage external processes required for certain features, Assassin needs the ability to use password-less `sudo` for certain executables.
     - It should be noted that Assassin is intended to be installed on dedicated hardware. As such, granting these permissions will also grant the same permissions to any other process being run by the specified user.

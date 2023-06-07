@@ -110,8 +110,13 @@ def validate_config(config):
                                 if (type(section4) == dict):
                                     for key5, section5 in section4.items():
                                         if (type(section5) == dict):
-                                            print("The configuration validation function hit a nested configuration outline section that exceeded 6 layers. The normal configuration outline file should never reach this point.")
-                                            exit()
+                                            for key6, section6 in section5.items():
+                                                if (type(section6) == dict):
+                                                    print("The configuration validation function hit a nested configuration outline section that exceeded 6 layers. The normal configuration outline file should never reach this point.")
+                                                    exit()
+                                                else:
+                                                    if (check_value(config[key1][key2][key3][key4][key5][key6], section6) == False):
+                                                        invalid_values.append(key1 + ">" + key2 + ">" + key3 + ">" + key4 + ">" + key5 + ">" + key6)
                                         else:
                                             if (check_value(config[key1][key2][key3][key4][key5], section5) == False):
                                                 invalid_values.append(key1 + ">" + key2 + ">" + key3 + ">" + key4 + ">" + key5)

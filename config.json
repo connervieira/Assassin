@@ -1,6 +1,6 @@
 {
     "general": {
-        "working_directory": "/home/alpr/Software/Support/Assassin/Working/",
+        "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
         "refresh_delay": 0.4,
         "debugging_output": true,
@@ -10,13 +10,13 @@
             "provider": "gpsd",
             "speed_source": "hardware",
             "demo_mode": {
-                "enabled": false,
+                "enabled": true,
                 "data": {
-                    "longitude": 41.52015,
-                    "latitude": -81.43883,
+                    "longitude": 41.5039,
+                    "latitude": -81.3909,
                     "speed": 20,
                     "altitude": 200,
-                    "heading": 270,
+                    "heading": 180,
                     "satellites": 6
                 }
             },
@@ -38,6 +38,26 @@
                 },
                 "diagnostic": {
                     "enabled": true
+                }
+            }
+        },
+        "obd_integration": {
+            "enabled": true,
+            "device": "/dev/ttyACM0",
+            "values": {
+                "speed": {
+                    "enabled": true,
+                    "thresholds": {
+                        "min": 0,
+                        "max": 200
+                    }
+                },
+                "rpm": {
+                    "enabled": true,
+                    "thresholds": {
+                        "min": 700,
+                        "max": 7000
+                    }
                 }
             }
         },
@@ -76,12 +96,12 @@
         },
         "predator_integration": {
             "enabled": false,
-            "instance_directory": "/home/alpr/Software/Programming/Python/Predator/",
-            "plate_log_file": "/home/alpr/Software/Support/Predator/Working/plate_history.json",
+            "instance_directory": "/home/cvieira/Software/Programming/Python/Predator/",
+            "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
             "latch_time": 60
         },
         "traffic_camera_alerts": {
-            "enabled": true,
+            "enabled": false,
             "loaded_radius": 100,
             "database": "./assets/databases/enforcement_cameras_v2.lzma",
             "speed_check": true,
@@ -130,7 +150,7 @@
             ]
         },
         "alpr_alerts": {
-            "enabled": true,
+            "enabled": false,
             "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
             "loaded_radius": 100,
@@ -186,7 +206,7 @@
             }
         },
         "adsb_alerts": {
-            "enabled": true,
+            "enabled": false,
             "adsb_message_filename": "adsb.csv",
             "threat_threshold": 3,
             "minimum_vehicle_speed": 0,
@@ -341,7 +361,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/alpr/Software/Support/Assassin/Interface/"
+            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
         }
     }
 }
