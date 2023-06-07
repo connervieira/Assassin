@@ -65,6 +65,13 @@
                         "min": "+float",
                         "max": "+float"
                     }
+                },
+                "airflow": {
+                    "enabled": "bool",
+                    "thresholds": {
+                        "min": "+float",
+                        "max": "+float"
+                    }
                 }
             }
         },

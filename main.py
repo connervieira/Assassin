@@ -877,8 +877,8 @@ while True: # Run forever in a loop until terminated.
 
 
 
-    if (config["general"]["debugging_output"] == True): # Check to see if debug output is enabled.
-        debug_message("Displaying process timers\n" + str(json.dumps(process_timing("", "dump"), indent=4))) # Print the timers for all processes.
+    #if (config["general"]["debugging_output"] == True): # Check to see if debug output is enabled.
+        #debug_message("Displaying process timers\n" + str(json.dumps(process_timing("", "dump"), indent=4))) # Print the timers for all processes.
 
     debug_message("Executing refresh delay")
     time.sleep(float(config["general"]["refresh_delay"])) # Wait for a certain amount of time, as specified in the configuration.
