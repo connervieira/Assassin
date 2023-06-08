@@ -79,6 +79,18 @@ import gpslocation
 get_gps_location = gpslocation.get_gps_location # Load the function to get the current GPS location.
 process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to detect GPS problems.
 
+# Load the OBD integration system. 
+if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if attention alerts are enabled.
+    debug_message("Initializing OBD integration system")
+    import obdintegration
+    start_obd_monitoring = obdintegration.start_obd_monitoring
+    fetch_obd_alerts = obdintegration.fetch_obd_alerts
+    obd_alerts = {}
+    obd_data = {}
+    obd_connection = start_obd_monitoring()
+else:
+    obd_connection = None
+
 
 display_notice("Acquiring initial GPS location", 1)
 if (config["general"]["gps"]["enabled"] == True): # Check to see if GPS is enabled before getting the initial location.
@@ -173,16 +185,6 @@ if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather
     last_weather_data = { "requested" : 0 } # Set the last round's weather information to a placeholder.
 
 
-
-# Load the OBD integration system. 
-if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if attention alerts are enabled.
-    debug_message("Initializing OBD integration system")
-    import obdintegration
-    start_obd_monitoring = obdintegration.start_obd_monitoring
-    fetch_obd_alerts = obdintegration.fetch_obd_alerts
-    obd_alerts = {}
-    obd_connection = start_obd_monitoring()
-
 # Load the attention alert system. 
 if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load attention monitoring system if attention alerts are enabled.
     debug_message("Initializing attention monitoring system")
@@ -275,7 +277,7 @@ while True: # Run forever in a loop until terminated.
 
     # Get the current location.
     if (config["general"]["gps"]["enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
-        current_location = get_gps_location(location_history, obd_connection) # Get the current location.
+        current_location = get_gps_location(location_history, obd_data) # Get the current location.
         current_speed = convert_speed(float(current_location[2])) # Convert the speed data from the GPS into the units specified by the configuration.
     else: # GPS functionality is disabled.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
@@ -355,7 +357,7 @@ while True: # Run forever in a loop until terminated.
     # Process attention alerts.
     if (config["general"]["obd_integration"]["enabled"] == True): # Only run OBD integration alert processing if it is enabled in the configuration.
         process_timing("Alerts/OBD", "start")
-        obd_alerts = fetch_obd_alerts(obd_connection)
+        obd_alerts, obd_data = fetch_obd_alerts(obd_connection)
         process_timing("Alerts/OBD", "end")
     else:
         obd_alerts = {}
