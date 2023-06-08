@@ -176,6 +176,8 @@ April 19th, 2023
 
 - Added Predator ALPR integration.
     - Assassin can now be configured to display alerts from Predator.
+- Added support for OBD integration.
+    - Using an ELM327 adapter, Assassin can monitor ground speed, engine revolutions per minute, fuel tank level, and airflow rate, and trigger alerts when certain thresholds are broken.
 - Refined the POI database format.
     - The ALPR camera database has been updated to reflect these changes, and includes additional refinements as well.
 - Refined the configuration loading process.
@@ -198,7 +200,10 @@ April 19th, 2023
 - Assassin can now be configured to display "status messages", which fall between the normal output and the debugging output, in terms of verbosity.
 - Added `--headless` command line argument for external interfaces to disable user interaction elements of the console output.
 - File-saving debug messages are now only displayed when the "silence" flag is set to `false`.
-- Added support for "calculated" GPS speed, where the speed is determined based on the most recent two GPS locations, rather than the speed provided by the hardware.
+- Added support for multiple speed sources.
+    - The GPS hardware provides a speed in each response. This is the only method Assassin supported previously.
+    - The vehicle speed can be calculated by determining the distance between the last two GPS points, then dividing by the time difference.
+    - The speed can be read directly from the car using an ELM327 adapter connected to the car's OBD-II port.
 - Added process timing for helping users experienced improve speed.
 - Fixed an issue in the `bearing_difference` function, where bearings were improperly reduced to a value below 360.
 - Refined traffic enforcement camera alerts.
