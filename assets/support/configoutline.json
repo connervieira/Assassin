@@ -8,7 +8,7 @@
 		"gps": {
 			"enabled": "bool",
 			"provider": ["gpsd", "termux", "locateme"],
-			"speed_source": ["hardware", "calculated"],
+			"speed_source": ["gps", "obd", "calculated"],
 			"demo_mode": {
 				"enabled": "bool",
 				"data": {

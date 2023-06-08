@@ -8,7 +8,7 @@
         "gps": {
             "enabled": true,
             "provider": "gpsd",
-            "speed_source": "hardware",
+            "speed_source": "gps",
             "demo_mode": {
                 "enabled": true,
                 "data": {

@@ -275,7 +275,7 @@ while True: # Run forever in a loop until terminated.
 
     # Get the current location.
     if (config["general"]["gps"]["enabled"] == True): # If GPS is enabled, then get the current location at the beginning of the cycle.
-        current_location = get_gps_location(location_history) # Get the current location.
+        current_location = get_gps_location(location_history, obd_connection) # Get the current location.
         current_speed = convert_speed(float(current_location[2])) # Convert the speed data from the GPS into the units specified by the configuration.
     else: # GPS functionality is disabled.
         current_location = [0.0000, 0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Set the current location to a placeholder.
@@ -831,9 +831,35 @@ while True: # Run forever in a loop until terminated.
         # Display OBD alerts.
         if (config["general"]["obd_integration"]["enabled"] == True and len(obd_alerts) > 0): # Check to make sure OBD integration is enabled before displaying OBD alerts.
             debug_message("Displaying OBD integration alerts")
-            # TODO
-            print(style.yellow + "OBD: " + str(len(obd_alerts))) # Display the OBD integration alerts title.
-            print("    " + str(obd_alerts))
+            print(style.green + "OBD: " + str(len(obd_alerts))) # Display the OBD integration alerts title.
+            if ("speed" in obd_alerts): # Check to see if there are any speed alerts.
+                if (obd_alerts["speed"]["alert"] == "high"):
+                    print("    Speed - High: ", obd_alerts["speed"]["value"])
+                elif (obd_alerts["speed"]["alert"] == "low"):
+                    print("    Speed - Low: ", obd_alerts["speed"]["value"])
+                else:
+                    print("    Speed - Unknown: ", obd_alerts["speed"]["value"])
+            if ("rpm" in obd_alerts): # Check to see if there are any engine RPM alerts.
+                if (obd_alerts["rpm"]["alert"] == "high"):
+                    print("    RPM - High: ", obd_alerts["rpm"]["value"])
+                elif (obd_alerts["rpm"]["alert"] == "low"):
+                    print("    RPM - Low: ", obd_alerts["rpm"]["value"])
+                else:
+                    print("    RPM - Unknown: ", obd_alerts["rpm"]["value"])
+            if ("fuel_level" in obd_alerts): # Check to see if there are any fuel level alerts.
+                if (obd_alerts["fuel_level"]["alert"] == "high"):
+                    print("    Fuel Level - High: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
+                elif (obd_alerts["fuel_level"]["alert"] == "low"):
+                    print("    Fuel Level - Low: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
+                else:
+                    print("    Fuel Level - Unknown: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
+            if ("airflow" in obd_alerts): # Check to see if there are any airflow alerts.
+                if (obd_alerts["airflow"]["alert"] == "high"):
+                    print("    Airflow - High: ", obd_alerts["airflow"]["value"])
+                elif (obd_alerts["fuel_level"]["alert"] == "low"):
+                    print("    Airflow - Low: ", obd_alerts["airflow"]["value"])
+                else:
+                    print("    Airflow - Unknown: ", obd_alerts["airflow"]["value"])
             print(style.end)
 
 

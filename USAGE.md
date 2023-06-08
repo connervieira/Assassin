@@ -75,8 +75,7 @@ Assassin uses text coloring to make it quick and easy to identify information. B
     - Purple text is used to display alerts concerning privacy.
     - Alerts like ALPR cameras and suspicious Bluetooth devices will be displayed in this color.
 - Red
-    - Red text is used to indicate immediately critical information.
-    - High priority alerts and system errors will be displayed in this color.
+    - Red text is used to indicate immediately critical information, like system errors.
     - While not necessarily part of this category, the Assassin start-up header will also be displayed in red.
 - Yellow
     - Yellow text is used to indicate safety related alerts.

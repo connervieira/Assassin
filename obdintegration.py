@@ -40,6 +40,24 @@ def start_obd_monitoring():
     return None # OBD integration is disabled, so return no data.
 
 
+def fetch_obd_speed(obd_connection):
+    debug_message("Fetching speed via OBD-II")
+
+    if (obd_connection == None): # Check to see if the OBD connection does not exist.
+        display_notice("The OBD connection is invalid. OBD speed could not be determined.", 2)
+        return 0
+    else:
+        if (config["general"]["obd_integration"]["values"]["speed"]["enabled"] == True): # Check to see if speed monitoring is enabled.
+            try: # Try to query the car for speed information.
+                return obd_connection.query(obd.commands.SPEED).value.magnitude * 0.2777778 # Query the vehicle speed, measured in m/s.
+            except: # If the query fails, then return placeholder values for all configured attributes.
+                display_notice("OBD speed could not be queried.", 2)
+                return 0
+        else:
+            display_notice("OBD speed is disabled, so the speed could not be determined.", 2)
+            return 0
+
+
 
 def fetch_obd_alerts(obd_connection):
     debug_message("Processing OBD alerts")
@@ -66,15 +84,15 @@ def fetch_obd_alerts(obd_connection):
             if (config["general"]["obd_integration"]["values"]["rpm"]["enabled"] == True): # Check to see if RPM monitoring is enabled.
                 obd_data["rpm"] = 0
             if (config["general"]["obd_integration"]["values"]["fuel_level"]["enabled"] == True): # Check to see if fuel level monitoring is enabled.
-                obd_data["airflow"] = 0
-            if (config["general"]["obd_integration"]["values"]["airflow"]["enabled"] == True): # Check to see if air flow rate monitoring is enabled.
                 obd_data["fuel_level"] = 0
+            if (config["general"]["obd_integration"]["values"]["airflow"]["enabled"] == True): # Check to see if air flow rate monitoring is enabled.
+                obd_data["airflow"] = 0
 
 
         for value in config["general"]["obd_integration"]["values"]: # Iterate through each supported value.
             if (config["general"]["obd_integration"]["values"][value]["enabled"] == True): # Check to see if this value is enabled.
                 if (obd_data[value] < config["general"]["obd_integration"]["values"][value]["thresholds"]["min"]): # Check to see if this value is lower than it's configured minimum value.
-                    obd_alerts[value] = {"value": obd_data[value], "alert": "lower"}
+                    obd_alerts[value] = {"value": obd_data[value], "alert": "low"}
                 elif (obd_data[value] > config["general"]["obd_integration"]["values"][value]["thresholds"]["max"]): # Check to see if this value is higher than it's configured maximum value.
                     obd_alerts[value] = {"value": obd_data[value], "alert": "high"}
 
