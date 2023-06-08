@@ -52,7 +52,7 @@ if (gps_enabled == True and config["general"]["gps"]["provider"] == "gpsd"): # O
 
 
 
-def calculate_speed(location_history, gps_speed, obd_connection):
+def calculate_speed(location_history, gps_speed, obd_data):
     speed = 0 # This is a placeholder that will be replaced with the actual speed.
     if (config["general"]["gps"]["speed_source"] == "calculated"): # The configuration indicates that the speed should be calculated based on distance and time.
         if (len(location_history) >= 2):
@@ -65,7 +65,12 @@ def calculate_speed(location_history, gps_speed, obd_connection):
     elif (config["general"]["gps"]["speed_source"] == "gps"):
         speed = gps_speed
     elif (config["general"]["gps"]["speed_source"] == "obd"):
-        speed = obdintegration.fetch_obd_speed(obd_connection)
+        # TODO: Add validation
+        if ("speed" in obd_data):
+            speed = obd_data["speed"]
+            display_notice("There is no speed data in the OBD response. Speed information could not be determined.")
+        else:
+            speed = 0
     else: # This will only happen when the configuration is invalid.
         speed = 0
 
@@ -74,13 +79,13 @@ def calculate_speed(location_history, gps_speed, obd_connection):
 
 # Define the function that will be used to get the current GPS coordinates.
 debug_message("Creating `get_gps_location` function")
-def get_gps_location(location_history=[], obd_connection=None):
+def get_gps_location(location_history=[], obd_data={}):
     debug_message("Getting GPS location")
     process_timing("GPS Location", "start")
     if (gps_enabled == True): # Check to see if GPS is enabled.
         if (config["general"]["gps"]["demo_mode"]["enabled"] == True): # Check to see if GPS demo mode is enabled in the configuration.
             debug_message("Returning demo GPS information")
-            speed = calculate_speed(location_history, config["general"]["gps"]["demo_mode"]["data"]["speed"], obd_connection)
+            speed = calculate_speed(location_history, config["general"]["gps"]["demo_mode"]["data"]["speed"], obd_data)
             current_location = [float(config["general"]["gps"]["demo_mode"]["data"]["longitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["latitude"]), speed, float(config["general"]["gps"]["demo_mode"]["data"]["altitude"]), float(config["general"]["gps"]["demo_mode"]["data"]["heading"]), int(config["general"]["gps"]["demo_mode"]["data"]["satellites"]), "V0LT Assassin - GPS demo mode"] # Return the sample GPS information defined in the configuration.
         else: # GPS demo mode is disabled, so attempt to get the actual GPS data from GPSD.
             if (config["general"]["gps"]["provider"] == "gpsd"):
@@ -90,7 +95,7 @@ def get_gps_location(location_history=[], obd_connection=None):
                     debug_message("Fetching GPSD information")
                     gps_data_packet = gpsd.get_current() # Get the current information.
                     debug_message("Received GPSD information")
-                    speed = calculate_speed(location_history, gps_data_packet.speed())
+                    speed = calculate_speed(location_history, gps_data_packet.speed(), obd_data)
                     current_location = gps_data_packet.position()[0], gps_data_packet.position()[1], speed, gps_data_packet.altitude(), gps_data_packet.movement()["track"], gps_data_packet.sats, "V0LT Assassin - GPSD Device" # Return GPS information.
                 except: # If the current location can't be established, then return placeholder location data.
                     current_location = [0.0000, -0.0000, 0.0, 0.0, 0.0, 0, "V0LT Assassin"] # Return a default placeholder location.

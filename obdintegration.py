@@ -40,24 +40,6 @@ def start_obd_monitoring():
     return None # OBD integration is disabled, so return no data.
 
 
-def fetch_obd_speed(obd_connection):
-    debug_message("Fetching speed via OBD-II")
-
-    if (obd_connection == None): # Check to see if the OBD connection does not exist.
-        display_notice("The OBD connection is invalid. OBD speed could not be determined.", 2)
-        return 0
-    else:
-        if (config["general"]["obd_integration"]["values"]["speed"]["enabled"] == True): # Check to see if speed monitoring is enabled.
-            try: # Try to query the car for speed information.
-                return obd_connection.query(obd.commands.SPEED).value.magnitude * 0.2777778 # Query the vehicle speed, measured in m/s.
-            except: # If the query fails, then return placeholder values for all configured attributes.
-                display_notice("OBD speed could not be queried.", 2)
-                return 0
-        else:
-            display_notice("OBD speed is disabled, so the speed could not be determined.", 2)
-            return 0
-
-
 
 def fetch_obd_alerts(obd_connection):
     debug_message("Processing OBD alerts")
@@ -70,12 +52,16 @@ def fetch_obd_alerts(obd_connection):
     else:
         try: # Try to query the car for all configured attributes.
             if (config["general"]["obd_integration"]["values"]["speed"]["enabled"] == True): # Check to see if speed monitoring is enabled.
+                debug_message("Querying OBD for speed")
                 obd_data["speed"] = obd_connection.query(obd.commands.SPEED).value.to(str(config["display"]["displays"]["speed"]["unit"])).magnitude # Query the vehicle speed.
             if (config["general"]["obd_integration"]["values"]["rpm"]["enabled"] == True): # Check to see if RPM monitoring is enabled.
+                debug_message("Querying OBD for RPM")
                 obd_data["rpm"] = float(obd_connection.query(obd.commands.RPM).value.magnitude) # Query the engine RPM.
             if (config["general"]["obd_integration"]["values"]["fuel_level"]["enabled"] == True): # Check to see if fuel level monitoring is enabled.
+                debug_message("Querying OBD for fuel level")
                 obd_data["fuel_level"] = float(obd_connection.query(obd.commands.FUEL_LEVEL).value)/100 # Query the gas tank fuel level percentage as a decimal between 1 and 0.
             if (config["general"]["obd_integration"]["values"]["airflow"]["enabled"] == True): # Check to see if air flow rate monitoring is enabled.
+                debug_message("Querying OBD for mass airflow")
                 obd_data["airflow"] = float(obd_connection.query(obd.commands.MAF).value.magnitude) # Query the airflow rate from the mass-airflow sensor.
         except: # If the query fails, then return placeholder values for all configured attributes.
             display_notice("OBD information could not be queried.", 2)
@@ -96,4 +82,4 @@ def fetch_obd_alerts(obd_connection):
                 elif (obd_data[value] > config["general"]["obd_integration"]["values"][value]["thresholds"]["max"]): # Check to see if this value is higher than it's configured maximum value.
                     obd_alerts[value] = {"value": obd_data[value], "alert": "high"}
 
-    return obd_alerts
+    return obd_alerts, obd_data
