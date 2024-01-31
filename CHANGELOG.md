@@ -1,4 +1,4 @@
-# Changelog
+# Change-log
 
 This document contains a list of all the changes for each version of Assassin.
 
@@ -74,7 +74,7 @@ December 13th, 2022
     - Added an optional heartbeat sound effect to indicate when Assassin is active.
     - Added a drone sound effect.
     - Added a start-up sound effect.
-- Re-arranged the dispaly order of alerts.
+- Re-arranged the display order of alerts.
 - Updated interface coloring.
     - Multiple alerts now share the same color.
     - Colors are now used to indicate categories, not specific alerts.
@@ -147,7 +147,7 @@ This update focuses on improving stability, reliability, and usability.
     - Improved overspeed alerts.
         - GPS alerts overspeed alerts are no longer triggered when no GPS data is received.
         - Overspeed alerts can now be configured to prioritize the highest speed alert when multiple alerts are triggered at once.
-    - Added support for frozen GPS alerts, where alerts can be triggered when exactly identitical GPS data is received repeatedly.
+    - Added support for frozen GPS alerts, where alerts can be triggered when exactly identical GPS data is received repeatedly.
     - GPS alerts are now detected in chronological order, such that the process looks through the location history in order from oldest to most recent.
     - Alert types in the GPS alert display are now capitalized.
 - Modified the loading process for ALPR camera and traffic cameras.

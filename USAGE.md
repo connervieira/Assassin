@@ -5,7 +5,7 @@ This document explains how to effectively use Assassin.
 
 ## Introduction
 
-Assassin is a very complex platform, designed to integrate multiple features and devices into a single system. Naturally, this means it may not be immediately apparent how to effectivelyt use it. This document contains tips, tricks, and explanations on how to effectively use Assassin.
+Assassin is a very complex platform, designed to integrate multiple features and devices into a single system. Naturally, this means it may not be immediately apparent how to effectively use it. This document contains tips, tricks, and explanations on how to effectively use Assassin.
 
 
 ## Interface
@@ -44,7 +44,7 @@ Assassin uses 'alerts' to inform the user of important information. Below is a l
     - This feature uses an internet-based weather information provider to alert the driver when potentially dangerous or important weather conditions are present.
 - Bluetooth alerts
     - Bluetooth alerts are triggered when a Bluetooth device has been detected following for a certain distance.
-    - This alert can be useful to detect Bluetooth trackers, or even to detect the precense of known bad devices using a blacklist.
+    - This alert can be useful to detect Bluetooth trackers, or even to detect the presence of known bad devices using a blacklist.
 - GPS alerts
     - GPS alerts are triggered when potential GPS problems are encountered.
     - Alerts can be configured to trigger under the following situations:

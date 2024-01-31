@@ -49,7 +49,7 @@ It's important to clarify what Assassin is actually designed for, to avoid confu
         - Below are some common ADS-B antennas used in Assassin installations:
             - [ThePiHut 3dBi 1090MHz Antenna](https://thepihut.com/products/3dbi-ads-b-1090mhz-sma-antenna-w-magnetic-base)
             - [Bingfu Dual Band Aviation Antenna](https://bingfushop.com/products/bingfu-dual-band-978mhz-1090mhz-5dbi-magnetic-base-sma-male-mcx-antenna-for-aviation-dual-band-978mhz-1090mhz-ads-b-receiver-rtl-sdr-software-defined-radio-usb-stick-dongle-tuner-receiver)
-    - Assassin uses the `dump1090-mutability` command line utility as its backend.
+    - Assassin uses the `dump1090-mutability` command line utility as its back-end.
         - You should verify that Dump1090 can successfully connect to and interpret data from the tuner.
 
 ### Bluetooth
