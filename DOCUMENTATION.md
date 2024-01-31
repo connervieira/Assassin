@@ -12,7 +12,7 @@ It's also worth clarifying that Assassin is designed to be installed on dedicate
 
 ## Platforms
 
-It's important to make a quick note about platform compatability. While Assassin can be run on several platforms, it's level of compatability varies significantly. The only officially supported platform is Linux, specifically Debian based distributions. However, other platforms may be partially compatible. To learn more, see the [COMPATABILITY.md](COMPATABILITY.md) document.
+It's important to make a quick note about platform compatibility. While Assassin can be run on several platforms, it's level of compatibility varies significantly. The only officially supported platform is Linux, specifically Debian based distributions. However, other platforms may be partially compatible. To learn more, see the [COMPATIBILITY.md](COMPATIBILITY.md) document.
 
 
 ## Quick Start
@@ -90,7 +90,7 @@ This is the full installation process for Assassin and all of its dependencies. 
 8. Optionally, install OBD-II integration libraries (Recommended).
     - Python-OBD is a library that allows Assassin to communicate with your car's on-board diagnostics port using an ELM327 adapter.
     - You can install this package using the following command: `pip3 install obd`
-8. Grant neccesary permissions (Highly Recommended).
+8. Grant necessary permissions (Highly Recommended).
     - In order to manage external processes required for certain features, Assassin needs the ability to use password-less `sudo` for certain executables.
     - It should be noted that Assassin is intended to be installed on dedicated hardware. As such, granting these permissions will also grant the same permissions to any other process being run by the specified user.
     - To grant these permissions, authenticate as root with the command `sudo su`, then execute this command, replacing `[username]` with the username you will be running Assassin as: `echo "[username] ALL=(ALL) NOPASSWD: /usr/bin/dump1090-mutability, /usr/bin/kill, /usr/bin/killall, /usr/sbin/iwconfig, /usr/sbin/ifconfig, /usr/sbin/airodump-ng" >> /etc/sudoers`
@@ -98,7 +98,7 @@ This is the full installation process for Assassin and all of its dependencies. 
     - Assassin is capable of being used fully from the command line. However, you may find it useful to install a graphical interface like [Marksman](https://v0lttech.com/marksman.php).
 10. Download Assassin.
     - Under normal circumstances, you shouldn't download Assassin directly from the git repository, since this version is often incomplete and unstable. Stable releases can be found at <https://v0lttech.com/assassin.php>
-    - Download Assassin from wherever you received it, and extract it to somewhere on your filesystem. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory itself to prevent conflicts.
+    - Download Assassin from wherever you received it, and extract it to somewhere on your file-system. The Assassin folder can be placed anywhere with appropriate permissions, but don't place any external files in the Assassin root directory itself to prevent conflicts.
 
 
 ## Configuration
