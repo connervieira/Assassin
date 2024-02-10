@@ -1,6 +1,6 @@
 # Assassin
 
-**Copyright 2023 V0LT - Conner Vieira**
+**Copyright 2024 V0LT - Conner Vieira**
 
 The ultimate defense system for driving the technological world.
 

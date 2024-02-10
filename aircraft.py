@@ -1,6 +1,6 @@
 # Assassin
 
-# Copyright (C) 2023 V0LT - Conner Vieira 
+# Copyright (C) 2024 V0LT - Conner Vieira 
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by# the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -311,11 +311,13 @@ def adsb_alert_processing(current_location, current_speed):
                     elif (element["threatlevel"] == 3):
                         level3_threats.append(element)
 
+                # Sort the entries in each threat level by distance.
                 sorted_level0_threats = sort_aircraft_by_distance(level0_threats)
                 sorted_level1_threats = sort_aircraft_by_distance(level1_threats)
                 sorted_level2_threats = sort_aircraft_by_distance(level2_threats)
                 sorted_level3_threats = sort_aircraft_by_distance(level3_threats)
 
+                # Add alerts of all threat levels to a single threat list, order from highest to lowest threat level.
                 sorted_aircraft_threats = []
                 for element in sorted_level3_threats:
                     sorted_aircraft_threats.append(element)
