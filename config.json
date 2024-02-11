@@ -8,9 +8,9 @@
         "gps": {
             "enabled": true,
             "provider": "gpsd",
-            "speed_source": "obd",
+            "speed_source": "gps",
             "demo_mode": {
-                "enabled": true,
+                "enabled": false,
                 "data": {
                     "longitude": 41.5039,
                     "latitude": -81.3909,
@@ -42,7 +42,7 @@
             }
         },
         "obd_integration": {
-            "enabled": true,
+            "enabled": false,
             "device": "/dev/ttyACM0",
             "values": {
                 "speed": {

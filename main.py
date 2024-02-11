@@ -80,13 +80,13 @@ get_gps_location = gpslocation.get_gps_location # Load the function to get the c
 process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to detect GPS problems.
 
 # Load the OBD integration system. 
+obd_alerts = {}
+obd_data = {}
 if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if attention alerts are enabled.
     debug_message("Initializing OBD integration system")
     import obdintegration
     start_obd_monitoring = obdintegration.start_obd_monitoring
     fetch_obd_alerts = obdintegration.fetch_obd_alerts
-    obd_alerts = {}
-    obd_data = {}
     obd_connection = start_obd_monitoring()
 else:
     obd_connection = None
