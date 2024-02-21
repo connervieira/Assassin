@@ -219,3 +219,4 @@ April 19th, 2023
     - Moved the false alert filtering configuration values to a dedicated section for sake of organization.
     - Added alert de-duplication, where cameras that are close to each other can be condensed into a single alert.
 - Improved the intial GPS location fetching process.
+- Assassin now erases the `alert.json` file in the interface directory in start-up to prevent external interfaces from displaying alerts from the last time Assassin was run.
