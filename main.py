@@ -74,6 +74,8 @@ process_timing = utils.process_timing # Load the function used to track how much
 speak = utils.speak # Load the function used to play text-to-speech.
 save_gpx = utils.save_gpx # Load the function used to save the location history to a GPX file.
 
+save_to_file(config["external"]["local"]["interface_directory"] + "/alerts.json", "{}") # Wipe the alerts file before starting the loading process.
+
 
 import gpslocation
 get_gps_location = gpslocation.get_gps_location # Load the function to get the current GPS location.
@@ -96,13 +98,19 @@ display_notice("Acquiring initial GPS location", 1)
 if (config["general"]["gps"]["enabled"] == True): # Check to see if GPS is enabled before getting the initial location.
     debug_message("Acquiring initial location")
     initial_location = [0, 0] # Set the "current location" to a placeholder.
-    previous_gps_attempt = False # This variable will be changed to `True` if the GPS fails to get a lock at least once. This variable is responsible for triggering a delay to allow the GPS to get a lock.
+    attempts = 0 # This will be incremented each time Assassin attempts to get the current GPS location.
     while (initial_location[0] == 0 and initial_location[1] == 0): # Repeatedly attempt to get a GPS location until one is received.
-        if (previous_gps_attempt == True): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
-            time.sleep(2) # Wait 2 seconds to give the GPS time to get a lock.
+        if (attempts >= 60):
+            display_notice("Failed to get initial GPS location", 3)
+            exit()
+        if (attempts > 0): # If the GPS previously failed to get a lock, then wait 2 seconds before trying again.
+            time.sleep(1) # Wait 1 second to give the GPS time to get a lock.
+            display_notice("Retrying to get initial GPS location (" + str(attempts) + ")", 1)
+        attempts += 1
 
         previous_gps_attempt = True
         initial_location = get_gps_location() # Attempt to get the current GPS location.
+    del started
 
 
 

@@ -218,3 +218,4 @@ April 19th, 2023
 - Improved ALPR alerts.
     - Moved the false alert filtering configuration values to a dedicated section for sake of organization.
     - Added alert de-duplication, where cameras that are close to each other can be condensed into a single alert.
+- Improved the intial GPS location fetching process.
