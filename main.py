@@ -110,7 +110,6 @@ if (config["general"]["gps"]["enabled"] == True): # Check to see if GPS is enabl
 
         previous_gps_attempt = True
         initial_location = get_gps_location() # Attempt to get the current GPS location.
-    del started
 
 
 
