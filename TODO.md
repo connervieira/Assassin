@@ -47,6 +47,9 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add configuration validation for new configuration values.
         - [X] Add Predator start/stop capability.
         - [ ] Test functionality.
+    - [ ] Add alert sounds.
+        - [ ] Add Predator alert sound.
+        - [ ] Add attention monitoring alert sound.
     - [X] Add notification when no ADS-B messages are being received.
 
 

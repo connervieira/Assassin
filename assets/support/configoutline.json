@@ -274,13 +274,18 @@
 		"diagonal_arrows": "bool",
 		"status_lighting": {
 			"enabled": "bool",
+            "delay": "+float",
 			"base_url": "str",
 			"status_lighting_values": {
-				"normal": "str",
-				"enforcementcamera": "str",
-				"alprcamera": "str",
-				"autonomousthreat": "str",
-				"adsbthreat": "str"
+                "normal": "str",
+                "gpsalert": "str",
+                "bluetooththreat": "str",
+                "alprcamera": "str",
+                "enforcementcamera": "str",
+                "autonomousthreat": "str",
+                "adsbthreat": "str",
+                "attention": "str",
+                "predator": "str"
 			}
 		},
 		"notices": {

@@ -279,6 +279,8 @@ This section of configuration values effect Assassin's visual displays.
 - `status_lighting`
     - The status lighting configuration values allow Assassin to interact with a "WLED" RGB LED controller.
     - The `enabled` configuration value determines whether or not status lighting is enabled or disabled.
+    - The `delay` configuration value is a position floating point number that determines how long Assassin will wait for after updating the status lighting.
+        - This allows you to see multiple alerts each cycle, without the previous alert being immediately replaced with the subsequent ones.
     - The `base_url` configuration value determines the base level URL that network requests will be made to in order to update the status lighting.
     - The `status_lighting_values` determine the exact URL that will be called for each condition.
         - The string `[U]` is replaced with the base URL defined earlier.

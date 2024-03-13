@@ -202,9 +202,11 @@ debug_message("Creating `display_notice` function")
 if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
     status_file_location = config["external"]["local"]["interface_directory"] + "/status.json"
 
-    if (os.path.isdir(config["external"]["local"]["interface_directory"]) == False):
-        print(style.red + "Error: The interface directory does not exist, so the notice system could not be loaded." + style.end)
-        exit()
+    if (os.path.isdir(config["external"]["local"]["interface_directory"]) == False): # Check to see if the interface directory needs to be created.
+        os.makedirs(config["external"]["local"]["interface_directory"]) # Attempt to make the interface directory.
+        if (os.path.isdir(config["external"]["local"]["interface_directory"]) == False): # Check to see if the interface directory was created.
+            print(style.red + "Error: The interface directory does not exist, so the notice system could not be loaded." + style.end)
+            exit()
     if (os.path.exists(status_file_location) == False): # If the error log file doesn't exist, create it.
         save_to_file(status_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
 

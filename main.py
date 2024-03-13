@@ -84,7 +84,7 @@ process_gps_alerts = gpslocation.process_gps_alerts # Load the function used to 
 # Load the OBD integration system. 
 obd_alerts = {}
 obd_data = {}
-if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if attention alerts are enabled.
+if (config["general"]["obd_integration"]["enabled"] == True): # Only load OBD integration system if OBD integration is enabled.
     debug_message("Initializing OBD integration system")
     import obdintegration
     start_obd_monitoring = obdintegration.start_obd_monitoring
@@ -389,9 +389,7 @@ while True: # Run forever in a loop until terminated.
 
     debug_message("Alert processing completed")
 
-
-    if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-        update_status_lighting("normal") # Run the function to reset the status lighting to indicate normal operation.
+    update_status_lighting("normal") # Run the function to reset the status lighting to indicate normal operation.
 
 
 
@@ -580,6 +578,7 @@ while True: # Run forever in a loop until terminated.
                 print("    GPS Diagnostics: (" + str(gps_alerts["diagnostic"]["lat"]) + ", " + str(gps_alerts["diagnostic"]["lon"]) + ") " + str(gps_alerts["diagnostic"]["spd"]) + " m/s facing " + str(gps_alerts["diagnostic"]["hdg"]) + "° at " + str(gps_alerts["diagnostic"]["alt"]) + "m with " + str(gps_alerts["diagnostic"]["sat"]) + " sat")
             print(style.end)
 
+            update_status_lighting("gpsalert")
             play_sound("gps") # Play the alert sound associated with GPS alerts, if one is configured to run.
 
 
@@ -602,7 +601,7 @@ while True: # Run forever in a loop until terminated.
 
 
             display_shape("square") # Display an ASCII square in the console output to represent a device, if Assassin is configured to do so.
-
+            update_status_lighting("bluetooththreat")
             play_sound("bluetooth") # Play the alert sound associated with Bluetooth alerts, if one is configured to run.
                 
 
@@ -612,8 +611,6 @@ while True: # Run forever in a loop until terminated.
         if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True and len(nearby_alpr_cameras) > 0): # Only display nearby ALPR camera alerts if they are enabled.
             debug_message("Displaying ALPR camera alerts")
 
-            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-                update_status_lighting("alprcamera") # Run the function to update the status lighting.
 
             print(style.purple + loaded_alpr_camera_database["name"] + " Cameras: " + str(len(nearby_alpr_cameras))) # Display the number of active ALPR alerts.
             print("    Nearest:")
@@ -666,6 +663,7 @@ while True: # Run forever in a loop until terminated.
 
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.
 
+            update_status_lighting("alprcamera") # Run the function to update the status lighting.
             play_sound("alpr")
 
 
@@ -675,8 +673,6 @@ while True: # Run forever in a loop until terminated.
         # Display traffic camera alerts.
         if (config["general"]["traffic_camera_alerts"]["enabled"] == True and len(nearby_cameras_all) > 0): # Check to see if the speed camera display is enabled in the configuration.
             debug_message("Displaying traffic enforcement camera alerts")
-            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-                update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
 
             print(style.blue + "Traffic Enforcement Cameras: " + str(len(nearby_cameras_all)))
             print("    Nearest:")
@@ -706,6 +702,7 @@ while True: # Run forever in a loop until terminated.
 
             display_shape("circle") # Display an ASCII circle in the console output, if Assassin is configured to do so.
 
+            update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
             # Play audio alerts, as necessary.
             if (nearby_cameras_all[0]["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
                 if (nearby_cameras_all[0]["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
@@ -726,8 +723,6 @@ while True: # Run forever in a loop until terminated.
         # Display drone alerts.
         if (config["general"]["drone_alerts"]["enabled"] == True and len(detected_drone_hazards) > 0): # Check to see if drone alerts are enabled.
             debug_message("Displaying drone alerts")
-            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-                update_status_lighting("autonomousthreat") # Update the status lighting to indicate that at least one autonomous threat was detected.
 
             print(style.blue + "Autonomous Hazards: " + str(len(detected_drone_hazards)))
             for hazard in detected_drone_hazards: # Iterate through each detected hazard.
@@ -759,6 +754,7 @@ while True: # Run forever in a loop until terminated.
 
             display_shape("cross") # Display an ASCII cross in the console output to represent a drone, if Assassin is configured to do so.
 
+            update_status_lighting("autonomousthreat") # Update the status lighting to indicate that at least one autonomous threat was detected.
             play_sound("drone") # Play the sound effect associated with a potential drone threat being detected.
 
 
@@ -767,8 +763,6 @@ while True: # Run forever in a loop until terminated.
         # Display ADS-B aircraft alerts
         if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and len(aircraft_threats) > 0): # Check to see if ADS-B alerts are enabled.
             debug_message("Displaying ADS-B alerts")
-            if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-                update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
 
             print(style.blue + "Aircraft Threats: " + str(len(aircraft_threats)))
             for threat in aircraft_threats: # Iterate through each detected potential threat.
@@ -807,6 +801,7 @@ while True: # Run forever in a loop until terminated.
 
             display_shape("triangle") # Display an ASCII triangle in the console output to represent a plane, if Assassin is configured to do so.
 
+            update_status_lighting("adsbthreat") # Update the status lighting to indicate that at least one ADS-B aircraft threat was detected.
             play_sound("adsb") # Play the sound effect associated with a potential ADS-B aircraft threat being detected.
 
 
@@ -883,6 +878,8 @@ while True: # Run forever in a loop until terminated.
 
             print(style.end)
 
+            update_status_lighting("attention")
+
 
 
         # Display Predator integration alerts.
@@ -895,6 +892,8 @@ while True: # Run forever in a loop until terminated.
                     print("        Trigger: " + str(alert))
 
             print(style.end)
+
+            update_status_lighting("predator")
 
         process_timing("Displays", "end")
 

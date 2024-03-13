@@ -2,7 +2,7 @@
     "general": {
         "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
-        "refresh_delay": 0.4,
+        "refresh_delay": 0.2,
         "debugging_output": true,
         "disable_console_clearing": true,
         "gps": {
@@ -115,7 +115,7 @@
             "latch_time": 60
         },
         "traffic_camera_alerts": {
-            "enabled": false,
+            "enabled": true,
             "loaded_radius": 100,
             "database": "./assets/databases/enforcement_cameras_v2.lzma",
             "speed_check": true,
@@ -164,7 +164,7 @@
             ]
         },
         "alpr_alerts": {
-            "enabled": false,
+            "enabled": true,
             "alert_range": 0.5,
             "database": "./assets/databases/alpr.json",
             "loaded_radius": 100,
@@ -282,14 +282,19 @@
         "custom_startup_message": "",
         "diagonal_arrows": false,
         "status_lighting": {
-            "enabled": false,
+            "enabled": true,
+            "delay": 0.5,
             "base_url": "http://wled.local/win&A=255",
             "status_lighting_values": {
-                "normal": "[U]&R=0&G=255&B=0",
-                "enforcementcamera": "[U]&R=0&G=0&B=255",
+                "normal": "[U]&R=255&G=255&B=255",
+                "gpsalert": "[U]&R=0&G=255&B=0",
+                "bluetooththreat": "[U]&R=255&G=0&B=128",
                 "alprcamera": "[U]&R=255&G=0&B=255",
-                "autonomousthreat": "[U]&R=255&G=0&B=0",
-                "adsbthreat": "[U]&R=255&G=128&B=0"
+                "enforcementcamera": "[U]&R=0&G=0&B=255",
+                "autonomousthreat": "[U]&R=255&G=128&B=255",
+                "adsbthreat": "[U]&R=0&G=128&B=255",
+                "attention": "[U]&R=255&G=255&B=0",
+                "predator": "[U]&R=255&G=0&B=0"
             }
         },
         "notices": {
@@ -375,7 +380,7 @@
     "external": {
         "local": {
             "enabled": true,
-            "interface_directory": "/home/cvieira/Software/Support/Assassin/Interface/"
+            "interface_directory": "/dev/shm/AssassinInterface/"
         }
     }
 }
