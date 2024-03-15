@@ -242,6 +242,7 @@ def display_notice(message, level=1):
             status_log[time.time()] = [2, message] # Add this warning message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.yellow + "Warning: " + message + style.end)
+        update_status_lighting("warning")
         if (headless_mode == False):
             if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
                 input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -253,6 +254,7 @@ def display_notice(message, level=1):
             status_log[time.time()] = [3, message] # Add this error message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
+        update_status_lighting("error")
         if (headless_mode == False):
             if (config["display"]["notices"]["3"]["wait_for_input"] == True and headless_mode == False): # Check to see if the configuration indicates to wait for user input before continuing.
                 input("Press enter to continue...") # Wait for the user to press enter before continuning.
