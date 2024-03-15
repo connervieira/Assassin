@@ -276,7 +276,11 @@
 			"enabled": "bool",
             "delay": "+float",
 			"base_url": "str",
-			"status_lighting_values": {
+			"alert_values": {
+                "warning": "str",
+                "error": "str"
+            },
+			"alert_values": {
                 "normal": "str",
                 "gpsalert": "str",
                 "bluetooththreat": "str",

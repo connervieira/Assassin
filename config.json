@@ -10,7 +10,7 @@
             "provider": "gpsd",
             "speed_source": "gps",
             "demo_mode": {
-                "enabled": false,
+                "enabled": true,
                 "data": {
                     "longitude": 41.5039,
                     "latitude": -81.3909,
@@ -285,16 +285,20 @@
             "enabled": true,
             "delay": 0.5,
             "base_url": "http://wled.local/win&A=255",
-            "status_lighting_values": {
-                "normal": "[U]&R=255&G=255&B=255",
-                "gpsalert": "[U]&R=0&G=255&B=0",
-                "bluetooththreat": "[U]&R=255&G=0&B=128",
-                "alprcamera": "[U]&R=255&G=0&B=255",
-                "enforcementcamera": "[U]&R=0&G=0&B=255",
-                "autonomousthreat": "[U]&R=255&G=128&B=255",
-                "adsbthreat": "[U]&R=0&G=128&B=255",
-                "attention": "[U]&R=255&G=255&B=0",
-                "predator": "[U]&R=255&G=0&B=0"
+            "system_values": {
+                "warning": "[U]&FX=1&SX=200&R=255&G=255&B=255",
+                "error": "[U]&FX=1&SX=200&R=0&G=255&B=0"
+            },
+            "alert_values": {
+                "normal": "[U]&FX=0&R=255&G=255&B=255",
+                "gpsalert": "[U]&FX=0&R=0&G=255&B=0",
+                "bluetooththreat": "[U]&FX=0&R=255&G=0&B=128",
+                "alprcamera": "[U]&FX=0&R=255&G=0&B=255",
+                "enforcementcamera": "[U]&FX=0&R=0&G=0&B=255",
+                "autonomousthreat": "[U]&FX=0&R=255&G=128&B=255",
+                "adsbthreat": "[U]&FX=0&R=0&G=128&B=255",
+                "attention": "[U]&FX=0&R=255&G=255&B=0",
+                "predator": "[U]&FX=0&R=255&G=0&B=0"
             }
         },
         "notices": {

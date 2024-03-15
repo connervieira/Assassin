@@ -324,6 +324,7 @@ This section of configuration values effect Assassin's audio functionality.
         - The `delay` is a decimal number that defines how long code execution will be paused to allow the sound effect time to play.
             - It's important to note that this delay does not include the time spent playing the audio file. Therefore, a 0.5 second audio file with a 1 second delay will only leave 0.5 seconds of delay after the sound has finished playing.
 
+
 ## External Service Configuration
 
 This section contains configuration values that control how Assassin interacts with external services.

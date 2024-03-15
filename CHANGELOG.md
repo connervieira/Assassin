@@ -221,5 +221,7 @@ April 19th, 2023
 - Improved the intial GPS location fetching process.
 - Assassin now erases the `alert.json` file in the interface directory in start-up to prevent external interfaces from displaying alerts from the last time Assassin was run.
 - Updated status light interfacing.
+    - Re-organized the status lighting configuration.
     - All alert types now have a corresponding status light color.
     - Status light changes now trigger a brief delay to allow all alerts to be shown.
+    - System warnings and errors now have corresponding status lighting actions.
