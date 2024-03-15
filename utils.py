@@ -763,6 +763,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
                 response = requests.get(status_lighting_update_url)
                 debug_message("Updated status lighting")
                 process_timing("Status Lighting", "end")
+                time.sleep(float(config["display"]["status_lighting"]["delay"]))
                 return True
             except:
                 debug_message("Failed to update status lighting")
