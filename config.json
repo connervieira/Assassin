@@ -192,33 +192,6 @@
                 "description": true
             }
         },
-        "bluetooth_monitoring": {
-            "enabled": false,
-            "scan_time": 1,
-            "latch_time": 10,
-            "minimum_following_distance": 0,
-            "log_devices": {
-                "enabled": false,
-                "filename": "bluetooth_devices.json"
-            },
-            "whitelist": {
-                "enabled": true,
-                "devices": {
-                    "Sample": "FF:FF:FF:FF:FF:FF"
-                }
-            },
-            "blacklist": {
-                "enabled": true,
-                "devices": {
-                    "Sample": "FF:FF:FF:FF:FF:FF"
-                }
-            },
-            "information_displayed": {
-                "name": true,
-                "distance": true,
-                "time": true
-            }
-        },
         "adsb_alerts": {
             "enabled": false,
             "adsb_message_filename": "adsb.csv",
