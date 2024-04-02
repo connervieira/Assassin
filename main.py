@@ -48,10 +48,6 @@ import math # Required to run more complex math functions.
 import random # Required to generate random numbers.
 
 
-if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only import the Bluetooth library if Bluetooth monitoring is enabled.
-    debug_message("Importing `bluetooth` library")
-    import bluetooth
-
 
 # Load the rest of the utility functions from utils.py
 debug_message("Loading `utils.py` functions")
@@ -168,19 +164,6 @@ if (config["general"]["alpr_alerts"]["enabled"] == True): # Only load ALPR camer
     loaded_alpr_camera_database = load_alpr_camera_database(initial_location)
 
 
-# Load the Bluetooth device alert system. 
-if (config["general"]["bluetooth_monitoring"]["enabled"] == True): # Only load Bluetooth monitoring system if Bluetooth monitoring is enabled.
-    debug_message("Initializing Bluetooth monitoring system")
-    import bluetoothdevices
-    load_bluetooth_log_file = bluetoothdevices.load_bluetooth_log_file
-    bluetooth_alert_processing = bluetoothdevices.bluetooth_alert_processing
-    start_bluetooth_scanning = bluetoothdevices.start_bluetooth_scanning
-    fetch_nearby_bluetooth_devices = bluetoothdevices.fetch_nearby_bluetooth_devices
-
-    detected_bluetooth_devices = load_bluetooth_log_file() # Load the detected Bluetooth device history.
-    start_bluetooth_scanning()
-
-
 
 # Load the weather alert system. 
 if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather alert system if weather alerts are enabled.
@@ -258,7 +241,6 @@ alert_count["drone"] = [0, 0]
 alert_count["aircraft"] = [0, 0]
 alert_count["traffic_camera"] = [0, 0]
 alert_count["alpr"] = [0, 0]
-alert_count["bluetooth"] = [0, 0]
 alert_count["weather"] = [0, 0]
 alert_count["gps"] = [0, 0]
 alert_count["obd"] = [0, 0]
@@ -329,18 +311,6 @@ while True: # Run forever in a loop until terminated.
         detected_drone_hazards = []
 
 
-    # Run Bluetooth alert processing.
-    if (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run Bluetooth monitoring processing if Bluetooth monitoring is enabled.
-        process_timing("Alerts/Bluetooth Monitoring", "start")
-        detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing(current_location, detected_bluetooth_devices)
-        process_timing("Alerts/Bluetooth Monitoring", "end")
-    elif (config["general"]["bluetooth_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == False): # If GPS functionality is disabled, then run Bluetooth monitoring without GPS information.
-        process_timing("Alerts/Bluetooth Monitoring", "start")
-        detected_bluetooth_devices, bluetooth_threats = bluetooth_alert_processing([0.0000, 0.0000, 0.0, 0.0, 0.0, 0], detected_bluetooth_devices) # Run the Bluetooth alert processing function with dummy GPS data.
-        process_timing("Alerts/Bluetooth Monitoring", "end")
-    else:
-        detected_bluetooth_devices, bluetooth_threats = {}, {}
-
 
     # Process ADS-B alerts.
     if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ADS-B alert processing if it is enabled in the configuration.
@@ -406,7 +376,6 @@ while True: # Run forever in a loop until terminated.
     all_alerts[current_time]["aircraft"] = aircraft_threats
     all_alerts[current_time]["traffic_camera"] = nearby_cameras_all
     all_alerts[current_time]["alpr"] = nearby_alpr_cameras
-    all_alerts[current_time]["bluetooth"] = bluetooth_threats
     all_alerts[current_time]["weather"] = weather_alerts
     all_alerts[current_time]["gps"] = gps_alerts
     all_alerts[current_time]["obd"] = obd_alerts
@@ -423,7 +392,6 @@ while True: # Run forever in a loop until terminated.
     alert_count["aircraft"] = [len(aircraft_threats)] + alert_count["aircraft"]
     alert_count["traffic_camera"] = [len(nearby_cameras_all)] + alert_count["traffic_camera"]
     alert_count["alpr"] = [len(nearby_alpr_cameras)] + alert_count["alpr"]
-    alert_count["bluetooth"] = [len(bluetooth_threats)] + alert_count["bluetooth"]
     alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
     alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
     alert_count["obd"] = [len(obd_alerts)] + alert_count["obd"]
@@ -436,7 +404,6 @@ while True: # Run forever in a loop until terminated.
     alert_count["aircraft"] = alert_count["aircraft"][:10]
     alert_count["traffic_camera"] = alert_count["traffic_camera"][:10]
     alert_count["alpr"] = alert_count["alpr"][:10]
-    alert_count["bluetooth"] = alert_count["bluetooth"][:10]
     alert_count["weather"] = alert_count["weather"][:10]
     alert_count["gps"] = alert_count["gps"][:10]
     alert_count["attention"] = alert_count["attention"][:10]
@@ -468,10 +435,6 @@ while True: # Run forever in a loop until terminated.
         # Process ALPR text to speech alerts.
         if (alert_count["alpr"][0] > alert_count["alpr"][1]):
             speak("New A. L. P. R. Alert. " + str(round(nearest_alpr_camera["distance"]*10)/10) + " miles", "A. L. P. R")
-
-        # Process Bluetooth text to speech alerts.
-        if (alert_count["bluetooth"][0] > alert_count["bluetooth"][1]):
-            speak("New Bluetooth alert", "Bluetooth")
 
         # Process weather text to speech alerts.
         if (alert_count["weather"][0] > alert_count["weather"][1]):
@@ -549,8 +512,6 @@ while True: # Run forever in a loop until terminated.
 
         if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
             print("Aircraft: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
-        if (config["display"]["displays"]["bluetooth"] == True and config["general"]["bluetooth_monitoring"]["enabled"] == True): # Check to see if the Bluetooth device count display is enabled in the configuration.
-            print("Bluetooth: " + str(len(fetch_nearby_bluetooth_devices()))) # Print the current detected Bluetooth device count to the console.
         if (config["display"]["displays"]["attention"] == True and config["general"]["attention_monitoring"]["enabled"] == True): # Check to see if the attention timer display is enabled in the configuration.
             print("Attention: " + str(datetime.timedelta(seconds=round(get_current_attention_time()[0]))) + " active (" + str(datetime.timedelta(seconds=round(get_current_attention_time()[1]))) + " reset)") # Print the current active attention time to the console.
 
@@ -583,27 +544,6 @@ while True: # Run forever in a loop until terminated.
 
 
 
-
-
-        # Display Bluetooth monitoring alerts.
-        if (config["general"]["bluetooth_monitoring"]["enabled"] == True and len(bluetooth_threats) > 0): # Only conduct Bluetooth alert processing if Bluetooth alerts and GPS features are enabled in the configuration.
-            debug_message("Displaying Bluetooth alerts")
-            print(style.purple + "Bluetooth Hazards: " + str(len(bluetooth_threats))) # Display the Bluetooth alert title.
-            for threat in bluetooth_threats: # Iterate through all of the active Bluetooth threats.
-                print("    " + str(threat['address']))
-                if (config["general"]["bluetooth_monitoring"]["information_displayed"]["name"] == True): # Only display the device name if it is enabled in the configuration.
-                    print("        Name: " + str(threat['name']))
-                if (config["general"]["bluetooth_monitoring"]["information_displayed"]["distance"] == True): # Only display the following distance if it is enabled in the configuration.
-                    print("        Distance: " + str(threat['distance_followed']))
-                if (config["general"]["bluetooth_monitoring"]["information_displayed"]["time"] == True): # Only display the following time if it is enabled in the configuration.
-                    print("        Time: " + str(int(threat['lastseentime']) - int(threat['firstseentime']))+ " seconds")
-            print(style.end)
-
-
-            display_shape("square") # Display an ASCII square in the console output to represent a device, if Assassin is configured to do so.
-            update_status_lighting("bluetooththreat")
-            play_sound("bluetooth") # Play the alert sound associated with Bluetooth alerts, if one is configured to run.
-                
 
 
 

@@ -25,13 +25,11 @@ This section contains a quick-start guide if you want to set up Assassin as quic
     - `pip3 install numpy playsound pyttsx3 validators requests obd`
 3. Install GPSD
     - `sudo apt-get install gpsd gpsd-clients; pip3 install gps gpsd-py3`
-4. Install Bluetooth tools
-    - `sudo apt-get install bluez-tools; pip3 install PyBluez`
-5. Install other dependencies
+4. Install other dependencies
     - `sudo apt-get install mpg321 aircrack-ng dump1090-mutability`
-6. Download Assassin
-7. Configure Assassin
-8. Run Assassin
+5. Download Assassin
+6. Configure Assassin
+7. Run Assassin
 
 
 ## Installation
@@ -78,16 +76,11 @@ This is the full installation process for Assassin and all of its dependencies. 
     - To use the drone alerting features of Assassin, `aircrack-ng` will need to be installed. AirCrack should come packaged with `airomon-ng` and `airodump-ng`.
     - You can install AirCrack using this command on a Debian based Linux machine: `sudo apt-get install aircrack-ng`
     - If you don't plan on using Assassin's radio threat detection features, this step is optional.
-6. Optionally, install Bluez Tools (Recommended).
-    - Bluez Tools is required to manipulate and process Bluetooth data. If you don't install it, features that require Bluetooth will be disabled.
-    - You can install Bluez Tools using this command on a Debian based Linux machine: `sudo apt-get install bluez-tools; pip3 install PyBluez`
-        - If you encounter issues, you may need to downgrade 'setuptools' using the following command: `pip3 install setuptools==57.5.0`
-    - If you don't plan on using Assassin's Bluetooth threat features, this step is optional.
-7. Optionally, install Dump1090 (Recommended).
+6. Optionally, install Dump1090 (Recommended).
     - Dump1090 is required for Assassin to be able to interface with ADS-B receivers in order to detect planes.
     - You can install Dump1090 using this command on a Debian based Linux machine: `sudo apt install dump1090-mutability`
     - If you don't plan on using Assassin's aircraft detection features, this step is optional.
-8. Optionally, install OBD-II integration libraries (Recommended).
+7. Optionally, install OBD-II integration libraries (Recommended).
     - Python-OBD is a library that allows Assassin to communicate with your car's on-board diagnostics port using an ELM327 adapter.
     - You can install this package using the following command: `pip3 install obd`
 8. Grant necessary permissions (Highly Recommended).
