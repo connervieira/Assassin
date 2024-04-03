@@ -225,5 +225,5 @@ April 19th, 2023
     - All alert types now have a corresponding status light color.
     - Status light changes now trigger a brief delay to allow all alerts to be shown.
     - System warnings and errors now have corresponding status lighting actions.
-- Removed Bluetooth tracker detection.
+- Completely re-designed the Bluetooth monitoring system.
     - This feature worked unreliably, and was prone to causing unexpected behavior that could prevent other alerts from being processed correctly.

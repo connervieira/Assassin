@@ -188,28 +188,20 @@
 				"description": "bool"
 			}
 		},
-		"bluetooth_monitoring": {
+		"bluetooth_scanning": {
 			"enabled": "bool",
-			"scan_time": "+float",
-			"latch_time": "+float",
-			"minimum_following_distance": "+float",
-			"log_devices": {
-				"enabled": "bool",
-				"filename": "str"
-			},
-			"whitelist": {
-				"enabled": "bool",
-				"devices": {}
-			},
-			"blacklist": {
-				"enabled": "bool",
-				"devices": {}
-			},
-			"information_displayed": {
-				"name": "bool",
-				"distance": "bool",
-				"time": "bool"
-			}
+            "thresholds": {
+                "time": {
+                    "enabled": "bool",
+                    "limit": "+float"
+                },
+                "distance": {
+                    "enabled": "bool",
+                    "limit": "+float"
+                }
+            },
+            "whitelist": {},
+            "blacklist": {}
 		},
 		"adsb_alerts": {
 			"enabled": "bool",

@@ -762,7 +762,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
         if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
             debug_message("Sending status lighting network request")
             try:
-                response = requests.get(status_lighting_update_url)
+                response = requests.get(status_lighting_update_url, timeout=0.5)
                 debug_message("Updated status lighting")
                 process_timing("Status Lighting", "end")
                 time.sleep(float(config["display"]["status_lighting"]["delay"]))

@@ -225,6 +225,24 @@
                 "callsign": false,
                 "climb": false
             }
+        },
+        "bluetooth_scanning": {
+            "enabled": true,
+            "thresholds": {
+                "time": {
+                    "enabled": false,
+                    "limit": 5
+                },
+                "distance": {
+                    "enabled": true,
+                    "limit": 0.5
+                }
+            },
+            "whitelist": {
+            },
+            "blacklist": {
+                "62:F2:E6:94:76:0D": "Test alert"
+            }
         }
     },
     "display": {
@@ -255,7 +273,7 @@
         "custom_startup_message": "",
         "diagonal_arrows": false,
         "status_lighting": {
-            "enabled": true,
+            "enabled": false,
             "delay": 0.5,
             "base_url": "http://wled.local/win&A=255",
             "system_values": {

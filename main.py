@@ -142,6 +142,12 @@ if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["g
     start_adsb_monitoring()
 
 
+# Load the Bluetooth monitoring system.
+if (config["general"]["bluetooth_scanning"]["enabled"] == True):
+    import bluetooth
+    bluetooth.start_bluetooth_scanning()
+
+
 
 # Load the drone/autonomous threat alert system.
 if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone processing if drone alerts are enabled.
@@ -245,6 +251,7 @@ alert_count["weather"] = [0, 0]
 alert_count["gps"] = [0, 0]
 alert_count["obd"] = [0, 0]
 alert_count["attention"] = [0, 0]
+alert_count["bluetooth"] = [0, 0]
 alert_count["predator"] = [0, 0]
 
 location_history = []
@@ -339,6 +346,7 @@ while True: # Run forever in a loop until terminated.
     else:
         obd_alerts = {}
 
+
     # Process attention alerts.
     if (config["general"]["attention_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run attention monitoring alert processing if it is enabled in the configuration.
         process_timing("Alerts/Attention", "start")
@@ -347,7 +355,20 @@ while True: # Run forever in a loop until terminated.
     else:
         attention_alerts = {}
 
-    if (config["general"]["predator_integration"]["enabled"] == True): # Only load Predator integration if Predator integration is enabled in the configuration.
+
+    # Process Bluetooth alerts.
+    if (config["general"]["bluetooth_scanning"]["enabled"] == True): # Only run Bluetooth monitoring processing if it is enabled in the configuration.
+        process_timing("Alerts/Bluetooth", "start")
+        bluetooth_devices_new = bluetooth.get_latest_bluetooth_le()
+        bluetooth_alerts = bluetooth.process_bluetooth_alerts(bluetooth_devices_new, current_location)
+        bluetooth_devices = bluetooth.get_all_bluetooth_devices()
+        process_timing("Alerts/Bluetooth", "end")
+    else:
+        bluetooth_devices = {}
+        bluetooth_alerts = {}
+
+
+    if (config["general"]["predator_integration"]["enabled"] == True): # Process Predator alerts.
         process_timing("Alerts/Predator", "start")
         predator_alerts = process_predator_alerts()
         process_timing("Alerts/Predator", "end")
@@ -380,6 +401,7 @@ while True: # Run forever in a loop until terminated.
     all_alerts[current_time]["gps"] = gps_alerts
     all_alerts[current_time]["obd"] = obd_alerts
     all_alerts[current_time]["attention"] = attention_alerts
+    all_alerts[current_time]["bluetooth"] = bluetooth_alerts
     all_alerts[current_time]["predator"] = predator_alerts
 
 
@@ -396,6 +418,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
     alert_count["obd"] = [len(obd_alerts)] + alert_count["obd"]
     alert_count["attention"] = [len(attention_alerts)] + alert_count["attention"]
+    alert_count["bluetooth"] = [len(bluetooth_alerts)] + alert_count["bluetooth"]
     alert_count["predator"] = [len(predator_alerts)] + alert_count["predator"]
 
 
@@ -407,6 +430,7 @@ while True: # Run forever in a loop until terminated.
     alert_count["weather"] = alert_count["weather"][:10]
     alert_count["gps"] = alert_count["gps"][:10]
     alert_count["attention"] = alert_count["attention"][:10]
+    alert_count["bluetooth"] = alert_count["bluetooth"][:10]
     alert_count["predator"] = alert_count["predator"][:10]
 
 
@@ -447,6 +471,11 @@ while True: # Run forever in a loop until terminated.
         # Process attention text to speech alerts.
         if (alert_count["attention"][0] > alert_count["attention"][1]):
             speak("Attention threshold reached", "Attention")
+
+        # Process Bluetooth text to speech alerts.
+        if (alert_count["bluetooth"][0] > alert_count["bluetooth"][1]):
+            speak("Bluetooth device threat", "Bluetooth")
+
 
         # Process Predator text to speech alerts.
         if (alert_count["predator"][0] > alert_count["predator"][1]):
@@ -514,6 +543,7 @@ while True: # Run forever in a loop until terminated.
             print("Aircraft: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
         if (config["display"]["displays"]["attention"] == True and config["general"]["attention_monitoring"]["enabled"] == True): # Check to see if the attention timer display is enabled in the configuration.
             print("Attention: " + str(datetime.timedelta(seconds=round(get_current_attention_time()[0]))) + " active (" + str(datetime.timedelta(seconds=round(get_current_attention_time()[1]))) + " reset)") # Print the current active attention time to the console.
+            print("Bluetooth: " + str(len(bluetooth_devices))) # Print the number of nearby Bluetooth devices.
 
         print("") # Add a line break after displaying the main information display.
 
@@ -808,7 +838,7 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display attention alerts.
-        if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to make sure attention monitoring is enabled before displaying attention alerts.
+        if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to see if there are attention alerts.
             debug_message("Displaying attention monitoring alerts")
             print(style.yellow + "Attention Alerts: " + str(len(attention_alerts))) # Display the attention monitoring alerts title.
 
@@ -819,6 +849,26 @@ while True: # Run forever in a loop until terminated.
             print(style.end)
 
             update_status_lighting("attention")
+
+
+        # Display Bluetooth scanning alerts.
+        if (config["general"]["bluetooth_scanning"]["enabled"] == True and len(bluetooth_alerts) > 0): # Check to see if there is 1 or more Bluetooth devices.
+            debug_message("Displaying attention monitoring alerts")
+            print(style.blue + "Bluetooth Alerts: " + str(len(bluetooth_alerts))) # Display the Bluetooth scanning alerts title.
+
+            # Display Bluetooth alerts.
+            for device in bluetooth_alerts:
+                print("    " + str(device) + ": " + bluetooth_devices[device]["name"])
+                if ("time" in bluetooth_alerts[device]): # Check to see if there is distance information associated with this alert.
+                    print("        Time: " + str(round(bluetooth_alerts[device]["time"])) + " sec")
+                if ("distance" in bluetooth_alerts[device]): # Check to see if there is time information associated with this alert.
+                    print("        Distance: " + str(round(bluetooth_alerts[device]["distance"]*100)/100))
+                if ("blacklist" in bluetooth_alerts[device]): # Check to see if there is blacklist information associated with this alert.
+                    print("        Blacklist: " + bluetooth_alerts[device]["blacklist"])
+
+            print(style.end)
+
+            update_status_lighting("bluetooth")
 
 
 
