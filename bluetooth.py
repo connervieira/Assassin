@@ -120,7 +120,11 @@ def process_bluetooth_alerts(devices, current_position):
                         bluetooth_threats[device] = {}
                     bluetooth_threats[device]["time"] = total_time_seen
             if (config["general"]["bluetooth_scanning"]["thresholds"]["distance"]["enabled"] == True): # Check to see if time-based alerts are enabled.
-                pass # TODO: Add distance analysis.
+                followed_distance = get_distance(bluetooth_device_data[device]["seen"]["first"]["pos"][0], bluetooth_device_data[device]["seen"]["first"]["pos"][1], bluetooth_device_data[device]["seen"]["last"]["pos"][0], bluetooth_device_data[device]["seen"]["last"]["pos"][1]) # Calculate the distance between the start and end points of this device (measured in miles).
+                if (followed_distance < config["general"]["bluetooth_scanning"]["thresholds"]["distance"]["limit"]): # Check to see if this device has been following for a distance greater than the threshold.
+                    if (device not in bluetooth_threats):
+                        bluetooth_threats[device] = {}
+                    bluetooth_threats[device]["distance"] = followed_distance
 
 
     return bluetooth_threats
