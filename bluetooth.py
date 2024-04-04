@@ -84,7 +84,7 @@ def process_bluetooth_alerts(devices, current_position):
     global bluetooth_device_data
     for device in devices:
         if (device in bluetooth_device_data): # Check to see if this device does not yet exist in the complete device data.
-            if (time.time() - bluetooth_device_data[device]["seen"]["original"]["time"] > 60): # Check to see if it has been at least 60 seconds since this device was seen. TODO: Replace with configuration.
+            if (time.time() - bluetooth_device_data[device]["seen"]["original"]["time"] > config["general"]["bluetooth_scanning"]["latch_time"] * 60): # Check to see if it has been at least a certain number of minutes since this device was seen.
                 bluetooth_device_data[device]["seen"]["first"]["time"] = time.time()
                 bluetooth_device_data[device]["seen"]["first"]["pos"] = [current_position[0], current_position[1]]
             bluetooth_device_data[device]["seen"]["last"]["time"] = time.time()
