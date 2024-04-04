@@ -36,7 +36,7 @@ def start_predator():
         debug_message("Starting Predator")
         predator_path = config["general"]["predator_integration"]["instance_directory"]
         if (os.path.exists(predator_path) == True): # Check to see if an ADS-B message file has been set.
-            start_command = ["python3",  predator_path + "/main.py", "2", "2>/dev/null"] # This command is responsible for starting Predator.
+            start_command = ["python3",  predator_path + "/main.py", "2", "--headless", "2>/dev/null"] # This command is responsible for starting Predator.
             subprocess.Popen(start_command, stdout=subprocess.DEVNULL) # Execute the command to start Predator in the background.
         else:
             display_notice("Predator integration is enabled, but the configured instance directory does not exist. Predator could not be started.", 3)
