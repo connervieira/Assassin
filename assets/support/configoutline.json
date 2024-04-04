@@ -188,21 +188,6 @@
 				"description": "bool"
 			}
 		},
-		"bluetooth_scanning": {
-			"enabled": "bool",
-            "thresholds": {
-                "time": {
-                    "enabled": "bool",
-                    "limit": "+float"
-                },
-                "distance": {
-                    "enabled": "bool",
-                    "limit": "+float"
-                }
-            },
-            "whitelist": {},
-            "blacklist": {}
-		},
 		"adsb_alerts": {
 			"enabled": "bool",
 			"adsb_message_filename": "str",
@@ -235,6 +220,22 @@
 				"callsign": "bool",
 				"climb": "bool"
 			}
+		},
+		"bluetooth_scanning": {
+			"enabled": "bool",
+			"latch_time": "+float",
+            "thresholds": {
+                "time": {
+                    "enabled": "bool",
+                    "limit": "+float"
+                },
+                "distance": {
+                    "enabled": "bool",
+                    "limit": "+float"
+                }
+            },
+            "whitelist": {},
+            "blacklist": {}
 		}
 	},
 	"display": {

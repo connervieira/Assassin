@@ -65,12 +65,11 @@ def calculate_speed(location_history, gps_speed, obd_data):
     elif (config["general"]["gps"]["speed_source"] == "gps"):
         speed = gps_speed
     elif (config["general"]["gps"]["speed_source"] == "obd"):
-        # TODO: Add validation
         if ("speed" in obd_data):
             speed = obd_data["speed"]
-            display_notice("There is no speed data in the OBD response. Speed information could not be determined.")
         else:
             speed = 0
+            display_notice("There is no speed data in the OBD response. Speed information could not be determined.")
     else: # This will only happen when the configuration is invalid.
         speed = 0
 
