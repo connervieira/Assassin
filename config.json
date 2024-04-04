@@ -228,7 +228,7 @@
         },
         "bluetooth_scanning": {
             "enabled": true,
-            "latch_time": 30,
+            "memory_time": 30,
             "thresholds": {
                 "time": {
                     "enabled": false,

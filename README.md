@@ -11,6 +11,8 @@ While Assassin is designed to be as safe as possible, it's always the driver's r
 
 In most regions, Assassin is completely legal to possess and use. However, some areas might place legal restrictions on certain features, like traffic camera alerting, or certain devices, like radio receivers and transmitters.
 
+Additionally, Assassin should not be relied upon for safety critical tasks. For example, if you suspect someone may be attempting to track you, you absolutely should not rely entirely on Assassin's Bluetooth tracker detection. While Assassin is intended to be as reliable, it is far from infallible.
+
 
 ## Description
 
@@ -29,17 +31,12 @@ Assassin comes bundled with a database to detect nearby ALPR cameras, and alert 
 
 ### Autonomous Threat Defense
 
-Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detect, record, and alert to nearby consumer and commercial drones. This feature makes use of an open, customizable database of wireless threats in order to quickly and effectively detect and alert to nearby autonomous hazards. While not it's primary purpose, this feature is also theoretically capable of detecting various other radio-based devices, including remote-operated speed cameras from several common manufacturers.
+Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detect, record, and alert to nearby consumer and commercial drones. This feature makes use of an open, customizable database of wireless threats in order to quickly and effectively detect and alert to nearby autonomous hazards. While not its primary purpose, this feature is also theoretically capable of detecting various other radio-based devices, including remote-operated speed cameras from several common manufacturers.
 
 
 ### Traffic Enforcement Camera Defense
 
-Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras.
-
-
-### Bluetooth Threat Defense
-
-Assassin can interface with Bluetooth adapters to provide Bluetooth monitoring, and can display an alert when a particular Bluetooth device has been following for a suspiciously long time. This can help provide early warning of people tailing you as you drive, as well as aiding in the location of concealed tracking devices hidden in your car. This feature can also be configured to ignore certain devices (like your phone or car stereo) or instantly alert to specific devices that could be an imminent threat (like the phone of a previous security concern).
+Assassin can process and alert to nearby speed enforcement and red light cameras as the user drives, and even check the vehicle's current speed against the speed limit associated with nearby cameras. If the vehicle speed exceeds a customizable offset relative to the speed camera's limit, Assassin will issue an alert.
 
 
 ### ADS-B Aircraft Detection
@@ -54,12 +51,23 @@ Assassin can detect potential GPS spoofing attempts by monitoring location histo
 
 ### Weather Alerts
 
-When connected to the internet, Assassin can fetch weather information, and display alerts when customizable criteria are met.
+When connected to the internet, Assassin can fetch weather information at a regular interval, and display alerts when customizable criteria are met.
 
 
 ### Attention Monitoring
 
 Assassin can monitor the time spend actively driving, and optionally display an alert when a threshold has been broken, and prompt the driver to take a break.
+
+
+### Bluetooth Threat Defense
+
+Assassin can interface with Bluetooth adapters to provide Bluetooth Low-Energy monitoring, and can display an alert when a particular Bluetooth device has been following for a suspiciously long time. This can help provide early warning of people tailing you as you drive, as well as aiding in the location of concealed tracking devices hidden in your car. This feature can also be configured to ignore certain devices (like your phone or car stereo) or instantly alert to specific devices that could be an imminent threat (like the phone of a previous security concern).
+
+
+
+### Predator Integration
+
+Assassin can integrate with [V0LT Predator](https://v0lttech.com/predator.php) to provide license plate recognition alerts. Assassin can automatically start Predator, and display alerts if Predator detects a license plate in a hot-list.
 
 
 
@@ -83,7 +91,7 @@ These are some of the key features of Assassin.
 
 ### Status Lighting
 
-Assassin can interface with WLED status lighting systems to provide immersive, attention grabbing alerts while driving.
+Assassin can interface with RGB lights via WLED to provide immersive and attention grabbing alerts while driving. When configured as such, these status light alerts allow Assassin to sit in the background, and issue important to the driver in a clean, integrated, OEM-like manner.
 
 ### Audio Alerts
 
@@ -94,13 +102,17 @@ Assassin comes bundled with various audio alert terms that are seamless and plea
 
 These are some of the attributes that Assassin is designed around.
 
+### Integrated
+
+When installed properly, Assassin should feel like just another part of your car, working in the background to protect you from a wide gamut of potential threats.
+
 ### Lightweight
 
 Assassin is extremely lightweight and power efficient, and is designed to work on a Raspberry Pi or similar low-powered device.
 
 ### Offline
 
-Assassin is capable of operating entirely offline, meaning it can go anywhere your car does regardless of network connectivity.
+Assassin is capable of operating entirely offline, meaning it can go anywhere your car does, regardless of network connectivity.
 
 ### Repairable
 

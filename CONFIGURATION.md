@@ -222,6 +222,27 @@ This section of configuration values will effect Assassin's general operation.
                 - This value should be roughly be the altitude that you expect aircraft threats to be at. Any aircraft above that altitude will be able to see farther, so the alert distance will increase. By the same logic, lower aircraft have a lower vision radius, so the alert distance decreases.
     - `information_displayed` determines what information is displayed in alerts.
         - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
+- `bluetooth_scanning` contains settings that control how Assassin scans for Bluetooth tracking devices.
+    - `enabled` determines whether Bluetooth scanning is enabled or disabled.
+    - `memory_time` is the length of time (measured in minutes) after which Assassin will "forget" a Bluetooth device.
+        - Behind the scenes, Assassin actually keeps track of the original time/location that each device was seen. This value simply changes how Assassin determines what devices are considered threats.
+        - For example, if you are traveling with someone in separate cars, Assassin may detect the other driver's devices before leaving. Once the destination has been reached, these devices may come back into detection range. Since the device was out of range through-out the trip, the memory time will prevent the device from being considered a threat.
+    - `thresholds` contains criteria under which Assassin will alert to Bluetooth devices.
+        - `time` controls alerts based on the length of time a device has been detected for.
+            - `enabled` is a boolean that determines if this type of alert is enabled.
+            - `limit` is the number of seconds between the first-seen time and last-seen time before Assassin considers this device to be a threat.
+        - `distance` controls alerts based on the distance between the first-seen location, and last-seen location.
+            - `enabled` is a boolean that determines if this type of alert is enabled.
+            - `limit` is the number of miles between the first-seen location and last-seen location before Assassin considers this device to be a threat.
+    - `whitelist` contains a list of devices that Assassin will never alert to.
+        - The whitelist should contain devices that you expect to "follow" you everywhere you go, including your phone, laptop, or personal trackers.
+        - Each entry in the whitelist uses a colon separated MAC address (in all uppercase letters) as the key, and a friendly name as a value.
+            - Example: `"FF:FF:FF:FF:FF:FF": "My Phone"
+    - `blacklist` contains a list of devices that Assassin will immediately consider threats, regardless of the following time or distance.
+        - The blacklist should contain devices that you always want to know about if they come within detection range.
+            - The blacklist may contain something as serious as the devices of someone you suspect to be tracking you, or something as simple a friend's device, such that you receive an alert when passing them.
+        - Each entry in the blacklist uses a colon separated MAC address (in all uppercase letters) as the key, and a friendly name as a value.
+            - Example: `"FF:FF:FF:FF:FF:FF": "My Phone"
 
 
 ## Display Configuration
@@ -250,7 +271,7 @@ This section of configuration values effect Assassin's visual displays.
         - `direction` determines whether or not the current heading will be displayed as a cardinal direction, such as 'N', 'SW', or 'E'.
     - `satellites` can be toggled on and off, and shows how many GPS satellites are connected.
     - `planes` can be toggled on and off, and shows many many aircraft are being detected. This is dependent on the ADS-B alerts system and requires `adsb_alerts` to be enabled.
-    - `bluetooth` can be toggled on and off, and shows many many total Bluetooth devices are being detected. This is dependent on the Bluetooth alerts system and requires `bluetooth_monitoring` to be enabled.
+    - `bluetooth` can be toggled on and off, and shows many many total Bluetooth devices are being detected. This is dependent on the Bluetooth alerts system and requires `bluetooth_scanning` to be enabled.
 - `shape_alerts`
     - This setting allows the user to turn on and off Assassin's "shape alerts", which are large ASCII shapes displayed when important events occur.
     - Shape alerts take up a lot of space on screen, but make it easy for the driver to understand a situation simply using their peripheral vision.
