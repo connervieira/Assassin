@@ -46,7 +46,8 @@ Tasks in this section are actively planned, and are likely to be completed some 
         - [X] Add alert handling.
         - [X] Add configuration validation for new configuration values.
         - [X] Add Predator start/stop capability.
-        - [ ] Test functionality.
+        - [X] Test functionality.
+        - [ ] Add alert name display.
     - [ ] Add alert sounds.
         - [ ] Add Predator alert sound.
         - [ ] Add attention monitoring alert sound.

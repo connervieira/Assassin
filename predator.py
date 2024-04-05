@@ -42,9 +42,8 @@ def start_predator():
             display_notice("Predator integration is enabled, but the configured instance directory does not exist. Predator could not be started.", 3)
 
 
-def process_predator_alerts():
-    debug_message("Processing Predator alerts")
 
+def get_predator_plate_history():
     plate_log_file_path = config["general"]["predator_integration"]["plate_log_file"]
 
     if (os.path.exists(plate_log_file_path)): # Check to see if the plate log file exists.
@@ -59,18 +58,21 @@ def process_predator_alerts():
         for timestamp, entry in raw_plate_history.items(): # Iterate through each entry in the raw plate history.
             if (float(timestamp) > time.time() - config["general"]["predator_integration"]["latch_time"]): # Check to see if this entry in the plate log file is within the configured latch time.
                 pruned_plate_history[timestamp] = entry # Add this entry to the pruned plate history.
+    else:
+        display_notice("Predator integration is enabled, but the plate log file does not exist. Alerts could not be processed.")
+        pruned_plate_history = {}
 
-        predator_alerts = {} # This is a placeholder that will hold the active alerts from the plate history.
-        for timestamp in pruned_plate_history: # Iterate through each entry in the plate log.
-            for plate in pruned_plate_history[timestamp]["plates"]: # Iterate through each plate in this entry.
-                if (len(pruned_plate_history[timestamp]["plates"][plate]["alerts"]) > 0): # Check to see if this plate is associated with any alerts.
-                    predator_alerts[plate] = {} # Initialize this plate in the Predator alerts.
-                    for rule in pruned_plate_history[timestamp]["plates"][plate]["alerts"]: # Iterate through each alert rule this plate is associated with.
-                        predator_alerts[plate][rule] = "TEST" # Add this alert rule and it's information to the Predator alert.
-                
-    else: # The plate log file does not exist.
-        display_notice("Predator integration is enabled, but the configured plate log file does not exist.", 2)
-        predator_alerts = {} # Set the dictionary of Predator alerts to a blank placeholder.
-        
+    return pruned_plate_history
 
+def process_predator_alerts(pruned_plate_history):
+    debug_message("Processing Predator alerts")
+
+    predator_alerts = {} # This is a placeholder that will hold the active alerts from the plate history.
+    for timestamp in pruned_plate_history: # Iterate through each entry in the plate log.
+        for plate in pruned_plate_history[timestamp]["plates"]: # Iterate through each plate in this entry.
+            if (len(pruned_plate_history[timestamp]["plates"][plate]["alerts"]) > 0): # Check to see if this plate is associated with any alerts.
+                predator_alerts[plate] = {} # Initialize this plate in the Predator alerts.
+                for rule in pruned_plate_history[timestamp]["plates"][plate]["alerts"]: # Iterate through each alert rule this plate is associated with.
+                    predator_alerts[plate][rule] = {} # Add this alert rule and it's information to the Predator alert.
+            
     return predator_alerts

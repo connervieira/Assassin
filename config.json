@@ -109,7 +109,7 @@
             }
         },
         "predator_integration": {
-            "enabled": false,
+            "enabled": true,
             "instance_directory": "/home/cvieira/Software/Programming/Python/Predator/",
             "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
             "latch_time": 60
@@ -227,7 +227,7 @@
             }
         },
         "bluetooth_scanning": {
-            "enabled": true,
+            "enabled": false,
             "memory_time": 30,
             "thresholds": {
                 "time": {
@@ -265,6 +265,7 @@
             },
             "satellites": true,
             "planes": true,
+            "predator": true,
             "bluetooth": true,
             "attention": true
         },
