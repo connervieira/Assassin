@@ -221,7 +221,7 @@ if (config["external"]["local"]["enabled"] == True): # Check to see if interfaci
 else: # Interfacing with local services is disabled.
     status_log = {} # Set the error log to a blank placeholder.
 
-def display_notice(message, level=1):
+def display_notice(message, level=1, suppress_status_light=False):
     global headless_mode
     level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
@@ -242,7 +242,8 @@ def display_notice(message, level=1):
             status_log[time.time()] = [2, message] # Add this warning message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.yellow + "Warning: " + message + style.end)
-        update_status_lighting("warning")
+        if (suppress_status_light == False):
+            update_status_lighting("warning")
         if (headless_mode == False):
             if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
                 input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -254,7 +255,8 @@ def display_notice(message, level=1):
             status_log[time.time()] = [3, message] # Add this error message to the log file, using the current time as the key.
             save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
-        update_status_lighting("error")
+        if (suppress_status_light == False):
+            update_status_lighting("error")
         if (headless_mode == False):
             if (config["display"]["notices"]["3"]["wait_for_input"] == True and headless_mode == False): # Check to see if the configuration indicates to wait for user input before continuing.
                 input("Press enter to continue...") # Wait for the user to press enter before continuning.
@@ -755,7 +757,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
             status_lighting_update_url = str(config["display"]["status_lighting"]["alert_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
         else:
             debug_message("Failed to update status lighting")
-            display_notice("Unable to update status lighting. No URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+            display_notice("Unable to update status lighting. No URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
             process_timing("Status Lighting", "end")
             return False
 
@@ -769,12 +771,12 @@ def update_status_lighting(url_id): # Define the function used to update status 
                 return True
             except:
                 debug_message("Failed to update status lighting")
-                display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
+                display_notice("Unable to update status lighting. No network response.", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
                 process_timing("Status Lighting", "end")
                 return False
         else:
             debug_message("Failed to update status lighting")
-            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
             process_timing("Status Lighting", "end")
             return False
 

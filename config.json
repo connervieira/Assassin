@@ -2,7 +2,7 @@
     "general": {
         "working_directory": "/home/cvieira/Software/Support/Assassin/Working/",
         "active_config_refresh": false,
-        "refresh_delay": 0.2,
+        "refresh_delay": 0.5,
         "debugging_output": true,
         "disable_console_clearing": true,
         "gps": {
@@ -239,11 +239,16 @@
                     "limit": 0.5
                 }
             },
-            "whitelist": {
-            },
+            "whitelist": [],
             "blacklist": {
                 "62:F2:E6:94:76:0D": "Test alert"
             }
+        },
+        "bluetooth_monitoring": {
+            "enabled": false,
+            "latch_time": 0,
+            "scan_time": 0,
+            "minimum_following_distance": 0
         }
     },
     "display": {
