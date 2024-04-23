@@ -747,19 +747,23 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
 
 
 debug_message("Creating `update_status_lighting` function")
+current_status_light = ""
 def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
-    process_timing("Status Lighting", "start")
-    if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
-        debug_message("Updating status lighting")
-        if (url_id in config["display"]["status_lighting"]["system_values"]): # Check to see if the given URL ID exists in the configuration.
-            status_lighting_update_url = str(config["display"]["status_lighting"]["system_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
-        elif (url_id in config["display"]["status_lighting"]["alert_values"]): # Check to see if the given URL ID exists in the configuration.
-            status_lighting_update_url = str(config["display"]["status_lighting"]["alert_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
-        else:
-            debug_message("Failed to update status lighting")
-            display_notice("Unable to update status lighting. No URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
-            process_timing("Status Lighting", "end")
-            return False
+    global current_status_light
+    if (url_id != current_status_light): # Only update the status lighting if the submitted URL ID is different from the current status light state.
+        current_status_light = url_id
+        process_timing("Status Lighting", "start")
+        if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
+            debug_message("Updating status lighting")
+            if (url_id in config["display"]["status_lighting"]["system_values"]): # Check to see if the given URL ID exists in the configuration.
+                status_lighting_update_url = str(config["display"]["status_lighting"]["system_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+            elif (url_id in config["display"]["status_lighting"]["alert_values"]): # Check to see if the given URL ID exists in the configuration.
+                status_lighting_update_url = str(config["display"]["status_lighting"]["alert_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+            else:
+                debug_message("Failed to update status lighting")
+                display_notice("Unable to update status lighting. No URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+                process_timing("Status Lighting", "end")
+                return False
 
         if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
             debug_message("Sending status lighting network request")

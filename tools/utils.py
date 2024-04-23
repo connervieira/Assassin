@@ -1,6 +1,6 @@
 # Assassin
 
-# Copyright (C) 2023 V0LT - Conner Vieira 
+# Copyright (C) 2024 V0LT - Conner Vieira 
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -59,27 +59,28 @@ def debug_message(message):
 import os # Required to interact with certain operating system functions
 import json # Required to process JSON data
 
+def is_json(string):
+    try:
+        json_object = json.loads(string) # Try to load string as JSON information.
+    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
+        return False # Return 'false' to indicate that the string is not JSON.
+
+    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
+
+
 assassin_root_directory = str(os.path.dirname(os.path.realpath(__file__))) # This variable determines the folder path of the root Assassin directory. This should usually automatically recognize itself, but it if it doesn't, you can change it manually.
 
+import config
+load_config = config.load_config
+
+config = load_config() # Load the configuration.
 
 
-def load_config():
-    # Locate and load the configuration file.
-    if (os.path.exists(str(assassin_root_directory + "/config.json")) == True): # Check to see if the configuration file exists in the default location.
-        config = json.load(open(assassin_root_directory + "/config.json")) # Load the configuration database from config.json
-    elif (os.path.exists(str(assassin_root_directory + "/../config.json")) == True): # Check to see if the configuration file exists in the parent directory. This may occur if this script is being used in a subfolder of Assassin.
-        config = json.load(open(assassin_root_directory + "/../config.json")) # Load the configuration database from the parent directory.
-    else: # The configuration file couldn't be located. Assassin can't continue to load.
-        config = {} # Set the configuration to a blank placeholder dictionary.
-        print("Configuration couldn't be located.")
-        exit()
-
-    return config # Return the loaded configuration information.
-
-
-config = load_config() # Execute the configuration loading.
-
-
+import sys
+if ("--headless" in sys.argv):
+    headless_mode = True
+else:
+    headless_mode = False
 
 
 debug_message("Loading utils.py libraries")
@@ -125,7 +126,8 @@ gps_enabled = config["general"]["gps"]["enabled"] # This setting determines whet
 # Define the function that will be used to clear the screen.
 debug_message("Creating `clear` function")
 def clear():
-    if config["general"]["disable_console_clearing"] == False: # Only run the clearing function if the configuration value to disable clearing is set to false.
+    global headless_mode
+    if (config["general"]["disable_console_clearing"] == False and headless_mode == False): # Only run the clearing function if the configuration value to disable clearing is set to false.
         if os.name == "nt": # Use 'cls' command if host is Windows
             os.system ("cls")
         else: # Use 'clear' command if host is Linux, BSD, MacOS, etc.
@@ -133,22 +135,14 @@ def clear():
 
 
 
-debug_message("Creating `is_json` function")
-def is_json(string):
-    try:
-        json_object = json.loads(string) # Try to load string as JSON information.
-    except ValueError as error_message: # If the process fails, then the string is not valid JSON.
-        return False # Return 'false' to indicate that the string is not JSON.
-
-    return True # If the try statement is successful, then return 'true' to indicate that the string is valid JSON.
-
-
 
 
 # Define the function that will be used to save files for exported data.
 debug_message("Creating `save_to_file` function")
 def save_to_file(file_name, contents, silence=True):
-    debug_message("Saving file: " + str(file_name))
+    file_name = file_name.replace("//","/")
+    if (silence == False):
+        debug_message("Saving file: " + str(file_name))
     file = None
     success = False
     try:
@@ -176,7 +170,9 @@ def save_to_file(file_name, contents, silence=True):
 # Define the fuction that will be used to add to the end of a file.
 debug_message("Creating `add_to_file` function")
 def add_to_file(file_name, contents, silence=True):
-    debug_message("Adding to file: " + str(file_name))
+    file_name = file_name.replace("//","/")
+    if (silence == False):
+        debug_message("Adding to file: " + str(file_name))
     file = None
     success = False
     try:
@@ -202,53 +198,94 @@ def add_to_file(file_name, contents, silence=True):
 
 
 
-
-
 debug_message("Creating `display_notice` function")
 if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
-    error_file_location = config["external"]["local"]["interface_directory"] + "/errors.json"
-    if (os.path.exists(error_file_location) == False): # If the error log file doesn't exist, create it.
-        save_to_file(error_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+    status_file_location = config["external"]["local"]["interface_directory"] + "/status.json"
 
-    error_file = open(error_file_location, "r") # Open the error log file for reading.
+    if (os.path.isdir(config["external"]["local"]["interface_directory"]) == False): # Check to see if the interface directory needs to be created.
+        os.makedirs(config["external"]["local"]["interface_directory"]) # Attempt to make the interface directory.
+        if (os.path.isdir(config["external"]["local"]["interface_directory"]) == False): # Check to see if the interface directory was created.
+            print(style.red + "Error: The interface directory does not exist, so the notice system could not be loaded." + style.end)
+            exit()
+    if (os.path.exists(status_file_location) == False): # If the error log file doesn't exist, create it.
+        save_to_file(status_file_location, "{}", True) # Save a blank placeholder dictionary to the error log file.
+
+    error_file = open(status_file_location, "r") # Open the error log file for reading.
     error_file_contents = error_file.read() # Read the raw contents of the error file as a string.
     error_file.close() # Close the error log file.
 
     if (is_json(error_file_contents) == True): # If the error file contains valid JSON data, then load it.
-        error_log = json.loads(error_file_contents) # Read and load the error log from the file.
+        status_log = json.loads(error_file_contents) # Read and load the error log from the file.
     else: # If the error file doesn't contain valid JSON data, then load a blank placeholder in it's place.
-        error_log = json.loads("{}") # Load a blank placeholder dictionary.
+        status_log = json.loads("{}") # Load a blank placeholder dictionary.
 else: # Interfacing with local services is disabled.
-    error_log = {} # Set the error log to a blank placeholder.
+    status_log = {} # Set the error log to a blank placeholder.
 
-def display_notice(message, level=1):
+def display_notice(message, level=1, suppress_status_light=False):
+    global headless_mode
     level = int(round(float(level))) # Convert the message level to an integer.
     message = str(message) # Convert the message to a string.
 
     if (level == 1): # The level is set to 1, indicating a standard notice.
-        print(message)
-        if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["1"]["delay"])) # Wait for the delay specified in the configuration.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            status_log[time.time()] = [1, message] # Add this warning message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
+        if (config["display"]["display_status_messages"] == True and headless_mode == False): # Check to see if the configuration indicates that status messages should be displayed.
+            print(message)
+            if (config["display"]["notices"]["1"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["1"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 2): # The level is set to 2, indicating a warning.
+        if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
+            status_log[time.time()] = [2, message] # Add this warning message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.yellow + "Warning: " + message + style.end)
-        if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
+        if (suppress_status_light == False):
+            update_status_lighting("warning")
+        if (headless_mode == False):
+            if (config["display"]["notices"]["2"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["2"]["delay"])) # Wait for the delay specified in the configuration.
 
     elif (level == 3): # The level is set to 3, indicating an error.
         if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
-            error_log[time.time()] = message # Add this error message to the log file, using the current time as the key.
-            save_to_file(error_file_location, json.dumps(error_log), True) # Save the modified error log to the disk as JSON data.
+            status_log[time.time()] = [3, message] # Add this error message to the log file, using the current time as the key.
+            save_to_file(status_file_location, json.dumps(status_log), True) # Save the modified error log to the disk as JSON data.
         print(style.red + "Error: " + message + style.end)
-        if (config["display"]["notices"]["3"]["wait_for_input"] == True): # Check to see if the configuration indicates to wait for user input before continuing.
-            input("Press enter to continue...") # Wait for the user to press enter before continuning.
-        else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
-            time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
+        if (suppress_status_light == False):
+            update_status_lighting("error")
+        if (headless_mode == False):
+            if (config["display"]["notices"]["3"]["wait_for_input"] == True and headless_mode == False): # Check to see if the configuration indicates to wait for user input before continuing.
+                input("Press enter to continue...") # Wait for the user to press enter before continuning.
+            else: # If the configuration doesn't indicate to wait for user input, then wait for a delay specified in the configuration for this notice level.
+                time.sleep(float(config["display"]["notices"]["3"]["delay"])) # Wait for the delay specified in the configuration.
 
+
+
+
+
+process_timers = {}
+def process_timing(identifier, action):
+    global process_timers
+
+    if (identifier not in process_timers and action != "dump"): # Check to see if the specified identifier doesn't exist in the process_timer dictionary.
+        process_timers[identifier] = {"total": 0, "start": 0} # Initialize the timer for this process.
+
+    if (action == "dump"):
+        return process_timers
+    elif (action == "start"):
+        process_timers[identifier]["start"] = time.time()
+    elif (action == "end"):
+        if (process_timers[identifier]["start"] != 0):
+            process_timers[identifier]["total"] = process_timers[identifier]["total"] + (time.time() - process_timers[identifier]["start"])
+            process_timers[identifier]["start"] = 0
+        else:
+            display_notice("The `processing_timing` function was called setting the end of the timer (" + identifier + "), but the timer wasn't started. This is likely a bug.", 2)
+    else:
+        display_notice("The `processing_timing` function was called with an unknown action. This likely a bug.", 2)
 
 
 
@@ -401,22 +438,6 @@ def display_shape(shape):
 
 
 
-# Define a function for running a countdown timer.
-debug_message("Creating `countdown` function")
-def countdown(timer):
-    timer = int(timer) # Make sure the timer is an integer number.
-
-    if (timer > 0): # Make sure the timer is greater than 0 seconds.
-        debug_message("Starting " + str(timer) + " second timer")
-        for iteration in range(1, timer + 1): # Loop however many times specified by the `timer` variable.
-            print(str(timer - iteration + 1)) # Display the current countdown number for this iteration, but subtracting the current iteration count from the total timer length.
-            time.sleep(1) # Wait for 1 second.
-    else:
-        display_notice("The timer was less than 0 seconds, so it was skipped.", 2)
-
-
-
-
 
 
 # Define a simple function to calculate the approximate distance between two points in miles.
@@ -431,16 +452,16 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
 
         # Verify the coordinates received, if efficient mode is disabled.
         if (efficient_mode == False):
-            if (lat1 > 180 or lat1 < -180):
+            if (lat1 >= 180 or lat1 <= -180):
                 display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
                 lat1 = 0 # Default to a safe value.
-            if (lon1 > 90 or lon1 < -90):
+            if (lon1 >= 90 or lon1 <= -90):
                 display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
                 lon1 = 0 # Default to a safe value.
-            if (lat2 > 180 or lat2 < -180):
+            if (lat2 >= 180 or lat2 <= -180):
                 display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
                 lat2 = 0 # Default to a safe value.
-            if (lon2 > 90 or lon2 < -90):
+            if (lon2 >= 90 or lon2 <= -90):
                 display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
                 lon2 = 0 # Default to a safe value.
 
@@ -474,12 +495,10 @@ def get_distance(lat1, lon1, lat2, lon2, efficient_mode = True):
 debug_message("Creating `load_traffic_cameras` function")
 def load_traffic_cameras(current_lat, current_lon, database_file, radius):
     if (os.path.exists(database_file) == True): # Check to make sure the database specified in the configuration actually exists.
-        debug_message("Opening traffic enforcement camera database")
         with lzma.open(database_file, "rt", encoding="utf-8") as f: # Open the database file.
             database_lines = list(map(json.loads, f)) # Load the camera database
             loaded_database_information = [] # Load an empty placeholder database so we can write data to it later.
             
-            debug_message("Loading traffic enforcement cameras from database")
             for camera in database_lines: # Iterate through each camera in the database.
                 if ("lat" in camera and "lon" in camera): # Only check this camera if it has a latitude and longitude defined in the database.
                     if (get_distance(current_lat, current_lon, camera['lat'], camera['lon']) < float(radius)): # Check to see if this camera is inside the initial loading radius.
@@ -505,16 +524,16 @@ def calculate_bearing (lat1, lon1, lat2, lon2):
     lon2 = float(lon2)
 
     # Verify the coordinates received.
-    if (lat1 > 180 or lat1 < -180):
+    if (lat1 >= 180 or lat1 <= -180):
         display_notice("Latitude value 1 is out of bounds, and is invalid.", 2)
         lat1 = 0 # Default to a safe value.
-    if (lon1 > 90 or lon1 < -90):
+    if (lon1 >= 90 or lon1 <= -90):
         display_notice("Longitude value 1 is out of bounds, and is invalid.", 2)
         lon1 = 0 # Default to a safe value.
-    if (lat2 > 180 or lat2 < -180):
+    if (lat2 >= 180 or lat2 <= -180):
         display_notice("Latitude value 2 is out of bounds, and is invalid.", 2)
         lat2 = 0 # Default to a safe value.
-    if (lon2 > 90 or lon2 < -90):
+    if (lon2 >= 90 or lon2 <= -90):
         display_notice("Longitude value 2 is out of bounds, and is invalid.", 2)
         lon2 = 0 # Default to a safe value.
 
@@ -547,9 +566,9 @@ def bearing_difference(bearing1, bearing2):
         bearing2 = bearing2 + 360
 
     # Make sure both of the bearings are less than 360 degrees.
-    while bearing1 > 0:
+    while bearing1 > 360:
         bearing1 = bearing1 - 360
-    while bearing2 > 0:
+    while bearing2 > 360:
         bearing2 = bearing2 - 360
 
 
@@ -594,7 +613,7 @@ def nearby_database_poi(current_location, database_information, radius=1.0): # T
 
 
 debug_message("Creating `convert_speed` function")
-def convert_speed(speed, unit="mph"): # This function is used to convert speeds from meters per second, to other units.
+def convert_speed(speed, unit=config["display"]["displays"]["speed"]["unit"]): # This function is used to convert speeds from meters per second, to other units.
     unit = unit.lower() # Convert the unit to all lowercase in order to make it easier to work with and remove inconsistencies in configuration setups.
     unit = unit.strip() # Remove any trailing or leading whitespaces in the unit in an attempt to recover from malformatted units.
 
@@ -729,19 +748,37 @@ def get_arrow_direction(heading=0): # Define the function used to convert degree
 
 debug_message("Creating `update_status_lighting` function")
 def update_status_lighting(url_id): # Define the function used to update status lighting. This function is primarily designed to interface with WLED RGB LED controllers, but it should work for other systems that use network requests to update lighting.
+    process_timing("Status Lighting", "start")
     if (config["display"]["status_lighting"]["enabled"] == True): # Check to see if status lighting alerts are enabled in the Assassin configuration.
         debug_message("Updating status lighting")
-        status_lighting_update_url = str(config["display"]["status_lighting"]["status_lighting_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+        if (url_id in config["display"]["status_lighting"]["system_values"]): # Check to see if the given URL ID exists in the configuration.
+            status_lighting_update_url = str(config["display"]["status_lighting"]["system_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+        elif (url_id in config["display"]["status_lighting"]["alert_values"]): # Check to see if the given URL ID exists in the configuration.
+            status_lighting_update_url = str(config["display"]["status_lighting"]["alert_values"][url_id]).replace("[U]", str(config["display"]["status_lighting"]["base_url"]))# Prepare the URL where a request will be sent in order to update the status lighting.
+        else:
+            debug_message("Failed to update status lighting")
+            display_notice("Unable to update status lighting. No URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+            process_timing("Status Lighting", "end")
+            return False
+
         if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
             debug_message("Sending status lighting network request")
             try:
-                response = requests.get(status_lighting_update_url)
+                response = requests.get(status_lighting_update_url, timeout=0.5)
                 debug_message("Updated status lighting")
+                process_timing("Status Lighting", "end")
+                time.sleep(float(config["display"]["status_lighting"]["delay"]))
+                return True
             except:
                 debug_message("Failed to update status lighting")
-                display_notice("Unable to update status lighting. No network response.", 2) # Display a warning that the URL was invalid, and no network request was sent.
+                display_notice("Unable to update status lighting. No network response.", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+                process_timing("Status Lighting", "end")
+                return False
         else:
-            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2) # Display a warning that the URL was invalid, and no network request was sent.
+            debug_message("Failed to update status lighting")
+            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+            process_timing("Status Lighting", "end")
+            return False
 
 
 
@@ -751,6 +788,7 @@ def update_status_lighting(url_id): # Define the function used to update status 
 # This function is used to play a given sound as defined in the configuration.
 debug_message("Creating `play_sound` function")
 def play_sound(sound_id):
+    process_timing("Audio/Sound Effects", "start")
     if (str(sound_id) in config["audio"]["sounds"]): # Check to see that a sound with the specified sound ID exists in the configuration.
         if (int(config["audio"]["sounds"][str(sound_id)]["repeat"]) > 0): # Check to see if this sound effect is enabled.
             if (os.path.exists(str(config["audio"]["sounds"][str(sound_id)]["path"])) == True and str(config["audio"]["sounds"][str(sound_id)]["path"]) != ""): # Check to see if the sound file associated with the specified sound ID actually exists.
@@ -770,6 +808,7 @@ def play_sound(sound_id):
                 display_notice("The sound file path associated with sound ID (" + str(sound_id) + ") does not exist.", 2)
     else: # No sound with this ID exists in the configuration database, and therefore the sound can't be played.
         display_notice("No sound with the ID (" + str(sound_id) + ") exists in the configuration.", 2)
+    process_timing("Audio/Sound Effects", "end")
 
 
 
@@ -800,9 +839,11 @@ def utc_datetime(timestamp):
 
 # This function takes the location history and exports it into a GPX file.
 debug_message("Creating `save_gpx` function")
-def save_gpx(location_history, file_path):
+def save_gpx(location_history):
     if (type(location_history) == list): # Check to make sure the location_history provided is a list.
         if (os.path.isdir(config["general"]["telemetry"]["directory"]) == True): # Check to make sure the save directory specified in the configuration exists and is actually a directory.
+            debug_message("Generating GPX location track")
+
             file_contents = '<?xml version="1.0" encoding="UTF-8" ?>\n<gpx version="1.0" creator="V0LT Assassin">\n    <time>' + utc_datetime(location_history[0]["time"]) + '</time>\n    <trk>\n        <trkseg>\n' # Set-up the start of the file.
 
             for point in location_history: # Iterate through each point in the location history .
@@ -818,7 +859,8 @@ def save_gpx(location_history, file_path):
             file_contents = file_contents + "        </trkseg>\n    </trk>\n</gpx>" # Set-up the end of the file.
 
             file_name = config["general"]["telemetry"]["file"].replace("{T}", str(round(location_history[0]["time"]))) # Set up the file name that the telemetry information will be saved to.
-            file_path = config["general"]["telemetry"]["directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
+            file_path = config["general"]["working_directory"] + "/" + file_name # Set up the complete file path that the telemetry information will be saved to.
+
             save_to_file(file_path, file_contents, True) # Save the telemetry data to a file.
 
     else:
