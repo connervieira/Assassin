@@ -765,24 +765,24 @@ def update_status_lighting(url_id): # Define the function used to update status 
                 process_timing("Status Lighting", "end")
                 return False
 
-        if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
-            debug_message("Sending status lighting network request")
-            try:
-                response = requests.get(status_lighting_update_url, timeout=0.5)
-                debug_message("Updated status lighting")
-                process_timing("Status Lighting", "end")
-                time.sleep(float(config["display"]["status_lighting"]["delay"]))
-                return True
-            except:
+            if (validators.url(status_lighting_update_url)): # Check to make sure the URL ID supplied actually resolves to a valid URL in the configuration database.
+                debug_message("Sending status lighting network request")
+                try:
+                    response = requests.get(status_lighting_update_url, timeout=0.5)
+                    debug_message("Updated status lighting")
+                    process_timing("Status Lighting", "end")
+                    time.sleep(float(config["display"]["status_lighting"]["delay"]))
+                    return True
+                except:
+                    debug_message("Failed to update status lighting")
+                    display_notice("Unable to update status lighting. No network response.", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+                    process_timing("Status Lighting", "end")
+                    return False
+            else:
                 debug_message("Failed to update status lighting")
-                display_notice("Unable to update status lighting. No network response.", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
+                display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + " (" + str(status_lighting_update_url) + ").", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
                 process_timing("Status Lighting", "end")
                 return False
-        else:
-            debug_message("Failed to update status lighting")
-            display_notice("Unable to update status lighting. Invalid URL configured for " + str(url_id) + ".", 2, suppress_status_light=True) # Display a warning that the URL was invalid, and no network request was sent.
-            process_timing("Status Lighting", "end")
-            return False
 
 
 
