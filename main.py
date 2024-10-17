@@ -880,7 +880,26 @@ while True: # Run forever in a loop until terminated.
             for plate in predator_alerts:
                 print("    Plate: " + str(plate))
                 for alert in predator_alerts[plate]:
-                    print("        Trigger: " + str(alert))
+                    print("        Trigger: " + str(alert)) # Display the alert rule that triggered this alert.
+                    if ("name" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["name"]) > 0): # Check to see if there is a name associated with this alert.
+                        print("            Name: " + str(predator_alerts[plate][alert]["name"])) # Display the name.
+                    if ("description" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["description"]) > 0): # Check to see if there is a description associated with this alert.
+                        print("            Description: " + str(predator_alerts[plate][alert]["description"])) # Display the description.
+                    if ("author" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["author"]) > 0): # Check to see if there is an author associated with this alert.
+                        print("            Author: " + str(predator_alerts[plate][alert]["author"])) # Display the author.
+                    if ("source" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["source"]) > 0): # Check to see if there is a source associated with this alert.
+                        print("            Source: " + str(predator_alerts[plate][alert]["source"])) # Display the source.
+                    if ("vehicle" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["vehicle"]) > 0): # Check to see if there is vehicle information associated with this alert.
+                        vehicle_string = ""
+                        if ("year" in predator_alerts[plate][alert]["vehicle"] and int(predator_alerts[plate][alert]["vehicle"]["year"]) > 0): # Check to see if there is a vehicle model associated with this alert.
+                            vehicle_string += str(predator_alerts[plate][alert]["vehicle"]["year"]) + " "
+                        if ("make" in predator_alerts[plate][alert]["vehicle"] and len(predator_alerts[plate][alert]["vehicle"]["make"]) > 0): # Check to see if there is a vehicle make associated with this alert.
+                            vehicle_string += predator_alerts[plate][alert]["vehicle"]["make"] + " "
+                        if ("model" in predator_alerts[plate][alert]["vehicle"] and len(predator_alerts[plate][alert]["vehicle"]["model"]) > 0): # Check to see if there is a vehicle model associated with this alert.
+                            vehicle_string += predator_alerts[plate][alert]["vehicle"]["model"] + " "
+                        if (len(vehicle_string) > 0): # Check to see if there is any vehicle informaton to display.
+                            print("            Vehicle: " + vehicle_string) # Display the vehicle information.
+                        del vehicle_string # Remove the temporary vehicle string.
 
             print(style.end)
 

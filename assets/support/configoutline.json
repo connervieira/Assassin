@@ -110,7 +110,8 @@
 		},
       	"predator_integration": {
           	"enabled": "bool",
-         	"plate_log_file": "str",
+			"instance_directory": "dir",
+            "start_predator": "bool",
           	"latch_time": "+float"
         },
 		"traffic_camera_alerts": {
@@ -362,7 +363,17 @@
 				"path": "file",
 				"repeat": "+int",
 				"delay": "+float"
-			}
+            },
+            "predator": {
+				"path": "file",
+				"repeat": "+int",
+				"delay": "+float"
+            },
+            "attention_monitoring": {
+				"path": "file",
+				"repeat": "+int",
+				"delay": "+float"
+            }
 		}
 	},
 	"external": {

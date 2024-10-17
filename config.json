@@ -111,7 +111,7 @@
         "predator_integration": {
             "enabled": true,
             "instance_directory": "/home/cvieira/Software/Programming/Python/Predator/",
-            "plate_log_file": "/home/cvieira/Software/Support/Predator/Working/plate_history.json",
+            "start_predator": true,
             "latch_time": 60
         },
         "traffic_camera_alerts": {
@@ -374,6 +374,16 @@
             },
             "gps": {
                 "path": "./assets/sounds/gps.mp3",
+                "repeat": 0,
+                "delay": 0.5
+            },
+            "predator": {
+                "path": "./assets/sounds/predator.mp3",
+                "repeat": 0,
+                "delay": 0.5
+            },
+            "attention_monitoring": {
+                "path": "./assets/sounds/attention_monitoring.mp3",
                 "repeat": 0,
                 "delay": 0.5
             }

@@ -122,8 +122,8 @@ This section of configuration values will effect Assassin's general operation.
         - `precipitation` is the current chance of precipitation.
 - `predator_integration` contains settings related to Predator integration, which allows Assassin to show alerts detected by [Predator](https://v0lttech.com/predator.php).
     - `enabled` is a boolean that determines if Predator integration alerts are active.
-    - `plate_log_file` is an absolute file path to the plate log file used by Predator.
-        - It should be noted that this is not the plate file from the interface directory, but rather the complete log file defined in the Predator configuration under `realtime>`saving>license_plates`
+    - `instance_directory` is a complete file-path that points to the root Predator instance directory (the directory containing `main.py`)
+    - `start_predator` is a boolean value that determines whether Assassin will start Predator on start-up. If your use case involves Predator being started separately before Assassin starts, then you should change this configuration value to `false`.
     - `latch_time` is a floating point value that determines how many seconds Assassin will look back in the plate history for active alerts.
 - `traffic_camera_alerts` contains settings related to traffic enforcement camera alerts.
     - `enabled` is a boolean value that determines whether or not traffic camera alerts are enabled or disabled.
