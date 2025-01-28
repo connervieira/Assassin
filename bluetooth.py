@@ -52,7 +52,7 @@ def scan_bluetooth_le(): # This function scans for Bluetooth LE devices, and dum
 
 
 def start_bluetooth_scanning(): # This function initializes the Bluetooth scanning system.
-    # Validate Bluetooth configuration values
+    # Validate Bluetooth configuration values:
     for entry in config["general"]["bluetooth_scanning"]["blacklist"]:
         if (entry != entry.upper()):
             display_notice("One or more entries in the Bluetooth blacklist contain lowercase letters. These entries will never be triggered.", 2)

@@ -205,7 +205,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
 
 
 
-        # Check to see which threats are still within the latch time, then add them to the active hazards list.
+        # Check to see which threats are still within the latch time, then add them to the active hazards list:
         for device in active_radio_devices: # Iterate through each active radio device.
             if (active_radio_devices[device]["threat"] == True):
                 if (time.time() - time.mktime(datetime.datetime.strptime(active_radio_devices[device]["lastseen"], "%Y-%m-%d %H:%M:%S").timetuple()) < float(config["general"]["drone_alerts"]["hazard_latch_time"])): # Check to see if this threat was recently seen. If not, don't consider it an active threat.
@@ -224,7 +224,7 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
 
 
 
-        # Sort the drone alert list.
+        # Sort the drone alert list:
         if (len(detected_drone_hazards) > 1): # Only sort the drone threats list if there is more than 1 entry in it.
             debug_message("Sorting drone threats")
             sorted_detected_drone_hazards = [] # Set the sorted drone threats to a blank placeholder so each entry can be added one by one in the next steps.
@@ -239,7 +239,12 @@ def drone_alert_processing(radio_device_history, drone_threat_database, detected
 
             detected_drone_hazards = sorted_detected_drone_hazards # After the sorting has been finished, set the original drone threats list to the sorted version of it's original contents.
 
-        return detected_drone_hazards
+        # Add alert IDs to each active drone alert:
+        drone_alerts = {}
+        for drone in detected_drone_hazards:
+            drone_alerts[str(hash(drone["mac"]))] = drone
+
+        return drone_alerts
         debug_message("Processed drone alerts")
     else:
         return []

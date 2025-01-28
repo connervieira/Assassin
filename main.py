@@ -157,7 +157,6 @@ if (config["general"]["drone_alerts"]["enabled"] == True): # Only load drone pro
     load_drone_alerts = drones.load_drone_alerts
 
     drone_threat_history, radio_device_history, drone_threat_database = load_drone_alerts()
-    detected_drone_hazards = []
 
 
 # Load the ALPR camera alert system.
@@ -185,8 +184,6 @@ if (config["general"]["weather_alerts"]["enabled"] == True): # Only load weather
 if (config["general"]["attention_monitoring"]["enabled"] == True): # Only load attention monitoring system if attention alerts are enabled.
     debug_message("Initializing attention monitoring system")
     import attention
-    process_attention_alerts = attention.process_attention_alerts
-    get_current_attention_time = attention.get_current_attention_time
     attention_alerts = {}
 
 # Load Predator integration.
@@ -233,7 +230,7 @@ speak("Assassin has completed loading", "Loading complete")
 
 current_location = [] # Set the current location variable to a placeholder before starting the main loop.
 
-# Set placeholders for all the complete alert dictionary.
+# Initialize the complete alert dictionary:
 all_alerts = {}
 
 # Set placeholders for all the alert counters.
@@ -289,19 +286,19 @@ while True: # Run forever in a loop until terminated.
     # Run traffic enforcement camera alert processing.
     if (config["general"]["traffic_camera_alerts"]["enabled"] == True):
         process_timing("Alerts/Traffic Enforcement Cameras", "start")
-        nearby_cameras_all = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
+        traffic_camera_alerts = traffic_camera_alert_processing(current_location, loaded_traffic_camera_database)
         process_timing("Alerts/Traffic Enforcement Cameras", "end")
     else:
-        nearby_cameras_all = []
+        traffic_camera_alerts = {}
 
 
     # Run ALPR camera alert processing.
     if (config["general"]["alpr_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run ALPR camera processing if ALPR alerts are enabled.
         process_timing("Alerts/License Plate Recognition Cameras", "start")
-        nearest_alpr_camera, nearby_alpr_cameras = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
+        alpr_alerts = alpr_camera_alert_processing(current_location, loaded_alpr_camera_database)
         process_timing("Alerts/License Plate Recognition Cameras", "end")
     else:
-        nearest_alpr_camera, nearby_alpr_cameras = {}, []
+        alpr_alerts = {}
 
 
     # Run drone alert processing.
@@ -310,7 +307,7 @@ while True: # Run forever in a loop until terminated.
         detected_drone_hazards = drone_alert_processing(radio_device_history, drone_threat_database, detected_drone_hazards)
         process_timing("Alerts/Drones", "end")
     else:
-        detected_drone_hazards = []
+        detected_drone_hazards = {}
 
 
 
@@ -320,7 +317,7 @@ while True: # Run forever in a loop until terminated.
         aircraft_threats, aircraft_data = adsb_alert_processing(current_location, current_speed)
         process_timing("Alerts/Aircraft", "end")
     else:
-        aircraft_threats, aircraft_data = [], {}
+        aircraft_threats, aircraft_data = {}, {}
 
 
     # Process weather alerts.
@@ -340,12 +337,13 @@ while True: # Run forever in a loop until terminated.
         process_timing("Alerts/OBD", "end")
     else:
         obd_alerts = {}
+        obd_data = {}
 
 
     # Process attention alerts.
     if (config["general"]["attention_monitoring"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Only run attention monitoring alert processing if it is enabled in the configuration.
         process_timing("Alerts/Attention", "start")
-        attention_alerts = process_attention_alerts(float(current_speed))
+        attention_alerts = attention.process_attention_alerts(float(current_speed))
         process_timing("Alerts/Attention", "end")
     else:
         attention_alerts = {}
@@ -387,18 +385,18 @@ while True: # Run forever in a loop until terminated.
     # Collect all alerts.
     process_timing("Organization/Alerts", "start")
     all_alerts = dict(list(all_alerts.items())[-10:]) # Trim the dictionary of all alerts to the last 10 entries.
-    current_time = time.time() # Get the current time.
-    all_alerts[current_time] = {}
-    all_alerts[current_time]["drone"] = detected_drone_hazards
-    all_alerts[current_time]["aircraft"] = aircraft_threats
-    all_alerts[current_time]["traffic_camera"] = nearby_cameras_all
-    all_alerts[current_time]["alpr"] = nearby_alpr_cameras
-    all_alerts[current_time]["weather"] = weather_alerts
-    all_alerts[current_time]["gps"] = gps_alerts
-    all_alerts[current_time]["obd"] = obd_alerts
-    all_alerts[current_time]["attention"] = attention_alerts
-    all_alerts[current_time]["bluetooth"] = bluetooth_alerts
-    all_alerts[current_time]["predator"] = predator_alerts
+    cycle_current_time = time.time() # Get the current time at the start of this processing cycle.
+    all_alerts[cycle_current_time] = {}
+    all_alerts[cycle_current_time]["drone"] = detected_drone_hazards
+    all_alerts[cycle_current_time]["aircraft"] = aircraft_threats
+    all_alerts[cycle_current_time]["traffic_camera"] = traffic_camera_alerts
+    all_alerts[cycle_current_time]["alpr"] = alpr_alerts
+    all_alerts[cycle_current_time]["weather"] = weather_alerts
+    all_alerts[cycle_current_time]["gps"] = gps_alerts
+    all_alerts[cycle_current_time]["obd"] = obd_alerts
+    all_alerts[cycle_current_time]["attention"] = attention_alerts
+    all_alerts[cycle_current_time]["bluetooth"] = bluetooth_alerts
+    all_alerts[cycle_current_time]["predator"] = predator_alerts
 
 
     if (config["external"]["local"]["enabled"] == True): # Check to see if interfacing with local services is enabled.
@@ -406,16 +404,16 @@ while True: # Run forever in a loop until terminated.
 
 
     # Record the number of active alerts.
-    alert_count["drone"] = [len(detected_drone_hazards)] + alert_count["drone"]
-    alert_count["aircraft"] = [len(aircraft_threats)] + alert_count["aircraft"]
-    alert_count["traffic_camera"] = [len(nearby_cameras_all)] + alert_count["traffic_camera"]
-    alert_count["alpr"] = [len(nearby_alpr_cameras)] + alert_count["alpr"]
-    alert_count["weather"] = [len(weather_alerts)] + alert_count["weather"]
-    alert_count["gps"] = [len(gps_alerts)] + alert_count["gps"]
-    alert_count["obd"] = [len(obd_alerts)] + alert_count["obd"]
-    alert_count["attention"] = [len(attention_alerts)] + alert_count["attention"]
-    alert_count["bluetooth"] = [len(bluetooth_alerts)] + alert_count["bluetooth"]
-    alert_count["predator"] = [len(predator_alerts)] + alert_count["predator"]
+    alert_count["drone"] = [len(all_alerts[cycle_current_time]["drone"])] + alert_count["drone"]
+    alert_count["aircraft"] = [len(all_alerts[cycle_current_time]["aircraft"])] + alert_count["aircraft"]
+    alert_count["traffic_camera"] = [len(all_alerts[cycle_current_time]["traffic_camera"])] + alert_count["traffic_camera"]
+    alert_count["alpr"] = [len(all_alerts[cycle_current_time]["alpr"])] + alert_count["alpr"]
+    alert_count["weather"] = [len(all_alerts[cycle_current_time]["weather"])] + alert_count["weather"]
+    alert_count["gps"] = [len(all_alerts[cycle_current_time]["gps"])] + alert_count["gps"]
+    alert_count["obd"] = [len(all_alerts[cycle_current_time]["obd"])] + alert_count["obd"]
+    alert_count["attention"] = [len(all_alerts[cycle_current_time]["attention"])] + alert_count["attention"]
+    alert_count["bluetooth"] = [len(all_alerts[cycle_current_time]["bluetooth"])] + alert_count["bluetooth"]
+    alert_count["predator"] = [len(all_alerts[cycle_current_time]["predator"])] + alert_count["predator"]
 
 
     # Only keep alert counts from the past 10 cycles.
@@ -446,15 +444,15 @@ while True: # Run forever in a loop until terminated.
 
         # Process aircraft text to speech alerts.
         if (alert_count["aircraft"][0] > alert_count["aircraft"][1]):
-            speak("New aircraft alert. " + str(round(aircraft_threats[0]["distance"]*10)/10) + " miles", "Aircraft")
+            speak("New aircraft alert. " + str(round(all_alerts[cycle_current_time]["aircraft"][list(all_alerts[cycle_current_time]["aircraft"]).keys()[0]]["distance"]*10)/10) + " miles", "Aircraft")
 
         # Process traffic camera text to speech alerts.
         if (alert_count["traffic_camera"][0] > alert_count["traffic_camera"][1]):
-            speak("New traffic camera alert. " + str(round(nearby_cameras_all[0]["dst"]*10)/10) + " miles", "Traffic camera")
+            speak("New traffic camera alert. " + str(round(all_alerts[cycle_current_time]["traffic_camera"][list(all_alerts[cycle_current_time]["traffic_camera"].keys())[0]]["dst"]*10)/10) + " miles", "Traffic camera")
 
         # Process ALPR text to speech alerts.
         if (alert_count["alpr"][0] > alert_count["alpr"][1]):
-            speak("New A. L. P. R. Alert. " + str(round(nearest_alpr_camera["distance"]*10)/10) + " miles", "A. L. P. R")
+            speak("New A. L. P. R. Alert. " + str(round(all_alerts[cycle_current_time]["alpr"][list(all_alerts[cycle_current_time]["alpr"]).keys()[0]]["distance"]*10)/10) + " miles", "A. L. P. R")
 
         # Process weather text to speech alerts.
         if (alert_count["weather"][0] > alert_count["weather"][1]):
@@ -538,10 +536,10 @@ while True: # Run forever in a loop until terminated.
         if (config["display"]["displays"]["planes"] == True and config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True): # Check to see if the plane count display is enabled in the configuration.
             print("Aircraft: " + str(len(aircraft_data))) # Print the current detected plane count to the console.
         if (config["display"]["displays"]["attention"] == True and config["general"]["attention_monitoring"]["enabled"] == True): # Check to see if the attention timer display is enabled in the configuration.
-            print("Attention: " + str(datetime.timedelta(seconds=round(get_current_attention_time()[0]))) + " active (" + str(datetime.timedelta(seconds=round(get_current_attention_time()[1]))) + " reset)") # Print the current active attention time to the console.
+            print("Attention: " + str(datetime.timedelta(seconds=round(attention.get_current_attention_time()[0]))) + " active (" + str(datetime.timedelta(seconds=round(attention.get_current_attention_time()[1]))) + " reset)") # Print the current active attention time to the console.
 
         if (config["general"]["predator_integration"]["enabled"] == True and config["display"]["displays"]["predator"] == True): # Check to see if the Predator display is enabled.
-            print("Predator: " + str(len(predator_plate_history))) # Print the number of license plates currently seen by Predator. TODO
+            print("Predator: " + str(len(predator_plate_history))) # Print the number of license plates currently seen by Predator. TODO: Test
 
         if (config["general"]["bluetooth_scanning"]["enabled"] == True and config["display"]["displays"]["bluetooth"] == True): # Check to see if the Bluetooth display is enabled.
             print("Bluetooth: " + str(len(bluetooth_devices))) # Print the number of nearby Bluetooth devices.
@@ -554,20 +552,20 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display GPS alerts.
-        if (config["general"]["gps"]["alerts"]["enabled"] == True and len(gps_alerts) > 0):
+        if (config["general"]["gps"]["alerts"]["enabled"] == True and len(all_alerts[cycle_current_time]["gps"]) > 0):
             debug_message("Displaying GPS alerts")
-            print(style.green + "GPS Alerts: " + str(len(gps_alerts))) # Display the GPS alert title.
-            if ("maxspeed" in gps_alerts): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
-                if (gps_alerts["maxspeed"]["active"] == True):
-                    print("    Calculated Overspeed: " + str(round(gps_alerts["maxspeed"]["speed"]*1000)/1000))
-            if ("nodata" in gps_alerts): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
-                if (gps_alerts["nodata"]["active"] == True):
+            print(style.green + "GPS Alerts: " + str(len(all_alerts[cycle_current_time]["gps"]))) # Display the GPS alert title.
+            if ("maxspeed" in all_alerts[cycle_current_time]["gps"]): # Check to see if there is an entry for 'max speed' alerts in the GPS alerts.
+                if (all_alerts[cycle_current_time]["gps"]["maxspeed"]["active"] == True):
+                    print("    Calculated Overspeed: " + str(round(all_alerts[cycle_current_time]["gps"]["maxspeed"]["speed"]*1000)/1000))
+            if ("nodata" in all_alerts[cycle_current_time]["gps"]): # Check to see if there is an entry for 'no data' alerts in the GPS alerts.
+                if (all_alerts[cycle_current_time]["gps"]["nodata"]["active"] == True):
                     print("    No GPS Data")
-            if ("frozen" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
-                if (gps_alerts["frozen"]["active"] == True):
+            if ("frozen" in all_alerts[cycle_current_time]["gps"]): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
+                if (all_alerts[cycle_current_time]["gps"]["frozen"]["active"] == True):
                     print("    GPS Frozen")
-            if ("diagnostic" in gps_alerts): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
-                print("    GPS Diagnostics: (" + str(gps_alerts["diagnostic"]["lat"]) + ", " + str(gps_alerts["diagnostic"]["lon"]) + ") " + str(gps_alerts["diagnostic"]["spd"]) + " m/s facing " + str(gps_alerts["diagnostic"]["hdg"]) + "° at " + str(gps_alerts["diagnostic"]["alt"]) + "m with " + str(gps_alerts["diagnostic"]["sat"]) + " sat")
+            if ("diagnostic" in all_alerts[cycle_current_time]["gps"]): # Check to see if there is an entry for 'frozen' alerts in the GPS alerts.
+                print("    GPS Diagnostics: (" + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["lat"]) + ", " + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["lon"]) + ") " + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["spd"]) + " m/s facing " + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["hdg"]) + "° at " + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["alt"]) + "m with " + str(all_alerts[cycle_current_time]["gps"]["diagnostic"]["sat"]) + " sat")
             print(style.end)
 
             update_status_lighting("gpsalert")
@@ -579,57 +577,59 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display ALPR camera alerts.
-        if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True and len(nearby_alpr_cameras) > 0): # Only display nearby ALPR camera alerts if they are enabled.
+        if (float(config["general"]["alpr_alerts"]["alert_range"]) > 0 and config["general"]["gps"]["enabled"] == True and len(all_alerts[cycle_current_time]["alpr"]) > 0): # Only display nearby ALPR camera alerts if they are enabled.
             debug_message("Displaying ALPR camera alerts")
 
 
-            print(style.purple + loaded_alpr_camera_database["name"] + " Cameras: " + str(len(nearby_alpr_cameras))) # Display the number of active ALPR alerts.
-            print("    Nearest:")
-            if (config["general"]["alpr_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearest_alpr_camera["lat"]) + ", " + str(nearest_alpr_camera["lon"]) + " (" + get_arrow_direction(nearest_alpr_camera["direction"]) + " " + str(round(nearest_alpr_camera["direction"])) + "°)") # Display the distance to this POI.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["distance"] == True): # Only display the distance to the camera if it is enabled in the configuration.
-                print("        Distance: " + str(round(nearest_alpr_camera["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
-                if (nearest_alpr_camera["street"] != ""):
-                    print("        Street: " + str(nearest_alpr_camera["street"])) # Display the street that this POI is associated with.
-                else:
-                    print("        Street: Unknown")
-            if (config["general"]["alpr_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing to the camera if it is enabled in the configuration.
-                print("        Bearing: " + str(get_cardinal_direction(nearest_alpr_camera["bearing"])) + " " + str(round(nearest_alpr_camera["bearing"])) + "°") # Display the absolute bearing to this POI.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["absolute_facing"] == True): # Only display the absolute facing angle of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["facing"] != ""): # Check to see if this POI has direction information.
-                    print("        Absolute Facing: " + get_cardinal_direction(nearest_alpr_camera["facing"]) + " " + str(nearest_alpr_camera["facing"]) + "°") # Display the direction this camera is facing.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["relative_facing"] == True): # Only display the relative facing angle of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["relativefacing"] != ""): # Check to see if this POI has relative direction information.
-                    print("        Relative Facing: " + str(get_arrow_direction(nearest_alpr_camera["relativefacing"])) + " " + str(round(nearest_alpr_camera["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["brand"] == True): # Only display the brand of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["brand"] != ""):
-                    print("        Brand: " + str(nearest_alpr_camera["brand"])) # Display the brand of this camera.
-                else:
-                    print("        Brand: Unknown") # Display the brand of this camera as unknown.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["model"] == True): # Only display the model of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["model"] != ""):
-                    print("        Model: " + str(nearest_alpr_camera["model"])) # Display the model of this camera.
-                else:
-                    print("        Model: Unknown") # Display the model of this camera as unknown.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["operator"] == True): # Only display the operator of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["operator"] != ""):
-                    print("        Operator: " + str(nearest_alpr_camera["operator"])) # Display the brand of this camera.
-                else:
-                    print("        Operator: Unknown") # Display the operator of this camera as unknown.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["type"] == True): # Only display the type of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["type"] != ""):
-                    print("        Type: " + str(nearest_alpr_camera["type"])) # Display the type of this camera.
-                else:
-                    print("        Type: Unknown") # Display the type of this camera as unknown.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["mount"] == True): # Only display the mount of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["mount"] != ""):
-                    print("        Mount: " + str(nearest_alpr_camera["mount"])) # Display the mount of this camera.
-                else:
-                    print("        Mount: Unknown") # Display the mountof this camera as unknown.
-            if (config["general"]["alpr_alerts"]["information_displayed"]["description"] == True): # Only display the description of the camera if it is enabled in the configuration.
-                if (nearest_alpr_camera["description"] != ""):
-                    print("        Description: " + str(nearest_alpr_camera["description"])) # Display the description of this camera.
+            print(style.purple + loaded_alpr_camera_database["name"] + " Cameras: " + str(len(all_alerts[cycle_current_time]["alpr"]))) # Display the number of active ALPR alerts.
+            for alert_id in all_alerts[cycle_current_time]["alpr"]:
+                alert_info = all_alerts[cycle_current_time]["alpr"][alert_id]
+                print("    " + str(alert_id) + ":")
+                if (config["general"]["alpr_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
+                    print("        Location: " + str(alert_info["lat"]) + ", " + str(alert_info["lon"]) + " (" + get_arrow_direction(alert_info["direction"]) + " " + str(round(alert_info["direction"])) + "°)") # Display the distance to this POI.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["distance"] == True): # Only display the distance to the camera if it is enabled in the configuration.
+                    print("        Distance: " + str(round(alert_info["distance"]*1000)/1000) + " miles") # Display the distance to this POI.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
+                    if (alert_info["street"] != ""):
+                        print("        Street: " + str(alert_info["street"])) # Display the street that this POI is associated with.
+                    else:
+                        print("        Street: Unknown")
+                if (config["general"]["alpr_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing to the camera if it is enabled in the configuration.
+                    print("        Bearing: " + str(get_cardinal_direction(alert_info["bearing"])) + " " + str(round(alert_info["bearing"])) + "°") # Display the absolute bearing to this POI.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["absolute_facing"] == True): # Only display the absolute facing angle of the camera if it is enabled in the configuration.
+                    if (alert_info["facing"] != ""): # Check to see if this POI has direction information.
+                        print("        Absolute Facing: " + get_cardinal_direction(alert_info["facing"]) + " " + str(alert_info["facing"]) + "°") # Display the direction this camera is facing.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["relative_facing"] == True): # Only display the relative facing angle of the camera if it is enabled in the configuration.
+                    if (alert_info["relativefacing"] != ""): # Check to see if this POI has relative direction information.
+                        print("        Relative Facing: " + str(get_arrow_direction(alert_info["relativefacing"])) + " " + str(round(alert_info["relativefacing"])) + "°") # Display the direction this camera is facing relative to the current direction of movement.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["brand"] == True): # Only display the brand of the camera if it is enabled in the configuration.
+                    if (alert_info["brand"] != ""):
+                        print("        Brand: " + str(alert_info["brand"])) # Display the brand of this camera.
+                    else:
+                        print("        Brand: Unknown") # Display the brand of this camera as unknown.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["model"] == True): # Only display the model of the camera if it is enabled in the configuration.
+                    if (alert_info["model"] != ""):
+                        print("        Model: " + str(alert_info["model"])) # Display the model of this camera.
+                    else:
+                        print("        Model: Unknown") # Display the model of this camera as unknown.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["operator"] == True): # Only display the operator of the camera if it is enabled in the configuration.
+                    if (alert_info["operator"] != ""):
+                        print("        Operator: " + str(alert_info["operator"])) # Display the brand of this camera.
+                    else:
+                        print("        Operator: Unknown") # Display the operator of this camera as unknown.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["type"] == True): # Only display the type of the camera if it is enabled in the configuration.
+                    if (alert_info["type"] != ""):
+                        print("        Type: " + str(alert_info["type"])) # Display the type of this camera.
+                    else:
+                        print("        Type: Unknown") # Display the type of this camera as unknown.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["mount"] == True): # Only display the mount of the camera if it is enabled in the configuration.
+                    if (alert_info["mount"] != ""):
+                        print("        Mount: " + str(alert_info["mount"])) # Display the mount of this camera.
+                    else:
+                        print("        Mount: Unknown") # Display the mountof this camera as unknown.
+                if (config["general"]["alpr_alerts"]["information_displayed"]["description"] == True): # Only display the description of the camera if it is enabled in the configuration.
+                    if (alert_info["description"] != ""):
+                        print("        Description: " + str(alert_info["description"])) # Display the description of this camera.
             print(style.end)
 
             display_shape("horizontal") # Display an ASCII horizontal bar in the console output, if Assassin is configured to do so.
@@ -642,48 +642,51 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display traffic camera alerts.
-        if (config["general"]["traffic_camera_alerts"]["enabled"] == True and len(nearby_cameras_all) > 0): # Check to see if the speed camera display is enabled in the configuration.
+        if (config["general"]["traffic_camera_alerts"]["enabled"] == True and len(all_alerts[cycle_current_time]["traffic_camera"]) > 0): # Check to see if the speed camera display is enabled in the configuration.
             debug_message("Displaying traffic enforcement camera alerts")
 
-            print(style.blue + "Traffic Enforcement Cameras: " + str(len(nearby_cameras_all)))
-            print("    Nearest:")
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["type"] == True): # Only display the camera type if it is enabled in the configuration.
-                if (nearby_cameras_all[0]["type"] == "speed"): # Check to see if the overall nearest camera is the nearest speed camera.
-                    print("        Type: Speed Camera")
-                elif (nearby_cameras_all[0]["type"] == "redlight"): # Check to see if the overall nearest camera is the nearest red light camera.
-                    print("        Type: Red Light Camera")
-                elif (nearby_cameras_all[0]["type"] == "misc"): # Check to see if the overall nearest camera is the nearest general traffic camera.
-                    print("        Type: General Traffic Camera")
-                else:
-                    print("        Type: Unknown")
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                print("        Location: " + str(nearby_cameras_all[0]["lat"]) + ", " + str(nearby_cameras_all[0]["lon"]) + " (" + get_arrow_direction(nearby_cameras_all[0]["direction"]) + " " + str(round(nearby_cameras_all[0]["direction"])) + "°)") # Display the location of the traffic camera.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
-                print("        Distance: " + str(round(nearby_cameras_all[0]["dst"]*1000)/1000) + " miles") # Display the current distance to the traffic camera.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
-                if (nearby_cameras_all[0]["str"] != None): # Check to see if street data exists for this camera.
-                    print("        Street: " + str(nearby_cameras_all[0]["str"])) # Display the street that the traffic camera is on.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
-                if (nearby_cameras_all[0]["spd"] != None): # Check to see if speed limit data exists for this camera.
-                    print("        Speed: " + str(round(int(nearby_cameras_all[0]["spd"]) * 0.6213712)) + " mph") # Display the speed limit of the traffic camera, converted to miles per hour.
-            if (config["general"]["traffic_camera_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing if it is enabled in the configuration.
-                print("        Bearing: " + str(get_cardinal_direction(nearby_cameras_all[0]["bearing"])) + " " + str(round(nearby_cameras_all[0]["bearing"])) + "°") # Display the absolute direction towards this camera.
+            print(style.blue + "Traffic Enforcement Cameras: " + str(len(all_alerts[cycle_current_time]["traffic_camera"])))
+            for alert_id in all_alerts[cycle_current_time]["traffic_camera"]:
+                alert_info = all_alerts[cycle_current_time]["traffic_camera"][alert_id]
+                print("    " + str(alert_id) + ":")
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["type"] == True): # Only display the camera type if it is enabled in the configuration.
+                    if (alert_info["type"] == "speed"): # Check to see if the overall nearest camera is the nearest speed camera.
+                        print("        Type: Speed Camera")
+                    elif (alert_info["type"] == "redlight"): # Check to see if the overall nearest camera is the nearest red light camera.
+                        print("        Type: Red Light Camera")
+                    elif (alert_info["type"] == "misc"): # Check to see if the overall nearest camera is the nearest general traffic camera.
+                        print("        Type: General Traffic Camera")
+                    else:
+                        print("        Type: Unknown")
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
+                    print("        Location: " + str(alert_info["lat"]) + ", " + str(alert_info["lon"]) + " (" + get_arrow_direction(alert_info["direction"]) + " " + str(round(alert_info["direction"])) + "°)") # Display the location of the traffic camera.
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
+                    print("        Distance: " + str(round(alert_info["dst"]*1000)/1000) + " miles") # Display the current distance to the traffic camera.
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["street"] == True): # Only display the street if it is enabled in the configuration.
+                    if (alert_info["str"] != None): # Check to see if street data exists for this camera.
+                        print("        Street: " + str(alert_info["str"])) # Display the street that the traffic camera is on.
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
+                    if (alert_info["spd"] != None): # Check to see if speed limit data exists for this camera.
+                        print("        Speed: " + str(round(int(alert_info["spd"]) * 0.6213712)) + " mph") # Display the speed limit of the traffic camera, converted to miles per hour.
+                if (config["general"]["traffic_camera_alerts"]["information_displayed"]["bearing"] == True): # Only display the bearing if it is enabled in the configuration.
+                    print("        Bearing: " + str(get_cardinal_direction(alert_info["bearing"])) + " " + str(round(alert_info["bearing"])) + "°") # Display the absolute direction towards this camera, as if the vehicle was facing due north.
             print(style.end)
 
 
             display_shape("circle") # Display an ASCII circle in the console output, if Assassin is configured to do so.
-
             update_status_lighting("enforcementcamera") # Run the function to update the status lighting.
-            # Play audio alerts, as necessary.
-            if (nearby_cameras_all[0]["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
-                if (nearby_cameras_all[0]["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
-                    if (float(nearby_cameras_all[0]["spd"]) < float(convert_speed(float(current_location[2])))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
+
+            # Play audio alerts, as necessary:
+            closest_camera = all_alerts[cycle_current_time]["traffic_camera"][list(all_alerts[cycle_current_time]["traffic_camera"].keys())[0]]
+            if (closest_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) * 0.1)): # Check to see if the nearest camera is within 10% of the traffic camera alert radius.
+                if (closest_camera["spd"] != None and config["general"]["traffic_camera_alerts"]["speed_check"] == True): # Check to see if speed limit data exists for this speed camera, and if the traffic camera speed check setting is enabled in the configuration.
+                    if (float(closest_camera["spd"]) < float(convert_speed(float(current_location[2])))): # If the current speed exceeds the speed camera's speed limit, then play a heightened alarm sound.
                         play_sound("alarm")
 
                 play_sound("camera3")
-            elif (nearby_cameras_all[0]["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) * 0.25)): # Check to see if the nearest camera is within 25% of the traffic camera alert radius.
+            elif (closest_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]) * 0.25)): # Check to see if the nearest camera is within 25% of the traffic camera alert radius.
                 play_sound("camera2")
-            elif (nearby_cameras_all[0]["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]))): # Check to see if the nearest camera is within the traffic camera alert radius.
+            elif (closest_camera["dst"] < (float(config["general"]["traffic_camera_alerts"]["triggers"]["distance"]))): # Check to see if the nearest camera is within the traffic camera alert radius.
                 play_sound("camera1")
 
 
@@ -692,32 +695,33 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display drone alerts.
-        if (config["general"]["drone_alerts"]["enabled"] == True and len(detected_drone_hazards) > 0): # Check to see if drone alerts are enabled.
+        if (config["general"]["drone_alerts"]["enabled"] == True and len(all_alerts[cycle_current_time]["drone"]) > 0): # Check to see if drone alerts are enabled.
             debug_message("Displaying drone alerts")
 
-            print(style.blue + "Autonomous Hazards: " + str(len(detected_drone_hazards)))
-            for hazard in detected_drone_hazards: # Iterate through each detected hazard.
-                print("    " + hazard["mac"] + "") # Show this hazard's MAC address.
+            print(style.blue + "Autonomous Hazards: " + str(len(all_alerts[cycle_current_time]["drone"])))
+            for hazard in all_alerts[cycle_current_time]["drone"]: # Iterate through each detected hazard.
+                alert_info = all_alerts[cycle_current_time]["drone"][hazard]
+                print("    " + alert_info["mac"] + "") # Show this hazard's MAC address.
                 if (config["general"]["drone_alerts"]["information_displayed"]["threat_type"] == True): # Only display the threat type if it is enabled in the configuration.
-                    print("        Threat Type: " + hazard["threattype"]) # Show what kind of threat this device is.
+                    print("        Threat Type: " + alert_info["threattype"]) # Show what kind of threat this device is.
                 if (config["general"]["drone_alerts"]["information_displayed"]["company"] == True): # Only display the device company if it is enabled in the configuration.
-                    print("        Company: " + hazard["company"]) # Show company or brand that this hazard is associated with.
+                    print("        Company: " + alert_info["company"]) # Show company or brand that this hazard is associated with.
                 if (config["general"]["drone_alerts"]["information_displayed"]["name"] == True): # Only display the device name if it is enabled in the configuration.
-                    print("        Name: " + hazard["name"]) # Show this hazard's name.
+                    print("        Name: " + alert_info["name"]) # Show this hazard's name.
                 if (config["general"]["drone_alerts"]["information_displayed"]["last_seen"] == True): # Only display the last-seen time if it is enabled in the configuration.
-                    print("        Last Seen: " + str(hazard["lastseen"])) # Show the timestamp that this hazard was last seen.
+                    print("        Last Seen: " + str(alert_info["lastseen"])) # Show the timestamp that this hazard was last seen.
                 if (config["general"]["drone_alerts"]["information_displayed"]["first_seen"] == True): # Only display the first-seen time if it is enabled in the configuration.
-                    print("        First Seen: " + str(hazard["firstseen"])) # Show the timestamp that this hazard was first seen.
+                    print("        First Seen: " + str(alert_info["firstseen"])) # Show the timestamp that this hazard was first seen.
                 if (config["general"]["drone_alerts"]["information_displayed"]["channel"] == True): # Only display the wireless channel if it is enabled in the configuration.
-                    print("        Channel: " + hazard["channel"]) # Show this hazard's wireless channel.
+                    print("        Channel: " + alert_info["channel"]) # Show this hazard's wireless channel.
                 if (config["general"]["drone_alerts"]["information_displayed"]["packets"] == True): # Only display the packet count if it is enabled in the configuration.
-                    print("        Packets: " + hazard["packets"]) # Show this hazard's packet count.
+                    print("        Packets: " + alert_info["packets"]) # Show this hazard's packet count.
                 if (config["general"]["drone_alerts"]["information_displayed"]["strength"] == True): # Only display the signal strength if it is enabled in the configuration.
-                    print("        Strength: " + str(hazard["strength"]) + "%") # Show this hazards relative signal strength.
+                    print("        Strength: " + str(alert_info["strength"]) + "%") # Show this hazards relative signal strength.
                 if (config["general"]["drone_alerts"]["information_displayed"]["wireless_type"] == True): # Only display the wireless device type if it is enabled in the configuration.
-                    print("        Wireless Type: " + hazard["type"]) # Show this hazard's type.
+                    print("        Wireless Type: " + alert_info["type"]) # Show this hazard's type.
 
-                drone_threat_history.append(hazard) # Add this threat to the threat history.
+                drone_threat_history.append(alert_info) # Add this threat to the threat history.
 
             print(style.end) # End the font styling from the drone threat display.
 
@@ -732,41 +736,42 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display ADS-B aircraft alerts
-        if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and len(aircraft_threats) > 0): # Check to see if ADS-B alerts are enabled.
+        if (config["general"]["adsb_alerts"]["enabled"] == True and config["general"]["gps"]["enabled"] == True and len(all_alerts[cycle_current_time]["aircraft"]) > 0): # Check to see if ADS-B alerts are enabled.
             debug_message("Displaying ADS-B alerts")
 
-            print(style.blue + "Aircraft Threats: " + str(len(aircraft_threats)))
-            for threat in aircraft_threats: # Iterate through each detected potential threat.
-                if (float(threat["longitude"]) == 0.0 and float(threat["latitude"]) == 0.0): # Check to see if this aircraft is missing position data.
-                    print("    " + threat["id"] + ": Incomplete data") # Show this aircraft as invalid.
+            print(style.blue + "Aircraft Threats: " + str(len(all_alerts[cycle_current_time]["aircraft"])))
+            for alert_id in all_alerts[cycle_current_time]["aircraft"]: # Iterate through each detected potential threat.
+                alert_info = all_alerts[cycle_current_time]["aircraft"][alert_id]
+                if (float(alert_info["longitude"]) == 0.0 and float(alert_info["latitude"]) == 0.0): # Check to see if this aircraft is missing position data.
+                    print("    " + alert_info["id"] + ": Incomplete data") # Show this aircraft as invalid.
                 else:
-                    print("    " + threat["id"] + ":") # Show this hazard's identifier.
+                    print("    " + alert_info["id"] + ":") # Show this hazard's identifier.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                        print("        Location: " + str(threat["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(threat["direction"]) + " " + str(round(threat["direction"])) + "°)") # Show the coordinates of this aircraft.
+                        print("        Location: " + str(alert_info["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(alert_info["direction"]) + " " + str(round(alert_info["direction"])) + "°)") # Show the coordinates of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
-                        print("        Distance: " + str(round(threat["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
+                        print("        Distance: " + str(round(alert_info["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["threat_level"] == True): # Only display the threat level if it is enabled in the configuration.
-                        print("        Threat Level: " + str(threat["threatlevel"])) # Show the distance to this aircraft.
+                        print("        Threat Level: " + str(alert_info["threatlevel"])) # Show the distance to this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["speed"] == True): # Only display the speed if it is enabled in the configuration.
-                        print("        Speed: " + str(threat["speed"]) + " knots") # Show the speed of this aircraft.
+                        print("        Speed: " + str(alert_info["speed"]) + " knots") # Show the speed of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["altitude"] == True): # Only display the altitude if it is enabled in the configuration.
-                        print("        Altitude: " + str(threat["altitude"]) + " feet") # Show the altitude of this aircraft.
+                        print("        Altitude: " + str(alert_info["altitude"]) + " feet") # Show the altitude of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["absolute_heading"] == True): # Only display the absolute heading if it is enabled in the configuration.
-                        if (threat["absoluteheading"] == "?"): # Check to see if this aircraft has an unknown absolute heading.
+                        if (alert_info["absoluteheading"] == "?"): # Check to see if this aircraft has an unknown absolute heading.
                             print("        Absolute Heading: ?") # Show the absolute heading of this aircraft.
                         else:
-                            print("        Absolute Heading: " + get_cardinal_direction(threat["heading"]) + " (" + str(threat["heading"]) + "°)") # Show the absolute heading of this aircraft.
+                            print("        Absolute Heading: " + get_cardinal_direction(alert_info["heading"]) + " (" + str(alert_info["heading"]) + "°)") # Show the absolute heading of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["relative_heading"] == True): # Only display the relative heading if it is enabled in the configuration.
-                        if (threat["relativeheading"] == "?"): # Check to see if this aircraft has an unknown relative heading.
+                        if (alert_info["relativeheading"] == "?"): # Check to see if this aircraft has an unknown relative heading.
                             print("        Relative Heading: ?") # Show the direction of this aircraft relative to the current direction of movement.
                         else:
-                            print("        Relative Heading: " + get_arrow_direction(threat["relativeheading"]), " (", str(threat["relativeheading"]), "°)") # Show the direction of this aircraft relative to the current direction of movement.
+                            print("        Relative Heading: " + get_arrow_direction(alert_info["relativeheading"]), " (", str(alert_info["relativeheading"]), "°)") # Show the direction of this aircraft relative to the current direction of movement.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["time"] == True): # Only display the message age if it is enabled in the configuration.
-                        print("        Time: " + str(round((time.time() - float(threat["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
+                        print("        Time: " + str(round((time.time() - float(alert_info["time"]))*100)/100) + " seconds ago") # Show how long it has been since this aircraft was detected.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["callsign"] == True): # Only display the callsign if it is enabled in the configuration.
-                        print("        Callsign: " + str(threat["callsign"])) # Show the callsign of this aircraft.
+                        print("        Callsign: " + str(alert_info["callsign"])) # Show the callsign of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["climb"] == True): # Only display the climb rate if it is enabled in the configuration.
-                        print("        Climb: " + str(threat["climb"]) + " feet per minute") # Show the vertical climb rate of this aircraft.
+                        print("        Climb: " + str(alert_info["climb"]) + " feet per minute") # Show the vertical climb rate of this aircraft.
 
             print(style.end) # End the font styling from the aircraft ADS-B threat display.
 
@@ -778,74 +783,74 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display weather alerts.
-        if (config["general"]["weather_alerts"]["enabled"] == True and len(weather_alerts) > 0): # Check to make sure weather alerts are enabled before displaying weather alerts.
+        if (config["general"]["weather_alerts"]["enabled"] == True and len(all_alerts[cycle_current_time]["weather"]) > 0): # Check to make sure weather alerts are enabled before displaying weather alerts.
             debug_message("Displaying weather alerts")
-            print(style.yellow + "Weather Alerts: " + str(len(weather_alerts))) # Display the weather alerts title.
+            print(style.yellow + "Weather Alerts: " + str(len(all_alerts[cycle_current_time]["weather"]))) # Display the weather alerts title.
 
             # Display visibility alerts.
-            if ("visibility" in weather_alerts): # Check to see if there is a visibility alert.
-                if (weather_alerts["visibility"][1] == "below"): # Check to see if the alert is below the low threshold.
-                    print("    Visibility low: " + str(weather_alerts["visibility"][0]))
-                elif (weather_alerts["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
-                    print("    Visibility high: " + str(weather_alerts["visibility"][0]))
+            if ("visibility" in all_alerts[cycle_current_time]["weather"]): # Check to see if there is a visibility alert.
+                if (all_alerts[cycle_current_time]["weather"]["visibility"][1] == "below"): # Check to see if the alert is below the low threshold.
+                    print("    Visibility low: " + str(all_alerts[cycle_current_time]["weather"]["visibility"][0]))
+                elif (all_alerts[cycle_current_time]["weather"]["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
+                    print("    Visibility high: " + str(all_alerts[cycle_current_time]["weather"]["visibility"][0]))
                 else: # Check to see if the alert is another case. This should never happen, and indicates a bug if it does.
-                    print("    Visibility unknown alert: " + str(weather_alerts["visibility"][0]))
+                    print("    Visibility unknown alert: " + str(all_alerts[cycle_current_time]["weather"]["visibility"][0]))
 
             # Display temperature alerts.
-            if ("temperature" in weather_alerts): # Check to see if there is a temperature alert.
-                if (weather_alerts["temperature"][1] == "below"): # Check to see if the alert is below the low threshold.
-                    print("    Temperature low: " + str(weather_alerts["temperature"][0]))
-                elif (weather_alerts["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
-                    print("    Temperature high: " + str(weather_alerts["temperature"][0]))
+            if ("temperature" in all_alerts[cycle_current_time]["weather"]): # Check to see if there is a temperature alert.
+                if (all_alerts[cycle_current_time]["weather"]["temperature"][1] == "below"): # Check to see if the alert is below the low threshold.
+                    print("    Temperature low: " + str(all_alerts[cycle_current_time]["weather"]["temperature"][0]))
+                elif (all_alerts[cycle_current_time]["weather"]["visibility"][1] == "above"): # Check to see if the alert is above the high threshold.
+                    print("    Temperature high: " + str(all_alerts[cycle_current_time]["weather"]["temperature"][0]))
                 else: # Check to see if the alert is another case. This should never happen, and indicates a bug if it does.
-                    print("    Temperature unknown alert: " + str(weather_alerts["temperature"][0]))
+                    print("    Temperature unknown alert: " + str(all_alerts[cycle_current_time]["weather"]["temperature"][0]))
             print(style.end)
 
 
 
         # Display OBD alerts.
-        if (config["general"]["obd_integration"]["enabled"] == True and len(obd_alerts) > 0): # Check to make sure OBD integration is enabled before displaying OBD alerts.
+        if (config["general"]["obd_integration"]["enabled"] == True and len(all_alerts[cycle_current_time]["obd"]) > 0): # Check to make sure OBD integration is enabled before displaying OBD alerts.
             debug_message("Displaying OBD integration alerts")
-            print(style.green + "OBD: " + str(len(obd_alerts))) # Display the OBD integration alerts title.
-            if ("speed" in obd_alerts): # Check to see if there are any speed alerts.
-                if (obd_alerts["speed"]["alert"] == "high"):
-                    print("    Speed - High: ", obd_alerts["speed"]["value"])
-                elif (obd_alerts["speed"]["alert"] == "low"):
-                    print("    Speed - Low: ", obd_alerts["speed"]["value"])
+            print(style.green + "OBD: " + str(len(all_alerts[cycle_current_time]["obd"]))) # Display the OBD integration alerts title.
+            if ("speed" in all_alerts[cycle_current_time]["obd"]): # Check to see if there are any speed alerts.
+                if (all_alerts[cycle_current_time]["obd"]["speed"]["alert"] == "high"):
+                    print("    Speed - High: ", all_alerts[cycle_current_time]["obd"]["speed"]["value"])
+                elif (all_alerts[cycle_current_time]["obd"]["speed"]["alert"] == "low"):
+                    print("    Speed - Low: ", all_alerts[cycle_current_time]["obd"]["speed"]["value"])
                 else:
-                    print("    Speed - Unknown: ", obd_alerts["speed"]["value"])
-            if ("rpm" in obd_alerts): # Check to see if there are any engine RPM alerts.
-                if (obd_alerts["rpm"]["alert"] == "high"):
-                    print("    RPM - High: ", obd_alerts["rpm"]["value"])
-                elif (obd_alerts["rpm"]["alert"] == "low"):
-                    print("    RPM - Low: ", obd_alerts["rpm"]["value"])
+                    print("    Speed - Unknown: ", all_alerts[cycle_current_time]["obd"]["speed"]["value"])
+            if ("rpm" in all_alerts[cycle_current_time]["obd"]): # Check to see if there are any engine RPM alerts.
+                if (all_alerts[cycle_current_time]["obd"]["rpm"]["alert"] == "high"):
+                    print("    RPM - High: ", all_alerts[cycle_current_time]["obd"]["rpm"]["value"])
+                elif (all_alerts[cycle_current_time]["obd"]["rpm"]["alert"] == "low"):
+                    print("    RPM - Low: ", all_alerts[cycle_current_time]["obd"]["rpm"]["value"])
                 else:
-                    print("    RPM - Unknown: ", obd_alerts["rpm"]["value"])
-            if ("fuel_level" in obd_alerts): # Check to see if there are any fuel level alerts.
-                if (obd_alerts["fuel_level"]["alert"] == "high"):
-                    print("    Fuel Level - High: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
-                elif (obd_alerts["fuel_level"]["alert"] == "low"):
-                    print("    Fuel Level - Low: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
+                    print("    RPM - Unknown: ", all_alerts[cycle_current_time]["obd"]["rpm"]["value"])
+            if ("fuel_level" in all_alerts[cycle_current_time]["obd"]): # Check to see if there are any fuel level alerts.
+                if (all_alerts[cycle_current_time]["obd"]["fuel_level"]["alert"] == "high"):
+                    print("    Fuel Level - High: ", round(all_alerts[cycle_current_time]["obd"]["fuel_level"]["value"]*1000)/10, "%")
+                elif (all_alerts[cycle_current_time]["obd"]["fuel_level"]["alert"] == "low"):
+                    print("    Fuel Level - Low: ", round(all_alerts[cycle_current_time]["obd"]["fuel_level"]["value"]*1000)/10, "%")
                 else:
-                    print("    Fuel Level - Unknown: ", round(obd_alerts["fuel_level"]["value"]*1000)/10, "%")
-            if ("airflow" in obd_alerts): # Check to see if there are any airflow alerts.
-                if (obd_alerts["airflow"]["alert"] == "high"):
-                    print("    Airflow - High: ", obd_alerts["airflow"]["value"])
-                elif (obd_alerts["fuel_level"]["alert"] == "low"):
-                    print("    Airflow - Low: ", obd_alerts["airflow"]["value"])
+                    print("    Fuel Level - Unknown: ", round(all_alerts[cycle_current_time]["obd"]["fuel_level"]["value"]*1000)/10, "%")
+            if ("airflow" in all_alerts[cycle_current_time]["obd"]): # Check to see if there are any airflow alerts.
+                if (all_alerts[cycle_current_time]["obd"]["airflow"]["alert"] == "high"):
+                    print("    Airflow - High: ", all_alerts[cycle_current_time]["obd"]["airflow"]["value"])
+                elif (all_alerts[cycle_current_time]["obd"]["fuel_level"]["alert"] == "low"):
+                    print("    Airflow - Low: ", all_alerts[cycle_current_time]["obd"]["airflow"]["value"])
                 else:
-                    print("    Airflow - Unknown: ", obd_alerts["airflow"]["value"])
+                    print("    Airflow - Unknown: ", all_alerts[cycle_current_time]["obd"]["airflow"]["value"])
             print(style.end)
 
 
         # Display attention alerts.
-        if (config["general"]["attention_monitoring"]["enabled"] == True and len(attention_alerts) > 0): # Check to see if there are attention alerts.
+        if (config["general"]["attention_monitoring"]["enabled"] == True and len(all_alerts[cycle_current_time]["attention"]) > 0): # Check to see if there are attention alerts.
             debug_message("Displaying attention monitoring alerts")
-            print(style.yellow + "Attention Alerts: " + str(len(attention_alerts))) # Display the attention monitoring alerts title.
+            print(style.yellow + "Attention Alerts: " + str(len(all_alerts[cycle_current_time]["attention"]))) # Display the attention monitoring alerts title.
 
             # Display attention alerts.
-            if ("time" in attention_alerts): # Check to see if there is a time-related attention alert.
-                print("    Attentive Time: " + str(math.floor(round(attention_alerts["time"]["time"])/60)) + " min " + str(round(attention_alerts["time"]["time"]) % 60) + " sec") # Display the time-related attention alert.
+            if ("time" in all_alerts[cycle_current_time]["attention"]): # Check to see if there is a time-related attention alert.
+                print("    Attentive Time: " + str(math.floor(round(all_alerts[cycle_current_time]["attention"]["time"]["time"])/60)) + " min " + str(round(all_alerts[cycle_current_time]["attention"]["time"]["time"]) % 60) + " sec") # Display the time-related attention alert.
 
             print(style.end)
 
@@ -853,19 +858,20 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display Bluetooth scanning alerts.
-        if (config["general"]["bluetooth_scanning"]["enabled"] == True and len(bluetooth_alerts) > 0): # Check to see if there is 1 or more Bluetooth devices.
+        if (config["general"]["bluetooth_scanning"]["enabled"] == True and len(all_alerts[cycle_current_time]["bluetooth"]) > 0): # Check to see if there is 1 or more Bluetooth devices.
             debug_message("Displaying attention monitoring alerts")
-            print(style.blue + "Bluetooth Alerts: " + str(len(bluetooth_alerts))) # Display the Bluetooth scanning alerts title.
+            print(style.blue + "Bluetooth Alerts: " + str(len(all_alerts[cycle_current_time]["bluetooth"]))) # Display the Bluetooth scanning alerts title.
 
             # Display Bluetooth alerts.
-            for device in bluetooth_alerts:
-                print("    " + str(device) + ": " + bluetooth_devices[device]["name"])
-                if ("time" in bluetooth_alerts[device]): # Check to see if there is distance information associated with this alert.
-                    print("        Time: " + str(round(bluetooth_alerts[device]["time"])) + " sec")
-                if ("distance" in bluetooth_alerts[device]): # Check to see if there is time information associated with this alert.
-                    print("        Distance: " + str(round(bluetooth_alerts[device]["distance"]*100)/100))
-                if ("blacklist" in bluetooth_alerts[device]): # Check to see if there is blacklist information associated with this alert.
-                    print("        Blacklist: " + bluetooth_alerts[device]["blacklist"])
+            for alert_id in all_alerts[cycle_current_time]["bluetooth"]:
+                alert_info = all_alerts[cycle_current_time]["bluetooth"][alert_id]
+                print("    " + alert_id + ": " + bluetooth_devices[device]["name"])
+                if ("time" in alert_info): # Check to see if there is distance information associated with this alert.
+                    print("        Time: " + str(round(alert_info["time"])) + " sec")
+                if ("distance" in alert_info): # Check to see if there is time information associated with this alert.
+                    print("        Distance: " + str(round(alert_info["distance"]*100)/100))
+                if ("blacklist" in alert_info): # Check to see if there is blacklist information associated with this alert.
+                    print("        Blacklist: " + alert_info["blacklist"])
 
             print(style.end)
 
@@ -874,29 +880,30 @@ while True: # Run forever in a loop until terminated.
 
 
         # Display Predator integration alerts.
-        if (config["general"]["predator_integration"]["enabled"] == True and len(predator_alerts) > 0): # Check to make sure Predator integration is enabled before displaying Predator alerts.
+        if (config["general"]["predator_integration"]["enabled"] == True and len(all_alerts[cycle_current_time]["predator"]) > 0): # Check to make sure Predator integration is enabled before displaying Predator alerts.
             debug_message("Displaying Predator alerts")
-            print(style.yellow + "Predator: " + str(len(predator_alerts))) # Display the attention monitoring alerts title.
-            for plate in predator_alerts:
+            print(style.yellow + "Predator: " + str(len(all_alerts[cycle_current_time]["predator"]))) # Display the attention monitoring alerts title.
+            for plate in all_alerts[cycle_current_time]["predator"]:
+                alert_info = all_alerts[cycle_current_time]["predator"][plate]
                 print("    Plate: " + str(plate))
-                for alert in predator_alerts[plate]:
-                    print("        Trigger: " + str(alert)) # Display the alert rule that triggered this alert.
-                    if ("name" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["name"]) > 0): # Check to see if there is a name associated with this alert.
-                        print("            Name: " + str(predator_alerts[plate][alert]["name"])) # Display the name.
-                    if ("description" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["description"]) > 0): # Check to see if there is a description associated with this alert.
-                        print("            Description: " + str(predator_alerts[plate][alert]["description"])) # Display the description.
-                    if ("author" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["author"]) > 0): # Check to see if there is an author associated with this alert.
-                        print("            Author: " + str(predator_alerts[plate][alert]["author"])) # Display the author.
-                    if ("source" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["source"]) > 0): # Check to see if there is a source associated with this alert.
-                        print("            Source: " + str(predator_alerts[plate][alert]["source"])) # Display the source.
-                    if ("vehicle" in predator_alerts[plate][alert] and len(predator_alerts[plate][alert]["vehicle"]) > 0): # Check to see if there is vehicle information associated with this alert.
+                for rule in alert_info:
+                    print("        Trigger: " + str(rule)) # Display the alert rule that triggered this alert.
+                    if ("name" in alert_info[rule] and len(alert_info[rule]["name"]) > 0): # Check to see if there is a name associated with this alert.
+                        print("            Name: " + str(alert_info[rule]["name"])) # Display the name.
+                    if ("description" in alert_info[rule] and len(alert_info[rule]["description"]) > 0): # Check to see if there is a description associated with this alert.
+                        print("            Description: " + str(alert_info[rule]["description"])) # Display the description.
+                    if ("author" in alert_info[rule] and len(alert_info[rule]["author"]) > 0): # Check to see if there is an author associated with this alert.
+                        print("            Author: " + str(alert_info[rule]["author"])) # Display the author.
+                    if ("source" in alert_info[rule] and len(alert_info[rule]["source"]) > 0): # Check to see if there is a source associated with this alert.
+                        print("            Source: " + str(alert_info[rule]["source"])) # Display the source.
+                    if ("vehicle" in alert_info[rule] and len(alert_info[rule]["vehicle"]) > 0): # Check to see if there is vehicle information associated with this alert.
                         vehicle_string = ""
-                        if ("year" in predator_alerts[plate][alert]["vehicle"] and int(predator_alerts[plate][alert]["vehicle"]["year"]) > 0): # Check to see if there is a vehicle model associated with this alert.
-                            vehicle_string += str(predator_alerts[plate][alert]["vehicle"]["year"]) + " "
-                        if ("make" in predator_alerts[plate][alert]["vehicle"] and len(predator_alerts[plate][alert]["vehicle"]["make"]) > 0): # Check to see if there is a vehicle make associated with this alert.
-                            vehicle_string += predator_alerts[plate][alert]["vehicle"]["make"] + " "
-                        if ("model" in predator_alerts[plate][alert]["vehicle"] and len(predator_alerts[plate][alert]["vehicle"]["model"]) > 0): # Check to see if there is a vehicle model associated with this alert.
-                            vehicle_string += predator_alerts[plate][alert]["vehicle"]["model"] + " "
+                        if ("year" in alert_info[rule]["vehicle"] and int(alert_info[rule]["vehicle"]["year"]) > 0): # Check to see if there is a vehicle model associated with this alert.
+                            vehicle_string += str(alert_info[rule]["vehicle"]["year"]) + " "
+                        if ("make" in alert_info[rule]["vehicle"] and len(alert_info[rule]["vehicle"]["make"]) > 0): # Check to see if there is a vehicle make associated with this alert.
+                            vehicle_string += alert_info[rule]["vehicle"]["make"] + " "
+                        if ("model" in alert_info[rule]["vehicle"] and len(alert_info[rule]["vehicle"]["model"]) > 0): # Check to see if there is a vehicle model associated with this alert.
+                            vehicle_string += alert_info[rule]["vehicle"]["model"] + " "
                         if (len(vehicle_string) > 0): # Check to see if there is any vehicle informaton to display.
                             print("            Vehicle: " + vehicle_string) # Display the vehicle information.
                         del vehicle_string # Remove the temporary vehicle string.

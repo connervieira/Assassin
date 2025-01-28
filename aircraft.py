@@ -318,15 +318,15 @@ def adsb_alert_processing(current_location, current_speed):
                 sorted_level3_threats = sort_aircraft_by_distance(level3_threats)
 
                 # Add alerts of all threat levels to a single threat list, order from highest to lowest threat level.
-                sorted_aircraft_threats = []
+                sorted_aircraft_threats = {}
                 for element in sorted_level3_threats:
-                    sorted_aircraft_threats.append(element)
+                    sorted_aircraft_threats[str(hash(element["id"]))] = element
                 for element in sorted_level2_threats:
-                    sorted_aircraft_threats.append(element)
+                    sorted_aircraft_threats[str(hash(element["id"]))] = element
                 for element in sorted_level1_threats:
-                    sorted_aircraft_threats.append(element)
+                    sorted_aircraft_threats[str(hash(element["id"]))] = element
                 for element in sorted_level0_threats:
-                    sorted_aircraft_threats.append(element)
+                    sorted_aircraft_threats[str(hash(element["id"]))] = element
 
                 aircraft_threats = sorted_aircraft_threats
             

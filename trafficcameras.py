@@ -116,6 +116,7 @@ def traffic_camera_alert_processing(current_location, loaded_traffic_camera_data
                 for affected_direction in camera["dir"]: # Iterate through each direction that each camera affects.
                     if (bearing_difference(current_location[4], float(affected_direction)) < float(config["general"]["traffic_camera_alerts"]["triggers"]["angle"])): # Check to make sure the camera's facing-direction is inside the threshold.
                         if (bearing_difference(current_location[4], float(camera["bearing"])) < float(config["general"]["traffic_camera_alerts"]["triggers"]["direction"])): # Check to make sure the bearing to this camera is within the threshold.
+                            camera["facing"] = float(affected_direction)
                             camera["direction"] = float(camera["bearing"]) - current_location[4] # Calculate the direction to this camera, relative to the current direction of movement.
                             filtered_cameras.append(camera) # Add this camera to the filtered list.
                             break # If this camera is added to the list of filtered cameras, then break out of the "directions" loop to prevent the same camera from being added repeatedly.
@@ -133,8 +134,13 @@ def traffic_camera_alert_processing(current_location, loaded_traffic_camera_data
             nearby_cameras.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
         nearby_cameras = sorted_cameras # Set the original list of cameras to the sorted list.
 
+        # Finally, move the alerts into the dictionary to be passed back to the main process:
+        traffic_camera_alerts = {}
+        for element in sorted_cameras:
+            traffic_camera_alerts[str(hash(str(element["lat"]) + str(element["lon"]) + str(element["direction"])))] = element
+
         debug_message("Processed traffic enforcement camera alerts")
-        return nearby_cameras # Return the nearby cameras.
+        return traffic_camera_alerts # Return the nearby cameras.
 
 
     else: # Traffic enforcement camera alert processing is disabled, so return blank placeholder information to avoid errors.

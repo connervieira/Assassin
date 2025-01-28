@@ -98,11 +98,6 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
                         deduplicated_cameras.remove(base_camera) # Add this camera to the list of de-duplicated cameras, since it is not a duplicate.
 
 
-            nearest_alpr_camera = {"distance": 1000000000.0}
-            for entry in deduplicated_cameras: # Iterate through all nearby ALPR cameras.
-                if (entry["distance"] < nearest_alpr_camera["distance"]): # Check to see if the distance to this camera is lower than the current closest camera.
-                    nearest_alpr_camera = entry # Make the current camera the new closest camera.
-
             # Sort the ALPR cameras list by distance.
             sorted_cameras = [] # This is a placeholder list that will receive the cameras as they are sorted.
             for i in range(0, len(deduplicated_cameras)): # Run once for every entry in the list of nearby ALPR cameras.
@@ -114,10 +109,15 @@ def alpr_camera_alert_processing(current_location, loaded_alpr_camera_database):
                 deduplicated_cameras.remove(current_closest) # After adding it to the sorted list, remove it from the original list.
 
 
-            debug_message("Processed ALPR camera alerts")
-            return nearest_alpr_camera, sorted_cameras
+            # Finally, places the alerts into the dictionary to pass back to the main process:
+            alpr_alerts = {}
+            for element in sorted_cameras:
+                alpr_alerts[str(hash(str(element["lat"]) + str(element["lon"])))] = element
 
-        else: # ALPR camera alerts are diabled.
+            debug_message("Processed ALPR camera alerts")
+            return alpr_alerts
+
+        else: # ALPR camera alerts are disabled.
             return {"distance": 1000000000.0}, {} # Return a blank placeholder in place of the nearest ALPR camera.
-    else: # ALPR camera alerts are diabled.
+    else: # ALPR camera alerts are disabled.
         return {"distance": 1000000000.0}, {} # Return a blank placeholder in place of the nearest ALPR camera.

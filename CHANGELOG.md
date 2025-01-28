@@ -207,6 +207,8 @@ April 19th, 2023
     - The speed can be read directly from the car using an ELM327 adapter connected to the car's OBD-II port.
 - Added process timing for helping users experienced improve speed.
 - Fixed an issue in the `bearing_difference` function, where bearings were improperly reduced to a value below 360.
+- Restructured the alert back-end.
+    - All alerts are now stored in a single dictionary, and have unique identifiers.
 - Refined traffic enforcement camera alerts.
     - Updated the traffic enforcement camera database.
     - Re-organized the configuration.
