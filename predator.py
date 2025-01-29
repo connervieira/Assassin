@@ -62,7 +62,13 @@ def start_predator():
             else:
                 display_notice("Predator integration is enabled, but the configured instance directory does not exist. Predator could not be started.", 3)
 
+
     hotlist_filepath = os.path.join(predator_config["general"]["interface_directory"], "hotlist.json")
+    for i in range(0, 10): # Take 10 attempts at waiting for the hotlist file to be present.
+        time.sleep(0.5) # Wait briefly to give Predator time to generate the hot-list file.
+        if (os.path.exists(hotlist_filepath)): # Check to see if the file now exists.
+            break # Exit the loop.
+
     if (os.path.exists(hotlist_filepath)):
         with open(hotlist_filepath) as file:
             file_contents = file.read() # Read the contents of the file.

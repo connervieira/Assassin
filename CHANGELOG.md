@@ -186,7 +186,7 @@ April 19th, 2023
 - Added support for GPS diagnostic alerts, which simply issue an alert containing the most recent GPS information.
 - Created a dedicated working directory configuration value.
     - Removed the telemetry directory configuration value.
-    - Renamed the `general > adsb_alerts > adsb_message_file` configuration value to `adsb_message_filename`, which is now only a file name that is saved to the dedicated working directory.
+    - Renamed the `general>adsb_alerts>adsb_message_file` configuration value to `general>adsb_alerts>adsb_message_filename`, which is now only a file name that is saved to the dedicated working directory.
 - Moved the drone detection working directory to the new general working directory.
 - Improved ADS-B alerts.
     - Updated the way the minimum vehicle speed configuration value is handled.
@@ -220,6 +220,7 @@ April 19th, 2023
 - Improved ALPR alerts.
     - Moved the false alert filtering configuration values to a dedicated section for sake of organization.
     - Added alert de-duplication, where cameras that are close to each other can be condensed into a single alert.
+    - All active ALPR alerts are now displayed, rather than just the closest.
 - Improved the intial GPS location fetching process.
 - Assassin now erases the `alert.json` file in the interface directory in start-up to prevent external interfaces from displaying alerts from the last time Assassin was run.
 - Updated status light interfacing.

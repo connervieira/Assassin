@@ -380,7 +380,7 @@
             "predator": {
                 "path": "./assets/sounds/predator.mp3",
                 "repeat": 0,
-                "delay": 0.5
+                "delay": 2
             },
             "attention_monitoring": {
                 "path": "./assets/sounds/attention_monitoring.mp3",

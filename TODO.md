@@ -42,7 +42,7 @@ Tasks in this section are actively planned, and are likely to be completed some 
     - [X] Improve Bluetooth scanning process.
     - [X] Refine GPS alert processing.
 - Version 4.0
-    - [ ] Add Predator integration.
+    - [X] Add Predator integration.
         - [X] Add alert handling.
         - [X] Add configuration validation for new configuration values.
         - [X] Add Predator start/stop capability.
