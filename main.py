@@ -540,6 +540,7 @@ while True: # Run forever in a loop until terminated.
 
         if (config["general"]["predator_integration"]["enabled"] == True and config["display"]["displays"]["predator"] == True): # Check to see if the Predator display is enabled.
             print("Predator: " + str(len(predator_plate_history))) # Print the number of license plates currently seen by Predator.
+            # TODO: Try to de-duplicate the recent plate history.
 
         if (config["general"]["bluetooth_scanning"]["enabled"] == True and config["display"]["displays"]["bluetooth"] == True): # Check to see if the Bluetooth display is enabled.
             print("Bluetooth: " + str(len(bluetooth_devices))) # Print the number of nearby Bluetooth devices.

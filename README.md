@@ -2,7 +2,7 @@
 
 **Copyright 2024 V0LT - Conner Vieira**
 
-The ultimate defense system for driving the technological world.
+The ultimate driving copilot for autonomously detecting threats.
 
 
 ## Disclaimer
@@ -16,8 +16,7 @@ Additionally, Assassin should not be relied upon for safety critical tasks. For 
 
 ## Description
 
-Assassin is designed to be the ultimate copilot for driving in the digital world. At a basic level, Assassin operates like an extension of your dashboard, showing information like your speed, position, altitude, and other relevant information. However, it goes far beyond a typical information display. Assassin is a highly customizable platform for building the ultimate digital defense system. As you drive, Assassin interfaces with different sensors and devices to constantly attempt to detect and mitigate a plethora of modern threats to safety, security, and privacy.
-
+Assassin is an off-grid digital copilot for driving in the technological world. At a basic level, Assassin operates like an extension of your dashboard, showing information like your speed, position, altitude, and other relevant information. However, it goes far beyond a typical information display. Assassin is a highly customizable platform for building the ultimate digital defense system. As you drive, Assassin interfaces with different sensors and devices to constantly attempt to detect and mitigate a plethora of modern threats to safety, security, and privacy.
 
 ### Telemetry Logging
 
@@ -29,7 +28,7 @@ Assassin is capable of logging information from various sources to a local file,
 Assassin comes bundled with a database to detect nearby ALPR cameras, and alert the user before crossing the reading threshold. Assassin will determine the distance and direction to nearby ALPR cameras in real-time, and assign them a threat severity level. Assassin also comes bundled with tools to convert information from existing sources, like OpenStreetMap to further extend coverage.
 
 
-### Autonomous Threat Defense
+### WiFi Device Detection
 
 Assassin can interface with 2.4GHz, 5GHz, and 5.8GHz receivers in order to detect, record, and alert to nearby consumer and commercial drones. This feature makes use of an open, customizable database of wireless threats in order to quickly and effectively detect and alert to nearby autonomous hazards. While not its primary purpose, this feature is also theoretically capable of detecting various other radio-based devices, including remote-operated speed cameras from several common manufacturers.
 
@@ -56,7 +55,7 @@ When connected to the internet, Assassin can fetch weather information at a regu
 
 ### Attention Monitoring
 
-Assassin can monitor the time spend actively driving, and optionally display an alert when a threshold has been broken, and prompt the driver to take a break.
+Assassin can monitor the time spent actively driving, and optionally display an alert when a threshold has been broken to prompt the driver to take a break.
 
 
 ### Bluetooth Threat Defense
@@ -88,14 +87,22 @@ These are some of the key features of Assassin.
     - The current altitude in meters can be displayed based on data derived from the GPS.
 - Satellite display
     - For diagnostic purposes, Assassin can display the number of satellites that the GPS is currently connected to.
+- Aircraft display
+    - Displays the number of aircraft currently being detected.
+- Attention display
+    - Displays the amount of time spent driving since taking a break.
+- Predator display
+    - Displays the number of license plates detected by V0LT Predator recently.
+- Bluetooth display
+    - Displays the number of nearby Bluetooth devices.
 
 ### Status Lighting
 
-Assassin can interface with RGB lights via WLED to provide immersive and attention grabbing alerts while driving. When configured as such, these status light alerts allow Assassin to sit in the background, and issue important to the driver in a clean, integrated, OEM-like manner.
+Assassin can interface with RGB lights via [WLED](https://kno.wled.ge/) (a third-party project) to provide immersive and attention grabbing alerts while driving. When configured as such, these status light alerts allow Assassin to sit in the background, and issue important to the driver in a clean, integrated, OEM-like manner.
 
 ### Audio Alerts
 
-Assassin comes bundled with various audio alert terms that are seamless and pleasant while still being distinctive and recognizable.
+Assassin comes bundled with various audio alert samples that are seamless and pleasant while still being distinctive and recognizable.
 
 
 ## Philosophy
