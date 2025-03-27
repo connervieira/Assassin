@@ -71,6 +71,9 @@ output_database["entries"] = []
 
 for entry in input_database["elements"]:
     new_entry_data = {} # Set the new entry data to a placeholder.
+    if ("lat" not in entry or "lon" not in entry):
+        print("Missing lat/lon data")
+        continue # Skip this entry, since location data is required.
     new_entry_data["lat"] = entry["lat"]
     new_entry_data["lon"] = entry["lon"]
 

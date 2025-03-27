@@ -166,8 +166,8 @@
         "alpr_alerts": {
             "enabled": true,
             "alert_range": 0.5,
-            "database": "./assets/databases/alpr.json",
-            "loaded_radius": 100,
+            "database": "./assets/databases/2025-03-27 alpr.json",
+            "loaded_radius": 500,
             "filters": {
                 "angle_threshold": 60,
                 "direction_threshold": 20,

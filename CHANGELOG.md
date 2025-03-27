@@ -170,7 +170,7 @@ April 19th, 2023
 
 ## Version 4.0
 
-### Name Pending
+### Refinement Update
 
 *Release date to be determined*
 
@@ -183,7 +183,7 @@ April 19th, 2023
 - Refined the configuration loading process.
     - Functions related to configuration loading and validation have been moved to a dedicated script, titled `config,py`
     - The configuration is now validated at startup based on an outline template.
-- Added support for GPS diagnostic alerts, which simply issue an alert containing the most recent GPS information.
+- Added support for GPS diagnostic alerts, which simply issue a persistent alert containing the most recent GPS information.
 - Created a dedicated working directory configuration value.
     - Removed the telemetry directory configuration value.
     - Renamed the `general>adsb_alerts>adsb_message_file` configuration value to `general>adsb_alerts>adsb_message_filename`, which is now only a file name that is saved to the dedicated working directory.
@@ -221,6 +221,7 @@ April 19th, 2023
     - Moved the false alert filtering configuration values to a dedicated section for sake of organization.
     - Added alert de-duplication, where cameras that are close to each other can be condensed into a single alert.
     - All active ALPR alerts are now displayed, rather than just the closest.
+    - Updated the ALPR alert database.
 - Improved the intial GPS location fetching process.
 - Assassin now erases the `alert.json` file in the interface directory in start-up to prevent external interfaces from displaying alerts from the last time Assassin was run.
 - Updated status light interfacing.
