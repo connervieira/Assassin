@@ -11,7 +11,8 @@
 
 
 
-import obd
+if (config["general"]["obd_integration"]["enabled"] == True): # Check to see if OBD integration is enabled.
+    import obd
 import time
 
 
