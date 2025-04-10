@@ -748,7 +748,7 @@ while True: # Run forever in a loop until terminated.
                 else:
                     print("    " + alert_info["id"] + ":") # Show this hazard's identifier.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["location"] == True): # Only display the location if it is enabled in the configuration.
-                        print("        Location: " + str(alert_info["latitude"]) + ", " + str(threat["longitude"]) + " (" + get_arrow_direction(alert_info["direction"]) + " " + str(round(alert_info["direction"])) + "°)") # Show the coordinates of this aircraft.
+                        print("        Location: " + str(alert_info["latitude"]) + ", " + str(alert_info["longitude"]) + " (" + get_arrow_direction(alert_info["direction"]) + " " + str(round(alert_info["direction"])) + "°)") # Show the coordinates of this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["distance"] == True): # Only display the distance if it is enabled in the configuration.
                         print("        Distance: " + str(round(alert_info["distance"]*1000)/1000) + " miles") # Show the distance to this aircraft.
                     if (config["general"]["adsb_alerts"]["information_displayed"]["threat_level"] == True): # Only display the threat level if it is enabled in the configuration.
