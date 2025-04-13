@@ -193,8 +193,6 @@ This section of configuration values will effect Assassin's general operation.
         - This value is a dictionary containing all the information Assassin is capable of displaying. Set each value to `true` or `false` to enable or disable it.
 - `adsb_alerts` contains settings related to Assassin's aircraft threat alerting behavior.
     - The `enabled` value enables and disables the entire ADS-B system.
-    - The `adsb_message_filename` is the file name of the file that Assassin will stream ADS-B messages to.
-        - Assassin will manipulate this file and regularly erase its contents as a part of its data processing. If you want to keep an archive of all ADS-B messages, you should stream Dump1090 message data to a second file, independent of Assassin.
     - The `threat_threshold` determines how likely a plane is to be a threat before Assassin displays it as an alert. A plane has to match all of the criteria at its threshold level, and all levels below it.
         - A threshold of `0` includes all aircraft detected.
         - A threshold of `1` includes all aircraft within the alert distance threshold.

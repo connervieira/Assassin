@@ -194,7 +194,6 @@
         },
         "adsb_alerts": {
             "enabled": false,
-            "adsb_message_filename": "adsb.csv",
             "threat_threshold": 3,
             "minimum_vehicle_speed": 0,
             "message_time_to_live": 20,
