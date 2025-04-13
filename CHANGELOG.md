@@ -189,6 +189,7 @@ April 19th, 2023
     - Renamed the `general>adsb_alerts>adsb_message_file` configuration value to `general>adsb_alerts>adsb_message_filename`, which is now only a file name that is saved to the dedicated working directory.
 - Moved the drone detection working directory to the new general working directory.
 - Improved ADS-B alerts.
+    - ADS-B messages are now stored in memory, rather than as a message file.
     - Updated the way the minimum vehicle speed configuration value is handled.
         - This value is now considered during alert processing, instead of when alerts are displayed. This improves efficiency, and means the minimum vehicle speed will be respected by external programs.
     - Re-organized the ADS-B alert configuration for sake of clarity.
